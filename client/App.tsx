@@ -53,6 +53,14 @@ const App = () => (
             element={<AdminRoute element={<AdminEditUser />} />}
           />
           <Route
+            path="/admin/invoices"
+            element={<AdminRoute element={<AdminInvoices />} />}
+          />
+          <Route
+            path="/admin/invoices/:invoiceId"
+            element={<AdminRoute element={<AdminInvoiceDetail />} />}
+          />
+          <Route
             path="/admin/staff"
             element={<AdminRoute element={<AdminStaff />} />}
           />

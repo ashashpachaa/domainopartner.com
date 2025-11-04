@@ -236,6 +236,121 @@ export default function AdminStaffDetail() {
             </div>
           </div>
         </div>
+
+        {/* Commission Section */}
+        <div className="bg-white rounded-lg border border-slate-200 p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold text-slate-900 flex items-center gap-3">
+              <DollarSign className="w-6 h-6 text-green-600" />
+              Commission Configuration
+            </h2>
+            <Link to={`/admin/staff/${member.id}/commission`}>
+              <Button className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white gap-2">
+                <Edit2 className="w-4 h-4" />
+                Configure Commission
+              </Button>
+            </Link>
+          </div>
+
+          {mockStaffCommissions.find((c) => c.staffId === member.id) ? (
+            <div className="space-y-4">
+              {mockStaffCommissions
+                .filter((c) => c.staffId === member.id)
+                .map((commission) => (
+                  <div key={commission.staffId}>
+                    <div className="mb-4 p-4 bg-slate-50 rounded-lg">
+                      <p className="text-sm font-semibold text-slate-600 mb-2">
+                        Currency
+                      </p>
+                      <p className="text-2xl font-bold text-slate-900">
+                        {commission.currency}
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                      <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                        <p className="text-xs font-semibold text-green-600 uppercase mb-1">
+                          Total Earned
+                        </p>
+                        <p className="text-2xl font-bold text-green-700">
+                          {commission.currency}{" "}
+                          {commission.totalEarned.toLocaleString()}
+                        </p>
+                      </div>
+                      <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                        <p className="text-xs font-semibold text-blue-600 uppercase mb-1">
+                          Paid
+                        </p>
+                        <p className="text-2xl font-bold text-blue-700">
+                          {commission.currency}{" "}
+                          {commission.paidAmount.toLocaleString()}
+                        </p>
+                      </div>
+                      <div className="p-4 bg-amber-50 rounded-lg border border-amber-200">
+                        <p className="text-xs font-semibold text-amber-600 uppercase mb-1">
+                          Pending
+                        </p>
+                        <p className="text-2xl font-bold text-amber-700">
+                          {commission.currency}{" "}
+                          {commission.pendingAmount.toLocaleString()}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div>
+                      <h3 className="text-sm font-semibold text-slate-900 mb-3">
+                        Commission Tiers
+                      </h3>
+                      <div className="space-y-2">
+                        {commission.tiers.map((tier) => (
+                          <div
+                            key={tier.id}
+                            className="p-4 bg-slate-50 rounded-lg border border-slate-200"
+                          >
+                            <div className="flex items-center justify-between mb-2">
+                              <h4 className="font-semibold text-slate-900">
+                                {tier.description}
+                              </h4>
+                              <span className="px-2 py-1 text-xs bg-primary-100 text-primary-700 rounded">
+                                {tier.orderCountMin}-{tier.orderCountMax} orders
+                              </span>
+                            </div>
+                            <div className="grid grid-cols-2 gap-4 text-sm">
+                              <div>
+                                <p className="text-slate-600">Percentage Rate</p>
+                                <p className="font-semibold text-slate-900">
+                                  {tier.percentageRate}%
+                                </p>
+                              </div>
+                              <div>
+                                <p className="text-slate-600">Fixed Amount</p>
+                                <p className="font-semibold text-slate-900">
+                                  {commission.currency}{" "}
+                                  {tier.fixedAmount.toLocaleString()}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          ) : (
+            <div className="p-6 bg-amber-50 border border-amber-200 rounded-lg">
+              <p className="text-amber-900 mb-4">
+                No commission configuration found for this staff member.
+              </p>
+              <Link to={`/admin/staff/${member.id}/commission`}>
+                <Button className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white gap-2">
+                  <Plus className="w-4 h-4" />
+                  Create Commission Configuration
+                </Button>
+              </Link>
+            </div>
+          )}
+        </div>
       </div>
     </AdminLayout>
   );

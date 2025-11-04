@@ -35,6 +35,10 @@ export default function StaffDashboard() {
   const commissionHistory = mockStaffCommissionHistory.filter(
     (h) => h.staffId === CURRENT_STAFF_ID
   );
+  const salary = mockStaffSalaries.find((s) => s.staffId === CURRENT_STAFF_ID);
+  const performance = mockStaffPerformances.find(
+    (p) => p.staffId === CURRENT_STAFF_ID
+  );
 
   const [sortBy, setSortBy] = useState<"date" | "amount">("date");
   const [filterStatus, setFilterStatus] = useState<"all" | "pending" | "paid">(

@@ -16,6 +16,8 @@ import AdminInvoiceDetail from "./pages/AdminInvoiceDetail";
 import AdminStaff from "./pages/AdminStaff";
 import AdminStaffDetail from "./pages/AdminStaffDetail";
 import AdminEditStaff from "./pages/AdminEditStaff";
+import AdminStaffCommission from "./pages/AdminStaffCommission";
+import StaffDashboard from "./pages/StaffDashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();

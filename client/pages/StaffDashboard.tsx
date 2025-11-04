@@ -381,6 +381,153 @@ export default function StaffDashboard() {
           </div>
         </div>
 
+        {/* Salary Information */}
+        {salary && (
+          <div className="bg-white rounded-lg border border-slate-200 p-6">
+            <h2 className="text-lg font-semibold text-slate-900 mb-6 flex items-center gap-2">
+              <DollarSign className="w-5 h-5 text-green-600" />
+              Salary Information
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                <p className="text-xs font-semibold text-green-600 uppercase mb-1">
+                  Base Salary
+                </p>
+                <p className="text-2xl font-bold text-green-700">
+                  {salary.currency} {salary.baseSalary.toLocaleString()}
+                </p>
+                <p className="text-xs text-green-600 mt-1">Monthly</p>
+              </div>
+              <div className="p-4 bg-amber-50 rounded-lg border border-amber-200">
+                <p className="text-xs font-semibold text-amber-600 uppercase mb-1">
+                  Underperformance Deduction
+                </p>
+                <p className="text-2xl font-bold text-amber-700">
+                  -{salary.currency} {salary.underperformanceDeduction.toLocaleString()}
+                </p>
+                <p className="text-xs text-amber-600 mt-1">If score {" < "} {salary.underperformanceThreshold}</p>
+              </div>
+              <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                <p className="text-xs font-semibold text-blue-600 uppercase mb-1">
+                  Next Payment
+                </p>
+                <p className="text-lg font-bold text-blue-700">
+                  {new Date(salary.nextSalaryDate).toLocaleDateString()}
+                </p>
+                <p className="text-xs text-blue-600 mt-1">Scheduled date</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Performance Score */}
+        {performance && (
+          <div className="space-y-4">
+            <div className="bg-white rounded-lg border border-slate-200 p-6">
+              <h2 className="text-lg font-semibold text-slate-900 mb-6 flex items-center gap-2">
+                <TrendingUp className="w-5 h-5 text-primary-600" />
+                Performance Score
+              </h2>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                {/* Score */}
+                <div className="p-6 bg-gradient-to-br from-primary-50 to-primary-100 rounded-lg border border-primary-200">
+                  <p className="text-xs font-semibold text-primary-600 uppercase mb-2">
+                    Current Score
+                  </p>
+                  <div className="flex items-center justify-between">
+                    <p className="text-4xl font-bold text-primary-900">
+                      {performance.currentScore}
+                    </p>
+                    <p className="text-sm text-primary-600">/100</p>
+                  </div>
+                  {performance.currentScore < 60 && (
+                    <p className="text-xs text-red-600 mt-2 font-semibold">
+                      ⚠️ Below threshold - Salary deduction active
+                    </p>
+                  )}
+                </div>
+
+                {/* Early Completions */}
+                <div className="p-6 bg-gradient-to-br from-green-50 to-green-100 rounded-lg border border-green-200">
+                  <p className="text-xs font-semibold text-green-600 uppercase mb-2">
+                    Early Completions
+                  </p>
+                  <div className="flex items-center gap-3">
+                    <CheckCircle className="w-8 h-8 text-green-600" />
+                    <p className="text-3xl font-bold text-green-900">
+                      {performance.earlyCompletions}
+                    </p>
+                  </div>
+                  <p className="text-xs text-green-700 mt-2">
+                    +{performance.earlyCompletions * 10} points earned
+                  </p>
+                </div>
+
+                {/* Rejections */}
+                <div className="p-6 bg-gradient-to-br from-red-50 to-red-100 rounded-lg border border-red-200">
+                  <p className="text-xs font-semibold text-red-600 uppercase mb-2">
+                    Rejections
+                  </p>
+                  <div className="flex items-center gap-3">
+                    <XCircle className="w-8 h-8 text-red-600" />
+                    <p className="text-3xl font-bold text-red-900">
+                      {performance.rejections}
+                    </p>
+                  </div>
+                  <p className="text-xs text-red-700 mt-2">
+                    -{performance.rejections * 10} points deducted
+                  </p>
+                </div>
+              </div>
+
+              {/* Performance History */}
+              {performance.performanceHistory.length > 0 && (
+                <div className="border-t border-slate-200 pt-4">
+                  <h3 className="text-sm font-semibold text-slate-900 mb-3">
+                    Recent Activity
+                  </h3>
+                  <div className="space-y-2">
+                    {performance.performanceHistory
+                      .slice(0, 5)
+                      .map((record) => (
+                        <div
+                          key={record.id}
+                          className="flex items-start gap-3 p-3 bg-slate-50 rounded-lg"
+                        >
+                          {record.type === "early_completion" ? (
+                            <CheckCircle className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                          ) : (
+                            <XCircle className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" />
+                          )}
+                          <div className="flex-1">
+                            <p className="text-sm text-slate-900">
+                              {record.description}
+                            </p>
+                            <p className="text-xs text-slate-500 mt-1">
+                              {new Date(record.createdAt).toLocaleDateString()}
+                              {" • "}
+                              <span
+                                className={
+                                  record.pointsChange >= 0
+                                    ? "text-green-600 font-semibold"
+                                    : "text-red-600 font-semibold"
+                                }
+                              >
+                                {record.pointsChange > 0 ? "+" : ""}
+                                {record.pointsChange} pts
+                              </span>
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
         {/* How it Works */}
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
           <h3 className="text-sm font-semibold text-blue-900 mb-4">

@@ -81,6 +81,89 @@ export default function AdminPerformance() {
     return data;
   }, [searchTerm, sortBy, showOnlyUnderperforming]);
 
+  // Filter monthly reports
+  const filteredMonthlyReports = useMemo(() => {
+    let filtered = mockMonthlyPerformanceReports.filter((report) => {
+      const staff = mockStaff.find((s) => s.id === report.staffId);
+      const reportDate = new Date(report.year, report.month - 1);
+      const startDate = new Date(startYear, startMonth - 1);
+      const endDate = new Date(endYear, endMonth - 1);
+
+      // Date range filter
+      const dateInRange =
+        reportDate >= startDate && reportDate <= endDate;
+
+      // Staff name search filter
+      const staffMatch =
+        !monthlySearchTerm ||
+        staff?.firstName.toLowerCase().includes(monthlySearchTerm.toLowerCase()) ||
+        staff?.lastName.toLowerCase().includes(monthlySearchTerm.toLowerCase());
+
+      return dateInRange && staffMatch;
+    });
+
+    // Sort by date (descending)
+    filtered.sort((a, b) => {
+      const dateA = new Date(a.year, a.month - 1);
+      const dateB = new Date(b.year, b.month - 1);
+      return dateB.getTime() - dateA.getTime();
+    });
+
+    return filtered;
+  }, [startMonth, startYear, endMonth, endYear, monthlySearchTerm]);
+
+  // Generate PDF report
+  const downloadMonthlyReportPDF = (report: MonthlyPerformanceReport) => {
+    const staff = mockStaff.find((s) => s.id === report.staffId);
+    const monthName = new Date(2023, report.month - 1).toLocaleString(
+      "default",
+      { month: "long" }
+    );
+
+    let pdfContent = `
+MONTHLY PERFORMANCE REPORT
+========================
+
+Staff Member: ${staff?.firstName} ${staff?.lastName}
+Period: ${monthName} ${report.year}
+Generated: ${new Date().toLocaleDateString()}
+
+PERFORMANCE METRICS
+==================
+Current Score: ${report.totalScore}/100
+Early Completions: ${report.earlyCompletions}
+Review Rejections: ${report.rejections}
+Score Trend: ${report.scoreTrend > 0 ? "↑ " : "↓ "}${Math.abs(report.scoreTrend)} points
+
+PERFORMANCE STATUS
+==================
+Status: ${report.performanceStatus.toUpperCase()}
+Salary Impact: ${report.salaryImpact ? "YES - Deduction: $" + report.deductionAmount : "NO"}
+
+BREAKDOWN
+=========
+Early Completions: +${report.earlyCompletions * 10} points
+Review Rejections: -${report.rejections * 10} points
+Total Adjustments: ${report.earlyCompletions * 10 - report.rejections * 10} points
+Final Score: ${report.totalScore}/100
+    `;
+
+    // Create a blob and download
+    const element = document.createElement("a");
+    element.setAttribute(
+      "href",
+      "data:text/plain;charset=utf-8," + encodeURIComponent(pdfContent)
+    );
+    element.setAttribute(
+      "download",
+      `Performance_Report_${staff?.firstName}_${monthName}_${report.year}.txt`
+    );
+    element.style.display = "none";
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  };
+
   const getScoreColor = (score: number) => {
     if (score >= 80) return "text-green-600 bg-green-50 border-green-200";
     if (score >= 60) return "text-blue-600 bg-blue-50 border-blue-200";

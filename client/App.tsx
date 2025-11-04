@@ -39,6 +39,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/staff/dashboard" element={<StaffDashboard />} />
 
           {/* Admin Routes */}
           <Route path="/admin/login" element={<AdminLogin />} />
@@ -73,6 +74,10 @@ const App = () => (
           <Route
             path="/admin/staff/:staffId/edit"
             element={<AdminRoute element={<AdminEditStaff />} />}
+          />
+          <Route
+            path="/admin/staff/:staffId/commission"
+            element={<AdminRoute element={<AdminStaffCommission />} />}
           />
 
           {/* Catch-all */}

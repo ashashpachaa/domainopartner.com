@@ -81,6 +81,14 @@ const App = () => (
             path="/admin/staff/:staffId/commission"
             element={<AdminRoute element={<AdminStaffCommission />} />}
           />
+          <Route
+            path="/admin/staff/:staffId/salary"
+            element={<AdminRoute element={<AdminStaffSalary />} />}
+          />
+          <Route
+            path="/admin/performance"
+            element={<AdminRoute element={<AdminPerformance />} />}
+          />
 
           {/* Catch-all */}
           <Route path="*" element={<NotFound />} />

@@ -77,6 +77,40 @@ export interface LoginHistory {
   duration?: number;
 }
 
+export interface CommissionTier {
+  id: string;
+  orderCountMin: number;
+  orderCountMax: number;
+  percentageRate: number;
+  fixedAmount: number;
+  description: string;
+}
+
+export interface StaffCommission {
+  staffId: string;
+  currency: string;
+  tiers: CommissionTier[];
+  totalEarned: number;
+  paidAmount: number;
+  pendingAmount: number;
+}
+
+export interface StaffCommissionHistory {
+  id: string;
+  staffId: string;
+  invoiceId: string;
+  orderCount: number;
+  appliedTier: CommissionTier;
+  invoiceAmount: number;
+  commissionPercentage: number;
+  commissionFixed: number;
+  totalCommission: number;
+  currency: string;
+  status: "pending" | "paid";
+  createdAt: string;
+  paidAt?: string;
+}
+
 export const mockUsers: User[] = [
   {
     id: "1",

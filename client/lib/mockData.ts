@@ -141,6 +141,20 @@ export interface PerformanceRecord {
   createdAt: string;
 }
 
+export interface MonthlyPerformanceReport {
+  id: string;
+  staffId: string;
+  month: number;
+  year: number;
+  totalScore: number;
+  earlyCompletions: number;
+  rejections: number;
+  scoreTrend: number;
+  performanceStatus: "excellent" | "good" | "fair" | "poor";
+  salaryImpact: boolean;
+  deductionAmount: number;
+}
+
 export const mockUsers: User[] = [
   {
     id: "1",

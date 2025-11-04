@@ -63,6 +63,17 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             {sidebarOpen && <span className="font-medium">Users</span>}
           </Link>
           <Link
+            to="/admin/invoices"
+            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition ${
+              isActive("/admin/invoices") || isActive("/admin/invoices")
+                ? "bg-primary-600 text-white"
+                : "text-slate-400 hover:bg-slate-800"
+            }`}
+          >
+            <FileText className="w-5 h-5" />
+            {sidebarOpen && <span className="font-medium">Invoices</span>}
+          </Link>
+          <Link
             to="/admin/staff"
             className={`flex items-center gap-3 px-4 py-3 rounded-lg transition ${
               isActive("/admin/staff")

@@ -66,16 +66,12 @@ const App = () => (
             element={<AdminRoute element={<AdminInvoiceDetail />} />}
           />
           <Route
+            path="/admin/performance"
+            element={<AdminRoute element={<AdminPerformance />} />}
+          />
+          <Route
             path="/admin/staff"
             element={<AdminRoute element={<AdminStaff />} />}
-          />
-          <Route
-            path="/admin/staff/:staffId"
-            element={<AdminRoute element={<AdminStaffDetail />} />}
-          />
-          <Route
-            path="/admin/staff/:staffId/edit"
-            element={<AdminRoute element={<AdminEditStaff />} />}
           />
           <Route
             path="/admin/staff/:staffId/commission"
@@ -86,8 +82,12 @@ const App = () => (
             element={<AdminRoute element={<AdminStaffSalary />} />}
           />
           <Route
-            path="/admin/performance"
-            element={<AdminRoute element={<AdminPerformance />} />}
+            path="/admin/staff/:staffId/edit"
+            element={<AdminRoute element={<AdminEditStaff />} />}
+          />
+          <Route
+            path="/admin/staff/:staffId"
+            element={<AdminRoute element={<AdminStaffDetail />} />}
           />
 
           {/* Catch-all */}

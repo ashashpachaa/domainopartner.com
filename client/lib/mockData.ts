@@ -1,4 +1,24 @@
 export type UserStatus = "pending" | "active" | "suspended" | "inactive";
+export type StaffRole = "super_admin" | "admin" | "operation_manager" | "operation" | "sales" | "accounting";
+
+export interface Permission {
+  id: string;
+  name: string;
+  description: string;
+}
+
+export interface Staff {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: StaffRole;
+  status: "active" | "inactive";
+  department: string;
+  joinDate: string;
+  lastLogin: string;
+  phone: string;
+}
 
 export interface User {
   id: string;

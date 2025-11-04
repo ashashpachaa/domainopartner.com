@@ -111,6 +111,36 @@ export interface StaffCommissionHistory {
   paidAt?: string;
 }
 
+export interface StaffSalary {
+  staffId: string;
+  baseSalary: number;
+  currency: string;
+  underperformanceDeduction: number;
+  underperformanceThreshold: number;
+  lastSalaryDate: string;
+  nextSalaryDate: string;
+}
+
+export interface StaffPerformance {
+  staffId: string;
+  currentScore: number;
+  totalScore: number;
+  rejections: number;
+  earlyCompletions: number;
+  lastUpdated: string;
+  performanceHistory: PerformanceRecord[];
+}
+
+export interface PerformanceRecord {
+  id: string;
+  staffId: string;
+  type: "rejection" | "early_completion" | "manual_adjustment";
+  pointsChange: number;
+  description: string;
+  relatedOrderId?: string;
+  createdAt: string;
+}
+
 export const mockUsers: User[] = [
   {
     id: "1",

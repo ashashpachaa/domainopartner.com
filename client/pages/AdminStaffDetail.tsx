@@ -1,7 +1,7 @@
 import AdminLayout from "@/components/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Edit2, Mail, Phone, MapPin, Calendar, Shield, DollarSign } from "lucide-react";
+import { ArrowLeft, Edit2, Mail, Phone, MapPin, Calendar, Shield, DollarSign, Plus } from "lucide-react";
 import { mockStaff, rolePermissions, roleLabels, mockStaffCommissions } from "@/lib/mockData";
 
 const roleDescriptions: Record<string, string> = {

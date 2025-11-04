@@ -11,6 +11,9 @@ import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminUserDetail from "./pages/AdminUserDetail";
 import AdminEditUser from "./pages/AdminEditUser";
+import AdminStaff from "./pages/AdminStaff";
+import AdminStaffDetail from "./pages/AdminStaffDetail";
+import AdminEditStaff from "./pages/AdminEditStaff";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();

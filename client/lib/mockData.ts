@@ -556,6 +556,15 @@ export const rolePermissions: Record<StaffRole, string[]> = {
   accounting: ["view_invoices", "view_payments", "manage_billing"],
 };
 
+export const roleLabels: Record<StaffRole, string> = {
+  super_admin: "Super Admin",
+  admin: "Admin",
+  operation_manager: "Operation Manager",
+  operation: "Operation",
+  sales: "Sales",
+  accounting: "Accounting",
+};
+
 export const mockStaff: Staff[] = [
   {
     id: "S001",

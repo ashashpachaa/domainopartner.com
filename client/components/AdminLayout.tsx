@@ -62,6 +62,17 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             <Users className="w-5 h-5" />
             {sidebarOpen && <span className="font-medium">Users</span>}
           </Link>
+          <Link
+            to="/admin/staff"
+            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition ${
+              isActive("/admin/staff")
+                ? "bg-primary-600 text-white"
+                : "text-slate-400 hover:bg-slate-800"
+            }`}
+          >
+            <Users2 className="w-5 h-5" />
+            {sidebarOpen && <span className="font-medium">Staff</span>}
+          </Link>
         </nav>
 
         {/* Logout */}

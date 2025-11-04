@@ -84,6 +84,17 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             <Users2 className="w-5 h-5" />
             {sidebarOpen && <span className="font-medium">Staff</span>}
           </Link>
+          <Link
+            to="/admin/performance"
+            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition ${
+              isActive("/admin/performance")
+                ? "bg-primary-600 text-white"
+                : "text-slate-400 hover:bg-slate-800"
+            }`}
+          >
+            <TrendingUp className="w-5 h-5" />
+            {sidebarOpen && <span className="font-medium">Performance</span>}
+          </Link>
         </nav>
 
         {/* Logout */}

@@ -9,12 +9,17 @@ import {
   AlertCircle,
   BarChart3,
   Download,
+  TrendingDown,
+  Zap,
+  XCircle,
 } from "lucide-react";
 import { useState, useMemo } from "react";
 import {
   mockStaffCommissions,
   mockStaffCommissionHistory,
   mockStaff,
+  mockStaffSalaries,
+  mockStaffPerformances,
   StaffCommission,
   StaffCommissionHistory,
 } from "@/lib/mockData";

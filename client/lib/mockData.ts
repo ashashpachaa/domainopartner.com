@@ -1796,3 +1796,62 @@ export const mockStaffPerformances: StaffPerformance[] = [
     ],
   },
 ];
+
+// Monthly Performance Reports
+export const mockMonthlyPerformanceReports: MonthlyPerformanceReport[] = [
+  // S001 Reports
+  { id: "MR001", staffId: "S001", month: 9, year: 2023, totalScore: 95, earlyCompletions: 8, rejections: 0, scoreTrend: 5, performanceStatus: "excellent", salaryImpact: false, deductionAmount: 0 },
+  { id: "MR002", staffId: "S001", month: 10, year: 2023, totalScore: 100, earlyCompletions: 10, rejections: 0, scoreTrend: 5, performanceStatus: "excellent", salaryImpact: false, deductionAmount: 0 },
+  { id: "MR003", staffId: "S001", month: 11, year: 2023, totalScore: 100, earlyCompletions: 9, rejections: 0, scoreTrend: 0, performanceStatus: "excellent", salaryImpact: false, deductionAmount: 0 },
+  { id: "MR004", staffId: "S001", month: 12, year: 2023, totalScore: 100, earlyCompletions: 10, rejections: 0, scoreTrend: 0, performanceStatus: "excellent", salaryImpact: false, deductionAmount: 0 },
+  { id: "MR005", staffId: "S001", month: 1, year: 2024, totalScore: 100, earlyCompletions: 9, rejections: 0, scoreTrend: 0, performanceStatus: "excellent", salaryImpact: false, deductionAmount: 0 },
+
+  // S002 Reports
+  { id: "MR006", staffId: "S002", month: 9, year: 2023, totalScore: 80, earlyCompletions: 5, rejections: 2, scoreTrend: 0, performanceStatus: "good", salaryImpact: false, deductionAmount: 0 },
+  { id: "MR007", staffId: "S002", month: 10, year: 2023, totalScore: 85, earlyCompletions: 6, rejections: 1, scoreTrend: 5, performanceStatus: "good", salaryImpact: false, deductionAmount: 0 },
+  { id: "MR008", staffId: "S002", month: 11, year: 2023, totalScore: 80, earlyCompletions: 4, rejections: 2, scoreTrend: -5, performanceStatus: "good", salaryImpact: false, deductionAmount: 0 },
+  { id: "MR009", staffId: "S002", month: 12, year: 2023, totalScore: 90, earlyCompletions: 7, rejections: 1, scoreTrend: 10, performanceStatus: "excellent", salaryImpact: false, deductionAmount: 0 },
+  { id: "MR010", staffId: "S002", month: 1, year: 2024, totalScore: 85, earlyCompletions: 5, rejections: 1, scoreTrend: -5, performanceStatus: "good", salaryImpact: false, deductionAmount: 0 },
+
+  // S003 Reports
+  { id: "MR011", staffId: "S003", month: 9, year: 2023, totalScore: 70, earlyCompletions: 4, rejections: 3, scoreTrend: 0, performanceStatus: "fair", salaryImpact: false, deductionAmount: 0 },
+  { id: "MR012", staffId: "S003", month: 10, year: 2023, totalScore: 75, earlyCompletions: 5, rejections: 2, scoreTrend: 5, performanceStatus: "good", salaryImpact: false, deductionAmount: 0 },
+  { id: "MR013", staffId: "S003", month: 11, year: 2023, totalScore: 65, earlyCompletions: 3, rejections: 3, scoreTrend: -10, performanceStatus: "fair", salaryImpact: true, deductionAmount: 400 },
+  { id: "MR014", staffId: "S003", month: 12, year: 2023, totalScore: 75, earlyCompletions: 4, rejections: 2, scoreTrend: 10, performanceStatus: "good", salaryImpact: false, deductionAmount: 0 },
+  { id: "MR015", staffId: "S003", month: 1, year: 2024, totalScore: 75, earlyCompletions: 3, rejections: 2, scoreTrend: 0, performanceStatus: "good", salaryImpact: false, deductionAmount: 0 },
+
+  // S004 Reports
+  { id: "MR016", staffId: "S004", month: 9, year: 2023, totalScore: 55, earlyCompletions: 2, rejections: 4, scoreTrend: 0, performanceStatus: "poor", salaryImpact: true, deductionAmount: 350 },
+  { id: "MR017", staffId: "S004", month: 10, year: 2023, totalScore: 65, earlyCompletions: 3, rejections: 3, scoreTrend: 10, performanceStatus: "fair", salaryImpact: true, deductionAmount: 350 },
+  { id: "MR018", staffId: "S004", month: 11, year: 2023, totalScore: 70, earlyCompletions: 4, rejections: 3, scoreTrend: 5, performanceStatus: "fair", salaryImpact: false, deductionAmount: 0 },
+  { id: "MR019", staffId: "S004", month: 12, year: 2023, totalScore: 75, earlyCompletions: 3, rejections: 2, scoreTrend: 5, performanceStatus: "good", salaryImpact: false, deductionAmount: 0 },
+  { id: "MR020", staffId: "S004", month: 1, year: 2024, totalScore: 70, earlyCompletions: 2, rejections: 3, scoreTrend: -5, performanceStatus: "fair", salaryImpact: false, deductionAmount: 0 },
+
+  // S005 Reports
+  { id: "MR021", staffId: "S005", month: 9, year: 2023, totalScore: 80, earlyCompletions: 5, rejections: 2, scoreTrend: 0, performanceStatus: "good", salaryImpact: false, deductionAmount: 0 },
+  { id: "MR022", staffId: "S005", month: 10, year: 2023, totalScore: 85, earlyCompletions: 6, rejections: 1, scoreTrend: 5, performanceStatus: "good", salaryImpact: false, deductionAmount: 0 },
+  { id: "MR023", staffId: "S005", month: 11, year: 2023, totalScore: 80, earlyCompletions: 4, rejections: 2, scoreTrend: -5, performanceStatus: "good", salaryImpact: false, deductionAmount: 0 },
+  { id: "MR024", staffId: "S005", month: 12, year: 2023, totalScore: 90, earlyCompletions: 7, rejections: 1, scoreTrend: 10, performanceStatus: "excellent", salaryImpact: false, deductionAmount: 0 },
+  { id: "MR025", staffId: "S005", month: 1, year: 2024, totalScore: 80, earlyCompletions: 4, rejections: 2, scoreTrend: -10, performanceStatus: "good", salaryImpact: false, deductionAmount: 0 },
+
+  // S006 Reports
+  { id: "MR026", staffId: "S006", month: 9, year: 2023, totalScore: 90, earlyCompletions: 8, rejections: 1, scoreTrend: 0, performanceStatus: "excellent", salaryImpact: false, deductionAmount: 0 },
+  { id: "MR027", staffId: "S006", month: 10, year: 2023, totalScore: 95, earlyCompletions: 9, rejections: 0, scoreTrend: 5, performanceStatus: "excellent", salaryImpact: false, deductionAmount: 0 },
+  { id: "MR028", staffId: "S006", month: 11, year: 2023, totalScore: 85, earlyCompletions: 6, rejections: 1, scoreTrend: -10, performanceStatus: "good", salaryImpact: false, deductionAmount: 0 },
+  { id: "MR029", staffId: "S006", month: 12, year: 2023, totalScore: 90, earlyCompletions: 8, rejections: 1, scoreTrend: 5, performanceStatus: "excellent", salaryImpact: false, deductionAmount: 0 },
+  { id: "MR030", staffId: "S006", month: 1, year: 2024, totalScore: 90, earlyCompletions: 7, rejections: 1, scoreTrend: 0, performanceStatus: "excellent", salaryImpact: false, deductionAmount: 0 },
+
+  // S007 Reports
+  { id: "MR031", staffId: "S007", month: 9, year: 2023, totalScore: 100, earlyCompletions: 10, rejections: 0, scoreTrend: 0, performanceStatus: "excellent", salaryImpact: false, deductionAmount: 0 },
+  { id: "MR032", staffId: "S007", month: 10, year: 2023, totalScore: 100, earlyCompletions: 9, rejections: 0, scoreTrend: 0, performanceStatus: "excellent", salaryImpact: false, deductionAmount: 0 },
+  { id: "MR033", staffId: "S007", month: 11, year: 2023, totalScore: 95, earlyCompletions: 8, rejections: 0, scoreTrend: -5, performanceStatus: "excellent", salaryImpact: false, deductionAmount: 0 },
+  { id: "MR034", staffId: "S007", month: 12, year: 2023, totalScore: 100, earlyCompletions: 10, rejections: 0, scoreTrend: 5, performanceStatus: "excellent", salaryImpact: false, deductionAmount: 0 },
+  { id: "MR035", staffId: "S007", month: 1, year: 2024, totalScore: 95, earlyCompletions: 8, rejections: 0, scoreTrend: -5, performanceStatus: "excellent", salaryImpact: false, deductionAmount: 0 },
+
+  // S008 Reports
+  { id: "MR036", staffId: "S008", month: 9, year: 2023, totalScore: 85, earlyCompletions: 6, rejections: 1, scoreTrend: 0, performanceStatus: "good", salaryImpact: false, deductionAmount: 0 },
+  { id: "MR037", staffId: "S008", month: 10, year: 2023, totalScore: 90, earlyCompletions: 7, rejections: 1, scoreTrend: 5, performanceStatus: "excellent", salaryImpact: false, deductionAmount: 0 },
+  { id: "MR038", staffId: "S008", month: 11, year: 2023, totalScore: 88, earlyCompletions: 6, rejections: 1, scoreTrend: -2, performanceStatus: "excellent", salaryImpact: false, deductionAmount: 0 },
+  { id: "MR039", staffId: "S008", month: 12, year: 2023, totalScore: 92, earlyCompletions: 8, rejections: 0, scoreTrend: 4, performanceStatus: "excellent", salaryImpact: false, deductionAmount: 0 },
+  { id: "MR040", staffId: "S008", month: 1, year: 2024, totalScore: 88, earlyCompletions: 6, rejections: 1, scoreTrend: -4, performanceStatus: "excellent", salaryImpact: false, deductionAmount: 0 },
+];

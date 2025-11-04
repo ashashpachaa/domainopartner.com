@@ -147,14 +147,91 @@ export default function AdminStaffCommission() {
             onChange={(e) => setCurrency(e.target.value)}
             className="w-full md:w-64 px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-primary-600 focus:ring-1 focus:ring-primary-600"
           >
-            <option value="USD">USD ($)</option>
-            <option value="EUR">EUR (€)</option>
-            <option value="GBP">GBP (£)</option>
-            <option value="JPY">JPY (¥)</option>
-            <option value="SGD">SGD (S$)</option>
-            <option value="AUD">AUD (A$)</option>
-            <option value="CAD">CAD (C$)</option>
-            <option value="BRL">BRL (R$)</option>
+            <optgroup label="Major Currencies">
+              <option value="USD">USD - US Dollar ($)</option>
+              <option value="EUR">EUR - Euro (€)</option>
+              <option value="GBP">GBP - British Pound (£)</option>
+              <option value="JPY">JPY - Japanese Yen (¥)</option>
+              <option value="CHF">CHF - Swiss Franc (CHF)</option>
+              <option value="CAD">CAD - Canadian Dollar (C$)</option>
+              <option value="AUD">AUD - Australian Dollar (A$)</option>
+            </optgroup>
+
+            <optgroup label="Asian Currencies">
+              <option value="SGD">SGD - Singapore Dollar (S$)</option>
+              <option value="HKD">HKD - Hong Kong Dollar (HK$)</option>
+              <option value="CNY">CNY - Chinese Yuan (¥)</option>
+              <option value="INR">INR - Indian Rupee (₹)</option>
+              <option value="IDR">IDR - Indonesian Rupiah (Rp)</option>
+              <option value="MYR">MYR - Malaysian Ringgit (RM)</option>
+              <option value="PHP">PHP - Philippine Peso (₱)</option>
+              <option value="THB">THB - Thai Baht (฿)</option>
+              <option value="VND">VND - Vietnamese Dong (₫)</option>
+              <option value="KRW">KRW - South Korean Won (₩)</option>
+              <option value="TWD">TWD - Taiwan Dollar (NT$)</option>
+              <option value="PKR">PKR - Pakistani Rupee (₨)</option>
+              <option value="BDT">BDT - Bangladeshi Taka (৳)</option>
+            </optgroup>
+
+            <optgroup label="European Currencies">
+              <option value="SEK">SEK - Swedish Krona (kr)</option>
+              <option value="NOK">NOK - Norwegian Krone (kr)</option>
+              <option value="DKK">DKK - Danish Krone (kr)</option>
+              <option value="PLN">PLN - Polish Zloty (zł)</option>
+              <option value="CZK">CZK - Czech Koruna (Kč)</option>
+              <option value="HUF">HUF - Hungarian Forint (Ft)</option>
+              <option value="RON">RON - Romanian Leu (lei)</option>
+              <option value="BGN">BGN - Bulgarian Lev (лв)</option>
+              <option value="HRK">HRK - Croatian Kuna (kn)</option>
+              <option value="RUB">RUB - Russian Ruble (₽)</option>
+              <option value="TRY">TRY - Turkish Lira (₺)</option>
+              <option value="UAH">UAH - Ukrainian Hryvnia (₴)</option>
+            </optgroup>
+
+            <optgroup label="Americas Currencies">
+              <option value="BRL">BRL - Brazilian Real (R$)</option>
+              <option value="MXN">MXN - Mexican Peso (Mex$)</option>
+              <option value="ARS">ARS - Argentine Peso ($)</option>
+              <option value="CLP">CLP - Chilean Peso ($)</option>
+              <option value="COP">COP - Colombian Peso ($)</option>
+              <option value="PEN">PEN - Peruvian Sol (S/)</option>
+              <option value="UYU">UYU - Uruguayan Peso ($U)</option>
+              <option value="VEF">VEF - Venezuelan Bolívar (Bs)</option>
+            </optgroup>
+
+            <optgroup label="Middle East & Africa">
+              <option value="AED">AED - UAE Dirham (د.إ)</option>
+              <option value="SAR">SAR - Saudi Riyal (﷼)</option>
+              <option value="QAR">QAR - Qatar Riyal (﷼)</option>
+              <option value="KWD">KWD - Kuwaiti Dinar (د.ك)</option>
+              <option value="BHD">BHD - Bahraini Dinar (.د.ب)</option>
+              <option value="OMR">OMR - Omani Rial (ر.ع.)</option>
+              <option value="JOD">JOD - Jordanian Dinar (د.ا)</option>
+              <option value="LBP">LBP - Lebanese Pound (ل.ل)</option>
+              <option value="EGP">EGP - Egyptian Pound (£)</option>
+              <option value="ZAR">ZAR - South African Rand (R)</option>
+              <option value="NGN">NGN - Nigerian Naira (₦)</option>
+              <option value="GHS">GHS - Ghanaian Cedi (₵)</option>
+              <option value="KES">KES - Kenyan Shilling (KSh)</option>
+              <option value="TZS">TZS - Tanzanian Shilling (TSh)</option>
+              <option value="UGX">UGX - Ugandan Shilling (USh)</option>
+              <option value="ETB">ETB - Ethiopian Birr (Br)</option>
+              <option value="MAD">MAD - Moroccan Dirham (د.م.)</option>
+              <option value="TND">TND - Tunisian Dinar (د.ت)</option>
+            </optgroup>
+
+            <optgroup label="Other Currencies">
+              <option value="NZD">NZD - New Zealand Dollar (NZ$)</option>
+              <option value="THB">THB - Thai Baht (฿)</option>
+              <option value="MOP">MOP - Macanese Pataca (P)</option>
+              <option value="HNL">HNL - Honduran Lempira (L)</option>
+              <option value="GTQ">GTQ - Guatemalan Quetzal (Q)</option>
+              <option value="CRC">CRC - Costa Rican Colón (₡)</option>
+              <option value="PYG">PYG - Paraguayan Guaraní (₲)</option>
+              <option value="BOB">BOB - Bolivian Boliviano (Bs.)</option>
+              <option value="ISK">ISK - Icelandic Króna (kr)</option>
+              <option value="NIS">NIS - Israeli New Sheqel (₪)</option>
+            </optgroup>
           </select>
           <p className="text-xs text-slate-500 mt-2">
             All commissions for this staff will be calculated in {currency}

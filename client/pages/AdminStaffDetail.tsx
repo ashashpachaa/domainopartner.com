@@ -351,6 +351,76 @@ export default function AdminStaffDetail() {
             </div>
           )}
         </div>
+
+        {/* Salary Section */}
+        <div className="bg-white rounded-lg border border-slate-200 p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold text-slate-900 flex items-center gap-3">
+              <DollarSign className="w-6 h-6 text-green-600" />
+              Salary Management
+            </h2>
+            <Link to={`/admin/staff/${member.id}/salary`}>
+              <Button className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white gap-2">
+                <Edit2 className="w-4 h-4" />
+                Configure Salary
+              </Button>
+            </Link>
+          </div>
+          {mockStaffSalaries.find((s) => s.staffId === member.id) ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {mockStaffSalaries.filter((s) => s.staffId === member.id).map((sal) => (
+                <div key={sal.staffId}>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                      <p className="text-xs font-semibold text-green-600 uppercase mb-1">Base Salary</p>
+                      <p className="text-2xl font-bold text-green-700">{sal.currency} {sal.baseSalary.toLocaleString()}</p>
+                    </div>
+                    <div className="p-4 bg-red-50 rounded-lg border border-red-200">
+                      <p className="text-xs font-semibold text-red-600 uppercase mb-1">Underperformance Deduction</p>
+                      <p className="text-2xl font-bold text-red-700">-{sal.currency} {sal.underperformanceDeduction.toLocaleString()}</p>
+                    </div>
+                    <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                      <p className="text-xs font-semibold text-blue-600 uppercase mb-1">Next Payment</p>
+                      <p className="text-lg font-bold text-blue-700">{new Date(sal.nextSalaryDate).toLocaleDateString()}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : null}
+        </div>
+
+        {/* Performance Section */}
+        <div className="bg-white rounded-lg border border-slate-200 p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold text-slate-900 flex items-center gap-3">
+              <TrendingUp className="w-6 h-6 text-primary-600" />
+              Performance Score
+            </h2>
+            <Link to="/admin/performance">
+              <Button variant="outline" className="gap-2">
+                <TrendingUp className="w-4 h-4" />
+                View All
+              </Button>
+            </Link>
+          </div>
+          {mockStaffPerformances.filter((p) => p.staffId === member.id).map((perf) => (
+            <div key={perf.staffId} className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="p-4 bg-primary-50 rounded-lg border border-primary-200">
+                <p className="text-xs font-semibold text-primary-600 uppercase mb-1">Current Score</p>
+                <p className="text-3xl font-bold text-primary-700">{perf.currentScore}/100</p>
+              </div>
+              <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                <p className="text-xs font-semibold text-green-600 uppercase mb-1">Early Completions</p>
+                <p className="text-3xl font-bold text-green-700">{perf.earlyCompletions}</p>
+              </div>
+              <div className="p-4 bg-red-50 rounded-lg border border-red-200">
+                <p className="text-xs font-semibold text-red-600 uppercase mb-1">Rejections</p>
+                <p className="text-3xl font-bold text-red-700">{perf.rejections}</p>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </AdminLayout>
   );

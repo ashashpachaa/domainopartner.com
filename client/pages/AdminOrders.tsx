@@ -221,6 +221,11 @@ export default function AdminOrders() {
       o.status !== "completed" &&
       !o.status.startsWith("rejected")
   ).length;
+  const overdueOrders = mockOrders.filter((order) => {
+    if (order.status === "completed") return false;
+    const { daysRemaining } = calculateExpectedCompletion(order);
+    return daysRemaining < 0;
+  }).length;
   const totalRevenue = mockOrders
     .filter((o) => o.status === "completed")
     .reduce((sum, o) => sum + o.amount, 0);

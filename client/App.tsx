@@ -21,6 +21,7 @@ import AdminStaffSalary from "./pages/AdminStaffSalary";
 import AdminPerformance from "./pages/AdminPerformance";
 import AdminOrders from "./pages/AdminOrders";
 import AdminOrderDetail from "./pages/AdminOrderDetail";
+import AdminCreateOrder from "./pages/AdminCreateOrder";
 import AdminProducts from "./pages/AdminProducts";
 import AdminClientRequests from "./pages/AdminClientRequests";
 import AdminClientRequestDetail from "./pages/AdminClientRequestDetail";
@@ -73,6 +74,10 @@ const App = () => (
           <Route
             path="/admin/orders"
             element={<AdminRoute element={<AdminOrders />} />}
+          />
+          <Route
+            path="/admin/orders/new"
+            element={<AdminRoute element={<AdminCreateOrder />} />}
           />
           <Route
             path="/admin/orders/:orderId"

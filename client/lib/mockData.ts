@@ -1183,6 +1183,8 @@ export const mockInvoices: Invoice[] = [
     issueDate: "2024-01-05",
     dueDate: "2024-02-05",
     paidDate: "2024-01-06",
+    createdAt: "2024-01-05T09:00:00Z",
+    createdByStaffId: "S003",
     description: "Company Registration Service - USA",
     items: [
       {
@@ -1207,6 +1209,8 @@ export const mockInvoices: Invoice[] = [
     issueDate: "2024-01-08",
     dueDate: "2024-02-08",
     paidDate: "2024-01-10",
+    createdAt: "2024-01-08T10:30:00Z",
+    createdByStaffId: "S003",
     description: "Tax ID Registration",
     items: [
       {
@@ -1226,6 +1230,8 @@ export const mockInvoices: Invoice[] = [
     issueDate: "2023-12-20",
     dueDate: "2024-01-20",
     paidDate: "2023-12-22",
+    createdAt: "2023-12-20T14:00:00Z",
+    createdByStaffId: "S006",
     description: "UK Company Formation",
     items: [
       {
@@ -1250,6 +1256,8 @@ export const mockInvoices: Invoice[] = [
     issueDate: "2023-11-15",
     dueDate: "2023-12-15",
     paidDate: "2023-12-01",
+    createdAt: "2023-11-15T11:15:00Z",
+    createdByStaffId: "S005",
     description: "EU Multi-Country Business Setup",
     items: [
       {

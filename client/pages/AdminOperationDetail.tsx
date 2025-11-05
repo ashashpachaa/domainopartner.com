@@ -406,18 +406,104 @@ export default function AdminOperationDetail() {
               </p>
             </div>
             <div className="text-right">
-              <p className="text-2xl font-bold text-primary-600">
-                {order.currency} {order.amount.toLocaleString()}
-              </p>
               <p className="text-xs text-slate-600 mt-1">
                 Created:{" "}
                 {new Date(order.createdAt).toLocaleDateString("en-US", {
                   month: "short",
                   day: "numeric",
                   year: "numeric",
+                })}{" "}
+                at{" "}
+                {new Date(order.createdAt).toLocaleTimeString("en-US", {
+                  hour: "2-digit",
+                  minute: "2-digit",
                 })}
               </p>
             </div>
+          </div>
+        </div>
+
+        {/* Order Details & Deadlines Section */}
+        <div className={`rounded-lg p-6 border-2 ${getDeadlineColor()}`}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Created By */}
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <User className="w-4 h-4 text-slate-600" />
+                <p className="text-xs font-semibold text-slate-600 uppercase">Created By</p>
+              </div>
+              <p className={`text-sm font-medium ${getDeadlineTextColor()}`}>
+                {order.createdByStaffId
+                  ? mockStaff.find((s) => s.id === order.createdByStaffId)?.firstName +
+                    " " +
+                    mockStaff.find((s) => s.id === order.createdByStaffId)?.lastName
+                  : "Unknown"}
+              </p>
+            </div>
+
+            {/* Current Stage */}
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <Clock className="w-4 h-4 text-slate-600" />
+                <p className="text-xs font-semibold text-slate-600 uppercase">Current Stage</p>
+              </div>
+              <p className={`text-sm font-medium ${getDeadlineTextColor()}`}>
+                {getDeadlineInfo.stageName}
+              </p>
+            </div>
+
+            {/* Deadline & Countdown */}
+            {getDeadlineInfo.deadlineDate && !["completed", "rejected_by_sales", "rejected_by_operation", "rejected_by_operation_manager", "rejected_by_client"].includes(order.status) && (
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <Calendar className="w-4 h-4 text-slate-600" />
+                  <p className="text-xs font-semibold text-slate-600 uppercase">Deadline</p>
+                </div>
+                <p className={`text-sm font-medium ${getDeadlineTextColor()}`}>
+                  {getDeadlineInfo.deadlineDate.toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </p>
+                <p className={`text-xs mt-1 font-semibold ${
+                  getDeadlineInfo.isOverdue
+                    ? "text-red-600"
+                    : getDeadlineInfo.isApproaching
+                    ? "text-yellow-600"
+                    : "text-blue-600"
+                }`}>
+                  {getDeadlineInfo.isOverdue ? (
+                    <>⚠️ OVERDUE</>
+                  ) : (
+                    <>
+                      {getDeadlineInfo.daysRemaining}d {getDeadlineInfo.hoursRemaining}h remaining
+                    </>
+                  )}
+                </p>
+              </div>
+            )}
+
+            {/* Affected Staff */}
+            {getDeadlineInfo.affectedStaff && !["completed", "rejected_by_sales", "rejected_by_operation", "rejected_by_operation_manager", "rejected_by_client"].includes(order.status) && (
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <AlertCircle className="w-4 h-4 text-slate-600" />
+                  <p className="text-xs font-semibold text-slate-600 uppercase">Responsible</p>
+                </div>
+                <p className={`text-sm font-medium ${getDeadlineTextColor()}`}>
+                  {getDeadlineInfo.affectedStaff.firstName} {getDeadlineInfo.affectedStaff.lastName}
+                </p>
+                {(getDeadlineInfo.isOverdue || getDeadlineInfo.isApproaching) && (
+                  <p className={`text-xs mt-1 font-semibold ${
+                    getDeadlineInfo.isOverdue
+                      ? "text-red-600"
+                      : "text-yellow-600"
+                  }`}>
+                    ⚠️ Performance Impact
+                  </p>
+                )}
+              </div>
+            )}
           </div>
         </div>
 

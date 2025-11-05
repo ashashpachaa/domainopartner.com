@@ -95,7 +95,6 @@ export default function AdminClientRequestDetail() {
   };
 
   const handleApprove = () => {
-    setSelectedPlan(request.subscriptionPlan);
     setSelectedSalesPersonId("");
     setActionModal("approve");
   };

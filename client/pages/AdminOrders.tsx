@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { mockOrders, Order, OrderStatus } from "@/lib/mockData";
+import { mockOrders, Order, OrderStatus, mockProducts } from "@/lib/mockData";
 import { mockUsers } from "@/lib/mockData";
 import { mockStaff } from "@/lib/mockData";
 
@@ -110,6 +110,47 @@ export default function AdminOrders() {
     if (!staffId) return "Unassigned";
     const staff = mockStaff.find((s) => s.id === staffId);
     return staff ? `${staff.firstName} ${staff.lastName}` : "Unknown";
+  };
+
+  const parseDurationDays = (duration: string): number => {
+    const match = duration.match(/(\d+)/);
+    return match ? parseInt(match[1], 10) : 5;
+  };
+
+  const calculateExpectedCompletion = (order: Order): { date: Date; daysRemaining: number } => {
+    if (order.productId) {
+      const product = mockProducts.find((p) => p.id === order.productId);
+      if (product) {
+        const durationDays = parseDurationDays(product.duration);
+        const createdDate = new Date(order.createdAt);
+        const expectedDate = new Date(createdDate);
+        expectedDate.setDate(expectedDate.getDate() + durationDays);
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        expectedDate.setHours(0, 0, 0, 0);
+
+        const daysRemaining = Math.ceil(
+          (expectedDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+        );
+
+        return { date: expectedDate, daysRemaining };
+      }
+    }
+
+    const createdDate = new Date(order.createdAt);
+    const expectedDate = new Date(createdDate);
+    expectedDate.setDate(expectedDate.getDate() + 5);
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    expectedDate.setHours(0, 0, 0, 0);
+
+    const daysRemaining = Math.ceil(
+      (expectedDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+    );
+
+    return { date: expectedDate, daysRemaining };
   };
 
   let filteredOrders = mockOrders;

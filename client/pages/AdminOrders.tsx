@@ -298,6 +298,7 @@ export default function AdminOrders() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Statuses</SelectItem>
+                  <SelectItem value="overdue">Overdue</SelectItem>
                   <SelectItem value="new">New</SelectItem>
                   <SelectItem value="pending_sales_review">Pending Sales Review</SelectItem>
                   <SelectItem value="rejected_by_sales">Rejected by Sales</SelectItem>

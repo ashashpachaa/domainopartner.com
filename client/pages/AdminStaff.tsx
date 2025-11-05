@@ -38,18 +38,23 @@ export default function AdminStaff() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterRole, setFilterRole] = useState<StaffRole | "all">("all");
 
-  const filteredStaff = staff.filter((member) => {
-    const matchesSearch =
-      member.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      member.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      member.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      member.department.toLowerCase().includes(searchTerm.toLowerCase());
+  const filteredStaff = staff
+    .filter((member) => {
+      const matchesSearch =
+        member.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        member.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        member.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        member.department.toLowerCase().includes(searchTerm.toLowerCase());
 
-    const matchesFilter =
-      filterRole === "all" || member.role === filterRole;
+      const matchesFilter =
+        filterRole === "all" || member.role === filterRole;
 
-    return matchesSearch && matchesFilter;
-  });
+      return matchesSearch && matchesFilter;
+    })
+    .sort(
+      (a, b) =>
+        new Date(b.joinDate).getTime() - new Date(a.joinDate).getTime()
+    );
 
   const deleteStaff = (staffId: string) => {
     if (confirm("Are you sure you want to delete this staff member?")) {

@@ -574,6 +574,7 @@ export const mockOrders: Order[] = [
   {
     id: "O001",
     userId: "1",
+    productId: "P002",
     orderNumber: "ORD-2024-001",
     description: "Company Registration - USA (Delaware)",
     amount: 1500,
@@ -683,6 +684,7 @@ export const mockOrders: Order[] = [
   {
     id: "O003",
     userId: "2",
+    productId: "P005",
     orderNumber: "ORD-2024-003",
     description: "UK Company Registration",
     amount: 2000,
@@ -1038,6 +1040,7 @@ export const mockOrders: Order[] = [
   {
     id: "O008",
     userId: "1",
+    productId: "P010",
     orderNumber: "ORD-2024-008",
     description: "Multi-country Corporate Setup",
     amount: 8500,

@@ -22,7 +22,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { mockClientRequests, mockStaff } from "@/lib/mockData";
+import { mockClientRequests, mockStaff, mockUsers } from "@/lib/mockData";
+import { useState } from "react";
 
 const statusConfig = {
   pending_approval: {

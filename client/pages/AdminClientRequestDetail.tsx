@@ -460,6 +460,29 @@ export default function AdminClientRequestDetail() {
                 <option value="enterprise">Enterprise</option>
               </select>
             </div>
+
+            <div>
+              <label className="text-sm font-semibold text-slate-900">
+                Account Manager (Sales Person) *
+              </label>
+              <select
+                value={selectedSalesPersonId}
+                onChange={(e) => setSelectedSalesPersonId(e.target.value)}
+                className="w-full mt-2 px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-primary-600"
+              >
+                <option value="">-- Select a Sales Person --</option>
+                {mockStaff
+                  .filter((staff) => staff.role === "Sales")
+                  .map((staff) => (
+                    <option key={staff.id} value={staff.id}>
+                      {staff.firstName} {staff.lastName}
+                    </option>
+                  ))}
+              </select>
+              <p className="text-xs text-slate-500 mt-1">
+                This sales person will manage the client account and handle the order workflow.
+              </p>
+            </div>
           </div>
 
           <div className="flex gap-3">

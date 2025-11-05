@@ -23,6 +23,8 @@ import AdminOrders from "./pages/AdminOrders";
 import AdminOrderDetail from "./pages/AdminOrderDetail";
 import AdminCreateOrder from "./pages/AdminCreateOrder";
 import AdminProducts from "./pages/AdminProducts";
+import AdminProductDetail from "./pages/AdminProductDetail";
+import AdminEditProduct from "./pages/AdminEditProduct";
 import AdminClientRequests from "./pages/AdminClientRequests";
 import AdminClientRequestDetail from "./pages/AdminClientRequestDetail";
 import StaffDashboard from "./pages/StaffDashboard";
@@ -86,6 +88,18 @@ const App = () => (
           <Route
             path="/admin/products"
             element={<AdminRoute element={<AdminProducts />} />}
+          />
+          <Route
+            path="/admin/products/new"
+            element={<AdminRoute element={<AdminEditProduct />} />}
+          />
+          <Route
+            path="/admin/products/:productId"
+            element={<AdminRoute element={<AdminProductDetail />} />}
+          />
+          <Route
+            path="/admin/products/:productId/edit"
+            element={<AdminRoute element={<AdminEditProduct />} />}
           />
           <Route
             path="/admin/client-requests"

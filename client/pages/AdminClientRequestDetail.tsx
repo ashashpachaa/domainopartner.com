@@ -106,8 +106,20 @@ export default function AdminClientRequestDetail() {
   };
 
   const submitApprove = () => {
+    if (!selectedSalesPersonId) {
+      alert("Please select a sales person to manage this client account");
+      return;
+    }
+
+    const selectedSalesPerson = mockStaff.find((s) => s.id === selectedSalesPersonId);
+    const newUserId = `U${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+
     alert(
-      `Client ${request.firstName} ${request.lastName} has been approved with ${selectedPlan} plan. They can now login.`
+      `Client ${request.firstName} ${request.lastName} has been APPROVED!\n\n` +
+      `✓ New user account created (ID: ${newUserId})\n` +
+      `✓ Subscription Plan: ${selectedPlan}\n` +
+      `✓ Account Manager: ${selectedSalesPerson?.firstName} ${selectedSalesPerson?.lastName}\n\n` +
+      `The client can now login and the sales person will manage their account.`
     );
     setActionModal(null);
     navigate("/admin/client-requests");

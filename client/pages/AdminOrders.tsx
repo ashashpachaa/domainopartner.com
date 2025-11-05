@@ -448,6 +448,33 @@ export default function AdminOrders() {
                     const isCompleted = order.status === "completed";
                     const isOverdue = !isCompleted && daysRemaining < 0;
                     const isOnTrack = !isCompleted && daysRemaining >= 0;
+                    const paymentStatus = getPaymentStatus(order);
+
+                    let paymentBgColor = "bg-slate-100";
+                    let paymentTextColor = "text-slate-700";
+                    let paymentBadge = "Unknown";
+
+                    if (paymentStatus === "paid") {
+                      paymentBgColor = "bg-green-100";
+                      paymentTextColor = "text-green-700";
+                      paymentBadge = "🟢 Paid";
+                    } else if (paymentStatus === "pending") {
+                      paymentBgColor = "bg-yellow-100";
+                      paymentTextColor = "text-yellow-700";
+                      paymentBadge = "🟡 Pending";
+                    } else if (paymentStatus === "partial") {
+                      paymentBgColor = "bg-blue-100";
+                      paymentTextColor = "text-blue-700";
+                      paymentBadge = "🔵 Partial";
+                    } else if (paymentStatus === "overdue") {
+                      paymentBgColor = "bg-red-100";
+                      paymentTextColor = "text-red-700";
+                      paymentBadge = "🔴 Overdue";
+                    } else if (paymentStatus === "failed") {
+                      paymentBgColor = "bg-red-100";
+                      paymentTextColor = "text-red-700";
+                      paymentBadge = "🔴 Failed";
+                    }
 
                     return [
                       <tr

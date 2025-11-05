@@ -9,9 +9,35 @@ import { mockClientRequests, mockUsers } from "@/lib/mockData";
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [rejectionReason, setRejectionReason] = useState("");
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
+    setError("");
+    setRejectionReason("");
+
+    // Check if the email exists in client requests with pending approval
+    const clientRequest = mockClientRequests.find((r) => r.email === email);
+
+    if (clientRequest && clientRequest.status === "pending_approval") {
+      setError("Your account is pending admin approval");
+      return;
+    }
+
+    if (clientRequest && clientRequest.status === "rejected") {
+      setError("Your signup request was rejected.");
+      setRejectionReason(clientRequest.rejectionReason || "No reason provided");
+      return;
+    }
+
+    // Check if user exists and is approved
+    const user = mockUsers.find((u) => u.email === email);
+    if (!user) {
+      setError("Invalid email or password");
+      return;
+    }
+
     // Handle sign in logic here
     console.log("Sign in attempted with:", { email, password });
   };

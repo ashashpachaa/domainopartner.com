@@ -13,9 +13,12 @@ import {
   AlertCircle,
   CheckCircle2,
   Pause,
+  Bell,
+  XCircle as XCircleIcon,
 } from "lucide-react";
-import { useState } from "react";
-import { mockUsers, User, UserStatus } from "@/lib/mockData";
+import { useState, useEffect } from "react";
+import { mockUsers, User, UserStatus, mockClientRequests, ClientRequestStatus } from "@/lib/mockData";
+import { toast } from "sonner";
 
 export default function AdminDashboard() {
   const [users, setUsers] = useState<User[]>(mockUsers);

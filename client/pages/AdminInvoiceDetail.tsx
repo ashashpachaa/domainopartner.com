@@ -10,7 +10,7 @@ import {
   Phone,
   FileText,
 } from "lucide-react";
-import { mockInvoices, mockUsers } from "@/lib/mockData";
+import { mockInvoices, mockUsers, mockStaff } from "@/lib/mockData";
 
 export default function AdminInvoiceDetail() {
   const { invoiceId } = useParams<{ invoiceId: string }>();
@@ -18,6 +18,9 @@ export default function AdminInvoiceDetail() {
 
   const invoice = mockInvoices.find((inv) => inv.id === invoiceId);
   const user = invoice ? mockUsers.find((u) => u.id === invoice.userId) : null;
+  const createdByStaff = invoice && invoice.createdByStaffId
+    ? mockStaff.find((s) => s.id === invoice.createdByStaffId)
+    : null;
 
   if (!invoice || !user) {
     return (
@@ -74,6 +77,46 @@ export default function AdminInvoiceDetail() {
                 {invoice.invoiceNumber}
               </h1>
               <p className="text-slate-600">{invoice.description}</p>
+              <div className="grid grid-cols-3 gap-4 mt-4 text-sm">
+                <div>
+                  <p className="text-slate-500 mb-1">Created</p>
+                  <p className="font-medium text-slate-900">
+                    {new Date(invoice.createdAt || invoice.issueDate).toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })} at{" "}
+                    {new Date(invoice.createdAt || invoice.issueDate).toLocaleTimeString("en-US", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </p>
+                </div>
+                {invoice.paidDate && (
+                  <div>
+                    <p className="text-slate-500 mb-1">Paid</p>
+                    <p className="font-medium text-slate-900">
+                      {new Date(invoice.paidDate).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      })} at{" "}
+                      {new Date(invoice.paidDate).toLocaleTimeString("en-US", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </p>
+                  </div>
+                )}
+                <div>
+                  <p className="text-slate-500 mb-1">Created By</p>
+                  <p className="font-medium text-slate-900">
+                    {createdByStaff
+                      ? `${createdByStaff.firstName} ${createdByStaff.lastName}`
+                      : "System"}
+                  </p>
+                </div>
+              </div>
               <span
                 className={`inline-block mt-4 px-4 py-2 rounded-full text-sm font-semibold ${getStatusColor(
                   invoice.status

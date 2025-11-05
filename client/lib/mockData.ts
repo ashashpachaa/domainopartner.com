@@ -99,6 +99,7 @@ export interface OrderHistory {
   actionByName: string;
   reason?: string; // For rejections
   notes?: string;
+  description?: string; // Human-readable description of the action
   createdAt: string;
 }
 

@@ -100,6 +100,18 @@ export interface OrderHistory {
   createdAt: string;
 }
 
+export interface OrderPayment {
+  id: string;
+  amount: number;
+  currency: string;
+  status: "pending" | "partial" | "paid" | "overdue" | "failed";
+  paidDate?: string;
+  dueDate: string;
+  description: string;
+  method?: string;
+  reference?: string;
+}
+
 export interface Order {
   id: string;
   userId: string;
@@ -122,6 +134,7 @@ export interface Order {
   clientAcceptedAt?: string;
   shippingNumber?: string;
   documentsUploaded?: boolean;
+  paymentHistory?: OrderPayment[];
 }
 
 export interface Invoice {

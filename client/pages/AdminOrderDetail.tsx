@@ -433,6 +433,119 @@ export default function AdminOrderDetail() {
                 )}
               </div>
 
+              {/* Payment History */}
+              {order.paymentHistory && order.paymentHistory.length > 0 && (
+                <div className="bg-white rounded-lg border border-slate-200 p-6">
+                  <h3 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <DollarSign className="w-5 h-5" />
+                    Payment History
+                  </h3>
+                  <div className="space-y-4">
+                    {order.paymentHistory.map((payment) => {
+                      const isPaid = payment.status === "paid";
+                      const isOverdue = payment.status === "overdue";
+                      const isPending = payment.status === "pending";
+                      const isPartial = payment.status === "partial";
+                      const isFailed = payment.status === "failed";
+
+                      let statusBgColor = "bg-slate-100";
+                      let statusTextColor = "text-slate-700";
+                      let statusLabel = "Unknown";
+
+                      if (isPaid) {
+                        statusBgColor = "bg-green-100";
+                        statusTextColor = "text-green-700";
+                        statusLabel = "Paid";
+                      } else if (isOverdue) {
+                        statusBgColor = "bg-red-100";
+                        statusTextColor = "text-red-700";
+                        statusLabel = "Overdue";
+                      } else if (isPending) {
+                        statusBgColor = "bg-yellow-100";
+                        statusTextColor = "text-yellow-700";
+                        statusLabel = "Pending";
+                      } else if (isPartial) {
+                        statusBgColor = "bg-blue-100";
+                        statusTextColor = "text-blue-700";
+                        statusLabel = "Partial";
+                      } else if (isFailed) {
+                        statusBgColor = "bg-red-100";
+                        statusTextColor = "text-red-700";
+                        statusLabel = "Failed";
+                      }
+
+                      return (
+                        <div
+                          key={payment.id}
+                          className="border border-slate-200 rounded-lg p-4 hover:bg-slate-50 transition"
+                        >
+                          <div className="flex items-start justify-between mb-3">
+                            <div>
+                              <p className="font-semibold text-slate-900">
+                                {payment.description}
+                              </p>
+                              <p className="text-sm text-slate-500 mt-1">
+                                Reference: {payment.reference || "N/A"}
+                              </p>
+                            </div>
+                            <span
+                              className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium ${statusBgColor} ${statusTextColor}`}
+                            >
+                              {statusLabel}
+                            </span>
+                          </div>
+
+                          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+                            <div>
+                              <label className="text-xs text-slate-500 font-semibold">
+                                Amount
+                              </label>
+                              <p className="text-slate-900 font-bold mt-1">
+                                {payment.amount.toLocaleString()} {payment.currency}
+                              </p>
+                            </div>
+                            <div>
+                              <label className="text-xs text-slate-500 font-semibold">
+                                Due Date
+                              </label>
+                              <p className="text-slate-900 font-medium mt-1">
+                                {new Date(payment.dueDate).toLocaleDateString("en-US", {
+                                  month: "short",
+                                  day: "numeric",
+                                  year: "numeric",
+                                })}
+                              </p>
+                            </div>
+                            {payment.paidDate && (
+                              <div>
+                                <label className="text-xs text-slate-500 font-semibold">
+                                  Paid Date
+                                </label>
+                                <p className="text-slate-900 font-medium mt-1">
+                                  {new Date(payment.paidDate).toLocaleDateString("en-US", {
+                                    month: "short",
+                                    day: "numeric",
+                                    year: "numeric",
+                                  })}
+                                </p>
+                              </div>
+                            )}
+                            <div>
+                              <label className="text-xs text-slate-500 font-semibold">
+                                Payment Method
+                              </label>
+                              <p className="text-slate-900 font-medium mt-1">
+                                {payment.method || "N/A"}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
               {/* Rejection Reasons */}
               {order.rejectionReasons && order.rejectionReasons.length > 0 && (
                 <div className="bg-red-50 rounded-lg border border-red-200 p-6">

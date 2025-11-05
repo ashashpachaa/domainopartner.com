@@ -231,6 +231,12 @@ export default function AdminOrders() {
     );
   }
 
+  if (paymentStatusFilter !== "all") {
+    filteredOrders = filteredOrders.filter(
+      (order) => getPaymentStatus(order) === paymentStatusFilter
+    );
+  }
+
   if (sortBy === "recent") {
     filteredOrders.sort(
       (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()

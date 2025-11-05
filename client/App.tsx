@@ -104,6 +104,14 @@ const App = () => (
             element={<AdminRoute element={<AdminEditProduct />} />}
           />
           <Route
+            path="/admin/operations"
+            element={<AdminRoute element={<AdminOperations />} />}
+          />
+          <Route
+            path="/admin/operations/:orderId"
+            element={<AdminRoute element={<AdminOperationDetail />} />}
+          />
+          <Route
             path="/admin/client-requests"
             element={<AdminRoute element={<AdminClientRequests />} />}
           />

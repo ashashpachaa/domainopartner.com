@@ -538,7 +538,7 @@ export default function AdminOrders() {
                       isExpanded && (
                         <tr key={`${order.id}-expand`} className="bg-slate-50 border-b border-slate-200">
                           <td colSpan={7} className="px-6 py-6">
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-2xl">
+                            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-3xl">
                               <div className="bg-white rounded-lg p-4 border border-slate-200">
                                 <label className="text-xs text-slate-500 font-semibold block mb-2">
                                   Estimated Completion
@@ -574,7 +574,7 @@ export default function AdminOrders() {
 
                               <div className="bg-white rounded-lg p-4 border border-slate-200">
                                 <label className="text-xs text-slate-500 font-semibold block mb-2">
-                                  Status
+                                  Order Timeline
                                 </label>
                                 {isCompleted && (
                                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-700">
@@ -597,6 +597,17 @@ export default function AdminOrders() {
                                     {Math.abs(daysRemaining) !== 1 ? "s" : ""} overdue
                                   </div>
                                 )}
+                              </div>
+
+                              <div className="bg-white rounded-lg p-4 border border-slate-200">
+                                <label className="text-xs text-slate-500 font-semibold block mb-2">
+                                  Payment Status
+                                </label>
+                                <div
+                                  className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium ${paymentBgColor} ${paymentTextColor}`}
+                                >
+                                  {paymentBadge}
+                                </div>
                               </div>
                             </div>
                           </td>

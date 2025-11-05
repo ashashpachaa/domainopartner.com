@@ -21,6 +21,8 @@ import AdminStaffSalary from "./pages/AdminStaffSalary";
 import AdminPerformance from "./pages/AdminPerformance";
 import AdminOrders from "./pages/AdminOrders";
 import AdminOrderDetail from "./pages/AdminOrderDetail";
+import AdminClientRequests from "./pages/AdminClientRequests";
+import AdminClientRequestDetail from "./pages/AdminClientRequestDetail";
 import StaffDashboard from "./pages/StaffDashboard";
 import NotFound from "./pages/NotFound";
 

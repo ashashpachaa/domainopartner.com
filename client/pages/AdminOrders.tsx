@@ -219,31 +219,56 @@ export default function AdminOrders() {
         <div className="p-8">
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-4xl font-bold text-slate-900 mb-2">Orders</h1>
-            <p className="text-slate-600">Manage and track customer orders through workflow</p>
+            <h1 className="text-4xl font-bold text-slate-900 mb-2">Orders Management</h1>
           </div>
 
-          {/* Filters and Search */}
-          <div className="bg-white rounded-lg border border-slate-200 p-6 mb-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {/* Search */}
-              <div className="relative">
-                <Search className="absolute left-3 top-3 w-5 h-5 text-slate-400" />
-                <Input
-                  placeholder="Search orders..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
+          {/* Summary Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+            <div className="bg-white rounded-lg border border-slate-200 p-6">
+              <p className="text-slate-500 text-sm font-medium mb-2">Total Orders</p>
+              <p className="text-3xl font-bold text-slate-900">{totalOrders}</p>
+            </div>
+            <div className="bg-white rounded-lg border border-slate-200 p-6">
+              <p className="text-slate-500 text-sm font-medium mb-2">Paid/Completed</p>
+              <p className="text-3xl font-bold text-green-600">{completedOrders}</p>
+            </div>
+            <div className="bg-white rounded-lg border border-slate-200 p-6">
+              <p className="text-slate-500 text-sm font-medium mb-2">Pending</p>
+              <p className="text-3xl font-bold text-yellow-600">{pendingOrders}</p>
+            </div>
+            <div className="bg-white rounded-lg border border-slate-200 p-6">
+              <p className="text-slate-500 text-sm font-medium mb-2">Refunded</p>
+              <p className="text-3xl font-bold text-slate-900">0</p>
+            </div>
+            <div className="bg-white rounded-lg border border-slate-200 p-6">
+              <p className="text-slate-500 text-sm font-medium mb-2">Total Revenue</p>
+              <p className="text-2xl font-bold text-slate-900">
+                {totalRevenue.toLocaleString()} USD
+              </p>
+            </div>
+          </div>
 
+          {/* Search */}
+          <div className="bg-white rounded-lg border border-slate-200 p-6 mb-6">
+            <div className="relative mb-6">
+              <Search className="absolute left-3 top-3 w-5 h-5 text-slate-400" />
+              <Input
+                placeholder="Search by order ID, customer name, email, or company..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10"
+              />
+            </div>
+
+            {/* Filters */}
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
               {/* Status Filter */}
               <Select value={statusFilter} onValueChange={setStatusFilter}>
                 <SelectTrigger>
-                  <SelectValue placeholder="All Status" />
+                  <SelectValue placeholder="All Statuses" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Status</SelectItem>
+                  <SelectItem value="all">All Statuses</SelectItem>
                   <SelectItem value="new">New</SelectItem>
                   <SelectItem value="pending_sales_review">Pending Sales Review</SelectItem>
                   <SelectItem value="rejected_by_sales">Rejected by Sales</SelectItem>
@@ -263,6 +288,36 @@ export default function AdminOrders() {
                   <SelectItem value="completed">Completed</SelectItem>
                 </SelectContent>
               </Select>
+
+              {/* Countries Filter */}
+              <Select>
+                <SelectTrigger>
+                  <SelectValue placeholder="All Countries" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Countries</SelectItem>
+                  <SelectItem value="us">United States</SelectItem>
+                  <SelectItem value="uk">United Kingdom</SelectItem>
+                  <SelectItem value="ca">Canada</SelectItem>
+                  <SelectItem value="se">Sweden</SelectItem>
+                </SelectContent>
+              </Select>
+
+              {/* Start Date */}
+              <Input
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                placeholder="mm/dd/yyyy"
+              />
+
+              {/* End Date */}
+              <Input
+                type="date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+                placeholder="mm/dd/yyyy"
+              />
 
               {/* Sort */}
               <Select value={sortBy} onValueChange={setSortBy}>

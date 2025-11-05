@@ -49,6 +49,66 @@ export default function StaffDashboard() {
     "all"
   );
 
+  // Calculate pending client payments
+  const pendingClientPayments = useMemo(() => {
+    // Get all orders assigned to this sales person
+    const assignedOrders = mockOrders.filter(
+      (order) => order.assignedToSalesId === CURRENT_STAFF_ID
+    );
+
+    // Get all unique client IDs from those orders
+    const clientIds = [...new Set(assignedOrders.map((order) => order.userId))];
+
+    // Get all invoices for those clients with pending status
+    const pendingInvoices = mockInvoices.filter(
+      (invoice) =>
+        clientIds.includes(invoice.userId) &&
+        (invoice.status === "draft" || invoice.status === "sent" || invoice.status === "overdue")
+    );
+
+    // Group by client and calculate totals
+    const groupedByClient: Record<
+      string,
+      {
+        clientName: string;
+        clientId: string;
+        invoices: typeof mockInvoices;
+        totalAmount: number;
+        currency: string;
+        overdueCount: number;
+      }
+    > = {};
+
+    pendingInvoices.forEach((invoice) => {
+      const client = mockUsers.find((u) => u.id === invoice.userId);
+      if (!client) return;
+
+      const clientKey = invoice.userId;
+      if (!groupedByClient[clientKey]) {
+        groupedByClient[clientKey] = {
+          clientName: `${client.firstName} ${client.lastName}`,
+          clientId: invoice.userId,
+          invoices: [],
+          totalAmount: 0,
+          currency: invoice.currency,
+          overdueCount: 0,
+        };
+      }
+
+      groupedByClient[clientKey].invoices.push(invoice);
+      groupedByClient[clientKey].totalAmount += invoice.amount;
+      if (invoice.status === "overdue") {
+        groupedByClient[clientKey].overdueCount += 1;
+      }
+    });
+
+    return Object.values(groupedByClient);
+  }, []);
+
+  const totalPendingAmount = useMemo(() => {
+    return pendingClientPayments.reduce((sum, client) => sum + client.totalAmount, 0);
+  }, [pendingClientPayments]);
+
   const filteredHistory = useMemo(() => {
     let filtered = commissionHistory;
 

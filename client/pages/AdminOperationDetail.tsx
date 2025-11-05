@@ -21,6 +21,8 @@ export default function AdminOperationDetail() {
   const navigate = useNavigate();
   const [trackingInput, setTrackingInput] = useState("");
   const [fileNotes, setFileNotes] = useState("");
+  const [rejectReason, setRejectReason] = useState("");
+  const [showRejectForm, setShowRejectForm] = useState(false);
   const [activeTab, setActiveTab] = useState<"workflow" | "apostille" | "history">("workflow");
 
   const order = mockOrders.find((o) => o.id === orderId);
@@ -28,6 +30,9 @@ export default function AdminOperationDetail() {
   const product = order?.productId
     ? mockProducts.find((p) => p.id === order.productId)
     : null;
+
+  // Get current user from localStorage (assuming it's stored as currentStaff or similar)
+  const currentUserId = localStorage.getItem("currentStaffId") || "S002"; // Default to manager for demo
 
   if (!order || !user) {
     return (
@@ -59,20 +64,170 @@ export default function AdminOperationDetail() {
     (s) => s.id === order.status
   );
 
+  // Determine if current user can take actions on this order
+  const canAccept = () => {
+    if (order.status === "pending_sales_review" && order.assignedToSalesId === currentUserId) return true;
+    if (order.status === "pending_operation" && order.assignedToOperationId === currentUserId) return true;
+    if (order.status === "pending_operation_manager_review" && order.assignedToManagerId === currentUserId) return true;
+    if (order.status === "awaiting_client_acceptance" && currentUserId === "client") return true;
+    if (order.status === "shipping_preparation" && order.assignedToManagerId === currentUserId) return true;
+    return false;
+  };
+
+  // Get the next status based on current status
+  const getNextStatus = (): string => {
+    const statusMap: { [key: string]: string } = {
+      "pending_sales_review": "pending_operation",
+      "pending_operation": "pending_operation_manager_review",
+      "pending_operation_manager_review": "awaiting_client_acceptance",
+      "awaiting_client_acceptance": product?.services.hasApostille ? "shipping_preparation" : "shipping_preparation",
+      "shipping_preparation": "completed",
+    };
+    return statusMap[order.status] || order.status;
+  };
+
+  // Get rejection status based on current status
+  const getRejectionStatus = (): string => {
+    const statusMap: { [key: string]: string } = {
+      "pending_sales_review": "rejected_by_sales",
+      "pending_operation": "rejected_by_operation",
+      "pending_operation_manager_review": "rejected_by_operation_manager",
+      "awaiting_client_acceptance": "rejected_by_client",
+    };
+    return statusMap[order.status] || order.status;
+  };
+
+  const handleAccept = () => {
+    if (canAccept()) {
+      const nextStatus = getNextStatus();
+      const currentStaff = mockStaff.find((s) => s.id === currentUserId);
+
+      // Add history entry
+      const newHistoryEntry = {
+        id: `H${order.id}-${order.history.length + 1}`,
+        orderId: order.id,
+        previousStatus: order.status as any,
+        newStatus: nextStatus as any,
+        actionType: "accept" as any,
+        actionBy: currentUserId,
+        actionByName: currentStaff?.firstName + " " + currentStaff?.lastName || "Unknown",
+        description: `${currentStaff?.firstName} accepted the order - moved to ${getStatusLabel(nextStatus)}`,
+        createdAt: new Date().toISOString(),
+      };
+
+      order.history.push(newHistoryEntry);
+      order.status = nextStatus as any;
+
+      // Mark as completed if final stage
+      if (nextStatus === "completed") {
+        order.completedAt = new Date().toISOString().split("T")[0];
+      }
+
+      alert(`Order accepted and moved to ${getStatusLabel(nextStatus)}`);
+      window.location.reload(); // Reload to see the changes
+    } else {
+      alert("You don't have permission to accept this order at this stage");
+    }
+  };
+
+  const handleReject = () => {
+    if (!rejectReason.trim()) {
+      alert("Please provide a rejection reason");
+      return;
+    }
+
+    if (canAccept()) {
+      const rejectionStatus = getRejectionStatus();
+      const currentStaff = mockStaff.find((s) => s.id === currentUserId);
+
+      // Add history entry
+      const newHistoryEntry = {
+        id: `H${order.id}-${order.history.length + 1}`,
+        orderId: order.id,
+        previousStatus: order.status as any,
+        newStatus: rejectionStatus as any,
+        actionType: "reject" as any,
+        actionBy: currentUserId,
+        actionByName: currentStaff?.firstName + " " + currentStaff?.lastName || "Unknown",
+        reason: rejectReason,
+        description: `${currentStaff?.firstName} rejected the order - ${rejectReason}`,
+        createdAt: new Date().toISOString(),
+      };
+
+      order.history.push(newHistoryEntry);
+      order.status = rejectionStatus as any;
+      order.rejectionReasons.push(rejectReason);
+
+      setRejectReason("");
+      setShowRejectForm(false);
+
+      alert(`Order rejected with reason: ${rejectReason}`);
+      window.location.reload(); // Reload to see the changes
+    } else {
+      alert("You don't have permission to reject this order at this stage");
+    }
+  };
+
+  const getStatusLabel = (status: string): string => {
+    const labels: { [key: string]: string } = {
+      "new": "Order Created",
+      "pending_sales_review": "Sales Review",
+      "pending_operation": "Operation",
+      "pending_operation_manager_review": "Manager Review",
+      "awaiting_client_acceptance": "Client Acceptance",
+      "shipping_preparation": "Shipping Preparation",
+      "completed": "Completed",
+      "rejected_by_sales": "Rejected by Sales",
+      "rejected_by_operation": "Rejected by Operation",
+      "rejected_by_operation_manager": "Rejected by Manager",
+      "rejected_by_client": "Rejected by Client",
+    };
+    return labels[status] || status;
+  };
+
   const handleAddTracking = () => {
     if (trackingInput.trim()) {
-      console.log("Adding tracking:", trackingInput);
+      order.trackingNumber = trackingInput;
+      order.trackingNumberAddedBy = currentUserId;
+      order.trackingNumberAddedAt = new Date().toISOString();
       setTrackingInput("");
       alert("Tracking number added successfully!");
+      window.location.reload();
     }
   };
 
   const handleFileUpload = () => {
     if (fileNotes.trim()) {
-      console.log("Uploading file with notes:", fileNotes);
+      const currentStaff = mockStaff.find((s) => s.id === currentUserId);
+      const newFile = {
+        id: `F${order.operationFiles.length + 1}`,
+        orderId: order.id,
+        fileName: `Document_${new Date().getTime()}.pdf`,
+        fileSize: Math.random() * 5000000, // Random size in bytes
+        uploadedBy: currentUserId,
+        uploadedByName: currentStaff?.firstName + " " + currentStaff?.lastName || "Unknown",
+        uploadedAt: new Date().toISOString(),
+        stage: getFileStageFromStatus(order.status),
+        fileType: "document" as any,
+        description: fileNotes,
+      };
+
+      order.operationFiles.push(newFile);
       setFileNotes("");
       alert("File uploaded successfully!");
+      window.location.reload();
     }
+  };
+
+  const getFileStageFromStatus = (status: string): "sales" | "operation" | "manager" | "apostille" => {
+    const stageMap: { [key: string]: "sales" | "operation" | "manager" | "apostille" } = {
+      "pending_sales_review": "sales",
+      "pending_operation": "operation",
+      "pending_operation_manager_review": "manager",
+      "shipping_preparation": "apostille",
+      "awaiting_client_acceptance": "manager",
+    };
+    return stageMap[status] || "operation";
   };
 
   return (

@@ -154,6 +154,7 @@ export interface Order {
   countries: string[];
   createdAt: string;
   completedAt?: string;
+  createdByStaffId?: string; // staffId who created/received the order
   assignedToSalesId?: string;
   assignedToOperationId?: string;
   assignedToManagerId?: string;

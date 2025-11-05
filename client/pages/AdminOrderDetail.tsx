@@ -22,7 +22,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { mockOrders, Order, OrderStatus, mockUsers, mockStaff } from "@/lib/mockData";
+import { mockOrders, Order, OrderStatus, mockUsers, mockStaff, mockProducts } from "@/lib/mockData";
 
 const statusConfig: Record<
   OrderStatus,
@@ -142,7 +142,39 @@ export default function AdminOrderDetail() {
 
   const handleAccept = () => {
     setIsModalOpen(false);
-    alert("Order accepted! (This is a demo - no actual changes were made)");
+
+    if (order.status === "awaiting_client_acceptance") {
+      // Check if order has a product
+      if (order.productId) {
+        const product = mockProducts.find((p) => p.id === order.productId);
+        if (product) {
+          const hasApostille = product.services.hasApostille;
+          const hasShipping = product.services.hasShipping;
+
+          if (!hasApostille && !hasShipping) {
+            // Auto-complete order
+            alert(
+              `Order accepted and automatically completed!\n\nProduct "${product.name}" does not require apostille or shipping services.`
+            );
+          } else {
+            // Send to shipping preparation
+            const services = [];
+            if (hasApostille) services.push("apostille");
+            if (hasShipping) services.push("shipping");
+
+            alert(
+              `Order accepted and sent to Operation Manager!\n\nProduct "${product.name}" requires: ${services.join(" and ")} services.`
+            );
+          }
+        } else {
+          alert("Order accepted! Product information not found.");
+        }
+      } else {
+        alert("Order accepted! (This is a demo - no actual changes were made)");
+      }
+    } else {
+      alert("Order accepted! (This is a demo - no actual changes were made)");
+    }
   };
 
   const handleReject = () => {

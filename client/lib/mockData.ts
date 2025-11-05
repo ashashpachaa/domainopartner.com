@@ -147,6 +147,8 @@ export interface Invoice {
   issueDate: string;
   dueDate: string;
   paidDate?: string;
+  createdAt: string;
+  createdByStaffId?: string;
   description: string;
   items: { description: string; quantity: number; unitPrice: number }[];
 }

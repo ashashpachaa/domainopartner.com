@@ -25,6 +25,8 @@ import AdminCreateOrder from "./pages/AdminCreateOrder";
 import AdminProducts from "./pages/AdminProducts";
 import AdminProductDetail from "./pages/AdminProductDetail";
 import AdminEditProduct from "./pages/AdminEditProduct";
+import AdminOperations from "./pages/AdminOperations";
+import AdminOperationDetail from "./pages/AdminOperationDetail";
 import AdminClientRequests from "./pages/AdminClientRequests";
 import AdminClientRequestDetail from "./pages/AdminClientRequestDetail";
 import StaffDashboard from "./pages/StaffDashboard";

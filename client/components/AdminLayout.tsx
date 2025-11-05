@@ -85,6 +85,17 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             {sidebarOpen && <span className="font-medium">Orders</span>}
           </Link>
           <Link
+            to="/admin/products"
+            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition ${
+              isActive("/admin/products") || location.pathname.startsWith("/admin/products/")
+                ? "bg-primary-600 text-white"
+                : "text-slate-400 hover:bg-slate-800"
+            }`}
+          >
+            <Package className="w-5 h-5" />
+            {sidebarOpen && <span className="font-medium">Items/Products</span>}
+          </Link>
+          <Link
             to="/admin/staff"
             className={`flex items-center gap-3 px-4 py-3 rounded-lg transition ${
               isActive("/admin/staff")

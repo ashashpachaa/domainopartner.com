@@ -2,8 +2,9 @@ import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
-import { Mail, Lock, ArrowRight } from "lucide-react";
+import { Mail, Lock, ArrowRight, AlertCircle } from "lucide-react";
 import { FormEvent, useState } from "react";
+import { mockClientRequests, mockUsers } from "@/lib/mockData";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");

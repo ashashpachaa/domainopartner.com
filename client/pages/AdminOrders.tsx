@@ -240,7 +240,7 @@ export default function AdminOrders() {
           </div>
 
           {/* Summary Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
             <div className="bg-white rounded-lg border border-slate-200 p-6">
               <p className="text-slate-500 text-sm font-medium mb-2">Total Orders</p>
               <p className="text-3xl font-bold text-slate-900">{totalOrders}</p>
@@ -252,6 +252,10 @@ export default function AdminOrders() {
             <div className="bg-white rounded-lg border border-slate-200 p-6">
               <p className="text-slate-500 text-sm font-medium mb-2">Pending</p>
               <p className="text-3xl font-bold text-yellow-600">{pendingOrders}</p>
+            </div>
+            <div className="bg-white rounded-lg border border-slate-200 p-6">
+              <p className="text-slate-500 text-sm font-medium mb-2">Overdue</p>
+              <p className="text-3xl font-bold text-red-600">{overdueOrders}</p>
             </div>
             <div className="bg-white rounded-lg border border-slate-200 p-6">
               <p className="text-slate-500 text-sm font-medium mb-2">Refunded</p>

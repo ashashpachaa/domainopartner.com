@@ -68,6 +68,14 @@ const App = () => (
             element={<AdminRoute element={<AdminInvoiceDetail />} />}
           />
           <Route
+            path="/admin/orders"
+            element={<AdminRoute element={<AdminOrders />} />}
+          />
+          <Route
+            path="/admin/orders/:orderId"
+            element={<AdminRoute element={<AdminOrderDetail />} />}
+          />
+          <Route
             path="/admin/performance"
             element={<AdminRoute element={<AdminPerformance />} />}
           />

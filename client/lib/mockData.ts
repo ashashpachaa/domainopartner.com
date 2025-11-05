@@ -1093,6 +1093,9 @@ export const mockOrders: Order[] = [
       },
     ],
     rejectionReasons: [],
+    operationFiles: [],
+    clientCanViewFiles: true,
+    clientCanViewTracking: true,
   },
   {
     id: "O005",

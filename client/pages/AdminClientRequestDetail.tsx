@@ -52,7 +52,6 @@ export default function AdminClientRequestDetail() {
   const [editData, setEditData] = useState<typeof mockClientRequests[0] | null>(null);
   const [actionModal, setActionModal] = useState<"approve" | "reject" | null>(null);
   const [rejectionReason, setRejectionReason] = useState("");
-  const [selectedPlan, setSelectedPlan] = useState<string>("");
   const [selectedSalesPersonId, setSelectedSalesPersonId] = useState<string>("");
 
   const request = mockClientRequests.find((r) => r.id === requestId);

@@ -442,6 +442,103 @@ export default function AdminInvoiceDetail() {
             Mark as Paid
           </Button>
         </div>
+
+        {/* Invoice History & Activity Log */}
+        {invoice.history && invoice.history.length > 0 && (
+          <div className="bg-white rounded-lg border border-slate-200 p-8">
+            <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+              <Clock className="w-6 h-6 text-primary-600" />
+              Invoice History & Activity Log
+            </h2>
+
+            <div className="space-y-4">
+              {[...invoice.history]
+                .sort(
+                  (a, b) =>
+                    new Date(b.createdAt).getTime() -
+                    new Date(a.createdAt).getTime()
+                )
+                .map((entry, index) => (
+                  <div
+                    key={entry.id}
+                    className={`border border-slate-200 rounded-lg p-4 ${getActionColor(
+                      entry.action
+                    )}`}
+                  >
+                    <div className="flex gap-4">
+                      <div className="flex-shrink-0 mt-1">
+                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-white border border-slate-200">
+                          {getActionIcon(entry.action)}
+                        </div>
+                      </div>
+
+                      <div className="flex-1 min-w-0">
+                        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-2">
+                          <div>
+                            <p className="font-semibold text-slate-900">
+                              {entry.description}
+                            </p>
+                            <p className="text-sm text-slate-600">
+                              {entry.actionByName}
+                              {entry.action === "payment_received" && entry.amount && (
+                                <span className="font-semibold text-green-600 ml-2">
+                                  +{invoice.currency} {entry.amount.toLocaleString()}
+                                </span>
+                              )}
+                            </p>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-xs font-mono text-slate-500">
+                              {new Date(entry.createdAt).toLocaleDateString(
+                                "en-US",
+                                {
+                                  month: "short",
+                                  day: "numeric",
+                                  year: "numeric",
+                                }
+                              )}
+                            </p>
+                            <p className="text-xs font-mono text-slate-500">
+                              {new Date(entry.createdAt).toLocaleTimeString(
+                                "en-US",
+                                {
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                }
+                              )}
+                            </p>
+                          </div>
+                        </div>
+
+                        {entry.previousStatus && entry.newStatus && (
+                          <div className="text-sm text-slate-600 mb-2">
+                            Status changed:{" "}
+                            <span className="font-medium text-slate-900">
+                              {entry.previousStatus}
+                            </span>{" "}
+                            →
+                            <span className="font-medium text-slate-900 ml-1">
+                              {entry.newStatus}
+                            </span>
+                          </div>
+                        )}
+
+                        {entry.notes && (
+                          <p className="text-sm text-slate-600 italic">
+                            {entry.notes}
+                          </p>
+                        )}
+
+                        {index !== invoice.history!.length - 1 && (
+                          <div className="mt-4 pt-4 border-t border-slate-300" />
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+        )}
       </div>
     </AdminLayout>
   );

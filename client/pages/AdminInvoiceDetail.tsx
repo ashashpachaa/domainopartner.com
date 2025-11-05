@@ -9,6 +9,13 @@ import {
   MapPin,
   Phone,
   FileText,
+  Clock,
+  CheckCircle2,
+  AlertCircle,
+  Send,
+  DollarSign,
+  Eye,
+  X,
 } from "lucide-react";
 import { mockInvoices, mockUsers, mockStaff } from "@/lib/mockData";
 

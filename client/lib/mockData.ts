@@ -693,6 +693,19 @@ export const mockOrders: Order[] = [
       },
     ],
     rejectionReasons: [],
+    paymentHistory: [
+      {
+        id: "PAY-O002-1",
+        amount: 500,
+        currency: "USD",
+        status: "paid",
+        paidDate: "2024-01-08",
+        dueDate: "2024-01-15",
+        description: "Full payment for Tax ID Registration",
+        method: "Credit Card",
+        reference: "TXN-20240108-0001",
+      },
+    ],
   },
   {
     id: "O003",

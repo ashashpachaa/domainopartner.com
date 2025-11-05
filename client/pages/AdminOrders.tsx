@@ -181,7 +181,15 @@ export default function AdminOrders() {
   }
 
   if (statusFilter !== "all") {
-    filteredOrders = filteredOrders.filter((order) => order.status === statusFilter);
+    if (statusFilter === "overdue") {
+      filteredOrders = filteredOrders.filter((order) => {
+        if (order.status === "completed") return false;
+        const { daysRemaining } = calculateExpectedCompletion(order);
+        return daysRemaining < 0;
+      });
+    } else {
+      filteredOrders = filteredOrders.filter((order) => order.status === statusFilter);
+    }
   }
 
   if (startDate) {

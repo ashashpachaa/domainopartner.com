@@ -376,17 +376,35 @@ export default function AdminOrders() {
               </thead>
               <tbody>
                 {filteredOrders.length > 0 ? (
-                  filteredOrders.map((order) => {
+                  filteredOrders.flatMap((order) => {
                     const config = statusConfig[order.status];
                     const client = mockUsers.find((u) => u.id === order.userId);
+                    const isExpanded = expandedRows.has(order.id);
+                    const { date: expectedDate, daysRemaining } =
+                      calculateExpectedCompletion(order);
+                    const isCompleted = order.status === "completed";
+                    const isOverdue = !isCompleted && daysRemaining < 0;
+                    const isOnTrack = !isCompleted && daysRemaining >= 0;
 
-                    return (
+                    return [
                       <tr
                         key={order.id}
                         className="border-b border-slate-200 hover:bg-slate-50 transition"
                       >
                         <td className="px-6 py-4 text-sm font-medium text-slate-900">
-                          {order.orderNumber}
+                          <div className="flex items-center gap-3">
+                            <button
+                              onClick={() => toggleRowExpanded(order.id)}
+                              className="p-1 hover:bg-slate-200 rounded transition"
+                            >
+                              {isExpanded ? (
+                                <ChevronDown className="w-4 h-4 text-slate-600" />
+                              ) : (
+                                <ChevronRight className="w-4 h-4 text-slate-600" />
+                              )}
+                            </button>
+                            {order.orderNumber}
+                          </div>
                         </td>
                         <td className="px-6 py-4 text-sm text-slate-600">
                           <div>
@@ -426,8 +444,75 @@ export default function AdminOrders() {
                             </Button>
                           </Link>
                         </td>
-                      </tr>
-                    );
+                      </tr>,
+                      isExpanded && (
+                        <tr key={`${order.id}-expand`} className="bg-slate-50 border-b border-slate-200">
+                          <td colSpan={7} className="px-6 py-6">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-2xl">
+                              <div className="bg-white rounded-lg p-4 border border-slate-200">
+                                <label className="text-xs text-slate-500 font-semibold block mb-2">
+                                  Estimated Completion
+                                </label>
+                                <p className="text-lg font-bold text-slate-900">
+                                  {expectedDate.toLocaleDateString("en-US", {
+                                    month: "short",
+                                    day: "numeric",
+                                    year: "numeric",
+                                  })}
+                                </p>
+                              </div>
+
+                              <div className="bg-white rounded-lg p-4 border border-slate-200">
+                                <label className="text-xs text-slate-500 font-semibold block mb-2">
+                                  Product Duration
+                                </label>
+                                {order.productId ? (
+                                  (() => {
+                                    const product = mockProducts.find(
+                                      (p) => p.id === order.productId
+                                    );
+                                    return (
+                                      <p className="text-lg font-bold text-slate-900">
+                                        {product ? product.duration : "N/A"}
+                                      </p>
+                                    );
+                                  })()
+                                ) : (
+                                  <p className="text-lg font-bold text-slate-900">5 days</p>
+                                )}
+                              </div>
+
+                              <div className="bg-white rounded-lg p-4 border border-slate-200">
+                                <label className="text-xs text-slate-500 font-semibold block mb-2">
+                                  Status
+                                </label>
+                                {isCompleted && (
+                                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-700">
+                                    <CheckCircle className="w-4 h-4" />
+                                    Completed
+                                  </div>
+                                )}
+                                {isOnTrack && (
+                                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-700">
+                                    <Clock className="w-4 h-4" />
+                                    {daysRemaining === 0
+                                      ? "Due Today"
+                                      : `${daysRemaining} day${daysRemaining !== 1 ? "s" : ""} left`}
+                                  </div>
+                                )}
+                                {isOverdue && (
+                                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-700">
+                                    <AlertCircle className="w-4 h-4" />
+                                    {Math.abs(daysRemaining)} day
+                                    {Math.abs(daysRemaining) !== 1 ? "s" : ""} overdue
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      ),
+                    ];
                   })
                 ) : (
                   <tr>

@@ -37,6 +37,26 @@ export interface User {
   lastLogin: string;
 }
 
+export type ClientRequestStatus = "pending_approval" | "approved" | "rejected";
+
+export interface ClientRequest {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  companyName: string;
+  country: string;
+  city: string;
+  whatsappNumber: string;
+  website: string;
+  status: ClientRequestStatus;
+  subscriptionPlan: "free" | "starter" | "pro" | "enterprise";
+  createdAt: string;
+  reviewedAt?: string;
+  reviewedBy?: string; // staff ID
+  rejectionReason?: string;
+}
+
 export type OrderStatus =
   | "new"
   | "pending_sales_review"

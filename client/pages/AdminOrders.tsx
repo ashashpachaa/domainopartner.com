@@ -340,13 +340,13 @@ export default function AdminOrders() {
               <thead>
                 <tr className="bg-slate-50 border-b border-slate-200">
                   <th className="px-6 py-4 text-left text-sm font-semibold text-slate-900">
-                    Order #
+                    Order
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-slate-900">
-                    Client
+                    Customer
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-slate-900">
-                    Service
+                    Company
                   </th>
                   <th className="px-6 py-4 text-right text-sm font-semibold text-slate-900">
                     Amount
@@ -355,10 +355,7 @@ export default function AdminOrders() {
                     Status
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-slate-900">
-                    Tracking
-                  </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-slate-900">
-                    Assigned To
+                    Date
                   </th>
                   <th className="px-6 py-4 text-center text-sm font-semibold text-slate-900">
                     Actions

@@ -137,6 +137,22 @@ export interface Order {
   paymentHistory?: OrderPayment[];
 }
 
+export type InvoiceAction = "created" | "sent" | "viewed" | "payment_received" | "payment_failed" | "reminder_sent" | "status_changed" | "cancelled";
+
+export interface InvoiceHistory {
+  id: string;
+  invoiceId: string;
+  action: InvoiceAction;
+  previousStatus?: string;
+  newStatus?: string;
+  actionBy: string; // staffId or "client" or "system"
+  actionByName: string;
+  description: string;
+  notes?: string;
+  amount?: number;
+  createdAt: string;
+}
+
 export interface Invoice {
   id: string;
   userId: string;
@@ -151,6 +167,7 @@ export interface Invoice {
   createdByStaffId?: string;
   description: string;
   items: { description: string; quantity: number; unitPrice: number }[];
+  history: InvoiceHistory[];
 }
 
 export interface LoginHistory {

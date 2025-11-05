@@ -19,6 +19,8 @@ import AdminEditStaff from "./pages/AdminEditStaff";
 import AdminStaffCommission from "./pages/AdminStaffCommission";
 import AdminStaffSalary from "./pages/AdminStaffSalary";
 import AdminPerformance from "./pages/AdminPerformance";
+import AdminOrders from "./pages/AdminOrders";
+import AdminOrderDetail from "./pages/AdminOrderDetail";
 import StaffDashboard from "./pages/StaffDashboard";
 import NotFound from "./pages/NotFound";
 

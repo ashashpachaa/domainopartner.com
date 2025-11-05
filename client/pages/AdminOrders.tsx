@@ -320,11 +320,11 @@ export default function AdminOrders() {
             </div>
 
             {/* Filters */}
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
               {/* Status Filter */}
               <Select value={statusFilter} onValueChange={setStatusFilter}>
                 <SelectTrigger>
-                  <SelectValue placeholder="All Statuses" />
+                  <SelectValue placeholder="Order Status" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Statuses</SelectItem>
@@ -346,6 +346,21 @@ export default function AdminOrders() {
                   <SelectItem value="rejected_by_client">Rejected by Client</SelectItem>
                   <SelectItem value="shipping_preparation">Shipping Preparation</SelectItem>
                   <SelectItem value="completed">Completed</SelectItem>
+                </SelectContent>
+              </Select>
+
+              {/* Payment Status Filter */}
+              <Select value={paymentStatusFilter} onValueChange={(value) => setPaymentStatusFilter(value as PaymentStatus)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Payment Status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Payments</SelectItem>
+                  <SelectItem value="paid">🟢 Paid</SelectItem>
+                  <SelectItem value="pending">🟡 Pending</SelectItem>
+                  <SelectItem value="partial">🔵 Partial</SelectItem>
+                  <SelectItem value="overdue">🔴 Overdue</SelectItem>
+                  <SelectItem value="failed">🔴 Failed</SelectItem>
                 </SelectContent>
               </Select>
 

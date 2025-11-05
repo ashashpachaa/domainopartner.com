@@ -10,6 +10,7 @@ import {
   AlertCircle,
   Clock,
   XCircle,
+  Plus,
 } from "lucide-react";
 import AdminLayout from "@/components/AdminLayout";
 import { Button } from "@/components/ui/button";
@@ -273,8 +274,14 @@ export default function AdminOrders() {
       <div className="flex-1 overflow-auto bg-slate-100">
         <div className="p-8">
           {/* Header */}
-          <div className="mb-8">
+          <div className="mb-8 flex items-center justify-between">
             <h1 className="text-4xl font-bold text-slate-900 mb-2">Orders Management</h1>
+            <Link to="/admin/orders/new">
+              <Button className="bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white flex items-center gap-2">
+                <Plus className="w-5 h-5" />
+                Add Order
+              </Button>
+            </Link>
           </div>
 
           {/* Summary Stats */}

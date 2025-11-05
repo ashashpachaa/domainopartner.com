@@ -114,6 +114,32 @@ export interface OrderPayment {
   reference?: string;
 }
 
+export interface OperationFile {
+  id: string;
+  orderId: string;
+  fileName: string;
+  fileSize: number; // in bytes
+  uploadedBy: string; // staffId
+  uploadedByName: string;
+  uploadedAt: string;
+  stage: "sales" | "operation" | "manager" | "apostille"; // workflow stage
+  fileType: "document" | "receipt" | "tracking" | "apostille";
+  description?: string;
+}
+
+export interface ApostilleDocument {
+  id: string;
+  orderId: string;
+  documentName: string;
+  originalFile: OperationFile;
+  apostilledBy: string; // staffId (operation manager)
+  apostilledByName: string;
+  apostilledAt: string;
+  isComplete: boolean;
+  certificateNumber?: string;
+  description?: string;
+}
+
 export interface Order {
   id: string;
   userId: string;
@@ -135,8 +161,15 @@ export interface Order {
   clientAccepted?: boolean;
   clientAcceptedAt?: string;
   shippingNumber?: string;
+  trackingNumber?: string;
+  trackingNumberAddedBy?: string; // staffId who added tracking
+  trackingNumberAddedAt?: string;
   documentsUploaded?: boolean;
   paymentHistory?: OrderPayment[];
+  operationFiles: OperationFile[]; // files uploaded during workflow
+  apostilleDocuments?: ApostilleDocument[]; // apostille documents if applicable
+  clientCanViewFiles: boolean; // visibility to client
+  clientCanViewTracking: boolean; // visibility of tracking to client
 }
 
 export type InvoiceAction = "created" | "sent" | "viewed" | "payment_received" | "payment_failed" | "reminder_sent" | "status_changed" | "cancelled";

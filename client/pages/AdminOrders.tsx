@@ -366,32 +366,7 @@ export default function AdminOrders() {
                 {filteredOrders.length > 0 ? (
                   filteredOrders.map((order) => {
                     const config = statusConfig[order.status];
-                    let assignedStaff = "None";
-                    if (
-                      order.status === "pending_sales_review" ||
-                      order.status === "rejected_by_sales"
-                    ) {
-                      assignedStaff = getStaffName(order.assignedToSalesId);
-                    } else if (
-                      order.status === "pending_operation" ||
-                      order.status === "rejected_by_operation"
-                    ) {
-                      assignedStaff = getStaffName(order.assignedToOperationId);
-                    } else if (
-                      order.status === "pending_operation_manager_review" ||
-                      order.status === "rejected_by_operation_manager" ||
-                      order.status === "shipping_preparation"
-                    ) {
-                      assignedStaff = getStaffName(order.assignedToManagerId);
-                    } else if (order.status === "awaiting_client_acceptance") {
-                      assignedStaff = getStaffName(order.assignedToSalesId);
-                    }
-
-                    const { date: expectedDate, daysRemaining } =
-                      calculateExpectedCompletion(order);
-                    const isCompleted = order.status === "completed";
-                    const isOverdue = !isCompleted && daysRemaining < 0;
-                    const isOnTrack = !isCompleted && daysRemaining >= 0;
+                    const client = mockUsers.find((u) => u.id === order.userId);
 
                     return (
                       <tr
@@ -402,10 +377,17 @@ export default function AdminOrders() {
                           {order.orderNumber}
                         </td>
                         <td className="px-6 py-4 text-sm text-slate-600">
-                          {getUserName(order.userId)}
+                          <div>
+                            <p className="font-medium text-slate-900">
+                              {client ? `${client.firstName} ${client.lastName}` : "Unknown"}
+                            </p>
+                            <p className="text-xs text-slate-500">
+                              {client ? client.email : ""}
+                            </p>
+                          </div>
                         </td>
                         <td className="px-6 py-4 text-sm text-slate-600">
-                          {order.serviceType}
+                          {client ? client.companyName : "N/A"}
                         </td>
                         <td className="px-6 py-4 text-sm font-medium text-slate-900 text-right">
                           {order.amount.toLocaleString()} {order.currency}
@@ -418,35 +400,13 @@ export default function AdminOrders() {
                             {config.label}
                           </div>
                         </td>
-                        <td className="px-6 py-4 text-sm">
-                          <div className="space-y-1">
-                            <p className="text-slate-600">
-                              {expectedDate.toLocaleDateString("en-US", {
-                                month: "short",
-                                day: "numeric",
-                                year: "numeric",
-                              })}
-                            </p>
-                            {isCompleted && (
-                              <p className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full inline-block font-medium">
-                                ✓ Completed
-                              </p>
-                            )}
-                            {isOnTrack && (
-                              <p className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full inline-block font-medium">
-                                {daysRemaining === 0
-                                  ? "Due Today"
-                                  : `${daysRemaining} day${daysRemaining !== 1 ? "s" : ""} left`}
-                              </p>
-                            )}
-                            {isOverdue && (
-                              <p className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded-full inline-block font-medium">
-                                {Math.abs(daysRemaining)} day{Math.abs(daysRemaining) !== 1 ? "s" : ""} overdue
-                              </p>
-                            )}
-                          </div>
+                        <td className="px-6 py-4 text-sm text-slate-600">
+                          {new Date(order.createdAt).toLocaleDateString("en-US", {
+                            month: "2-digit",
+                            day: "2-digit",
+                            year: "numeric",
+                          })}
                         </td>
-                        <td className="px-6 py-4 text-sm text-slate-600">{assignedStaff}</td>
                         <td className="px-6 py-4 text-center">
                           <Link to={`/admin/orders/${order.id}`}>
                             <Button size="sm" variant="ghost">

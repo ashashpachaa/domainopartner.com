@@ -98,6 +98,8 @@ export default function AdminStaffSalary() {
       currency: "USD",
       underperformanceDeduction: 0,
       underperformanceThreshold: 60,
+      rejectionFee: 50,
+      totalRejectionFees: 0,
       lastSalaryDate: new Date().toISOString().split("T")[0],
       nextSalaryDate: new Date(new Date().getTime() + 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
     }

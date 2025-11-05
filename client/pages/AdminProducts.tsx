@@ -150,6 +150,14 @@ export default function AdminProducts() {
                   {product.description}
                 </p>
 
+                {/* Price */}
+                <div className="mb-4 p-3 bg-primary-50 rounded-lg">
+                  <p className="text-xs text-slate-500 uppercase tracking-wide">Price</p>
+                  <p className="text-xl font-bold text-primary-600 mt-1">
+                    {product.currency} {product.price.toLocaleString()}
+                  </p>
+                </div>
+
                 {/* Details */}
                 <div className="space-y-2 mb-4 text-sm">
                   <div>

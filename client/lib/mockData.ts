@@ -224,6 +224,8 @@ export interface StaffSalary {
   currency: string;
   underperformanceDeduction: number;
   underperformanceThreshold: number;
+  rejectionFee: number; // Fee deducted per order rejection
+  totalRejectionFees: number; // Cumulative rejection fees for current period
   lastSalaryDate: string;
   nextSalaryDate: string;
 }

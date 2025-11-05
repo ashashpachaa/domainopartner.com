@@ -856,6 +856,9 @@ export const mockOrders: Order[] = [
         reference: "TXN-20240108-0001",
       },
     ],
+    operationFiles: [],
+    clientCanViewFiles: false,
+    clientCanViewTracking: false,
   },
   {
     id: "O003",

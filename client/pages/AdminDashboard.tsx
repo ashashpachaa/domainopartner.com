@@ -78,6 +78,23 @@ export default function AdminDashboard() {
     return matchesSearch && matchesFilter;
   });
 
+  const filteredClientRequests = clientRequests.filter((request) => {
+    const matchesSearch =
+      request.firstName.toLowerCase().includes(clientSearchTerm.toLowerCase()) ||
+      request.lastName.toLowerCase().includes(clientSearchTerm.toLowerCase()) ||
+      request.email.toLowerCase().includes(clientSearchTerm.toLowerCase()) ||
+      request.companyName.toLowerCase().includes(clientSearchTerm.toLowerCase());
+
+    const matchesFilter =
+      clientFilterStatus === "all" || request.status === clientFilterStatus;
+
+    return matchesSearch && matchesFilter;
+  });
+
+  const pendingClientCount = clientRequests.filter(
+    (r) => r.status === "pending_approval"
+  ).length;
+
   const updateUserStatus = (
     userId: string,
     newStatus: UserStatus

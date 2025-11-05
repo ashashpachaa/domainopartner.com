@@ -65,31 +65,41 @@ export default function AdminDashboard() {
     }
   }, [notificationDismissed, showNotificationToast]);
 
-  const filteredUsers = users.filter((user) => {
-    const matchesSearch =
-      user.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.companyName.toLowerCase().includes(searchTerm.toLowerCase());
+  const filteredUsers = users
+    .filter((user) => {
+      const matchesSearch =
+        user.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.companyName.toLowerCase().includes(searchTerm.toLowerCase());
 
-    const matchesFilter =
-      filterStatus === "all" || user.status === filterStatus;
+      const matchesFilter =
+        filterStatus === "all" || user.status === filterStatus;
 
-    return matchesSearch && matchesFilter;
-  });
+      return matchesSearch && matchesFilter;
+    })
+    .sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
 
-  const filteredClientRequests = clientRequests.filter((request) => {
-    const matchesSearch =
-      request.firstName.toLowerCase().includes(clientSearchTerm.toLowerCase()) ||
-      request.lastName.toLowerCase().includes(clientSearchTerm.toLowerCase()) ||
-      request.email.toLowerCase().includes(clientSearchTerm.toLowerCase()) ||
-      request.companyName.toLowerCase().includes(clientSearchTerm.toLowerCase());
+  const filteredClientRequests = clientRequests
+    .filter((request) => {
+      const matchesSearch =
+        request.firstName.toLowerCase().includes(clientSearchTerm.toLowerCase()) ||
+        request.lastName.toLowerCase().includes(clientSearchTerm.toLowerCase()) ||
+        request.email.toLowerCase().includes(clientSearchTerm.toLowerCase()) ||
+        request.companyName.toLowerCase().includes(clientSearchTerm.toLowerCase());
 
-    const matchesFilter =
-      clientFilterStatus === "all" || request.status === clientFilterStatus;
+      const matchesFilter =
+        clientFilterStatus === "all" || request.status === clientFilterStatus;
 
-    return matchesSearch && matchesFilter;
-  });
+      return matchesSearch && matchesFilter;
+    })
+    .sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
 
   const pendingClientCount = clientRequests.filter(
     (r) => r.status === "pending_approval"

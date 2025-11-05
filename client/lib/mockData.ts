@@ -103,6 +103,7 @@ export interface OrderHistory {
 export interface Order {
   id: string;
   userId: string;
+  productId?: string;
   orderNumber: string;
   description: string;
   amount: number;

@@ -177,6 +177,48 @@ export default function AdminEditProduct() {
                   />
                 </div>
 
+                {/* Price */}
+                <div>
+                  <label className="block text-sm font-medium text-slate-900 mb-2">
+                    Price *
+                  </label>
+                  <Input
+                    type="number"
+                    name="price"
+                    value={formData.price || ""}
+                    onChange={handleChange}
+                    placeholder="e.g., 500"
+                    min="0"
+                    step="0.01"
+                    required
+                    className="border-slate-300 focus:border-primary-500 focus:ring-primary-500"
+                  />
+                </div>
+
+                {/* Currency */}
+                <div>
+                  <label className="block text-sm font-medium text-slate-900 mb-2">
+                    Currency *
+                  </label>
+                  <select
+                    name="currency"
+                    value={formData.currency || "USD"}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500 bg-white"
+                  >
+                    <option value="USD">USD - US Dollar</option>
+                    <option value="GBP">GBP - British Pound</option>
+                    <option value="EUR">EUR - Euro</option>
+                    <option value="CAD">CAD - Canadian Dollar</option>
+                    <option value="SEK">SEK - Swedish Krona</option>
+                    <option value="JPY">JPY - Japanese Yen</option>
+                    <option value="AUD">AUD - Australian Dollar</option>
+                    <option value="SGD">SGD - Singapore Dollar</option>
+                    <option value="BRL">BRL - Brazilian Real</option>
+                  </select>
+                </div>
+
                 {/* Status */}
                 <div>
                   <label className="block text-sm font-medium text-slate-900 mb-2">

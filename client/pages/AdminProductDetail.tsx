@@ -117,7 +117,28 @@ export default function AdminProductDetail() {
             </div>
 
             {/* Right Column */}
-            <div>
+            <div className="space-y-6">
+              {/* Pricing */}
+              <div>
+                <h3 className="text-sm font-semibold text-slate-900 mb-4 flex items-center gap-2">
+                  <span className="text-primary-600 font-bold">$</span>
+                  Pricing
+                </h3>
+                <div className="bg-gradient-to-br from-primary-50 to-primary-100 rounded-lg p-4">
+                  <div className="flex items-baseline gap-3">
+                    <span className="text-3xl font-bold text-primary-600">
+                      {product.price.toLocaleString()}
+                    </span>
+                    <span className="text-lg font-semibold text-slate-700">
+                      {product.currency}
+                    </span>
+                  </div>
+                  <p className="text-sm text-slate-600 mt-2">
+                    Base price for this service
+                  </p>
+                </div>
+              </div>
+
               {/* Services */}
               <div>
                 <h3 className="text-sm font-semibold text-slate-900 mb-4">

@@ -12,6 +12,7 @@ import {
   TrendingDown,
   Zap,
   XCircle,
+  AlertTriangle,
 } from "lucide-react";
 import { useState, useMemo } from "react";
 import {
@@ -22,6 +23,9 @@ import {
   mockStaffPerformances,
   StaffCommission,
   StaffCommissionHistory,
+  mockOrders,
+  mockInvoices,
+  mockUsers,
 } from "@/lib/mockData";
 
 // Mock: In real app, get staffId from auth context

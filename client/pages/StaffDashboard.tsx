@@ -186,6 +186,66 @@ export default function StaffDashboard() {
           </div>
         </div>
 
+        {/* Pending Client Payments Alert */}
+        {pendingClientPayments.length > 0 && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-6 shadow-sm">
+            <div className="flex items-start justify-between">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-lg bg-red-100 flex items-center justify-center flex-shrink-0">
+                  <AlertTriangle className="w-6 h-6 text-red-600" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-red-900 mb-1">
+                    Pending Client Payments
+                  </h2>
+                  <p className="text-sm text-red-700 mb-4">
+                    {pendingClientPayments.length} client(s) with outstanding invoices
+                  </p>
+                  <p className="text-2xl font-bold text-red-600">
+                    Total: {pendingClientPayments[0]?.currency || "USD"}{" "}
+                    {totalPendingAmount.toLocaleString()}
+                  </p>
+                </div>
+              </div>
+              <Link to="/admin/invoices">
+                <Button className="bg-red-600 hover:bg-red-700 text-white">
+                  View Invoices
+                </Button>
+              </Link>
+            </div>
+
+            {/* Pending Payments by Client */}
+            <div className="mt-6 space-y-3">
+              {pendingClientPayments.map((client) => (
+                <div
+                  key={client.clientId}
+                  className="flex items-start justify-between p-4 bg-white rounded-lg border border-red-100 hover:border-red-300 transition"
+                >
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-slate-900 mb-1">
+                      {client.clientName}
+                    </h3>
+                    <p className="text-xs text-slate-600 mb-2">
+                      {client.invoices.length} invoice(s)
+                      {client.overdueCount > 0 && (
+                        <span className="ml-2 px-2 py-0.5 bg-red-100 text-red-700 text-xs font-semibold rounded">
+                          {client.overdueCount} overdue
+                        </span>
+                      )}
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-lg font-bold text-red-600">
+                      {client.currency} {client.totalAmount.toLocaleString()}
+                    </p>
+                    <p className="text-xs text-slate-500 mt-1">Pending</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Commission Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Total Earned */}

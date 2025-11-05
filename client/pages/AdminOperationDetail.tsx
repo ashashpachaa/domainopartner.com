@@ -247,6 +247,142 @@ export default function AdminOperationDetail() {
     return `${event.actionByName} performed ${event.actionType} action`;
   };
 
+  // Calculate business days (Mon-Fri only)
+  const calculateBusinessDays = (startDate: Date, endDate: Date): number => {
+    let count = 0;
+    const current = new Date(startDate);
+    while (current < endDate) {
+      const dayOfWeek = current.getDay();
+      if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+        count++;
+      }
+      current.setDate(current.getDate() + 1);
+    }
+    return count;
+  };
+
+  // Add business days to a date
+  const addBusinessDays = (startDate: Date, daysToAdd: number): Date => {
+    let count = 0;
+    const result = new Date(startDate);
+    while (count < daysToAdd) {
+      result.setDate(result.getDate() + 1);
+      const dayOfWeek = result.getDay();
+      if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+        count++;
+      }
+    }
+    return result;
+  };
+
+  // Get deadline and affected staff for current stage
+  const getDeadlineInfo = useMemo(() => {
+    const now = new Date();
+    const createdDate = new Date(order.createdAt);
+    let deadlineDate: Date;
+    let affectedStaffId: string | null = null;
+    let stageName = "";
+    let daysAllowed = 0;
+
+    switch (order.status) {
+      case "pending_sales_review":
+        stageName = "Sales Review";
+        daysAllowed = 0.25; // 6 hours
+        deadlineDate = new Date(createdDate.getTime() + 6 * 60 * 60 * 1000);
+        affectedStaffId = order.assignedToSalesId || null;
+        break;
+      case "pending_operation":
+        stageName = "Operation Processing";
+        daysAllowed = 3;
+        deadlineDate = addBusinessDays(createdDate, 3);
+        affectedStaffId = order.assignedToOperationId || null;
+        break;
+      case "pending_operation_manager_review":
+        stageName = "Manager Review";
+        daysAllowed = 1;
+        deadlineDate = addBusinessDays(createdDate, 4); // 3 days operation + 1 day manager
+        affectedStaffId = order.assignedToManagerId || null;
+        break;
+      case "awaiting_client_acceptance":
+        stageName = "Client Acceptance Review";
+        daysAllowed = 1;
+        deadlineDate = addBusinessDays(createdDate, 5); // 3 days operation + 1 day manager + 1 day sales
+        affectedStaffId = order.assignedToSalesId || null;
+        break;
+      case "shipping_preparation":
+        // If apostille required, deadline is 1 day for apostille, then 2 days for tracking
+        if (product?.services.hasApostille) {
+          stageName = "Apostille Processing";
+          daysAllowed = 1;
+          deadlineDate = addBusinessDays(createdDate, 7); // 3 + 1 + 1 + 1 + 1 (apostille)
+          affectedStaffId = order.assignedToManagerId || null;
+        } else {
+          stageName = "Shipping Preparation";
+          daysAllowed = 2;
+          deadlineDate = addBusinessDays(createdDate, 8); // Total for tracking
+          affectedStaffId = order.assignedToManagerId || null;
+        }
+        break;
+      default:
+        return {
+          stageName: getStatusLabel(order.status),
+          deadlineDate: null,
+          daysRemaining: null,
+          hoursRemaining: null,
+          affectedStaff: null,
+          isOverdue: false,
+          isApproaching: false,
+          daysAllowed: 0,
+        };
+    }
+
+    const affectedStaff = affectedStaffId
+      ? mockStaff.find((s) => s.id === affectedStaffId)
+      : null;
+    const timeRemaining = deadlineDate.getTime() - now.getTime();
+    const daysRemaining = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+    const hoursRemaining = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const isOverdue = now > deadlineDate;
+    const isApproaching = timeRemaining < 6 * 60 * 60 * 1000 && !isOverdue; // Less than 6 hours
+
+    return {
+      stageName,
+      deadlineDate,
+      daysRemaining,
+      hoursRemaining,
+      affectedStaff,
+      isOverdue,
+      isApproaching,
+      daysAllowed,
+    };
+  }, [order.status, order.createdAt, order.assignedToSalesId, order.assignedToOperationId, order.assignedToManagerId]);
+
+  const getDeadlineColor = () => {
+    if (["completed", "rejected_by_sales", "rejected_by_operation", "rejected_by_operation_manager", "rejected_by_client"].includes(order.status)) {
+      return "bg-slate-50 border-slate-200";
+    }
+    if (getDeadlineInfo.isOverdue) {
+      return "bg-red-50 border-red-200";
+    }
+    if (getDeadlineInfo.isApproaching) {
+      return "bg-yellow-50 border-yellow-200";
+    }
+    return "bg-blue-50 border-blue-200";
+  };
+
+  const getDeadlineTextColor = () => {
+    if (["completed", "rejected_by_sales", "rejected_by_operation", "rejected_by_operation_manager", "rejected_by_client"].includes(order.status)) {
+      return "text-slate-700";
+    }
+    if (getDeadlineInfo.isOverdue) {
+      return "text-red-700";
+    }
+    if (getDeadlineInfo.isApproaching) {
+      return "text-yellow-700";
+    }
+    return "text-blue-700";
+  };
+
   return (
     <AdminLayout>
       <div className="space-y-6">

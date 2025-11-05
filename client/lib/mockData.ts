@@ -1978,6 +1978,36 @@ export const mockInvoices: Invoice[] = [
         unitPrice: 675,
       },
     ],
+    history: [
+      {
+        id: "H015-1",
+        invoiceId: "INV015",
+        action: "created",
+        actionBy: "system",
+        actionByName: "System",
+        description: "Invoice created",
+        createdAt: "2023-11-20T10:00:00Z",
+      },
+      {
+        id: "H015-2",
+        invoiceId: "INV015",
+        action: "sent",
+        actionBy: "system",
+        actionByName: "System",
+        description: "Invoice sent to customer",
+        createdAt: "2023-11-20T10:15:00Z",
+      },
+      {
+        id: "H015-3",
+        invoiceId: "INV015",
+        action: "cancelled",
+        actionBy: "system",
+        actionByName: "System",
+        description: "Invoice cancelled - Client request",
+        notes: "Client no longer needs Brazil setup services",
+        createdAt: "2023-11-25T14:20:00Z",
+      },
+    ],
   },
 ];
 

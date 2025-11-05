@@ -63,6 +63,8 @@ export interface Product {
   description: string;
   duration: string; // e.g., "3-5 business days"
   requirements: string; // e.g., "Valid ID, Company documents"
+  price: number;
+  currency: string; // e.g., "USD", "GBP", "EUR"
   services: {
     hasApostille: boolean;
     hasShipping: boolean;

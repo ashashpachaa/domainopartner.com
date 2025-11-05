@@ -172,6 +172,21 @@ export default function AdminOrders() {
     filteredOrders = filteredOrders.filter((order) => order.status === statusFilter);
   }
 
+  if (startDate) {
+    const start = new Date(startDate);
+    filteredOrders = filteredOrders.filter(
+      (order) => new Date(order.createdAt) >= start
+    );
+  }
+
+  if (endDate) {
+    const end = new Date(endDate);
+    end.setHours(23, 59, 59, 999);
+    filteredOrders = filteredOrders.filter(
+      (order) => new Date(order.createdAt) <= end
+    );
+  }
+
   if (sortBy === "recent") {
     filteredOrders.sort(
       (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -185,6 +200,18 @@ export default function AdminOrders() {
   } else if (sortBy === "amount_low") {
     filteredOrders.sort((a, b) => a.amount - b.amount);
   }
+
+  // Calculate summary statistics
+  const totalOrders = mockOrders.length;
+  const completedOrders = mockOrders.filter((o) => o.status === "completed").length;
+  const pendingOrders = mockOrders.filter(
+    (o) =>
+      o.status !== "completed" &&
+      !o.status.startsWith("rejected")
+  ).length;
+  const totalRevenue = mockOrders
+    .filter((o) => o.status === "completed")
+    .reduce((sum, o) => sum + o.amount, 0);
 
   return (
     <AdminLayout>

@@ -217,6 +217,14 @@ export default function AdminProductDetail() {
             <div className="space-y-3">
               <div>
                 <p className="text-xs text-slate-500 uppercase tracking-wide">
+                  Price
+                </p>
+                <p className="text-sm font-medium text-slate-900 mt-1">
+                  {product.currency} {product.price.toLocaleString()}
+                </p>
+              </div>
+              <div>
+                <p className="text-xs text-slate-500 uppercase tracking-wide">
                   Duration
                 </p>
                 <p className="text-sm font-medium text-slate-900 mt-1">

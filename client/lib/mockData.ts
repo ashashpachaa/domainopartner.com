@@ -57,6 +57,21 @@ export interface ClientRequest {
   rejectionReason?: string;
 }
 
+export interface Product {
+  id: string;
+  name: string;
+  description: string;
+  duration: string; // e.g., "3-5 business days"
+  requirements: string; // e.g., "Valid ID, Company documents"
+  services: {
+    hasApostille: boolean;
+    hasShipping: boolean;
+    hasPOA: boolean;
+  };
+  createdAt: string;
+  status: "active" | "inactive";
+}
+
 export type OrderStatus =
   | "new"
   | "pending_sales_review"

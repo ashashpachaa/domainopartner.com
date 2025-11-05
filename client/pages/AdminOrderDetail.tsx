@@ -291,6 +291,89 @@ export default function AdminOrderDetail() {
                 </div>
               </div>
 
+              {/* Product Information */}
+              {order.productId && mockProducts.find((p) => p.id === order.productId) && (
+                <div className="bg-blue-50 rounded-lg border border-blue-200 p-6">
+                  <h3 className="text-xl font-bold text-blue-900 mb-4">Product Information</h3>
+                  {(() => {
+                    const product = mockProducts.find((p) => p.id === order.productId);
+                    if (!product) return null;
+
+                    const hasApostille = product.services.hasApostille;
+                    const hasShipping = product.services.hasShipping;
+                    const hasPOA = product.services.hasPOA;
+
+                    return (
+                      <div className="space-y-4">
+                        <div>
+                          <label className="text-sm text-blue-700 font-semibold">Product Name</label>
+                          <p className="text-blue-900 font-medium mt-1">{product.name}</p>
+                        </div>
+                        <div>
+                          <label className="text-sm text-blue-700 font-semibold">Description</label>
+                          <p className="text-blue-900 mt-1">{product.description}</p>
+                        </div>
+                        <div className="grid grid-cols-3 gap-4">
+                          <div>
+                            <label className="text-sm text-blue-700 font-semibold">Duration</label>
+                            <p className="text-blue-900 font-medium mt-1">{product.duration}</p>
+                          </div>
+                          <div>
+                            <label className="text-sm text-blue-700 font-semibold">Status</label>
+                            <p className="text-blue-900 font-medium mt-1 capitalize">{product.status}</p>
+                          </div>
+                        </div>
+                        <div className="pt-2 border-t border-blue-200">
+                          <label className="text-sm text-blue-700 font-semibold block mb-3">
+                            Included Services
+                          </label>
+                          <div className="flex gap-3">
+                            <div className="flex items-center gap-2">
+                              <div
+                                className={`w-3 h-3 rounded-full ${
+                                  hasApostille ? "bg-green-500" : "bg-slate-300"
+                                }`}
+                              />
+                              <span className="text-sm text-blue-900">Apostille</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <div
+                                className={`w-3 h-3 rounded-full ${
+                                  hasShipping ? "bg-green-500" : "bg-slate-300"
+                                }`}
+                              />
+                              <span className="text-sm text-blue-900">Shipping</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <div
+                                className={`w-3 h-3 rounded-full ${
+                                  hasPOA ? "bg-green-500" : "bg-slate-300"
+                                }`}
+                              />
+                              <span className="text-sm text-blue-900">POA</span>
+                            </div>
+                          </div>
+                        </div>
+                        {order.status === "awaiting_client_acceptance" && (
+                          <div className="pt-3 border-t border-blue-200">
+                            <p className="text-sm text-blue-700 font-semibold">
+                              {!hasApostille && !hasShipping
+                                ? "✓ Order will auto-complete when client accepts (no additional services required)"
+                                : `✓ Order will be sent to Operation Manager for ${[
+                                    hasApostille && "apostille",
+                                    hasShipping && "shipping",
+                                  ]
+                                    .filter(Boolean)
+                                    .join(" and ")} when client accepts`}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })()}
+                </div>
+              )}
+
               {/* Client Information */}
               <div className="bg-white rounded-lg border border-slate-200 p-6">
                 <h3 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">

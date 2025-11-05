@@ -115,7 +115,6 @@ export default function AdminClientRequestDetail() {
     alert(
       `Client ${request.firstName} ${request.lastName} has been APPROVED!\n\n` +
       `✓ New user account created (ID: ${newUserId})\n` +
-      `✓ Subscription Plan: ${selectedPlan}\n` +
       `✓ Account Manager: ${selectedSalesPerson?.firstName} ${selectedSalesPerson?.lastName}\n\n` +
       `The client can now login and the sales person will manage their account.`
     );

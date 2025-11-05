@@ -97,9 +97,12 @@ const statusConfig: Record<
   },
 };
 
+type PaymentStatus = "all" | "paid" | "pending" | "partial" | "overdue" | "failed";
+
 export default function AdminOrders() {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [paymentStatusFilter, setPaymentStatusFilter] = useState<PaymentStatus>("all");
   const [sortBy, setSortBy] = useState<string>("recent");
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
@@ -113,6 +116,27 @@ export default function AdminOrders() {
       newExpanded.add(orderId);
     }
     setExpandedRows(newExpanded);
+  };
+
+  const getPaymentStatus = (order: typeof mockOrders[0]): PaymentStatus => {
+    if (!order.paymentHistory || order.paymentHistory.length === 0) {
+      return "pending";
+    }
+
+    const hasOverdue = order.paymentHistory.some((p) => p.status === "overdue");
+    const hasFailed = order.paymentHistory.some((p) => p.status === "failed");
+    const hasPaid = order.paymentHistory.some((p) => p.status === "paid");
+    const hasPending = order.paymentHistory.some((p) => p.status === "pending");
+    const hasPartial = order.paymentHistory.some((p) => p.status === "partial");
+
+    if (hasOverdue) return "overdue";
+    if (hasFailed) return "failed";
+    if (hasPaid && (hasPending || hasPartial)) return "partial";
+    if (hasPaid) return "paid";
+    if (hasPartial) return "partial";
+    if (hasPending) return "pending";
+
+    return "pending";
   };
 
   const getUserName = (userId: string) => {

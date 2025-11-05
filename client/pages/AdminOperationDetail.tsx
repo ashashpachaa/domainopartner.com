@@ -230,6 +230,21 @@ export default function AdminOperationDetail() {
     return stageMap[status] || "operation";
   };
 
+  const generateHistoryDescription = (event: any): string => {
+    if (event.actionType === "accept") {
+      return `${event.actionByName} accepted the order and moved it to ${getStatusLabel(event.newStatus)}`;
+    } else if (event.actionType === "reject") {
+      return `${event.actionByName} rejected the order`;
+    } else if (event.actionType === "resubmit") {
+      return `${event.actionByName} resubmitted the order to ${getStatusLabel(event.newStatus)}`;
+    } else if (event.actionType === "system_transition") {
+      return `Order automatically moved to ${getStatusLabel(event.newStatus)} by ${event.actionByName}`;
+    } else if (event.actionType === "edit") {
+      return `${event.actionByName} edited the order`;
+    }
+    return `${event.actionByName} performed ${event.actionType} action`;
+  };
+
   return (
     <AdminLayout>
       <div className="space-y-6">

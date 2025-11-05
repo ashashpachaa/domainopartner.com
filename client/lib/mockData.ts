@@ -1680,6 +1680,28 @@ export const mockInvoices: Invoice[] = [
         unitPrice: 700,
       },
     ],
+    history: [
+      {
+        id: "H009-1",
+        invoiceId: "INV009",
+        action: "created",
+        actionBy: "S004",
+        actionByName: "Sarah Johnson",
+        description: "Invoice created",
+        createdAt: "2024-01-08T16:50:00Z",
+      },
+      {
+        id: "H009-2",
+        invoiceId: "INV009",
+        action: "status_changed",
+        previousStatus: "draft",
+        newStatus: "draft",
+        actionBy: "S004",
+        actionByName: "Sarah Johnson",
+        description: "Invoice status: Draft",
+        createdAt: "2024-01-08T16:50:00Z",
+      },
+    ],
   },
   {
     id: "INV010",

@@ -265,10 +265,24 @@ export default function AdminOrderDetail() {
                   <div>
                     <label className="text-sm text-slate-500 flex items-center gap-2">
                       <Calendar className="w-4 h-4" />
-                      Created Date
+                      Created Date & Time
                     </label>
                     <p className="text-slate-900 font-medium mt-1">
-                      {new Date(order.createdAt).toLocaleDateString()}
+                      {new Date(order.createdAt).toLocaleString("en-US", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        second: "2-digit",
+                        hour12: true,
+                      })}
+                    </p>
+                  </div>
+                  <div>
+                    <label className="text-sm text-slate-500">Created By</label>
+                    <p className="text-slate-900 font-medium mt-1">
+                      {client ? `${client.firstName} ${client.lastName}` : "Unknown Client"}
                     </p>
                   </div>
                   <div>

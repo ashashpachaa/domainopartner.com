@@ -37,6 +37,34 @@ export interface User {
   lastLogin: string;
 }
 
+export type OrderStatus =
+  | "new"
+  | "pending_sales_review"
+  | "rejected_by_sales"
+  | "pending_operation"
+  | "rejected_by_operation"
+  | "pending_operation_manager_review"
+  | "rejected_by_operation_manager"
+  | "awaiting_client_acceptance"
+  | "rejected_by_client"
+  | "shipping_preparation"
+  | "completed";
+
+export type OrderActionType = "accept" | "reject" | "edit" | "resubmit" | "system_transition";
+
+export interface OrderHistory {
+  id: string;
+  orderId: string;
+  previousStatus: OrderStatus;
+  newStatus: OrderStatus;
+  actionType: OrderActionType;
+  actionBy: string; // staffId or "client"
+  actionByName: string;
+  reason?: string; // For rejections
+  notes?: string;
+  createdAt: string;
+}
+
 export interface Order {
   id: string;
   userId: string;
@@ -44,11 +72,20 @@ export interface Order {
   description: string;
   amount: number;
   currency: string;
-  status: "pending" | "processing" | "completed" | "cancelled";
+  status: OrderStatus;
   serviceType: string;
   countries: string[];
   createdAt: string;
   completedAt?: string;
+  assignedToSalesId?: string;
+  assignedToOperationId?: string;
+  assignedToManagerId?: string;
+  history: OrderHistory[];
+  rejectionReasons: string[];
+  clientAccepted?: boolean;
+  clientAcceptedAt?: string;
+  shippingNumber?: string;
+  documentsUploaded?: boolean;
 }
 
 export interface Invoice {

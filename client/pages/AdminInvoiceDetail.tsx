@@ -53,6 +53,42 @@ export default function AdminInvoiceDetail() {
     return statusColors[status] || "bg-slate-100 text-slate-800";
   };
 
+  const getActionIcon = (action: string) => {
+    switch (action) {
+      case "created":
+        return <FileText className="w-4 h-4" />;
+      case "sent":
+        return <Send className="w-4 h-4" />;
+      case "payment_received":
+        return <DollarSign className="w-4 h-4 text-green-600" />;
+      case "payment_failed":
+        return <AlertCircle className="w-4 h-4 text-red-600" />;
+      case "viewed":
+        return <Eye className="w-4 h-4" />;
+      case "reminder_sent":
+        return <Clock className="w-4 h-4" />;
+      case "cancelled":
+        return <X className="w-4 h-4 text-red-600" />;
+      default:
+        return <CheckCircle2 className="w-4 h-4" />;
+    }
+  };
+
+  const getActionColor = (action: string) => {
+    switch (action) {
+      case "payment_received":
+        return "bg-green-50 border-green-200";
+      case "payment_failed":
+        return "bg-red-50 border-red-200";
+      case "cancelled":
+        return "bg-red-50 border-red-200";
+      case "sent":
+        return "bg-blue-50 border-blue-200";
+      default:
+        return "bg-slate-50 border-slate-200";
+    }
+  };
+
   const calculateSubtotal = () => {
     return invoice.items.reduce((sum, item) => sum + item.quantity * item.unitPrice, 0);
   };

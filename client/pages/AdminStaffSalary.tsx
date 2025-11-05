@@ -463,7 +463,7 @@ export default function AdminStaffSalary() {
           <h3 className="text-sm font-semibold text-green-900 mb-4">
             Salary Configuration Summary
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div>
               <p className="text-xs text-green-700 uppercase font-semibold">
                 Monthly Salary
@@ -484,10 +484,33 @@ export default function AdminStaffSalary() {
             </div>
             <div>
               <p className="text-xs text-green-700 uppercase font-semibold">
-                Threshold Score
+                Per Rejection Fee
               </p>
-              <p className="text-2xl font-bold text-blue-900 mt-1">
-                {formData.underperformanceThreshold}/100
+              <p className="text-2xl font-bold text-orange-600 mt-1">
+                -{currencySymbol}
+                {formData.rejectionFee.toLocaleString()}
+              </p>
+            </div>
+            <div>
+              <p className="text-xs text-green-700 uppercase font-semibold">
+                Total Rejections Deducted
+              </p>
+              <p className="text-2xl font-bold text-red-600 mt-1">
+                -{currencySymbol}
+                {formData.totalRejectionFees.toLocaleString()}
+              </p>
+            </div>
+          </div>
+
+          {/* Net Salary Calculation */}
+          <div className="mt-6 pt-6 border-t border-green-300">
+            <div className="flex justify-between items-center">
+              <p className="text-lg font-semibold text-slate-900">
+                Estimated Net Salary (before underperformance deduction):
+              </p>
+              <p className="text-3xl font-bold text-green-600">
+                {currencySymbol}
+                {(formData.baseSalary - formData.totalRejectionFees).toLocaleString()}
               </p>
             </div>
           </div>

@@ -48,7 +48,7 @@ export default function AdminOperationDetail() {
   }
 
   const workflowStages = [
-    { id: "new", label: "Order Created", icon: "📋" },
+    { id: "new", label: "Order Created", icon: "����" },
     { id: "pending_sales_review", label: "Sales Review", icon: "👤" },
     { id: "pending_operation", label: "Operation Process", icon: "⚙️" },
     {
@@ -267,6 +267,63 @@ export default function AdminOperationDetail() {
             </div>
           </div>
         </div>
+
+        {/* Workflow Action Buttons */}
+        {!["completed", "rejected_by_sales", "rejected_by_operation", "rejected_by_operation_manager", "rejected_by_client"].includes(order.status) && canAccept() && (
+          <div className="bg-white rounded-lg p-6 border border-slate-200 flex gap-3 items-center">
+            <Button
+              onClick={handleAccept}
+              className="bg-green-600 hover:bg-green-700 text-white gap-2"
+            >
+              <CheckCircle2 className="w-4 h-4" />
+              Accept & Move Forward
+            </Button>
+
+            {!showRejectForm ? (
+              <Button
+                onClick={() => setShowRejectForm(true)}
+                variant="destructive"
+                className="gap-2"
+              >
+                <AlertCircle className="w-4 h-4" />
+                Reject Order
+              </Button>
+            ) : (
+              <div className="flex-1 flex gap-2 items-end">
+                <div className="flex-1">
+                  <label className="block text-sm font-medium text-slate-900 mb-2">
+                    Rejection Reason
+                  </label>
+                  <textarea
+                    value={rejectReason}
+                    onChange={(e) => setRejectReason(e.target.value)}
+                    placeholder="Please explain why you're rejecting this order..."
+                    rows={2}
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:border-red-500 focus:ring-red-500 resize-none"
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <Button
+                    onClick={handleReject}
+                    variant="destructive"
+                    disabled={!rejectReason.trim()}
+                  >
+                    Submit Rejection
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      setShowRejectForm(false);
+                      setRejectReason("");
+                    }}
+                    variant="outline"
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Workflow Progress */}
         <div className="bg-white rounded-lg p-8 border border-slate-200">

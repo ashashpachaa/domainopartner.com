@@ -367,10 +367,10 @@ export default function AdminStaffDetail() {
             </Link>
           </div>
           {mockStaffSalaries.find((s) => s.staffId === member.id) ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 gap-4">
               {mockStaffSalaries.filter((s) => s.staffId === member.id).map((sal) => (
                 <div key={sal.staffId}>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div className="p-4 bg-green-50 rounded-lg border border-green-200">
                       <p className="text-xs font-semibold text-green-600 uppercase mb-1">Base Salary</p>
                       <p className="text-2xl font-bold text-green-700">{sal.currency} {sal.baseSalary.toLocaleString()}</p>
@@ -378,6 +378,11 @@ export default function AdminStaffDetail() {
                     <div className="p-4 bg-red-50 rounded-lg border border-red-200">
                       <p className="text-xs font-semibold text-red-600 uppercase mb-1">Underperformance Deduction</p>
                       <p className="text-2xl font-bold text-red-700">-{sal.currency} {sal.underperformanceDeduction.toLocaleString()}</p>
+                    </div>
+                    <div className="p-4 bg-orange-50 rounded-lg border border-orange-200">
+                      <p className="text-xs font-semibold text-orange-600 uppercase mb-1">Rejection Fee Deducted</p>
+                      <p className="text-2xl font-bold text-orange-700">-{sal.currency} {sal.totalRejectionFees.toLocaleString()}</p>
+                      <p className="text-xs text-orange-600 mt-2">({sal.rejectionFee.toLocaleString()} per rejection)</p>
                     </div>
                     <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
                       <p className="text-xs font-semibold text-blue-600 uppercase mb-1">Next Payment</p>

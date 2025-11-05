@@ -21,9 +21,49 @@ import { mockUsers, User, UserStatus, mockClientRequests, ClientRequestStatus } 
 import { toast } from "sonner";
 
 export default function AdminDashboard() {
+  const [activeTab, setActiveTab] = useState<"users" | "client-requests">("users");
   const [users, setUsers] = useState<User[]>(mockUsers);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState<UserStatus | "all">("all");
+  const [clientRequests, setClientRequests] = useState(mockClientRequests);
+  const [clientSearchTerm, setClientSearchTerm] = useState("");
+  const [clientFilterStatus, setClientFilterStatus] = useState<ClientRequestStatus | "all">("all");
+  const [notificationDismissed, setNotificationDismissed] = useState(false);
+  const [showNotificationToast, setShowNotificationToast] = useState(false);
+
+  // Show notification for pending client requests on mount
+  useEffect(() => {
+    const pendingCount = mockClientRequests.filter(
+      (r) => r.status === "pending_approval"
+    ).length;
+    if (pendingCount > 0 && !notificationDismissed && !showNotificationToast) {
+      setShowNotificationToast(true);
+      toast.custom((t) => (
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 shadow-lg max-w-md">
+          <div className="flex items-start gap-3">
+            <Bell className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+            <div className="flex-1">
+              <p className="font-semibold text-blue-900">
+                New Client Signup{pendingCount > 1 ? "s" : ""}
+              </p>
+              <p className="text-sm text-blue-700 mt-1">
+                {pendingCount} client request{pendingCount > 1 ? "s" : ""} pending approval
+              </p>
+            </div>
+            <button
+              onClick={() => {
+                setNotificationDismissed(true);
+                toast.dismiss(t);
+              }}
+              className="text-blue-600 hover:text-blue-700 flex-shrink-0"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      ));
+    }
+  }, [notificationDismissed, showNotificationToast]);
 
   const filteredUsers = users.filter((user) => {
     const matchesSearch =

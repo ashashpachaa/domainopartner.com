@@ -306,6 +306,12 @@ export default function AdminOrders() {
                       assignedStaff = getStaffName(order.assignedToSalesId);
                     }
 
+                    const { date: expectedDate, daysRemaining } =
+                      calculateExpectedCompletion(order);
+                    const isCompleted = order.status === "completed";
+                    const isOverdue = !isCompleted && daysRemaining < 0;
+                    const isOnTrack = !isCompleted && daysRemaining >= 0;
+
                     return (
                       <tr
                         key={order.id}
@@ -329,6 +335,34 @@ export default function AdminOrders() {
                           >
                             {config.icon}
                             {config.label}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 text-sm">
+                          <div className="space-y-1">
+                            <p className="text-slate-600">
+                              {expectedDate.toLocaleDateString("en-US", {
+                                month: "short",
+                                day: "numeric",
+                                year: "numeric",
+                              })}
+                            </p>
+                            {isCompleted && (
+                              <p className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full inline-block font-medium">
+                                ✓ Completed
+                              </p>
+                            )}
+                            {isOnTrack && (
+                              <p className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full inline-block font-medium">
+                                {daysRemaining === 0
+                                  ? "Due Today"
+                                  : `${daysRemaining} day${daysRemaining !== 1 ? "s" : ""} left`}
+                              </p>
+                            )}
+                            {isOverdue && (
+                              <p className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded-full inline-block font-medium">
+                                {Math.abs(daysRemaining)} day{Math.abs(daysRemaining) !== 1 ? "s" : ""} overdue
+                              </p>
+                            )}
                           </div>
                         </td>
                         <td className="px-6 py-4 text-sm text-slate-600">{assignedStaff}</td>

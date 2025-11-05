@@ -48,7 +48,7 @@ export default function AdminOperationDetail() {
   }
 
   const workflowStages = [
-    { id: "new", label: "Order Created", icon: "����" },
+    { id: "new", label: "Order Created", icon: "📋" },
     { id: "pending_sales_review", label: "Sales Review", icon: "👤" },
     { id: "pending_operation", label: "Operation Process", icon: "⚙️" },
     {
@@ -623,31 +623,45 @@ export default function AdminOperationDetail() {
               <div className="space-y-4">
                 {[...order.history]
                   .reverse()
-                  .map((event, index) => (
-                    <div
-                      key={index}
-                      className="flex gap-4 pb-4 border-b border-slate-200 last:border-b-0"
-                    >
-                      <div className="flex-shrink-0 w-2 h-2 rounded-full bg-primary-600 mt-2" />
-                      <div className="flex-1">
-                        <p className="text-sm font-medium text-slate-900">
-                          {event.description}
-                        </p>
-                        <p className="text-xs text-slate-600 mt-1">
-                          {new Date(event.createdAt).toLocaleDateString(
-                            "en-US",
-                            {
-                              month: "short",
-                              day: "numeric",
-                              year: "numeric",
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            }
+                  .map((event, index) => {
+                    // Generate description if not present
+                    const description = event.description || generateHistoryDescription(event);
+                    return (
+                      <div
+                        key={index}
+                        className="flex gap-4 pb-4 border-b border-slate-200 last:border-b-0"
+                      >
+                        <div className="flex-shrink-0 w-2 h-2 rounded-full bg-primary-600 mt-2" />
+                        <div className="flex-1">
+                          <p className="text-sm font-medium text-slate-900">
+                            {description}
+                          </p>
+                          {event.reason && (
+                            <p className="text-xs text-red-600 mt-1">
+                              Reason: {event.reason}
+                            </p>
                           )}
-                        </p>
+                          {event.notes && (
+                            <p className="text-xs text-blue-600 mt-1">
+                              Notes: {event.notes}
+                            </p>
+                          )}
+                          <p className="text-xs text-slate-600 mt-1">
+                            {new Date(event.createdAt).toLocaleDateString(
+                              "en-US",
+                              {
+                                month: "short",
+                                day: "numeric",
+                                year: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              }
+                            )}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
               </div>
             ) : (
               <p className="text-slate-600">No activity yet</p>

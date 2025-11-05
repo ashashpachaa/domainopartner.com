@@ -336,6 +336,75 @@ export default function AdminStaffSalary() {
             </div>
           </div>
 
+          {/* Rejection Fee Section */}
+          <div className="border-b border-slate-200 pb-8">
+            <h2 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+              <AlertTriangle className="w-5 h-5 text-orange-600" />
+              Rejection Fee Configuration
+            </h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Rejection Fee Amount */}
+              <div>
+                <label className="block text-sm font-semibold text-slate-900 mb-2">
+                  Rejection Fee Per Order
+                </label>
+                <div className="relative">
+                  <input
+                    type="number"
+                    value={formData.rejectionFee}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        rejectionFee: parseFloat(e.target.value) || 0,
+                      })
+                    }
+                    placeholder="0.00"
+                    min="0"
+                    step="5"
+                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-primary-600 focus:ring-1 focus:ring-primary-600"
+                  />
+                  <span className="absolute right-4 top-2.5 text-slate-600 font-semibold">
+                    {currencySymbol}
+                  </span>
+                </div>
+                <p className="text-xs text-slate-500 mt-2">
+                  Amount deducted from salary for each rejected order review
+                </p>
+              </div>
+
+              {/* Total Rejection Fees (Display Only) */}
+              <div>
+                <label className="block text-sm font-semibold text-slate-900 mb-2">
+                  Total Rejection Fees (Current Period)
+                </label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={`${currencySymbol}${formData.totalRejectionFees.toLocaleString()}`}
+                    disabled
+                    className="w-full px-4 py-2 border border-slate-300 rounded-lg bg-slate-50 cursor-not-allowed"
+                  />
+                </div>
+                <p className="text-xs text-slate-500 mt-2">
+                  Cumulative rejection fees deducted this period
+                </p>
+              </div>
+            </div>
+
+            {/* Rejection Fee Info */}
+            <div className="mt-6 p-4 bg-orange-50 border border-orange-200 rounded-lg">
+              <p className="text-sm text-orange-900">
+                <span className="font-semibold">How it works:</span> When an order review is rejected by any role, a fee of{" "}
+                <span className="font-semibold">
+                  {currencySymbol}{formData.rejectionFee.toLocaleString()}
+                </span>{" "}
+                is deducted from the staff member's salary. Multiple rejections result in cumulative deductions.
+                Additionally, <span className="font-semibold">-10 performance points</span> are also applied per rejection.
+              </p>
+            </div>
+          </div>
+
           {/* Salary Dates */}
           <div>
             <h2 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">

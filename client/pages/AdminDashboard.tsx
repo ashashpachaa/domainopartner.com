@@ -155,12 +155,43 @@ export default function AdminDashboard() {
               Manage user accounts, subscriptions, and access
             </p>
           </div>
-          <Link to="/admin/users/new">
-            <Button className="bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white flex items-center gap-2">
-              <Plus className="w-5 h-5" />
-              Add User
-            </Button>
-          </Link>
+          {activeTab === "users" && (
+            <Link to="/admin/users/new">
+              <Button className="bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white flex items-center gap-2">
+                <Plus className="w-5 h-5" />
+                Add User
+              </Button>
+            </Link>
+          )}
+        </div>
+
+        {/* Tabs */}
+        <div className="flex gap-2 border-b border-slate-200">
+          <button
+            onClick={() => setActiveTab("users")}
+            className={`px-4 py-3 font-medium border-b-2 transition ${
+              activeTab === "users"
+                ? "border-primary-600 text-primary-600"
+                : "border-transparent text-slate-600 hover:text-slate-900"
+            }`}
+          >
+            Users
+          </button>
+          <button
+            onClick={() => setActiveTab("client-requests")}
+            className={`px-4 py-3 font-medium border-b-2 transition flex items-center gap-2 ${
+              activeTab === "client-requests"
+                ? "border-primary-600 text-primary-600"
+                : "border-transparent text-slate-600 hover:text-slate-900"
+            }`}
+          >
+            Client Requests
+            {pendingClientCount > 0 && (
+              <span className="ml-1 px-2 py-0.5 bg-red-100 text-red-700 text-xs font-bold rounded-full">
+                {pendingClientCount}
+              </span>
+            )}
+          </button>
         </div>
 
         {/* Search & Filter */}

@@ -609,6 +609,110 @@ export default function AdminOperationDetail() {
           </div>
         </div>
 
+        {/* Shipping & Tracking Information Section */}
+        {order.status === "shipping_preparation" && (
+          <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-6 border-2 border-green-200">
+            <div className="space-y-6">
+              {/* Shipping Stage Info */}
+              <div>
+                <h3 className="text-lg font-bold text-green-900 mb-2 flex items-center gap-2">
+                  <Truck className="w-5 h-5 text-green-600" />
+                  Shipping & Tracking Stage
+                </h3>
+                <p className="text-sm text-green-800">
+                  {product?.services.hasApostille
+                    ? "Order is ready for apostille processing and tracking number assignment"
+                    : "Order is ready for shipping and tracking number assignment"}
+                </p>
+              </div>
+
+              {/* Tracking Information */}
+              <div className="bg-white rounded-lg p-6 border border-green-200">
+                <h4 className="text-base font-bold text-slate-900 mb-4 flex items-center gap-2">
+                  <Truck className="w-5 h-5 text-green-600" />
+                  Tracking Information
+                </h4>
+
+                {order.trackingNumber ? (
+                  <div className="space-y-4">
+                    <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                      <p className="text-sm text-green-900 mb-2 font-medium">
+                        Tracking Number
+                      </p>
+                      <p className="text-2xl font-bold text-green-600 font-mono mb-3">
+                        {order.trackingNumber}
+                      </p>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs text-green-700">
+                        <div>
+                          <p className="font-semibold">Added By:</p>
+                          <p>{order.trackingNumberAddedBy ? mockStaff.find(s => s.id === order.trackingNumberAddedBy)?.firstName + " " + mockStaff.find(s => s.id === order.trackingNumberAddedBy)?.lastName : "Unknown"}</p>
+                        </div>
+                        <div>
+                          <p className="font-semibold">Added On:</p>
+                          <p>
+                            {order.trackingNumberAddedAt
+                              ? new Date(order.trackingNumberAddedAt).toLocaleDateString("en-US", {
+                                  month: "short",
+                                  day: "numeric",
+                                  year: "numeric",
+                                }) +
+                                " at " +
+                                new Date(order.trackingNumberAddedAt).toLocaleTimeString("en-US", {
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                })
+                              : "Unknown date"}
+                          </p>
+                        </div>
+                      </div>
+                      <p className="text-xs text-green-600 mt-3">
+                        ✅ Tracking number is visible to the client in their dashboard
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-slate-900 mb-2">
+                        Add Tracking Number
+                      </label>
+                      <Input
+                        type="text"
+                        value={trackingInput}
+                        onChange={(e) => setTrackingInput(e.target.value)}
+                        placeholder="e.g., TRK123456789, FEDEX-12345, UPS-67890"
+                        className="border-slate-300 focus:border-green-500 focus:ring-green-500"
+                      />
+                      <p className="text-xs text-slate-600 mt-2">
+                        Enter courier name and tracking number (e.g., FEDEX-794612345678)
+                      </p>
+                    </div>
+
+                    <Button
+                      onClick={handleAddTracking}
+                      disabled={!trackingInput.trim()}
+                      className="w-full bg-green-600 hover:bg-green-700 text-white gap-2"
+                    >
+                      <Truck className="w-4 h-4" />
+                      Add Tracking Number
+                    </Button>
+                  </div>
+                )}
+              </div>
+
+              {/* Client Visibility Info */}
+              <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                <p className="text-sm text-blue-900 flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-blue-600" />
+                  <span>
+                    Once tracking is added, the client will be able to see it on their order dashboard.
+                  </span>
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Tabs */}
         <div className="flex gap-2 border-b border-slate-200">
           {["workflow", "apostille", "history"].map((tab) => (

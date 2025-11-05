@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   ChevronRight,
+  ChevronDown,
   Search,
   Filter,
   Eye,
@@ -102,6 +103,17 @@ export default function AdminOrders() {
   const [sortBy, setSortBy] = useState<string>("recent");
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
+  const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
+
+  const toggleRowExpanded = (orderId: string) => {
+    const newExpanded = new Set(expandedRows);
+    if (newExpanded.has(orderId)) {
+      newExpanded.delete(orderId);
+    } else {
+      newExpanded.add(orderId);
+    }
+    setExpandedRows(newExpanded);
+  };
 
   const getUserName = (userId: string) => {
     const user = mockUsers.find((u) => u.id === userId);

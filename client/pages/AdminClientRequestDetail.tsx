@@ -439,25 +439,11 @@ export default function AdminClientRequestDetail() {
           <DialogHeader>
             <DialogTitle>Approve Client Request</DialogTitle>
             <DialogDescription>
-              This client will be able to login and access the platform with the selected plan.
+              Select the sales person who will manage this client account and handle their orders.
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4 py-4">
-            <div>
-              <label className="text-sm font-semibold text-slate-900">Subscription Plan</label>
-              <select
-                value={selectedPlan}
-                onChange={(e) => setSelectedPlan(e.target.value)}
-                className="w-full mt-2 px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-primary-600"
-              >
-                <option value="free">Free</option>
-                <option value="starter">Starter</option>
-                <option value="pro">Pro</option>
-                <option value="enterprise">Enterprise</option>
-              </select>
-            </div>
-
             <div>
               <label className="text-sm font-semibold text-slate-900">
                 Account Manager (Sales Person) *

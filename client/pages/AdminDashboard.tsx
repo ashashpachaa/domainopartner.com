@@ -14,7 +14,7 @@ import {
   CheckCircle2,
   Pause,
   Bell,
-  XCircle as XCircleIcon,
+  Clock,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { mockUsers, User, UserStatus, mockClientRequests, ClientRequestStatus } from "@/lib/mockData";
@@ -142,6 +142,32 @@ export default function AdminDashboard() {
     }
   };
 
+  const getClientRequestStatusColor = (status: ClientRequestStatus) => {
+    switch (status) {
+      case "pending_approval":
+        return "bg-yellow-100 text-yellow-800";
+      case "approved":
+        return "bg-green-100 text-green-800";
+      case "rejected":
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-slate-100 text-slate-800";
+    }
+  };
+
+  const getClientRequestStatusIcon = (status: ClientRequestStatus) => {
+    switch (status) {
+      case "pending_approval":
+        return <Clock className="w-4 h-4" />;
+      case "approved":
+        return <CheckCircle2 className="w-4 h-4" />;
+      case "rejected":
+        return <X className="w-4 h-4" />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <AdminLayout>
       <div className="space-y-6">
@@ -194,240 +220,405 @@ export default function AdminDashboard() {
           </button>
         </div>
 
-        {/* Search & Filter */}
-        <div className="bg-white rounded-lg p-6 border border-slate-200">
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-              <Input
-                type="text"
-                placeholder="Search by name, email, or company..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 border-slate-300 focus:border-primary-500 focus:ring-primary-500"
-              />
+        {/* Users Tab */}
+        {activeTab === "users" && (
+          <>
+            {/* Search & Filter */}
+            <div className="bg-white rounded-lg p-6 border border-slate-200">
+              <div className="flex flex-col md:flex-row gap-4">
+                <div className="flex-1 relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                  <Input
+                    type="text"
+                    placeholder="Search by name, email, or company..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-10 border-slate-300 focus:border-primary-500 focus:ring-primary-500"
+                  />
+                </div>
+                <select
+                  value={filterStatus}
+                  onChange={(e) =>
+                    setFilterStatus(e.target.value as UserStatus | "all")
+                  }
+                  className="px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500 bg-white"
+                >
+                  <option value="all">All Status</option>
+                  <option value="pending">Pending</option>
+                  <option value="active">Active</option>
+                  <option value="suspended">Suspended</option>
+                  <option value="inactive">Inactive</option>
+                </select>
+              </div>
+              <p className="text-sm text-slate-600 mt-3">
+                Showing {filteredUsers.length} of {users.length} users
+              </p>
             </div>
-            <select
-              value={filterStatus}
-              onChange={(e) =>
-                setFilterStatus(e.target.value as UserStatus | "all")
-              }
-              className="px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500 bg-white"
-            >
-              <option value="all">All Status</option>
-              <option value="pending">Pending</option>
-              <option value="active">Active</option>
-              <option value="suspended">Suspended</option>
-              <option value="inactive">Inactive</option>
-            </select>
-          </div>
-          <p className="text-sm text-slate-600 mt-3">
-            Showing {filteredUsers.length} of {users.length} users
-          </p>
-        </div>
 
-        {/* Users Table */}
-        <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-slate-50 border-b border-slate-200">
-                <tr>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-slate-900">
-                    Name
-                  </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-slate-900">
-                    Company
-                  </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-slate-900">
-                    Location
-                  </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-slate-900">
-                    Email
-                  </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-slate-900">
-                    Plan
-                  </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-slate-900">
-                    Status
-                  </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-slate-900">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-200">
-                {filteredUsers.length === 0 ? (
-                  <tr>
-                    <td colSpan={7} className="px-6 py-8 text-center">
-                      <p className="text-slate-600 text-sm">No users found</p>
-                    </td>
-                  </tr>
-                ) : (
-                  filteredUsers.map((user) => (
-                    <tr key={user.id} className="hover:bg-slate-50 transition">
-                      <td className="px-6 py-4">
-                        <div>
-                          <p className="font-medium text-slate-900">
-                            {user.firstName} {user.lastName}
-                          </p>
-                          <p className="text-sm text-slate-600 mt-1">
-                            ID: {user.id}
-                          </p>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 text-slate-900">
-                        {user.companyName}
-                      </td>
-                      <td className="px-6 py-4 text-slate-600">
-                        {user.city}, {user.country}
-                      </td>
-                      <td className="px-6 py-4 text-slate-600 text-sm">
-                        {user.email}
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-primary-100 text-primary-800">
-                          {user.subscriptionPlan}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-2">
-                          <span
-                            className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(
-                              user.status
-                            )}`}
-                          >
-                            {getStatusIcon(user.status)}
-                            {user.status}
-                          </span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-2">
-                          <Link to={`/admin/users/${user.id}`}>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="text-primary-600 hover:text-primary-700 hover:bg-primary-50"
-                            >
-                              <Eye className="w-4 h-4" />
-                            </Button>
-                          </Link>
-                          <Link to={`/admin/users/${user.id}/edit`}>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="text-slate-600 hover:text-slate-700 hover:bg-slate-100"
-                            >
-                              <Edit2 className="w-4 h-4" />
-                            </Button>
-                          </Link>
-
-                          {/* Status Actions */}
-                          {user.status === "pending" && (
-                            <>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() =>
-                                  updateUserStatus(user.id, "active")
-                                }
-                                className="text-green-600 hover:text-green-700 hover:bg-green-50"
-                                title="Approve"
-                              >
-                                <Check className="w-4 h-4" />
-                              </Button>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() =>
-                                  updateUserStatus(user.id, "inactive")
-                                }
-                                className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                                title="Reject"
-                              >
-                                <X className="w-4 h-4" />
-                              </Button>
-                            </>
-                          )}
-
-                          {user.status === "active" && (
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() =>
-                                updateUserStatus(user.id, "suspended")
-                              }
-                              className="text-yellow-600 hover:text-yellow-700 hover:bg-yellow-50"
-                              title="Suspend"
-                            >
-                              <Pause className="w-4 h-4" />
-                            </Button>
-                          )}
-
-                          {user.status === "suspended" && (
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() =>
-                                updateUserStatus(user.id, "active")
-                              }
-                              className="text-green-600 hover:text-green-700 hover:bg-green-50"
-                              title="Reactivate"
-                            >
-                              <Check className="w-4 h-4" />
-                            </Button>
-                          )}
-
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => deleteUser(user.id)}
-                            className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                            title="Delete"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      </td>
+            {/* Users Table */}
+            <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-slate-50 border-b border-slate-200">
+                    <tr>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-slate-900">
+                        Name
+                      </th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-slate-900">
+                        Company
+                      </th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-slate-900">
+                        Location
+                      </th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-slate-900">
+                        Email
+                      </th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-slate-900">
+                        Plan
+                      </th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-slate-900">
+                        Status
+                      </th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-slate-900">
+                        Actions
+                      </th>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200">
+                    {filteredUsers.length === 0 ? (
+                      <tr>
+                        <td colSpan={7} className="px-6 py-8 text-center">
+                          <p className="text-slate-600 text-sm">No users found</p>
+                        </td>
+                      </tr>
+                    ) : (
+                      filteredUsers.map((user) => (
+                        <tr key={user.id} className="hover:bg-slate-50 transition">
+                          <td className="px-6 py-4">
+                            <div>
+                              <p className="font-medium text-slate-900">
+                                {user.firstName} {user.lastName}
+                              </p>
+                              <p className="text-sm text-slate-600 mt-1">
+                                ID: {user.id}
+                              </p>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 text-slate-900">
+                            {user.companyName}
+                          </td>
+                          <td className="px-6 py-4 text-slate-600">
+                            {user.city}, {user.country}
+                          </td>
+                          <td className="px-6 py-4 text-slate-600 text-sm">
+                            {user.email}
+                          </td>
+                          <td className="px-6 py-4">
+                            <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-primary-100 text-primary-800">
+                              {user.subscriptionPlan}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4">
+                            <div className="flex items-center gap-2">
+                              <span
+                                className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(
+                                  user.status
+                                )}`}
+                              >
+                                {getStatusIcon(user.status)}
+                                {user.status}
+                              </span>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4">
+                            <div className="flex items-center gap-2">
+                              <Link to={`/admin/users/${user.id}`}>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="text-primary-600 hover:text-primary-700 hover:bg-primary-50"
+                                >
+                                  <Eye className="w-4 h-4" />
+                                </Button>
+                              </Link>
+                              <Link to={`/admin/users/${user.id}/edit`}>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="text-slate-600 hover:text-slate-700 hover:bg-slate-100"
+                                >
+                                  <Edit2 className="w-4 h-4" />
+                                </Button>
+                              </Link>
 
-        {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div className="bg-white rounded-lg p-6 border border-slate-200">
-            <p className="text-slate-600 text-sm font-medium mb-2">
-              Total Users
-            </p>
-            <p className="text-3xl font-bold text-slate-900">{users.length}</p>
-          </div>
-          <div className="bg-white rounded-lg p-6 border border-slate-200">
-            <p className="text-slate-600 text-sm font-medium mb-2">Active</p>
-            <p className="text-3xl font-bold text-green-600">
-              {users.filter((u) => u.status === "active").length}
-            </p>
-          </div>
-          <div className="bg-white rounded-lg p-6 border border-slate-200">
-            <p className="text-slate-600 text-sm font-medium mb-2">
-              Pending Approval
-            </p>
-            <p className="text-3xl font-bold text-yellow-600">
-              {users.filter((u) => u.status === "pending").length}
-            </p>
-          </div>
-          <div className="bg-white rounded-lg p-6 border border-slate-200">
-            <p className="text-slate-600 text-sm font-medium mb-2">
-              Suspended
-            </p>
-            <p className="text-3xl font-bold text-red-600">
-              {users.filter((u) => u.status === "suspended").length}
-            </p>
-          </div>
-        </div>
+                              {/* Status Actions */}
+                              {user.status === "pending" && (
+                                <>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() =>
+                                      updateUserStatus(user.id, "active")
+                                    }
+                                    className="text-green-600 hover:text-green-700 hover:bg-green-50"
+                                    title="Approve"
+                                  >
+                                    <Check className="w-4 h-4" />
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() =>
+                                      updateUserStatus(user.id, "inactive")
+                                    }
+                                    className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                                    title="Reject"
+                                  >
+                                    <X className="w-4 h-4" />
+                                  </Button>
+                                </>
+                              )}
+
+                              {user.status === "active" && (
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() =>
+                                    updateUserStatus(user.id, "suspended")
+                                  }
+                                  className="text-yellow-600 hover:text-yellow-700 hover:bg-yellow-50"
+                                  title="Suspend"
+                                >
+                                  <Pause className="w-4 h-4" />
+                                </Button>
+                              )}
+
+                              {user.status === "suspended" && (
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() =>
+                                    updateUserStatus(user.id, "active")
+                                  }
+                                  className="text-green-600 hover:text-green-700 hover:bg-green-50"
+                                  title="Reactivate"
+                                >
+                                  <Check className="w-4 h-4" />
+                                </Button>
+                              )}
+
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => deleteUser(user.id)}
+                                className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                                title="Delete"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+              <div className="bg-white rounded-lg p-6 border border-slate-200">
+                <p className="text-slate-600 text-sm font-medium mb-2">
+                  Total Users
+                </p>
+                <p className="text-3xl font-bold text-slate-900">{users.length}</p>
+              </div>
+              <div className="bg-white rounded-lg p-6 border border-slate-200">
+                <p className="text-slate-600 text-sm font-medium mb-2">Active</p>
+                <p className="text-3xl font-bold text-green-600">
+                  {users.filter((u) => u.status === "active").length}
+                </p>
+              </div>
+              <div className="bg-white rounded-lg p-6 border border-slate-200">
+                <p className="text-slate-600 text-sm font-medium mb-2">
+                  Pending Approval
+                </p>
+                <p className="text-3xl font-bold text-yellow-600">
+                  {users.filter((u) => u.status === "pending").length}
+                </p>
+              </div>
+              <div className="bg-white rounded-lg p-6 border border-slate-200">
+                <p className="text-slate-600 text-sm font-medium mb-2">
+                  Suspended
+                </p>
+                <p className="text-3xl font-bold text-red-600">
+                  {users.filter((u) => u.status === "suspended").length}
+                </p>
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* Client Requests Tab */}
+        {activeTab === "client-requests" && (
+          <>
+            {/* Summary Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="bg-white rounded-lg border border-slate-200 p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-slate-600 text-sm">Pending Approval</p>
+                    <p className="text-2xl font-bold text-yellow-600 mt-1">{clientRequests.filter(r => r.status === "pending_approval").length}</p>
+                  </div>
+                  <Clock className="w-8 h-8 text-yellow-600 opacity-50" />
+                </div>
+              </div>
+              <div className="bg-white rounded-lg border border-slate-200 p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-slate-600 text-sm">Approved</p>
+                    <p className="text-2xl font-bold text-green-600 mt-1">{clientRequests.filter(r => r.status === "approved").length}</p>
+                  </div>
+                  <CheckCircle2 className="w-8 h-8 text-green-600 opacity-50" />
+                </div>
+              </div>
+              <div className="bg-white rounded-lg border border-slate-200 p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-slate-600 text-sm">Rejected</p>
+                    <p className="text-2xl font-bold text-red-600 mt-1">{clientRequests.filter(r => r.status === "rejected").length}</p>
+                  </div>
+                  <X className="w-8 h-8 text-red-600 opacity-50" />
+                </div>
+              </div>
+            </div>
+
+            {/* Search & Filter */}
+            <div className="bg-white rounded-lg p-6 border border-slate-200">
+              <div className="flex flex-col md:flex-row gap-4">
+                <div className="flex-1 relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                  <Input
+                    type="text"
+                    placeholder="Search by name, email, or company..."
+                    value={clientSearchTerm}
+                    onChange={(e) => setClientSearchTerm(e.target.value)}
+                    className="pl-10 border-slate-300 focus:border-primary-500 focus:ring-primary-500"
+                  />
+                </div>
+                <select
+                  value={clientFilterStatus}
+                  onChange={(e) =>
+                    setClientFilterStatus(e.target.value as ClientRequestStatus | "all")
+                  }
+                  className="px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500 bg-white"
+                >
+                  <option value="all">All Status</option>
+                  <option value="pending_approval">Pending Approval</option>
+                  <option value="approved">Approved</option>
+                  <option value="rejected">Rejected</option>
+                </select>
+              </div>
+              <p className="text-sm text-slate-600 mt-3">
+                Showing {filteredClientRequests.length} of {clientRequests.length} requests
+              </p>
+            </div>
+
+            {/* Client Requests Table */}
+            <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-slate-50 border-b border-slate-200">
+                    <tr>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-slate-900">
+                        Name
+                      </th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-slate-900">
+                        Company
+                      </th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-slate-900">
+                        Email
+                      </th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-slate-900">
+                        Plan
+                      </th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-slate-900">
+                        Status
+                      </th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-slate-900">
+                        Applied
+                      </th>
+                      <th className="px-6 py-4 text-center text-sm font-semibold text-slate-900">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200">
+                    {filteredClientRequests.length === 0 ? (
+                      <tr>
+                        <td colSpan={7} className="px-6 py-8 text-center">
+                          <p className="text-slate-600 text-sm">No client requests found</p>
+                        </td>
+                      </tr>
+                    ) : (
+                      filteredClientRequests.map((request) => (
+                        <tr key={request.id} className="hover:bg-slate-50 transition">
+                          <td className="px-6 py-4">
+                            <p className="font-medium text-slate-900">
+                              {request.firstName} {request.lastName}
+                            </p>
+                          </td>
+                          <td className="px-6 py-4 text-slate-600">
+                            {request.companyName}
+                          </td>
+                          <td className="px-6 py-4 text-slate-600 text-sm">
+                            {request.email}
+                          </td>
+                          <td className="px-6 py-4">
+                            <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 capitalize">
+                              {request.subscriptionPlan}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4">
+                            <div className="flex items-center gap-1">
+                              <span
+                                className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${getClientRequestStatusColor(
+                                  request.status
+                                )}`}
+                              >
+                                {getClientRequestStatusIcon(request.status)}
+                                {request.status === "pending_approval"
+                                  ? "Pending"
+                                  : request.status === "approved"
+                                    ? "Approved"
+                                    : "Rejected"}
+                              </span>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 text-sm text-slate-600">
+                            {new Date(request.createdAt).toLocaleDateString()}
+                          </td>
+                          <td className="px-6 py-4 text-center">
+                            <Link to={`/admin/client-requests/${request.id}`}>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="text-primary-600 hover:text-primary-700 hover:bg-primary-50"
+                              >
+                                <Eye className="w-4 h-4" />
+                              </Button>
+                            </Link>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </AdminLayout>
   );

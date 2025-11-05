@@ -1286,6 +1286,8 @@ export const mockInvoices: Invoice[] = [
     status: "sent",
     issueDate: "2024-01-07",
     dueDate: "2024-02-07",
+    createdAt: "2024-01-07T13:45:00Z",
+    createdByStaffId: "S005",
     description: "Spanish Sociedad Limitada Registration",
     items: [
       {
@@ -1304,6 +1306,8 @@ export const mockInvoices: Invoice[] = [
     status: "sent",
     issueDate: "2024-01-02",
     dueDate: "2024-02-02",
+    createdAt: "2024-01-02T08:20:00Z",
+    createdByStaffId: "S004",
     description: "Singapore & Malaysia Corporate Setup",
     items: [
       {
@@ -1328,6 +1332,8 @@ export const mockInvoices: Invoice[] = [
     issueDate: "2023-12-01",
     dueDate: "2024-01-01",
     paidDate: "2023-12-15",
+    createdAt: "2023-12-01T10:00:00Z",
+    createdByStaffId: "S006",
     description: "Japan Kabushiki Kaisha Registration",
     items: [
       {
@@ -1346,6 +1352,8 @@ export const mockInvoices: Invoice[] = [
     status: "overdue",
     issueDate: "2023-12-05",
     dueDate: "2024-01-05",
+    createdAt: "2023-12-05T15:30:00Z",
+    createdByStaffId: "S003",
     description: "Annual Compliance Filing - USA",
     items: [
       {
@@ -1364,6 +1372,8 @@ export const mockInvoices: Invoice[] = [
     status: "draft",
     issueDate: "2024-01-08",
     dueDate: "2024-02-08",
+    createdAt: "2024-01-08T16:50:00Z",
+    createdByStaffId: "S004",
     description: "Australian Business Registration",
     items: [
       {
@@ -1387,6 +1397,8 @@ export const mockInvoices: Invoice[] = [
     status: "sent",
     issueDate: "2024-01-06",
     dueDate: "2024-02-06",
+    createdAt: "2024-01-06T12:00:00Z",
+    createdByStaffId: "S005",
     description: "UK Tax Compliance - Annual",
     items: [
       {

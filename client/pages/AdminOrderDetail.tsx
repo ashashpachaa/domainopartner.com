@@ -566,15 +566,48 @@ export default function AdminOrderDetail() {
 
       {/* Accept/Reject Dialog */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent>
+        <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>
               {actionType === "accept" ? "Accept Order" : "Reject Order"}
             </DialogTitle>
             <DialogDescription>
-              {actionType === "accept"
-                ? "Are you sure you want to accept this order? It will move to the next stage."
-                : "Please provide a reason for rejecting this order."}
+              {actionType === "accept" ? (
+                order.status === "awaiting_client_acceptance" && order.productId ? (
+                  (() => {
+                    const product = mockProducts.find((p) => p.id === order.productId);
+                    if (product) {
+                      const hasApostille = product.services.hasApostille;
+                      const hasShipping = product.services.hasShipping;
+
+                      if (!hasApostille && !hasShipping) {
+                        return (
+                          <span>
+                            This order will be <strong>automatically completed</strong> when the client
+                            accepts it, as the product "{product.name}" requires no additional services.
+                          </span>
+                        );
+                      } else {
+                        const services = [];
+                        if (hasApostille) services.push("apostille");
+                        if (hasShipping) services.push("shipping");
+
+                        return (
+                          <span>
+                            This order will be sent to the Operation Manager for{" "}
+                            <strong>{services.join(" and ")}</strong> when the client accepts it.
+                          </span>
+                        );
+                      }
+                    }
+                    return "Are you sure you want to accept this order? It will move to the next stage.";
+                  })()
+                ) : (
+                  "Are you sure you want to accept this order? It will move to the next stage."
+                )
+              ) : (
+                "Please provide a reason for rejecting this order."
+              )}
             </DialogDescription>
           </DialogHeader>
 

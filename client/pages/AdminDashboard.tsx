@@ -88,7 +88,7 @@ export default function AdminDashboard() {
         </div>
       ));
     }
-  }, [notificationDismissed, showNotificationToast]);
+  }, [notificationDismissed, showNotificationToast, clientRequests]);
 
   const filteredUsers = users
     .filter((user) => {

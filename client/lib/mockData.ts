@@ -16,6 +16,26 @@ export interface WorkflowPermission {
   canAccess: boolean;
 }
 
+export interface WorkingHours {
+  startTime: string; // "09:00" format
+  endTime: string; // "18:00" format
+  daysPerWeek: number; // 5 for Mon-Fri, etc.
+}
+
+export interface AttendanceRecord {
+  id: string;
+  staffId: string;
+  date: string; // YYYY-MM-DD
+  loginTime?: string; // ISO timestamp
+  logoutTime?: string; // ISO timestamp
+  hoursWorked: number; // decimal hours
+  confirmations: number; // number of successful confirmation popups
+  missedConfirmations: number; // number of missed popups
+  isLate: boolean; // arrived after startTime
+  attendanceStatus: "present" | "absent" | "inactive"; // inactive if marked as such during day
+  notes?: string;
+}
+
 export interface Staff {
   id: string;
   firstName: string;

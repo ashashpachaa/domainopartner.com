@@ -1201,6 +1201,42 @@ export default function AdminOperationDetail() {
           </div>
         )}
 
+        {/* Company Information Section */}
+        {order.companyInfo && (
+          <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-lg p-8 border border-blue-200">
+            <h2 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+              <Building2 className="w-5 h-5 text-blue-600" />
+              Company Information
+            </h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-white rounded-lg p-4 border border-blue-100">
+                <p className="text-xs font-semibold text-slate-600 uppercase mb-2">Company Name</p>
+                <p className="text-sm font-semibold text-slate-900">{order.companyInfo.companyName}</p>
+              </div>
+              <div className="bg-white rounded-lg p-4 border border-blue-100">
+                <p className="text-xs font-semibold text-slate-600 uppercase mb-2">Total Capital</p>
+                <p className="text-sm font-semibold text-slate-900">{order.currency} {order.companyInfo.totalCapital}</p>
+              </div>
+              <div className="bg-white rounded-lg p-4 border border-blue-100">
+                <p className="text-xs font-semibold text-slate-600 uppercase mb-2">Price Per Share</p>
+                <p className="text-sm font-semibold text-slate-900">{order.currency} {order.companyInfo.pricePerShare}</p>
+              </div>
+              <div className="bg-white rounded-lg p-4 border border-blue-100">
+                <p className="text-xs font-semibold text-slate-600 uppercase mb-2">Currency</p>
+                <p className="text-sm font-semibold text-slate-900">{order.currency}</p>
+              </div>
+            </div>
+
+            {order.companyInfo.companyActivities && (
+              <div className="mt-6 bg-white rounded-lg p-4 border border-blue-100">
+                <p className="text-xs font-semibold text-slate-600 uppercase mb-2">Business Activities</p>
+                <p className="text-sm text-slate-900 whitespace-pre-wrap">{order.companyInfo.companyActivities}</p>
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Shareholders Section */}
         {order.shareholders && order.shareholders.length > 0 && (
           <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-lg p-8 border border-amber-200">

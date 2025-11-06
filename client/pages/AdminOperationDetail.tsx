@@ -67,6 +67,39 @@ export default function AdminOperationDetail() {
     localStorage.setItem(`order_${orderId}`, JSON.stringify(updatedOrder));
   };
 
+  // Auto-fetch and register company when order is completed
+  useEffect(() => {
+    const registerCompany = async () => {
+      if (
+        order &&
+        order.status === "completed" &&
+        order.companyInfo &&
+        !order.registeredCompany
+      ) {
+        try {
+          const result = await fetchCompanyDetails(order.companyInfo.companyName);
+          if (result.data) {
+            result.data.orderId = order.id;
+            result.data.userId = order.userId;
+            storeRegisteredCompany(result.data);
+
+            // Update order with registered company data
+            const updatedOrder = { ...order, registeredCompany: result.data };
+            saveOrder(updatedOrder);
+
+            toast.success("Company registered and added to your companies list!");
+          } else if (result.error) {
+            toast.warning(`Could not auto-register company: ${result.error}`);
+          }
+        } catch (error: any) {
+          toast.error("Failed to register company details");
+        }
+      }
+    };
+
+    registerCompany();
+  }, [order?.status, order?.companyInfo?.companyName]);
+
   const user = order ? mockUsers.find((u) => u.id === order.userId) : null;
   const product = order?.productId
     ? mockProducts.find((p) => p.id === order.productId)
@@ -1063,7 +1096,7 @@ export default function AdminOperationDetail() {
                     : "text-blue-600"
                 }`}>
                   {getDeadlineInfo.isOverdue ? (
-                    <>⚠️ OVERDUE</>
+                    <>���️ OVERDUE</>
                   ) : (
                     <>
                       {getDeadlineInfo.daysRemaining}d {getDeadlineInfo.hoursRemaining}h remaining

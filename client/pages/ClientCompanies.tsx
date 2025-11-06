@@ -198,7 +198,36 @@ export default function ClientCompanies() {
                     </div>
                   )}
 
-                  <div className="flex gap-2 pt-4 border-t border-slate-200">
+                  {/* Documents Section */}
+              {(() => {
+                const linkedOrder = mockOrders.find(o => o.id === company.orderId);
+                const documents = linkedOrder?.operationFiles || [];
+                return documents.length > 0 ? (
+                  <div className="mt-4 pt-4 border-t border-slate-200">
+                    <p className="text-xs text-slate-600 uppercase font-semibold mb-2">Documents</p>
+                    <div className="space-y-2">
+                      {documents.map((doc) => (
+                        <div key={doc.id} className="flex items-center justify-between p-2 bg-slate-50 rounded-lg hover:bg-slate-100">
+                          <div className="flex items-center gap-2 flex-1">
+                            <FileText className="w-4 h-4 text-slate-600" />
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium text-slate-900 truncate">{doc.fileName}</p>
+                              <p className="text-xs text-slate-500">{doc.stage}</p>
+                            </div>
+                          </div>
+                          {doc.fileUrl && (
+                            <Button variant="ghost" size="sm" className="p-1 h-auto">
+                              <Download className="w-4 h-4" />
+                            </Button>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : null;
+              })()}
+
+              <div className="flex gap-2 pt-4 border-t border-slate-200">
                     <Button
                       onClick={() => navigate(`/client/orders?company=${company.companyNumber}`)}
                       variant="outline"

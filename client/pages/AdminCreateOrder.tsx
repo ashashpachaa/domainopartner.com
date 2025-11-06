@@ -66,9 +66,14 @@ export default function AdminCreateOrder() {
       return;
     }
 
+    const orderId = formData.id || `O${String(mockOrders.length + 1).padStart(3, "0")}`;
+
+    // Get selected product to set requiredServices
+    const product = mockProducts.find(p => p.id === formData.productId);
+
     // In a real app, this would save to a database
-    mockOrders.push({
-      id: formData.id || `O${mockOrders.length + 1}`,
+    const newOrder: Order = {
+      id: orderId,
       orderNumber: formData.orderNumber || "",
       description: formData.description,
       amount: formData.amount || 0,
@@ -82,7 +87,7 @@ export default function AdminCreateOrder() {
       history: [
         {
           id: `H-${Date.now()}`,
-          orderId: formData.id || `O${mockOrders.length}`,
+          orderId: orderId,
           previousStatus: "new",
           newStatus: "new",
           actionType: "system_transition",
@@ -92,10 +97,36 @@ export default function AdminCreateOrder() {
         },
       ],
       rejectionReasons: [],
-    });
+      operationFiles: [],
+      clientCanViewFiles: false,
+      clientCanViewTracking: false,
+      comments: [],
+      completedServices: {
+        apostilleComplete: false,
+        shippingComplete: false,
+        poaComplete: false,
+        financialReportComplete: false,
+      },
+      operationReviewForm: {
+        isCompleted: false,
+        operationNotes: "",
+        qualityCheck: false,
+        documentsVerified: false,
+        complianceReview: false,
+      },
+      requiredServices: product?.services || {
+        hasApostille: false,
+        hasShipping: false,
+        hasPOA: false,
+        hasFinancialReport: false,
+      },
+    };
+
+    mockOrders.push(newOrder);
+    localStorage.setItem(`order_${newOrder.id}`, JSON.stringify(newOrder));
 
     toast.success("Order created successfully!");
-    navigate("/admin/orders");
+    navigate(`/admin/operations/${newOrder.id}`);
   };
 
   return (

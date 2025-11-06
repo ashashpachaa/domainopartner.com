@@ -149,9 +149,16 @@ export default function ClientCreateOrder() {
       toast.info(`Data extracted with ${confidencePercent}% confidence`);
     }
 
+    // Combine firstName and lastName into fullName
+    let fullName = prev.fullName;
+    if (extractedData.firstName || extractedData.lastName) {
+      const first = extractedData.firstName || "";
+      const last = extractedData.lastName || "";
+      fullName = `${first} ${last}`.trim();
+    }
+
     setShareholderForm((prev) => ({
-      firstName: extractedData.firstName || prev.firstName,
-      lastName: extractedData.lastName || prev.lastName,
+      fullName: fullName || prev.fullName,
       dateOfBirth: extractedData.dateOfBirth || prev.dateOfBirth,
       nationality: extractedData.nationality || prev.nationality,
       ownershipPercentage: prev.ownershipPercentage,

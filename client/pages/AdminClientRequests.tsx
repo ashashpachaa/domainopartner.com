@@ -132,7 +132,7 @@ export default function AdminClientRequests() {
           </div>
 
           {/* Filters and Search */}
-          <div className="bg-white rounded-lg border border-slate-200 p-6 mb-6">
+          <div className="bg-white rounded-lg border border-slate-200 p-6 mb-6 space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* Search */}
               <div className="relative">
@@ -168,6 +168,48 @@ export default function AdminClientRequests() {
                   <SelectItem value="oldest">Oldest First</SelectItem>
                 </SelectContent>
               </Select>
+            </div>
+
+            {/* Date Range Filters */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-xs font-medium text-slate-600 mb-2">
+                  From Date
+                </label>
+                <Input
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  className="border-slate-300 focus:border-primary-500 focus:ring-primary-500"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-slate-600 mb-2">
+                  To Date
+                </label>
+                <Input
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  className="border-slate-300 focus:border-primary-500 focus:ring-primary-500"
+                />
+              </div>
+              {(startDate || endDate || searchQuery || statusFilter !== "all") && (
+                <div className="flex items-end">
+                  <button
+                    onClick={() => {
+                      setStartDate("");
+                      setEndDate("");
+                      setSearchQuery("");
+                      setStatusFilter("all");
+                      setSortBy("recent");
+                    }}
+                    className="text-primary-600 hover:text-primary-700 text-sm font-medium"
+                  >
+                    Clear all filters
+                  </button>
+                </div>
+              )}
             </div>
           </div>
 

@@ -195,6 +195,10 @@ const App = () => (
             path="/staff/financial-dashboard"
             element={<StaffFinancialDashboard />}
           />
+          <Route
+            path="/admin/companies"
+            element={<AdminRoute element={<AdminCompanies />} />}
+          />
 
           {/* Client Routes */}
           <Route path="/client/dashboard" element={<ClientDashboard />} />

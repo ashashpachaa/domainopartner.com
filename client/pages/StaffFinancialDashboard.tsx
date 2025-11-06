@@ -202,7 +202,7 @@ export default function StaffFinancialDashboard() {
               -${(financialMetrics.deductedSalary / 1000).toFixed(1)}K
             </p>
             <div className="text-xs text-slate-600 mt-2">
-              <p>{financialMetrics.rejectedOrders?.length || 0} rejections × $500</p>
+              <p>{financialMetrics.rejectedOrderCount} rejections × $500</p>
             </div>
           </div>
 

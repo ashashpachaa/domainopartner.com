@@ -326,19 +326,19 @@ export default function AdminOrders() {
   }
 
   // Calculate summary statistics
-  const totalOrders = mockOrders.length;
-  const completedOrders = mockOrders.filter((o) => o.status === "completed").length;
-  const pendingOrders = mockOrders.filter(
+  const totalOrders = allOrders.length;
+  const completedOrders = allOrders.filter((o) => o.status === "completed").length;
+  const pendingOrders = allOrders.filter(
     (o) =>
       o.status !== "completed" &&
       !o.status.startsWith("rejected")
   ).length;
-  const overdueOrders = mockOrders.filter((order) => {
+  const overdueOrders = allOrders.filter((order) => {
     if (order.status === "completed") return false;
     const { daysRemaining } = calculateExpectedCompletion(order);
     return daysRemaining < 0;
   }).length;
-  const totalRevenue = mockOrders
+  const totalRevenue = allOrders
     .filter((o) => o.status === "completed")
     .reduce((sum, o) => sum + o.amount, 0);
 

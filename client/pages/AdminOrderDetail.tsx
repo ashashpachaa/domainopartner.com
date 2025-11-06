@@ -629,6 +629,15 @@ export default function AdminOrderDetail() {
                             )}
                           </div>
                         </div>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleDownloadFile(file)}
+                          className="ml-2 text-slate-600 hover:text-slate-900"
+                          title="Download file"
+                        >
+                          <Download className="w-4 h-4" />
+                        </Button>
                       </div>
                     ))}
                   </div>

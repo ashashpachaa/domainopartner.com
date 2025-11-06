@@ -94,6 +94,9 @@ export default function AdminOperationDetail() {
         operationNotes: order.operationReviewForm.operationNotes || "",
       });
     }
+    if (order?.trackingNumber) {
+      setTrackingNumber(order.trackingNumber);
+    }
   }, [order?.id]);
 
   if (!order || !user) {

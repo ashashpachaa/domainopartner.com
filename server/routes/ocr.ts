@@ -233,18 +233,47 @@ export async function handleOCR(req: Request, res: Response) {
       rawText: fullText,
     });
   } catch (error) {
-    console.error("OCR Error:", error);
+    console.error("OCR Error Details:", {
+      error: error instanceof Error ? error.message : String(error),
+      type: error instanceof Error ? error.constructor.name : typeof error,
+      fullError: error,
+    });
 
     if (error instanceof Error) {
-      if (error.message.includes("credentials")) {
-        res.status(500).json({ error: "Server configuration error: OCR service unavailable" });
-      } else if (error.message.includes("timeout") || error.message.includes("DEADLINE")) {
-        res.status(500).json({ error: "Request timed out. Please try with a smaller or clearer image." });
+      const errorMsg = error.message;
+
+      // Check for specific Google API errors
+      if (errorMsg.includes("PERMISSION_DENIED") || errorMsg.includes("permission")) {
+        res.status(500).json({
+          error: "Google Vision API permission issue. Please ensure billing is enabled and wait 5-10 minutes for changes to propagate.",
+          code: "BILLING_NOT_ENABLED",
+        });
+      } else if (errorMsg.includes("UNAUTHENTICATED") || errorMsg.includes("credentials")) {
+        res.status(500).json({
+          error: "Server configuration error: Google credentials not properly configured.",
+          code: "CREDENTIAL_ERROR",
+        });
+      } else if (errorMsg.includes("timeout") || errorMsg.includes("DEADLINE")) {
+        res.status(500).json({
+          error: "Request timed out. Please try with a smaller or clearer image.",
+          code: "TIMEOUT",
+        });
+      } else if (errorMsg.includes("INVALID_ARGUMENT")) {
+        res.status(500).json({
+          error: "Invalid image format. Please ensure the file is a clear JPG, PNG, or PDF.",
+          code: "INVALID_FORMAT",
+        });
       } else {
-        res.status(500).json({ error: `Processing failed: ${error.message}` });
+        res.status(500).json({
+          error: `Processing failed: ${errorMsg}`,
+          code: "PROCESSING_ERROR",
+        });
       }
     } else {
-      res.status(500).json({ error: "Failed to process file. Please try again." });
+      res.status(500).json({
+        error: "Failed to process file. Please try again.",
+        code: "UNKNOWN_ERROR",
+      });
     }
   }
 }

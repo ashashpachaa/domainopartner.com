@@ -29,6 +29,7 @@ import AdminProductDetail from "./pages/AdminProductDetail";
 import AdminEditProduct from "./pages/AdminEditProduct";
 import AdminOperations from "./pages/AdminOperations";
 import AdminOperationDetail from "./pages/AdminOperationDetail";
+import AdminWorkflowSettings from "./pages/AdminWorkflowSettings";
 import AdminClientRequests from "./pages/AdminClientRequests";
 import AdminClientRequestDetail from "./pages/AdminClientRequestDetail";
 import StaffDashboard from "./pages/StaffDashboard";
@@ -116,6 +117,10 @@ const App = () => (
           <Route
             path="/admin/operations/:orderId"
             element={<AdminRoute element={<AdminOperationDetail />} />}
+          />
+          <Route
+            path="/admin/operations/settings/workflow"
+            element={<AdminRoute element={<AdminWorkflowSettings />} />}
           />
           <Route
             path="/admin/client-requests"

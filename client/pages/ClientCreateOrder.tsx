@@ -4,9 +4,8 @@ import { mockOrders, mockProducts, Shareholder } from "@/lib/mockData";
 import ClientLayout from "@/components/ClientLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, AlertCircle, Plus, Trash2, Edit2, X, Zap, Loader } from "lucide-react";
+import { ArrowLeft, AlertCircle, Plus, Trash2, Edit2, X } from "lucide-react";
 import { toast } from "sonner";
-import { usePassportOCR } from "@/hooks/usePassportOCR";
 
 export default function ClientCreateOrder() {
   const navigate = useNavigate();
@@ -35,11 +34,6 @@ export default function ClientCreateOrder() {
   });
   const [shareholderPassportFile, setShareholderPassportFile] = useState<File | null>(null);
   const [showShareholderForm, setShowShareholderForm] = useState(false);
-  const [ocrProgress, setOcrProgress] = useState(0);
-  const [showOcrResult, setShowOcrResult] = useState(false);
-  const [ocrConfidence, setOcrConfidence] = useState(0);
-
-  const { extractPassportData, isProcessing: isOcrProcessing } = usePassportOCR();
 
   const MAX_FILE_SIZE = 5 * 1024 * 1024 * 1024; // 5GB in bytes
   const MAX_FILES = 5;
@@ -124,47 +118,6 @@ export default function ClientCreateOrder() {
       setShareholderPassportFile(file);
       toast.success("Passport file selected");
     }
-  };
-
-  const handleExtractPassportData = async () => {
-    if (!shareholderPassportFile) {
-      toast.error("Please select a passport file first");
-      return;
-    }
-
-    const extractedData = await extractPassportData(shareholderPassportFile);
-    if (!extractedData) {
-      return;
-    }
-
-    setOcrConfidence(extractedData.confidence);
-    setShowOcrResult(true);
-
-    const confidencePercent = Math.round(extractedData.confidence * 100);
-    if (confidencePercent < 50) {
-      toast.warning(`Low confidence (${confidencePercent}%). Please review extracted data.`);
-    } else if (confidencePercent >= 80) {
-      toast.success(`Data extracted with ${confidencePercent}% confidence`);
-    } else {
-      toast.info(`Data extracted with ${confidencePercent}% confidence`);
-    }
-
-    setShareholderForm((prev) => {
-      // Combine firstName and lastName into fullName
-      let fullName = prev.fullName;
-      if (extractedData.firstName || extractedData.lastName) {
-        const first = extractedData.firstName || "";
-        const last = extractedData.lastName || "";
-        fullName = `${first} ${last}`.trim();
-      }
-
-      return {
-        fullName: fullName || prev.fullName,
-        dateOfBirth: extractedData.dateOfBirth || prev.dateOfBirth,
-        nationality: extractedData.nationality || prev.nationality,
-        ownershipPercentage: prev.ownershipPercentage,
-      };
-    });
   };
 
   const validateShareholderForm = () => {
@@ -620,7 +573,7 @@ export default function ClientCreateOrder() {
                         onChange={(e) => setShareholderForm({ ...shareholderForm, fullName: e.target.value })}
                         placeholder="e.g., Ahmed Sameh Elmorsy"
                       />
-                      <p className="text-xs text-slate-500 mt-1">First and last name, or use auto-extract below</p>
+                      <p className="text-xs text-slate-500 mt-1">First and last name</p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -670,60 +623,11 @@ export default function ClientCreateOrder() {
                         type="file"
                         onChange={handleShareholderPassportSelect}
                         accept=".jpg,.jpeg,.png"
-                        disabled={isOcrProcessing}
-                        className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500 disabled:opacity-50"
+                        className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500"
                       />
-                      <p className="text-xs text-slate-500 mt-1">Max 50MB. Supported formats: JPG, PNG (convert PDFs to images first)</p>
+                      <p className="text-xs text-slate-500 mt-1">Max 50MB. Supported formats: JPG, PNG</p>
                       {shareholderPassportFile && (
-                        <div className="mt-3 space-y-2">
-                          <p className="text-sm text-green-600">✓ {shareholderPassportFile.name} selected</p>
-                          <button
-                            type="button"
-                            onClick={handleExtractPassportData}
-                            disabled={isOcrProcessing}
-                            className="w-full px-4 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 font-medium rounded-lg transition border border-blue-200 disabled:opacity-50 flex items-center justify-center gap-2"
-                          >
-                            {isOcrProcessing ? (
-                              <>
-                                <Loader className="w-4 h-4 animate-spin" />
-                                Extracting... {ocrProgress}%
-                              </>
-                            ) : (
-                              <>
-                                <Zap className="w-4 h-4" />
-                                Auto-extract with AI
-                              </>
-                            )}
-                          </button>
-                          {isOcrProcessing && (
-                            <div className="w-full bg-slate-200 rounded-full h-2">
-                              <div
-                                className="bg-blue-500 h-2 rounded-full transition-all duration-300"
-                                style={{ width: `${ocrProgress}%` }}
-                              />
-                            </div>
-                          )}
-                          {showOcrResult && (
-                            <div className={`p-3 rounded-lg border text-sm ${
-                              ocrConfidence >= 0.8
-                                ? 'bg-green-50 border-green-200 text-green-700'
-                                : ocrConfidence >= 0.6
-                                ? 'bg-yellow-50 border-yellow-200 text-yellow-700'
-                                : 'bg-orange-50 border-orange-200 text-orange-700'
-                            }`}>
-                              <p className="font-medium mb-1">OCR Extraction Result</p>
-                              <p>Confidence: {Math.round(ocrConfidence * 100)}%</p>
-                              <p className="text-xs mt-2">
-                                Fields extracted: {[
-                                  shareholderForm.firstName ? '✓ First Name' : '✗ First Name',
-                                  shareholderForm.lastName ? '✓ Last Name' : '✗ Last Name',
-                                  shareholderForm.dateOfBirth ? '✓ DOB' : '✗ DOB',
-                                  shareholderForm.nationality ? '✓ Nationality' : '✗ Nationality',
-                                ].filter(f => f.includes('✓')).length}/4
-                              </p>
-                            </div>
-                          )}
-                        </div>
+                        <p className="text-sm text-green-600 mt-2">✓ {shareholderPassportFile.name} selected</p>
                       )}
                     </div>
 

@@ -106,6 +106,12 @@ export default function AdminOperations() {
               Manage order workflow, uploads, apostille, and tracking
             </p>
           </div>
+          <Link to="/admin/operations/new">
+            <Button className="bg-primary-600 hover:bg-primary-700">
+              <Plus className="w-4 h-4 mr-2" />
+              Create New Order
+            </Button>
+          </Link>
         </div>
 
         {/* Filters & Search */}

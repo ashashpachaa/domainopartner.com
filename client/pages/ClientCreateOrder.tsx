@@ -36,6 +36,11 @@ export default function ClientCreateOrder() {
   });
   const [shareholderPassportFile, setShareholderPassportFile] = useState<File | null>(null);
   const [showShareholderForm, setShowShareholderForm] = useState(false);
+  const [ocrProgress, setOcrProgress] = useState(0);
+  const [showOcrResult, setShowOcrResult] = useState(false);
+  const [ocrConfidence, setOcrConfidence] = useState(0);
+
+  const { extractPassportData, isProcessing: isOcrProcessing } = usePassportOCR();
 
   const MAX_FILE_SIZE = 5 * 1024 * 1024 * 1024; // 5GB in bytes
   const MAX_FILES = 5;

@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { mockOrders, mockProducts, mockStaff } from "@/lib/mockData";
 import ClientLayout from "@/components/ClientLayout";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Download, MapPin, Clock, CheckCircle2, AlertCircle } from "lucide-react";
+import { ArrowLeft, Download, MapPin, Clock, CheckCircle2, AlertCircle, History } from "lucide-react";
 
 export default function ClientOrderDetail() {
   const { orderId } = useParams();

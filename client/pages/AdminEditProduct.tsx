@@ -69,19 +69,56 @@ export default function AdminEditProduct() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.name || !formData.description || !formData.duration) {
-      alert("Please fill in all required fields");
+    if (!formData.name || !formData.description || !formData.duration || !formData.price || !formData.currency) {
+      toast.error("Please fill in all required fields");
       return;
     }
 
     if (isNewProduct) {
-      // Add new product to the list (in a real app, this would be an API call)
-      console.log("Creating new product:", formData);
-      alert("Product created successfully!");
+      // Create new product object
+      const newProduct: Product = {
+        id: formData.id || `P${(mockProducts.length + 1).toString().padStart(3, "0")}`,
+        name: formData.name,
+        description: formData.description,
+        duration: formData.duration,
+        requirements: formData.requirements || "",
+        price: formData.price,
+        currency: formData.currency,
+        services: formData.services || {
+          hasApostille: false,
+          hasShipping: false,
+          hasPOA: false,
+          hasFinancialReport: false,
+        },
+        createdAt: new Date().toISOString(),
+        status: formData.status || "active",
+      };
+
+      // Add to mockProducts array
+      mockProducts.push(newProduct);
+
+      // Save to localStorage
+      localStorage.setItem(`product_${newProduct.id}`, JSON.stringify(newProduct));
+
+      toast.success("Product created successfully!");
     } else {
       // Update existing product
-      console.log("Updating product:", formData);
-      alert("Product updated successfully!");
+      const updatedProduct: Product = {
+        ...existingProduct!,
+        ...formData,
+        createdAt: existingProduct?.createdAt || new Date().toISOString(),
+      } as Product;
+
+      // Update in mockProducts array
+      const index = mockProducts.findIndex((p) => p.id === updatedProduct.id);
+      if (index >= 0) {
+        mockProducts[index] = updatedProduct;
+      }
+
+      // Update localStorage
+      localStorage.setItem(`product_${updatedProduct.id}`, JSON.stringify(updatedProduct));
+
+      toast.success("Product updated successfully!");
     }
 
     navigate("/admin/products");

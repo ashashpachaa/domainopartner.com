@@ -40,6 +40,9 @@ export default function AdminOperationDetail() {
   // Get current user from localStorage (assuming it's stored as currentStaff or similar)
   const currentUserId = localStorage.getItem("currentStaffId") || "S002"; // Default to manager for demo
 
+  // Admin impersonation - use selected staff or current user
+  const effectiveUserId = adminMode && impersonateStaffId ? impersonateStaffId : currentUserId;
+
   // Live countdown timer
   useEffect(() => {
     const interval = setInterval(() => {

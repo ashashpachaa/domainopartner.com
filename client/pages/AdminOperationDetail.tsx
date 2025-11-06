@@ -18,7 +18,7 @@ import {
 import AdminLayout from "@/components/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { mockOrders, mockUsers, mockProducts, mockStaff, mockStageDeadlines } from "@/lib/mockData";
+import { mockOrders, mockUsers, mockProducts, mockStaff, mockStageDeadlines, type OrderHistory } from "@/lib/mockData";
 
 export default function AdminOperationDetail() {
   const { orderId } = useParams<{ orderId: string }>();

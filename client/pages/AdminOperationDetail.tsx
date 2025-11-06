@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
@@ -27,6 +27,7 @@ export default function AdminOperationDetail() {
   const [rejectReason, setRejectReason] = useState("");
   const [showRejectForm, setShowRejectForm] = useState(false);
   const [activeTab, setActiveTab] = useState<"workflow" | "apostille" | "history">("workflow");
+  const [currentTime, setCurrentTime] = useState(new Date());
 
   const order = mockOrders.find((o) => o.id === orderId);
   const user = order ? mockUsers.find((u) => u.id === order.userId) : null;

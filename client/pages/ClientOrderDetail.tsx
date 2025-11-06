@@ -13,6 +13,19 @@ export default function ClientOrderDetail() {
   const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
 
   const order = useMemo(() => {
+    // First try to get from localStorage
+    if (orderId) {
+      try {
+        const storageKey = `order_${orderId}`;
+        const stored = localStorage.getItem(storageKey);
+        if (stored) {
+          return JSON.parse(stored);
+        }
+      } catch (e) {
+        console.warn("Failed to load order from localStorage:", e);
+      }
+    }
+    // Fallback to mockOrders
     return mockOrders.find((o) => o.id === orderId);
   }, [orderId]);
 

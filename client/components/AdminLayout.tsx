@@ -1,5 +1,5 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { Globe, Users, LogOut, Menu, X, Users2, FileText, TrendingUp, ShoppingCart, Package, Zap, Clock, Activity, BarChart3, Wallet } from "lucide-react";
+import { Globe, Users, LogOut, Menu, X, Users2, FileText, TrendingUp, ShoppingCart, Package, Zap, Clock, Activity, BarChart3, Wallet, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ReactNode, useState } from "react";
 

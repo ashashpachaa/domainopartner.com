@@ -165,6 +165,7 @@ export default function AdminOperationDetail() {
     if (canAccept()) {
       const rejectionStatus = getRejectionStatus();
       const currentStaff = mockStaff.find((s) => s.id === effectiveUserId);
+      const isReworkFlow = ["pending_operation_manager_review", "awaiting_client_acceptance"].includes(order.status);
 
       // Add history entry
       const newHistoryEntry = {
@@ -176,18 +177,36 @@ export default function AdminOperationDetail() {
         actionBy: effectiveUserId,
         actionByName: currentStaff?.firstName + " " + currentStaff?.lastName || "Unknown",
         reason: rejectReason,
-        description: `${currentStaff?.firstName} rejected the order - ${rejectReason}`,
+        description: isReworkFlow
+          ? `${currentStaff?.firstName} sent back for rework - ${rejectReason}`
+          : `${currentStaff?.firstName} rejected the order - ${rejectReason}`,
+        createdAt: new Date().toISOString(),
+      };
+
+      // Add rejection comment (visible to staff)
+      const rejectionComment = {
+        id: `C${order.id}-REJ-${Date.now()}`,
+        orderId: order.id,
+        commentBy: effectiveUserId,
+        commentByName: currentStaff?.firstName + " " + currentStaff?.lastName || "Unknown",
+        commentByRole: currentStaff?.role as any,
+        content: `⚠️ REJECTION/REWORK: ${rejectReason}`,
+        isInternal: true,
         createdAt: new Date().toISOString(),
       };
 
       order.history.push(newHistoryEntry);
+      order.comments.push(rejectionComment);
       order.status = rejectionStatus as any;
       order.rejectionReasons.push(rejectReason);
 
       setRejectReason("");
       setShowRejectForm(false);
 
-      alert(`Order rejected with reason: ${rejectReason}`);
+      const message = isReworkFlow
+        ? `Order sent back for rework: ${rejectReason}`
+        : `Order rejected with reason: ${rejectReason}`;
+      alert(message);
       window.location.reload(); // Reload to see the changes
     } else {
       alert("You don't have permission to reject this order at this stage");

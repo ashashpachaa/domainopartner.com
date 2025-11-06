@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { ArrowLeft, Save, RotateCcw, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import AdminLayout from "@/components/AdminLayout";
 import { mockStageDeadlines, type StageDealineConfig } from "@/lib/mockData";
 
 export default function AdminWorkflowSettings() {
@@ -260,7 +261,7 @@ export default function AdminWorkflowSettings() {
               ones.
             </li>
             <li>
-              • <strong>Tracking:</strong> All changes are logged with timestamp and user who made the
+              ��� <strong>Tracking:</strong> All changes are logged with timestamp and user who made the
               change.
             </li>
           </ul>

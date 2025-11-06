@@ -173,8 +173,8 @@ export interface OperationFile {
   uploadedBy: string; // staffId
   uploadedByName: string;
   uploadedAt: string;
-  stage: "sales" | "operation" | "manager" | "apostille" | "post_services"; // workflow stage
-  fileType: "document" | "receipt" | "tracking" | "apostille" | "financial_report" | "company_form";
+  stage: "sales" | "operation" | "manager" | "apostille" | "poa" | "financial_report" | "shipping" | "post_services"; // workflow stage
+  fileType: "document" | "receipt" | "tracking" | "apostille" | "poa" | "financial_report" | "company_form";
   description?: string;
   visibleToClient: boolean; // Individual document visibility toggle
 }

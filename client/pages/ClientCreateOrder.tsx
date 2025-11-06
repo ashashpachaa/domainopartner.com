@@ -233,9 +233,9 @@ export default function ClientCreateOrder() {
   };
 
   const editShareholder = (shareholder: Shareholder) => {
+    const fullName = `${shareholder.firstName} ${shareholder.lastName}`.trim();
     setShareholderForm({
-      firstName: shareholder.firstName,
-      lastName: shareholder.lastName,
+      fullName: fullName,
       dateOfBirth: shareholder.dateOfBirth,
       nationality: shareholder.nationality,
       ownershipPercentage: shareholder.ownershipPercentage.toString(),

@@ -596,6 +596,108 @@ export default function AdminOperationDetail() {
           </div>
         </div>
 
+        {/* Admin Controls */}
+        {adminMode && (
+          <div className="bg-amber-50 rounded-lg p-6 border-2 border-amber-200">
+            <h3 className="text-lg font-bold text-amber-900 mb-4">🔑 Admin Controls</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* Staff Impersonation */}
+              <div>
+                <label className="block text-sm font-semibold text-amber-900 mb-2">
+                  Impersonate Staff (Bypass Role Check)
+                </label>
+                <select
+                  value={impersonateStaffId}
+                  onChange={(e) => setImpersonateStaffId(e.target.value)}
+                  className="w-full px-3 py-2 border border-amber-300 rounded-lg bg-white text-slate-900"
+                >
+                  <option value="">-- No Impersonation --</option>
+                  {mockStaff.map((staff) => (
+                    <option key={staff.id} value={staff.id}>
+                      {staff.firstName} {staff.lastName} ({staff.role})
+                    </option>
+                  ))}
+                </select>
+                {impersonateStaffId && (
+                  <p className="text-xs text-amber-700 mt-2">
+                    ✓ Acting as {mockStaff.find(s => s.id === impersonateStaffId)?.firstName}
+                  </p>
+                )}
+              </div>
+
+              {/* Auto-Complete Button */}
+              <div className="flex flex-col justify-end">
+                <Button
+                  onClick={handleAutoCompleteAll}
+                  className="bg-amber-600 hover:bg-amber-700 text-white gap-2 w-full"
+                >
+                  ⚡ Auto-Complete All Stages
+                </Button>
+                <p className="text-xs text-amber-700 mt-2">
+                  Progresses order through all remaining stages
+                </p>
+              </div>
+
+              {/* Quick Service Completion */}
+              <div>
+                <label className="block text-sm font-semibold text-amber-900 mb-2">
+                  Mark Services Complete
+                </label>
+                <div className="space-y-2">
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={order.completedServices.apostilleComplete}
+                      onChange={(e) => {
+                        order.completedServices.apostilleComplete = e.target.checked;
+                        window.location.reload();
+                      }}
+                      className="rounded"
+                    />
+                    <span className="text-sm text-amber-900">Apostille</span>
+                  </label>
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={order.completedServices.shippingComplete}
+                      onChange={(e) => {
+                        order.completedServices.shippingComplete = e.target.checked;
+                        window.location.reload();
+                      }}
+                      className="rounded"
+                    />
+                    <span className="text-sm text-amber-900">Shipping</span>
+                  </label>
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={order.completedServices.poaComplete}
+                      onChange={(e) => {
+                        order.completedServices.poaComplete = e.target.checked;
+                        window.location.reload();
+                      }}
+                      className="rounded"
+                    />
+                    <span className="text-sm text-amber-900">POA</span>
+                  </label>
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={order.completedServices.financialReportComplete}
+                      onChange={(e) => {
+                        order.completedServices.financialReportComplete = e.target.checked;
+                        window.location.reload();
+                      }}
+                      className="rounded"
+                    />
+                    <span className="text-sm text-amber-900">Financial Report</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Order Details & Deadlines Section */}
         <div className={`rounded-lg p-6 border-2 ${getDeadlineColor()}`}>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

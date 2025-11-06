@@ -336,10 +336,8 @@ export default function ClientCreateOrder() {
         },
         operationReviewForm: {
           isCompleted: false,
-          operationNotes: "",
-          qualityCheck: false,
-          documentsVerified: false,
-          complianceReview: false,
+          companyName: "",
+          companyNumber: "",
         },
         requiredServices: selectedProduct?.services || {
           hasApostille: false,

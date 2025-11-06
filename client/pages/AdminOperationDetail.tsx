@@ -1811,7 +1811,9 @@ export default function AdminOperationDetail() {
                       <Button
                         variant="ghost"
                         size="sm"
+                        onClick={() => handleDownloadFile(file)}
                         className="text-slate-600 hover:text-slate-900"
+                        title="Download file"
                       >
                         <Download className="w-4 h-4" />
                       </Button>

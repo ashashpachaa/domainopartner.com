@@ -213,17 +213,17 @@ const App = () => (
           />
 
           {/* Client Routes */}
-          <Route path="/client/dashboard" element={<ClientDashboard />} />
-          <Route path="/client/orders" element={<ClientOrders />} />
-          <Route path="/client/orders/new" element={<ClientCreateOrder />} />
+          <Route path="/client/dashboard" element={<ProtectedRoute element={<ClientDashboard />} />} />
+          <Route path="/client/orders" element={<ProtectedRoute element={<ClientOrders />} />} />
+          <Route path="/client/orders/new" element={<ProtectedRoute element={<ClientCreateOrder />} />} />
           <Route
             path="/client/orders/:orderId"
-            element={<ClientOrderDetail />}
+            element={<ProtectedRoute element={<ClientOrderDetail />} />}
           />
-          <Route path="/client/invoices" element={<ClientInvoices />} />
-          <Route path="/client/documents" element={<ClientDocuments />} />
-          <Route path="/client/companies" element={<ClientCompanies />} />
-          <Route path="/client/profile" element={<ClientProfile />} />
+          <Route path="/client/invoices" element={<ProtectedRoute element={<ClientInvoices />} />} />
+          <Route path="/client/documents" element={<ProtectedRoute element={<ClientDocuments />} />} />
+          <Route path="/client/companies" element={<ProtectedRoute element={<ClientCompanies />} />} />
+          <Route path="/client/profile" element={<ProtectedRoute element={<ClientProfile />} />} />
           <Route
             path="/client/messages"
             element={

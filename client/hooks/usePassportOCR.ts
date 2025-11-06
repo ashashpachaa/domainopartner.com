@@ -13,56 +13,113 @@ export function usePassportOCR() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
 
+  const convertImageToCanvas = (file: File): Promise<HTMLCanvasElement> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          canvas.width = img.width;
+          canvas.height = img.height;
+          const ctx = canvas.getContext("2d");
+          if (!ctx) {
+            reject(new Error("Failed to get canvas context"));
+            return;
+          }
+          ctx.drawImage(img, 0, 0);
+          resolve(canvas);
+        };
+        img.onerror = () => {
+          reject(new Error("Failed to load image"));
+        };
+        img.src = e.target?.result as string;
+      };
+      reader.onerror = () => {
+        reject(new Error("Failed to read file"));
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
   const extractPassportData = async (file: File): Promise<ExtractedPassportData | null> => {
     setIsProcessing(true);
     setProgress(0);
 
     try {
+      // Validate file type
+      if (!file.type.startsWith("image/")) {
+        toast.error("Please select a valid image file (JPG, PNG, or PDF)");
+        setIsProcessing(false);
+        return null;
+      }
+
+      // Check file size (max 10MB for OCR)
+      if (file.size > 10 * 1024 * 1024) {
+        toast.error("Image file must be less than 10MB");
+        setIsProcessing(false);
+        return null;
+      }
+
       // Dynamically import Tesseract to avoid bundle issues
       const Tesseract = (await import("tesseract.js")).default;
 
-      // Read file as array buffer for better compatibility
-      const arrayBuffer = await file.arrayBuffer();
-      const uint8Array = new Uint8Array(arrayBuffer);
+      let imageData: string | HTMLCanvasElement | File;
 
-      // Create image element to validate format
-      const blob = new Blob([uint8Array], { type: file.type });
-      const imageUrl = URL.createObjectURL(blob);
-
-      try {
-        const result = await Tesseract.recognize(imageUrl, "eng", {
-          logger: (m: any) => {
-            if (m.status === "recognizing") {
-              setProgress(Math.round(m.progress * 100));
-            }
-          },
-        });
-
-        const text = result.data.text;
-
-        // Clean up blob URL
-        URL.revokeObjectURL(imageUrl);
-
-        if (!text || text.trim().length < 10) {
-          toast.error("Could not extract text from passport. Please check image quality.");
-          setIsProcessing(false);
-          return null;
+      // Try different approaches based on file type
+      if (file.type === "application/pdf") {
+        // PDFs need special handling - use the file directly
+        imageData = file;
+      } else {
+        // For images, convert through Canvas to ensure compatibility
+        try {
+          imageData = await convertImageToCanvas(file);
+        } catch (canvasError) {
+          console.warn("Canvas conversion failed, trying direct file approach:", canvasError);
+          // Fallback: try to use file directly
+          imageData = file;
         }
-
-        const extractedData = parsePassportText(text);
-        setIsProcessing(false);
-        setProgress(0);
-
-        return extractedData;
-      } catch (recognizeError) {
-        URL.revokeObjectURL(imageUrl);
-        throw recognizeError;
       }
+
+      const result = await Tesseract.recognize(imageData, "eng", {
+        logger: (m: any) => {
+          if (m.status === "recognizing") {
+            setProgress(Math.round(m.progress * 100));
+          } else if (m.status === "done") {
+            setProgress(100);
+          }
+        },
+      });
+
+      const text = result.data.text;
+      
+      if (!text || text.trim().length < 10) {
+        toast.error("Could not extract text from passport image. Please ensure the image is clear and readable.");
+        setIsProcessing(false);
+        return null;
+      }
+
+      const extractedData = parsePassportText(text);
+      setIsProcessing(false);
+      setProgress(0);
+
+      return extractedData;
     } catch (error) {
       console.error("OCR Error:", error);
       setIsProcessing(false);
       setProgress(0);
-      toast.error("Failed to process passport image. Please try a clearer image or enter data manually.");
+
+      // Provide helpful error message
+      if (error instanceof Error) {
+        if (error.message.includes("attempting to read image")) {
+          toast.error("Image format not supported. Please try a clearer JPG or PNG image of the passport.");
+        } else {
+          toast.error("OCR processing failed. Please enter data manually or try another image.");
+        }
+      } else {
+        toast.error("Failed to process passport image. Please try a clearer image or enter data manually.");
+      }
+      
       return null;
     }
   };

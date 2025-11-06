@@ -31,9 +31,25 @@ export default function AdminDashboard() {
   const [notificationDismissed, setNotificationDismissed] = useState(false);
   const [showNotificationToast, setShowNotificationToast] = useState(false);
 
+  // Load client requests from both mock data and localStorage
+  useEffect(() => {
+    const allRequests = [...mockClientRequests];
+    const storedRequests = JSON.parse(localStorage.getItem("mockClientRequests") || "[]");
+
+    // Merge and remove duplicates
+    const merged = [...allRequests];
+    for (const request of storedRequests) {
+      if (!merged.find(r => r.id === request.id)) {
+        merged.push(request);
+      }
+    }
+
+    setClientRequests(merged);
+  }, []);
+
   // Show notification for pending client requests on mount
   useEffect(() => {
-    const pendingCount = mockClientRequests.filter(
+    const pendingCount = clientRequests.filter(
       (r) => r.status === "pending_approval"
     ).length;
     if (pendingCount > 0 && !notificationDismissed && !showNotificationToast) {

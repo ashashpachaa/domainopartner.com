@@ -125,7 +125,7 @@ export default function AdminOperationDetail() {
   const getWorkflowStages = () => {
     const stages: Array<{ id: string; label: string; icon: string; requiresUpload?: boolean }> = [
       { id: "new", label: "Order Created", icon: "📋" },
-      { id: "pending_sales_review", label: "Sales Review", icon: "��" },
+      { id: "pending_sales_review", label: "Sales Review", icon: "👤" },
       { id: "pending_operation", label: "Operation Process", icon: "⚙️" },
       { id: "pending_operation_manager_review", label: "Manager Review", icon: "✓" },
       { id: "awaiting_client_acceptance", label: "Client Acceptance", icon: "����" },
@@ -2327,13 +2327,6 @@ export default function AdminOperationDetail() {
                   </div>
                 )}
 
-                {order.status !== "pending_poa" && order.operationFiles?.filter(f => f.stage === "poa").length === 0 && (
-                  <div className="bg-amber-50 rounded-lg p-6 border border-amber-200">
-                    <p className="text-amber-900">
-                      No POA documents uploaded yet. New uploads are only available during the POA stage.
-                    </p>
-                  </div>
-                )}
 
                 {/* Uploaded Files - Always visible */}
                 {order.operationFiles?.filter(f => f.stage === "poa").length > 0 && (
@@ -2490,13 +2483,6 @@ export default function AdminOperationDetail() {
                   </div>
                 )}
 
-                {order.status !== "pending_financial_report" && order.operationFiles?.filter(f => f.stage === "financial_report").length === 0 && (
-                  <div className="bg-amber-50 rounded-lg p-6 border border-amber-200">
-                    <p className="text-amber-900">
-                      No financial reports uploaded yet. New uploads are only available during the Financial Report stage.
-                    </p>
-                  </div>
-                )}
 
                 {/* Uploaded Files - Always visible */}
                 {order.operationFiles?.filter(f => f.stage === "financial_report").length > 0 && (
@@ -2607,13 +2593,6 @@ export default function AdminOperationDetail() {
                   </div>
                 )}
 
-                {order.status !== "shipping_preparation" && !order.trackingNumber && (
-                  <div className="bg-amber-50 rounded-lg p-6 border border-amber-200">
-                    <p className="text-amber-900">
-                      No tracking number added yet. Tracking numbers can only be added during the Shipping stage.
-                    </p>
-                  </div>
-                )}
 
                 {/* Current Tracking Info - Always visible */}
                 {order.trackingNumber && (

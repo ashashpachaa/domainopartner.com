@@ -80,6 +80,10 @@ const App = () => (
             element={<AdminRoute element={<AdminUserDetail />} />}
           />
           <Route
+            path="/admin/users/new"
+            element={<AdminRoute element={<AdminEditUser />} />}
+          />
+          <Route
             path="/admin/users/:userId/edit"
             element={<AdminRoute element={<AdminEditUser />} />}
           />

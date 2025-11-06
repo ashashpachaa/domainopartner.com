@@ -78,6 +78,7 @@ export default function AdminOperationDetail() {
   // Get current staff to check their role
   const currentStaff = mockStaff.find((s) => s.id === effectiveUserId);
   const isSalesStaff = currentStaff?.role === "sales";
+  const isAdmin = currentStaff?.role === "super_admin" || currentStaff?.role === "operation_manager";
 
   // Live countdown timer
   useEffect(() => {

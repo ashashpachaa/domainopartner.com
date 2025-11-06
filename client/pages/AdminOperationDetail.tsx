@@ -212,11 +212,13 @@ export default function AdminOperationDetail() {
         createdAt: new Date().toISOString(),
       };
 
-      order.history.push(newHistoryEntry);
-      order.comments.push(rejectionComment);
-      order.status = rejectionStatus as any;
-      order.rejectionReasons.push(rejectReason);
+      const updatedOrder = { ...order };
+      updatedOrder.history = [...(order.history || []), newHistoryEntry];
+      updatedOrder.comments = [...(order.comments || []), rejectionComment];
+      updatedOrder.status = rejectionStatus as any;
+      updatedOrder.rejectionReasons = [...(order.rejectionReasons || []), rejectReason];
 
+      saveOrder(updatedOrder);
       setRejectReason("");
       setShowRejectForm(false);
 
@@ -224,7 +226,6 @@ export default function AdminOperationDetail() {
         ? `Order sent back for rework: ${rejectReason}`
         : `Order rejected with reason: ${rejectReason}`;
       alert(message);
-      window.location.reload(); // Reload to see the changes
     } else {
       alert("You don't have permission to reject this order at this stage");
     }

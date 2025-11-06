@@ -28,8 +28,7 @@ export default function ClientCreateOrder() {
   const [shareholders, setShareholders] = useState<Shareholder[]>([]);
   const [editingShareholderId, setEditingShareholderId] = useState<string | null>(null);
   const [shareholderForm, setShareholderForm] = useState({
-    firstName: "",
-    lastName: "",
+    fullName: "",
     dateOfBirth: "",
     nationality: "",
     ownershipPercentage: "",

@@ -21,6 +21,13 @@ export default function ClientCreateOrder() {
     notes: "",
   });
 
+  const [companyInfo, setCompanyInfo] = useState({
+    companyName: "",
+    companyActivities: "",
+    totalCapital: "",
+    pricePerShare: "",
+  });
+
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [isDragging, setIsDragging] = useState(false);

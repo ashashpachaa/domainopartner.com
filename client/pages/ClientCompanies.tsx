@@ -2,8 +2,9 @@ import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import ClientLayout from "@/components/ClientLayout";
 import { Button } from "@/components/ui/button";
-import { Building2, ArrowLeft, Calendar, FileText, CheckCircle2, AlertCircle } from "lucide-react";
+import { Building2, ArrowLeft, Calendar, FileText, CheckCircle2, AlertCircle, Download } from "lucide-react";
 import { getRegisteredCompaniesByUser, RegisteredCompany } from "@/hooks/useCompanyDetails";
+import { mockOrders } from "@/lib/mockData";
 
 export default function ClientCompanies() {
   const navigate = useNavigate();

@@ -2,10 +2,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link, useNavigate } from "react-router-dom";
 import AdminLayout from "@/components/AdminLayout";
-import { ArrowLeft, Save, CheckCircle2, XCircle, Upload, Trash2, FileText } from "lucide-react";
+import { ArrowLeft, Save, CheckCircle2, XCircle, Upload, Trash2, FileText, Loader, Check, AlertCircle } from "lucide-react";
 import { FormEvent, useState } from "react";
 import { mockOrders, mockUsers, mockProducts, mockStaff, Order, OperationFile } from "@/lib/mockData";
 import { toast } from "sonner";
+import { useCompanyNameValidation } from "@/hooks/useCompanyNameValidation";
 
 export default function AdminCreateOrder() {
   const navigate = useNavigate();

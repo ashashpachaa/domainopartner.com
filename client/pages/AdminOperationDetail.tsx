@@ -102,19 +102,35 @@ export default function AdminOperationDetail() {
     );
   }
 
-  const workflowStages = [
-    { id: "new", label: "Order Created", icon: "📋" },
-    { id: "pending_sales_review", label: "Sales Review", icon: "👤" },
-    { id: "pending_operation", label: "Operation Process", icon: "⚙️" },
-    {
-      id: "pending_operation_manager_review",
-      label: "Manager Review",
-      icon: "✓",
-    },
-    { id: "awaiting_client_acceptance", label: "Client Acceptance", icon: "🤝" },
-    { id: "shipping_preparation", label: "Shipping & Complete", icon: "📦" },
-  ];
+  // Build dynamic workflow stages based on product services
+  const getWorkflowStages = () => {
+    const stages: Array<{ id: string; label: string; icon: string; requiresUpload?: boolean }> = [
+      { id: "new", label: "Order Created", icon: "📋" },
+      { id: "pending_sales_review", label: "Sales Review", icon: "👤" },
+      { id: "pending_operation", label: "Operation Process", icon: "⚙️" },
+      { id: "pending_operation_manager_review", label: "Manager Review", icon: "✓" },
+      { id: "awaiting_client_acceptance", label: "Client Acceptance", icon: "🤝" },
+    ];
 
+    // Add conditional stages based on product services
+    if (product?.services.hasApostille) {
+      stages.push({ id: "pending_apostille", label: "Apostille Processing", icon: "🔏", requiresUpload: true });
+    }
+    if (product?.services.hasPOA) {
+      stages.push({ id: "pending_poa", label: "Power of Attorney", icon: "📄", requiresUpload: true });
+    }
+    if (product?.services.hasFinancialReport) {
+      stages.push({ id: "pending_financial_report", label: "Financial Report", icon: "📊", requiresUpload: true });
+    }
+    if (product?.services.hasShipping) {
+      stages.push({ id: "shipping_preparation", label: "Shipping & Tracking", icon: "📦", requiresUpload: false });
+    }
+
+    stages.push({ id: "completed", label: "Completed", icon: "✅" });
+    return stages;
+  };
+
+  const workflowStages = getWorkflowStages();
   const currentStageIndex = workflowStages.findIndex(
     (s) => s.id === order.status
   );
@@ -124,39 +140,38 @@ export default function AdminOperationDetail() {
     // Admin override - always allow in admin mode
     if (adminMode && impersonateStaffId) return true;
 
-    if (order.status === "new") return true; // Anyone can accept a new order to assign it
+    if (order.status === "new") return true;
     if (order.status === "pending_sales_review" && order.assignedToSalesId === effectiveUserId) return true;
     if (order.status === "pending_operation" && order.assignedToOperationId === effectiveUserId) return true;
     if (order.status === "pending_operation_manager_review" && order.assignedToManagerId === effectiveUserId) return true;
     if (order.status === "awaiting_client_acceptance" && effectiveUserId === "client") return true;
-    if (order.status === "shipping_preparation" && order.assignedToManagerId === effectiveUserId) return true;
+    if (["pending_apostille", "pending_poa", "pending_financial_report", "shipping_preparation"].includes(order.status) && order.assignedToManagerId === effectiveUserId) return true;
     return false;
   };
 
-  // Get the next status based on current status
+  // Get the next status based on current status and workflow stages
   const getNextStatus = (): string => {
-    const statusMap: { [key: string]: string } = {
-      "new": "pending_sales_review",
-      "pending_sales_review": "pending_operation",
-      "pending_operation": "pending_operation_manager_review",
-      "pending_operation_manager_review": "awaiting_client_acceptance",
-      "awaiting_client_acceptance": product?.services.hasApostille ? "shipping_preparation" : "shipping_preparation",
-      "shipping_preparation": "completed",
-    };
-    return statusMap[order.status] || order.status;
+    const currentIndex = workflowStages.findIndex(s => s.id === order.status);
+    if (currentIndex < workflowStages.length - 1) {
+      return workflowStages[currentIndex + 1].id;
+    }
+    return "completed";
   };
 
   // Get rejection status based on current status
-  // Orders go back to previous stage for rework instead of terminal rejection
   const getRejectionStatus = (): string => {
-    const statusMap: { [key: string]: string } = {
-      "new": "new", // Can't reject a new order, keep it new
-      "pending_sales_review": "rejected_by_sales", // Terminal - back to client to fix
-      "pending_operation": "rejected_by_operation", // Terminal - back to client to fix
-      "pending_operation_manager_review": "pending_operation", // REWORK: Send back to Operation for fixes
-      "awaiting_client_acceptance": "pending_operation_manager_review", // REWORK: Send back to Manager for fixes
+    const rejectionMap: { [key: string]: string } = {
+      "new": "new",
+      "pending_sales_review": "rejected_by_sales",
+      "pending_operation": "rejected_by_operation",
+      "pending_operation_manager_review": "pending_operation",
+      "awaiting_client_acceptance": "pending_operation_manager_review",
+      "pending_apostille": "rejected_by_apostille",
+      "pending_poa": "rejected_by_poa",
+      "pending_financial_report": "rejected_by_financial_report",
+      "shipping_preparation": "rejected_by_shipping",
     };
-    return statusMap[order.status] || order.status;
+    return rejectionMap[order.status] || order.status;
   };
 
   const handleAccept = () => {

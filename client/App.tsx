@@ -37,6 +37,12 @@ import StaffFinancialDashboard from "./pages/StaffFinancialDashboard";
 import AdminClientRequests from "./pages/AdminClientRequests";
 import AdminClientRequestDetail from "./pages/AdminClientRequestDetail";
 import StaffDashboard from "./pages/StaffDashboard";
+import ClientDashboard from "./pages/ClientDashboard";
+import ClientOrders from "./pages/ClientOrders";
+import ClientOrderDetail from "./pages/ClientOrderDetail";
+import ClientInvoices from "./pages/ClientInvoices";
+import ClientDocuments from "./pages/ClientDocuments";
+import ClientProfile from "./pages/ClientProfile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();

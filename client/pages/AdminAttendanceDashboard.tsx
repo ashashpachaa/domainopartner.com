@@ -169,8 +169,8 @@ export default function AdminAttendanceDashboard() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-slate-900 mb-2">Period</label>
-              <div className="flex gap-2">
-                {(["today", "week", "month"] as const).map((period) => (
+              <div className="flex gap-2 flex-wrap">
+                {(["today", "week", "month", "custom"] as const).map((period) => (
                   <button
                     key={period}
                     onClick={() => setDateFilter(period)}
@@ -184,7 +184,9 @@ export default function AdminAttendanceDashboard() {
                       ? "Today"
                       : period === "week"
                       ? "This Week"
-                      : "This Month"}
+                      : period === "month"
+                      ? "This Month"
+                      : "Custom Range"}
                   </button>
                 ))}
               </div>

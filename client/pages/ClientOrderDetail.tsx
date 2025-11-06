@@ -223,6 +223,64 @@ export default function ClientOrderDetail() {
               </div>
             )}
 
+            {/* Shareholders */}
+            {order.shareholders && order.shareholders.length > 0 && (
+              <div className="bg-white rounded-lg border border-slate-200 p-6">
+                <h2 className="text-lg font-semibold text-slate-900 mb-4">Shareholders & Ownership</h2>
+                <div className="space-y-4">
+                  {order.shareholders.map((shareholder, index) => (
+                    <div key={index} className="border border-slate-200 rounded-lg p-4">
+                      <div className="flex items-start justify-between mb-3">
+                        <div>
+                          <p className="font-semibold text-slate-900">
+                            {shareholder.firstName} {shareholder.lastName}
+                          </p>
+                        </div>
+                        <div className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm font-semibold">
+                          {shareholder.ownershipPercentage}%
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                          <p className="text-slate-600">Date of Birth</p>
+                          <p className="font-medium text-slate-900">
+                            {new Date(shareholder.dateOfBirth).toLocaleDateString()}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-slate-600">Nationality</p>
+                          <p className="font-medium text-slate-900">{shareholder.nationality}</p>
+                        </div>
+                      </div>
+                      {shareholder.passportFile && (
+                        <div className="mt-3 pt-3 border-t border-slate-200">
+                          <p className="text-sm text-slate-600 mb-2">Passport Document</p>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => {
+                              const link = document.createElement("a");
+                              link.href = shareholder.passportFile?.fileUrl || "#";
+                              link.download = shareholder.passportFile?.fileName || "passport";
+                              link.click();
+                            }}
+                          >
+                            <Download className="w-4 h-4 mr-2" />
+                            {shareholder.passportFile.fileName}
+                          </Button>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                  <div className="bg-purple-50 border border-purple-200 rounded-lg p-3">
+                    <p className="text-sm font-medium text-purple-700">
+                      Total Ownership: {order.shareholders.reduce((sum, sh) => sum + sh.ownershipPercentage, 0)}%
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Tracking Number */}
             {order.trackingNumber && (
               <div className="bg-white rounded-lg border border-slate-200 p-6">

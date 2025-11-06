@@ -2,9 +2,27 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link, useNavigate } from "react-router-dom";
 import AdminLayout from "@/components/AdminLayout";
-import { ArrowLeft, Save, CheckCircle2, XCircle, Upload, Trash2, FileText, Loader, Check, AlertCircle } from "lucide-react";
+import {
+  ArrowLeft,
+  Save,
+  CheckCircle2,
+  XCircle,
+  Upload,
+  Trash2,
+  FileText,
+  Loader,
+  Check,
+  AlertCircle,
+} from "lucide-react";
 import { FormEvent, useState } from "react";
-import { mockOrders, mockUsers, mockProducts, mockStaff, Order, OperationFile } from "@/lib/mockData";
+import {
+  mockOrders,
+  mockUsers,
+  mockProducts,
+  mockStaff,
+  Order,
+  OperationFile,
+} from "@/lib/mockData";
 import { toast } from "sonner";
 import { useCompanyNameValidation } from "@/hooks/useCompanyNameValidation";
 
@@ -16,10 +34,10 @@ export default function AdminCreateOrder() {
   const getNextOrderNum = () => {
     const maxOrderNum = Math.max(
       0,
-      ...mockOrders.map(o => {
+      ...mockOrders.map((o) => {
         const match = o.id.match(/O(\d+)/);
         return match ? parseInt(match[1]) : 0;
-      })
+      }),
     );
     return maxOrderNum + 1;
   };
@@ -45,19 +63,23 @@ export default function AdminCreateOrder() {
 
   const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
   const [countryInput, setCountryInput] = useState("");
-  const [uploadedFiles, setUploadedFiles] = useState<Array<{ name: string; size: number; type: string }>>([]);
+  const [uploadedFiles, setUploadedFiles] = useState<
+    Array<{ name: string; size: number; type: string }>
+  >([]);
   const [fileDescription, setFileDescription] = useState("");
   const [companyName, setCompanyName] = useState("");
 
-  const selectedProduct = mockProducts.find(p => p.id === formData.productId);
-  const salesStaff = mockStaff.filter(s => s.role === "sales");
+  const selectedProduct = mockProducts.find((p) => p.id === formData.productId);
+  const salesStaff = mockStaff.filter((s) => s.role === "sales");
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >,
   ) => {
     const { name, value } = e.target;
     if (name === "productId") {
-      const product = mockProducts.find(p => p.id === value);
+      const product = mockProducts.find((p) => p.id === value);
       if (product) {
         // Auto-fill amount, currency, and country from product
         setFormData((prev) => ({
@@ -109,7 +131,7 @@ export default function AdminCreateOrder() {
       }
 
       // Check if file already exists
-      if (uploadedFiles.some(f => f.name === file.name)) {
+      if (uploadedFiles.some((f) => f.name === file.name)) {
         toast.error(`File ${file.name} is already uploaded`);
         return;
       }
@@ -130,7 +152,7 @@ export default function AdminCreateOrder() {
   };
 
   const removeFile = (fileName: string) => {
-    setUploadedFiles(uploadedFiles.filter(f => f.name !== fileName));
+    setUploadedFiles(uploadedFiles.filter((f) => f.name !== fileName));
   };
 
   const formatFileSize = (bytes: number): string => {
@@ -144,7 +166,12 @@ export default function AdminCreateOrder() {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    if (!formData.description || !formData.serviceType || !formData.userId || !formData.assignedToSalesId) {
+    if (
+      !formData.description ||
+      !formData.serviceType ||
+      !formData.userId ||
+      !formData.assignedToSalesId
+    ) {
       toast.error("Please fill in all required fields");
       return;
     }
@@ -156,11 +183,15 @@ export default function AdminCreateOrder() {
         return;
       }
       if (companyValidation.isAvailable === false) {
-        toast.error("This company name is already registered. Please choose a different name.");
+        toast.error(
+          "This company name is already registered. Please choose a different name.",
+        );
         return;
       }
       if (companyValidation.isAvailable === null) {
-        toast.error("Please wait for company name availability check to complete");
+        toast.error(
+          "Please wait for company name availability check to complete",
+        );
         return;
       }
     }
@@ -168,7 +199,7 @@ export default function AdminCreateOrder() {
     const orderId = formData.id || `O${String(nextOrderNum).padStart(3, "0")}`;
 
     // Get selected product to set requiredServices
-    const product = mockProducts.find(p => p.id === formData.productId);
+    const product = mockProducts.find((p) => p.id === formData.productId);
 
     // In a real app, this would save to a database
     const newOrder: Order = {
@@ -203,7 +234,12 @@ export default function AdminCreateOrder() {
         fileName: file.name,
         fileSize: file.size,
         uploadedBy: formData.assignedToSalesId || "system",
-        uploadedByName: mockStaff.find(s => s.id === formData.assignedToSalesId)?.firstName + " " + mockStaff.find(s => s.id === formData.assignedToSalesId)?.lastName || "System",
+        uploadedByName:
+          mockStaff.find((s) => s.id === formData.assignedToSalesId)
+            ?.firstName +
+            " " +
+            mockStaff.find((s) => s.id === formData.assignedToSalesId)
+              ?.lastName || "System",
         uploadedAt: new Date().toISOString(),
         stage: "sales" as const,
         fileType: "document" as const,
@@ -245,7 +281,10 @@ export default function AdminCreateOrder() {
         <div className="p-8">
           {/* Back Button */}
           <Link to="/admin/operations">
-            <Button variant="ghost" className="gap-2 text-slate-600 hover:text-slate-900 mb-8">
+            <Button
+              variant="ghost"
+              className="gap-2 text-slate-600 hover:text-slate-900 mb-8"
+            >
               <ArrowLeft className="w-4 h-4" />
               Back to Operations
             </Button>
@@ -253,14 +292,21 @@ export default function AdminCreateOrder() {
 
           {/* Form Card */}
           <div className="bg-white rounded-lg border border-slate-200 p-8 max-w-5xl">
-            <h1 className="text-3xl font-bold text-slate-900 mb-2">Create New Order</h1>
-            <p className="text-slate-600 mb-8">Fill in the order details and select a sales representative to manage client interaction</p>
+            <h1 className="text-3xl font-bold text-slate-900 mb-2">
+              Create New Order
+            </h1>
+            <p className="text-slate-600 mb-8">
+              Fill in the order details and select a sales representative to
+              manage client interaction
+            </p>
 
             <form onSubmit={handleSubmit} className="space-y-8">
               {/* Step 1: Client Selection */}
               <div className="pb-8 border-b border-slate-200">
                 <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
-                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-100 text-primary-700 text-sm font-semibold">1</span>
+                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-100 text-primary-700 text-sm font-semibold">
+                    1
+                  </span>
                   Select Client
                 </h2>
                 <div>
@@ -287,7 +333,9 @@ export default function AdminCreateOrder() {
               {/* Step 2: Product Selection & Service Summary */}
               <div className="pb-8 border-b border-slate-200">
                 <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
-                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-100 text-primary-700 text-sm font-semibold">2</span>
+                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-100 text-primary-700 text-sm font-semibold">
+                    2
+                  </span>
                   Select Product & Services
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -310,14 +358,18 @@ export default function AdminCreateOrder() {
                       ))}
                     </select>
                     {selectedProduct && (
-                      <p className="text-xs text-slate-500 mt-2">{selectedProduct.description}</p>
+                      <p className="text-xs text-slate-500 mt-2">
+                        {selectedProduct.description}
+                      </p>
                     )}
                   </div>
 
                   {/* Service Summary */}
                   {selectedProduct && (
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                      <h3 className="font-semibold text-slate-900 mb-3">Included Services</h3>
+                      <h3 className="font-semibold text-slate-900 mb-3">
+                        Included Services
+                      </h3>
                       <div className="space-y-2">
                         <div className="flex items-center gap-2">
                           {selectedProduct.services.hasApostille ? (
@@ -325,7 +377,13 @@ export default function AdminCreateOrder() {
                           ) : (
                             <XCircle className="w-4 h-4 text-slate-400" />
                           )}
-                          <span className={selectedProduct.services.hasApostille ? "text-slate-900" : "text-slate-500"}>
+                          <span
+                            className={
+                              selectedProduct.services.hasApostille
+                                ? "text-slate-900"
+                                : "text-slate-500"
+                            }
+                          >
                             Apostille Processing
                           </span>
                         </div>
@@ -335,7 +393,13 @@ export default function AdminCreateOrder() {
                           ) : (
                             <XCircle className="w-4 h-4 text-slate-400" />
                           )}
-                          <span className={selectedProduct.services.hasPOA ? "text-slate-900" : "text-slate-500"}>
+                          <span
+                            className={
+                              selectedProduct.services.hasPOA
+                                ? "text-slate-900"
+                                : "text-slate-500"
+                            }
+                          >
                             Power of Attorney (POA)
                           </span>
                         </div>
@@ -345,7 +409,13 @@ export default function AdminCreateOrder() {
                           ) : (
                             <XCircle className="w-4 h-4 text-slate-400" />
                           )}
-                          <span className={selectedProduct.services.hasFinancialReport ? "text-slate-900" : "text-slate-500"}>
+                          <span
+                            className={
+                              selectedProduct.services.hasFinancialReport
+                                ? "text-slate-900"
+                                : "text-slate-500"
+                            }
+                          >
                             Financial Report
                           </span>
                         </div>
@@ -355,7 +425,13 @@ export default function AdminCreateOrder() {
                           ) : (
                             <XCircle className="w-4 h-4 text-slate-400" />
                           )}
-                          <span className={selectedProduct.services.hasShipping ? "text-slate-900" : "text-slate-500"}>
+                          <span
+                            className={
+                              selectedProduct.services.hasShipping
+                                ? "text-slate-900"
+                                : "text-slate-500"
+                            }
+                          >
                             Shipping & Tracking
                           </span>
                         </div>
@@ -363,7 +439,8 @@ export default function AdminCreateOrder() {
                       {selectedProduct && (
                         <div className="mt-4 pt-4 border-t border-blue-200">
                           <p className="text-xs text-slate-600 mb-2">
-                            <span className="font-semibold">Duration:</span> {selectedProduct.duration}
+                            <span className="font-semibold">Duration:</span>{" "}
+                            {selectedProduct.duration}
                           </p>
                         </div>
                       )}
@@ -375,7 +452,9 @@ export default function AdminCreateOrder() {
               {/* Step 3: Sales Assignment */}
               <div className="pb-8 border-b border-slate-200">
                 <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
-                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-100 text-primary-700 text-sm font-semibold">3</span>
+                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-100 text-primary-700 text-sm font-semibold">
+                    3
+                  </span>
                   Assign Sales Representative
                 </h2>
                 <div>
@@ -397,7 +476,8 @@ export default function AdminCreateOrder() {
                     ))}
                   </select>
                   <p className="text-xs text-slate-500 mt-2">
-                    The assigned sales representative will interact with the client and make the order visible in their dashboard
+                    The assigned sales representative will interact with the
+                    client and make the order visible in their dashboard
                   </p>
                 </div>
               </div>
@@ -405,7 +485,9 @@ export default function AdminCreateOrder() {
               {/* Step 4: Order Details */}
               <div className="pb-8 border-b border-slate-200">
                 <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
-                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-100 text-primary-700 text-sm font-semibold">4</span>
+                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-100 text-primary-700 text-sm font-semibold">
+                    4
+                  </span>
                   Order Details
                 </h2>
 
@@ -421,15 +503,17 @@ export default function AdminCreateOrder() {
                         value={companyName}
                         onChange={(e) => {
                           setCompanyName(e.target.value);
-                          companyValidation.validateWithDebounce(e.target.value);
+                          companyValidation.validateWithDebounce(
+                            e.target.value,
+                          );
                         }}
                         placeholder="e.g., Acme Corporation Ltd"
                         className={`${
                           companyValidation.isAvailable === false
                             ? "border-red-500 focus:border-red-500"
                             : companyValidation.isAvailable === true
-                            ? "border-green-500 focus:border-green-500"
-                            : ""
+                              ? "border-green-500 focus:border-green-500"
+                              : ""
                         }`}
                       />
                       <div className="absolute right-3 top-2.5">
@@ -455,11 +539,13 @@ export default function AdminCreateOrder() {
                         {companyValidation.exactMatch && (
                           <div className="text-xs text-red-600 space-y-1 mt-2">
                             <p>
-                              <strong>Registered as:</strong> {companyValidation.exactMatch.title}
+                              <strong>Registered as:</strong>{" "}
+                              {companyValidation.exactMatch.title}
                             </p>
                             {companyValidation.exactMatch.company_number && (
                               <p>
-                                <strong>Company Number:</strong> {companyValidation.exactMatch.company_number}
+                                <strong>Company Number:</strong>{" "}
+                                {companyValidation.exactMatch.company_number}
                               </p>
                             )}
                           </div>
@@ -517,7 +603,9 @@ export default function AdminCreateOrder() {
                       required
                     />
                     {selectedProduct && (
-                      <p className="text-xs text-slate-500 mt-1">Auto-filled from product</p>
+                      <p className="text-xs text-slate-500 mt-1">
+                        Auto-filled from product
+                      </p>
                     )}
                   </div>
 
@@ -539,7 +627,9 @@ export default function AdminCreateOrder() {
                       />
                     </div>
                     {selectedProduct && (
-                      <p className="text-xs text-slate-500 mt-1">Auto-filled from product</p>
+                      <p className="text-xs text-slate-500 mt-1">
+                        Auto-filled from product
+                      </p>
                     )}
                   </div>
 
@@ -554,7 +644,9 @@ export default function AdminCreateOrder() {
                       disabled={!!selectedProduct}
                       className={`w-full px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-1 focus:ring-primary-500 bg-white ${selectedProduct ? "bg-slate-100" : ""}`}
                     >
-                      <option value="AED">AED - United Arab Emirates Dirham</option>
+                      <option value="AED">
+                        AED - United Arab Emirates Dirham
+                      </option>
                       <option value="AFN">AFN - Afghan Afghani</option>
                       <option value="ALL">ALL - Albanian Lek</option>
                       <option value="AMD">AMD - Armenian Dram</option>
@@ -564,7 +656,9 @@ export default function AdminCreateOrder() {
                       <option value="AUD">AUD - Australian Dollar</option>
                       <option value="AWG">AWG - Aruban Florin</option>
                       <option value="AZN">AZN - Azerbaijani Manat</option>
-                      <option value="BAM">BAM - Bosnia and Herzegovina Convertible Mark</option>
+                      <option value="BAM">
+                        BAM - Bosnia and Herzegovina Convertible Mark
+                      </option>
                       <option value="BBD">BBD - Barbadian Dollar</option>
                       <option value="BDT">BDT - Bangladeshi Taka</option>
                       <option value="BGN">BGN - Bulgarian Lev</option>
@@ -590,7 +684,9 @@ export default function AdminCreateOrder() {
                       <option value="CNH">CNH - Chinese Yuan (offshore)</option>
                       <option value="CNY">CNY - Chinese Yuan</option>
                       <option value="COP">COP - Colombian Peso</option>
-                      <option value="COU">COU - Colombian Real Value Unit</option>
+                      <option value="COU">
+                        COU - Colombian Real Value Unit
+                      </option>
                       <option value="CRC">CRC - Costa Rican Colón</option>
                       <option value="CUC">CUC - Cuban Convertible Peso</option>
                       <option value="CUP">CUP - Cuban Peso</option>
@@ -688,7 +784,9 @@ export default function AdminCreateOrder() {
                       <option value="SOS">SOS - Somali Shilling</option>
                       <option value="SRD">SRD - Surinamese Dollar</option>
                       <option value="SSP">SSP - South Sudanese Pound</option>
-                      <option value="STN">STN - São Tomé and Príncipe Dobra</option>
+                      <option value="STN">
+                        STN - São Tomé and Príncipe Dobra
+                      </option>
                       <option value="SYP">SYP - Syrian Pound</option>
                       <option value="SZL">SZL - Swazi Lilangeni</option>
                       <option value="THB">THB - Thai Baht</option>
@@ -697,36 +795,58 @@ export default function AdminCreateOrder() {
                       <option value="TND">TND - Tunisian Dinar</option>
                       <option value="TOP">TOP - Tongan Paʻanga</option>
                       <option value="TRY">TRY - Turkish Lira</option>
-                      <option value="TTD">TTD - Trinidad and Tobago Dollar</option>
+                      <option value="TTD">
+                        TTD - Trinidad and Tobago Dollar
+                      </option>
                       <option value="TWD">TWD - New Taiwan Dollar</option>
                       <option value="TZS">TZS - Tanzanian Shilling</option>
                       <option value="UAH">UAH - Ukrainian Hryvnia</option>
                       <option value="UGX">UGX - Ugandan Shilling</option>
                       <option value="USD">USD - US Dollar</option>
                       <option value="USN">USN - US Dollar (Next day)</option>
-                      <option value="UYI">UYI - Uruguayan Peso (Indexed)</option>
+                      <option value="UYI">
+                        UYI - Uruguayan Peso (Indexed)
+                      </option>
                       <option value="UYU">UYU - Uruguayan Peso</option>
                       <option value="UZS">UZS - Uzbekistani Som</option>
-                      <option value="VEF">VEF - Venezuelan Bolívar (fixed rate)</option>
+                      <option value="VEF">
+                        VEF - Venezuelan Bolívar (fixed rate)
+                      </option>
                       <option value="VES">VES - Venezuelan Bolívar</option>
                       <option value="VND">VND - Vietnamese Đồng</option>
                       <option value="VUV">VUV - Vanuatu Vatu</option>
                       <option value="WST">WST - Samoan Tala</option>
-                      <option value="XAF">XAF - Central African CFA Franc</option>
+                      <option value="XAF">
+                        XAF - Central African CFA Franc
+                      </option>
                       <option value="XAG">XAG - Silver (one troy ounce)</option>
                       <option value="XAU">XAU - Gold (one troy ounce)</option>
-                      <option value="XBA">XBA - European Composite Unit (EURCO)</option>
-                      <option value="XBB">XBB - European Monetary Unit (E.M.U.-6)</option>
-                      <option value="XBC">XBC - European Unit of Account 9 (E.U.A.-9)</option>
-                      <option value="XBD">XBD - European Unit of Account 17 (E.U.A.-17)</option>
+                      <option value="XBA">
+                        XBA - European Composite Unit (EURCO)
+                      </option>
+                      <option value="XBB">
+                        XBB - European Monetary Unit (E.M.U.-6)
+                      </option>
+                      <option value="XBC">
+                        XBC - European Unit of Account 9 (E.U.A.-9)
+                      </option>
+                      <option value="XBD">
+                        XBD - European Unit of Account 17 (E.U.A.-17)
+                      </option>
                       <option value="XCD">XCD - East Caribbean Dollar</option>
                       <option value="XDR">XDR - Special Drawing Right</option>
                       <option value="XOF">XOF - West African CFA Franc</option>
-                      <option value="XPD">XPD - Palladium (one troy ounce)</option>
+                      <option value="XPD">
+                        XPD - Palladium (one troy ounce)
+                      </option>
                       <option value="XPF">XPF - CFP Franc</option>
-                      <option value="XPT">XPT - Platinum (one troy ounce)</option>
+                      <option value="XPT">
+                        XPT - Platinum (one troy ounce)
+                      </option>
                       <option value="XSU">XSU - Sucre</option>
-                      <option value="XTS">XTS - Code reserved for testing</option>
+                      <option value="XTS">
+                        XTS - Code reserved for testing
+                      </option>
                       <option value="XUA">XUA - ADB Unit of Account</option>
                       <option value="XXX">XXX - No currency</option>
                       <option value="YER">YER - Yemeni Rial</option>
@@ -735,7 +855,9 @@ export default function AdminCreateOrder() {
                       <option value="ZWL">ZWL - Zimbabwean Dollar</option>
                     </select>
                     {selectedProduct && (
-                      <p className="text-xs text-slate-500 mt-1">Auto-filled from product</p>
+                      <p className="text-xs text-slate-500 mt-1">
+                        Auto-filled from product
+                      </p>
                     )}
                   </div>
                 </div>
@@ -786,7 +908,9 @@ export default function AdminCreateOrder() {
                     </div>
                   )}
                   {selectedProduct && selectedCountries.length > 0 && (
-                    <p className="text-xs text-slate-500 mt-2">Auto-filled from product</p>
+                    <p className="text-xs text-slate-500 mt-2">
+                      Auto-filled from product
+                    </p>
                   )}
                 </div>
               </div>
@@ -794,11 +918,14 @@ export default function AdminCreateOrder() {
               {/* Step 5: Document Upload */}
               <div className="pb-8 border-b border-slate-200">
                 <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
-                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-100 text-primary-700 text-sm font-semibold">5</span>
+                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-100 text-primary-700 text-sm font-semibold">
+                    5
+                  </span>
                   Attach Documents
                 </h2>
                 <p className="text-sm text-slate-600 mb-4">
-                  Upload customer documents. These will be visible in the order workflow automatically.
+                  Upload customer documents. These will be visible in the order
+                  workflow automatically.
                 </p>
 
                 {/* File Upload Area */}

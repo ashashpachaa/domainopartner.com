@@ -20,10 +20,10 @@ export default function AdminEditProduct() {
   const getNextProductNum = () => {
     const maxProductNum = Math.max(
       0,
-      ...mockProducts.map(p => {
+      ...mockProducts.map((p) => {
         const match = p.id.match(/P(\d+)/);
         return match ? parseInt(match[1]) : 0;
-      })
+      }),
     );
     return maxProductNum + 1;
   };
@@ -48,11 +48,13 @@ export default function AdminEditProduct() {
       },
       createdAt: new Date().toISOString(),
       status: "active",
-    }
+    },
   );
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
   ) => {
     const { name, value, type } = e.target;
     if (type === "checkbox") {
@@ -126,7 +128,10 @@ export default function AdminEditProduct() {
       mockProducts.push(newProduct);
 
       // Save to localStorage
-      localStorage.setItem(`product_${newProduct.id}`, JSON.stringify(newProduct));
+      localStorage.setItem(
+        `product_${newProduct.id}`,
+        JSON.stringify(newProduct),
+      );
 
       toast.success("Product created successfully!");
     } else {
@@ -144,7 +149,10 @@ export default function AdminEditProduct() {
       }
 
       // Update localStorage
-      localStorage.setItem(`product_${updatedProduct.id}`, JSON.stringify(updatedProduct));
+      localStorage.setItem(
+        `product_${updatedProduct.id}`,
+        JSON.stringify(updatedProduct),
+      );
 
       toast.success("Product updated successfully!");
     }
@@ -157,7 +165,10 @@ export default function AdminEditProduct() {
       <div className="space-y-6 max-w-4xl">
         {/* Back Button */}
         <Link to="/admin/products">
-          <Button variant="ghost" className="gap-2 text-slate-600 hover:text-slate-900">
+          <Button
+            variant="ghost"
+            className="gap-2 text-slate-600 hover:text-slate-900"
+          >
             <ArrowLeft className="w-4 h-4" />
             Back to Products
           </Button>
@@ -232,13 +243,17 @@ export default function AdminEditProduct() {
                     <Input
                       type="text"
                       name="duration"
-                      value={formData.duration?.replace(/ business days$/, "") || ""}
+                      value={
+                        formData.duration?.replace(/ business days$/, "") || ""
+                      }
                       onChange={handleChange}
                       placeholder="e.g., 3-5"
                       required
                       className="border-slate-300 focus:border-primary-500 focus:ring-primary-500 flex-1"
                     />
-                    <span className="text-sm text-slate-500 font-medium whitespace-nowrap">business days</span>
+                    <span className="text-sm text-slate-500 font-medium whitespace-nowrap">
+                      business days
+                    </span>
                   </div>
                 </div>
 
@@ -287,7 +302,9 @@ export default function AdminEditProduct() {
                     required
                     className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500 bg-white"
                   >
-                    <option value="AED">AED - United Arab Emirates Dirham</option>
+                    <option value="AED">
+                      AED - United Arab Emirates Dirham
+                    </option>
                     <option value="AFN">AFN - Afghan Afghani</option>
                     <option value="ALL">ALL - Albanian Lek</option>
                     <option value="AMD">AMD - Armenian Dram</option>
@@ -297,7 +314,9 @@ export default function AdminEditProduct() {
                     <option value="AUD">AUD - Australian Dollar</option>
                     <option value="AWG">AWG - Aruban Florin</option>
                     <option value="AZN">AZN - Azerbaijani Manat</option>
-                    <option value="BAM">BAM - Bosnia and Herzegovina Convertible Mark</option>
+                    <option value="BAM">
+                      BAM - Bosnia and Herzegovina Convertible Mark
+                    </option>
                     <option value="BBD">BBD - Barbadian Dollar</option>
                     <option value="BDT">BDT - Bangladeshi Taka</option>
                     <option value="BGN">BGN - Bulgarian Lev</option>
@@ -421,7 +440,9 @@ export default function AdminEditProduct() {
                     <option value="SOS">SOS - Somali Shilling</option>
                     <option value="SRD">SRD - Surinamese Dollar</option>
                     <option value="SSP">SSP - South Sudanese Pound</option>
-                    <option value="STN">STN - São Tomé and Príncipe Dobra</option>
+                    <option value="STN">
+                      STN - São Tomé and Príncipe Dobra
+                    </option>
                     <option value="SYP">SYP - Syrian Pound</option>
                     <option value="SZL">SZL - Swazi Lilangeni</option>
                     <option value="THB">THB - Thai Baht</option>
@@ -430,7 +451,9 @@ export default function AdminEditProduct() {
                     <option value="TND">TND - Tunisian Dinar</option>
                     <option value="TOP">TOP - Tongan Paʻanga</option>
                     <option value="TRY">TRY - Turkish Lira</option>
-                    <option value="TTD">TTD - Trinidad and Tobago Dollar</option>
+                    <option value="TTD">
+                      TTD - Trinidad and Tobago Dollar
+                    </option>
                     <option value="TWD">TWD - New Taiwan Dollar</option>
                     <option value="TZS">TZS - Tanzanian Shilling</option>
                     <option value="UAH">UAH - Ukrainian Hryvnia</option>
@@ -440,7 +463,9 @@ export default function AdminEditProduct() {
                     <option value="UYI">UYI - Uruguayan Peso (Indexed)</option>
                     <option value="UYU">UYU - Uruguayan Peso</option>
                     <option value="UZS">UZS - Uzbekistani Som</option>
-                    <option value="VEF">VEF - Venezuelan Bolívar (fixed rate)</option>
+                    <option value="VEF">
+                      VEF - Venezuelan Bolívar (fixed rate)
+                    </option>
                     <option value="VES">VES - Venezuelan Bolívar</option>
                     <option value="VND">VND - Vietnamese Đồng</option>
                     <option value="VUV">VUV - Vanuatu Vatu</option>
@@ -448,14 +473,24 @@ export default function AdminEditProduct() {
                     <option value="XAF">XAF - Central African CFA Franc</option>
                     <option value="XAG">XAG - Silver (one troy ounce)</option>
                     <option value="XAU">XAU - Gold (one troy ounce)</option>
-                    <option value="XBA">XBA - European Composite Unit (EURCO)</option>
-                    <option value="XBB">XBB - European Monetary Unit (E.M.U.-6)</option>
-                    <option value="XBC">XBC - European Unit of Account 9 (E.U.A.-9)</option>
-                    <option value="XBD">XBD - European Unit of Account 17 (E.U.A.-17)</option>
+                    <option value="XBA">
+                      XBA - European Composite Unit (EURCO)
+                    </option>
+                    <option value="XBB">
+                      XBB - European Monetary Unit (E.M.U.-6)
+                    </option>
+                    <option value="XBC">
+                      XBC - European Unit of Account 9 (E.U.A.-9)
+                    </option>
+                    <option value="XBD">
+                      XBD - European Unit of Account 17 (E.U.A.-17)
+                    </option>
                     <option value="XCD">XCD - East Caribbean Dollar</option>
                     <option value="XDR">XDR - Special Drawing Right</option>
                     <option value="XOF">XOF - West African CFA Franc</option>
-                    <option value="XPD">XPD - Palladium (one troy ounce)</option>
+                    <option value="XPD">
+                      XPD - Palladium (one troy ounce)
+                    </option>
                     <option value="XPF">XPF - CFP Franc</option>
                     <option value="XPT">XPT - Platinum (one troy ounce)</option>
                     <option value="XSU">XSU - Sucre</option>
@@ -552,7 +587,9 @@ export default function AdminEditProduct() {
                     className="w-4 h-4 rounded text-primary-600 focus:ring-primary-500"
                   />
                   <div>
-                    <p className="font-medium text-slate-900">Power of Attorney (POA)</p>
+                    <p className="font-medium text-slate-900">
+                      Power of Attorney (POA)
+                    </p>
                     <p className="text-sm text-slate-600">
                       Power of attorney documentation and preparation
                     </p>
@@ -584,7 +621,9 @@ export default function AdminEditProduct() {
                     className="w-4 h-4 rounded text-primary-600 focus:ring-primary-500"
                   />
                   <div>
-                    <p className="font-medium text-slate-900">Financial Report</p>
+                    <p className="font-medium text-slate-900">
+                      Financial Report
+                    </p>
                     <p className="text-sm text-slate-600">
                       Comprehensive financial analysis and reporting service
                     </p>

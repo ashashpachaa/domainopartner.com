@@ -3,8 +3,19 @@ import { useParams, useNavigate } from "react-router-dom";
 import { mockOrders, mockProducts, mockStaff } from "@/lib/mockData";
 import ClientLayout from "@/components/ClientLayout";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Download, MapPin, Clock, CheckCircle2, AlertCircle, History } from "lucide-react";
-import { fetchCompanyDetails, storeRegisteredCompany } from "@/hooks/useCompanyDetails";
+import {
+  ArrowLeft,
+  Download,
+  MapPin,
+  Clock,
+  CheckCircle2,
+  AlertCircle,
+  History,
+} from "lucide-react";
+import {
+  fetchCompanyDetails,
+  storeRegisteredCompany,
+} from "@/hooks/useCompanyDetails";
 import { toast } from "sonner";
 
 export default function ClientOrderDetail() {
@@ -34,7 +45,9 @@ export default function ClientOrderDetail() {
   }, [order]);
 
   const salesStaff = useMemo(() => {
-    return order ? mockStaff.find((s) => s.id === order.assignedToSalesId) : null;
+    return order
+      ? mockStaff.find((s) => s.id === order.assignedToSalesId)
+      : null;
   }, [order]);
 
   const [isRegisteringCompany, setIsRegisteringCompany] = useState(false);
@@ -51,7 +64,9 @@ export default function ClientOrderDetail() {
       ) {
         setIsRegisteringCompany(true);
         try {
-          const result = await fetchCompanyDetails(order.companyInfo.companyName);
+          const result = await fetchCompanyDetails(
+            order.companyInfo.companyName,
+          );
           if (result.data) {
             result.data.orderId = order.id;
             result.data.userId = order.userId;
@@ -61,7 +76,9 @@ export default function ClientOrderDetail() {
             order.registeredCompany = result.data;
             localStorage.setItem(`order_${order.id}`, JSON.stringify(order));
 
-            toast.success("Company registered and added to your companies list!");
+            toast.success(
+              "Company registered and added to your companies list!",
+            );
           } else if (result.error) {
             toast.warning(`Could not auto-register company: ${result.error}`);
           }
@@ -82,7 +99,11 @@ export default function ClientOrderDetail() {
         <div className="text-center py-12">
           <AlertCircle className="w-12 h-12 text-slate-300 mx-auto mb-4" />
           <p className="text-slate-600">Order not found</p>
-          <Button onClick={() => navigate("/client/orders")} variant="outline" className="mt-4">
+          <Button
+            onClick={() => navigate("/client/orders")}
+            variant="outline"
+            className="mt-4"
+          >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Orders
           </Button>
@@ -97,14 +118,24 @@ export default function ClientOrderDetail() {
     { key: "pending_operation", label: "Operation" },
     { key: "pending_operation_manager_review", label: "Manager Review" },
     { key: "awaiting_client_acceptance", label: "Your Approval" },
-    ...(product?.services.hasApostille ? [{ key: "pending_apostille", label: "Apostille" }] : []),
-    ...(product?.services.hasPOA ? [{ key: "pending_poa", label: "Power of Attorney" }] : []),
-    ...(product?.services.hasFinancialReport ? [{ key: "pending_financial_report", label: "Financial Report" }] : []),
-    ...(product?.services.hasShipping ? [{ key: "shipping_preparation", label: "Shipping" }] : []),
+    ...(product?.services.hasApostille
+      ? [{ key: "pending_apostille", label: "Apostille" }]
+      : []),
+    ...(product?.services.hasPOA
+      ? [{ key: "pending_poa", label: "Power of Attorney" }]
+      : []),
+    ...(product?.services.hasFinancialReport
+      ? [{ key: "pending_financial_report", label: "Financial Report" }]
+      : []),
+    ...(product?.services.hasShipping
+      ? [{ key: "shipping_preparation", label: "Shipping" }]
+      : []),
     { key: "completed", label: "Completed" },
   ];
 
-  const currentStageIndex = workflowStages.findIndex((s) => order.status.includes(s.key));
+  const currentStageIndex = workflowStages.findIndex((s) =>
+    order.status.includes(s.key),
+  );
 
   const getStatusColor = (status: string) => {
     if (status.includes("completed")) return "text-green-600";
@@ -134,10 +165,14 @@ export default function ClientOrderDetail() {
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Orders
             </Button>
-            <h1 className="text-3xl font-bold text-slate-900">{order.orderNumber}</h1>
+            <h1 className="text-3xl font-bold text-slate-900">
+              {order.orderNumber}
+            </h1>
             <p className="text-slate-600 mt-2">Order Details & Status</p>
           </div>
-          <div className={`px-4 py-2 rounded-lg font-semibold ${getStatusColor(order.status)}`}>
+          <div
+            className={`px-4 py-2 rounded-lg font-semibold ${getStatusColor(order.status)}`}
+          >
             {getStatusLabel(order.status)}
           </div>
         </div>
@@ -147,7 +182,8 @@ export default function ClientOrderDetail() {
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
             <p className="font-semibold text-blue-900">Action Required</p>
             <p className="text-sm text-blue-700 mt-1">
-              We're waiting for your approval to proceed with this order. Please review the documents and confirm.
+              We're waiting for your approval to proceed with this order. Please
+              review the documents and confirm.
             </p>
           </div>
         )}
@@ -157,15 +193,21 @@ export default function ClientOrderDetail() {
           <div className="lg:col-span-2 space-y-6">
             {/* Order Summary */}
             <div className="bg-white rounded-lg border border-slate-200 p-6">
-              <h2 className="text-lg font-semibold text-slate-900 mb-4">Order Summary</h2>
+              <h2 className="text-lg font-semibold text-slate-900 mb-4">
+                Order Summary
+              </h2>
               <div className="grid grid-cols-2 gap-6">
                 <div>
                   <p className="text-sm text-slate-600">Service Type</p>
-                  <p className="font-semibold text-slate-900">{order.serviceType}</p>
+                  <p className="font-semibold text-slate-900">
+                    {order.serviceType}
+                  </p>
                 </div>
                 <div>
                   <p className="text-sm text-slate-600">Amount</p>
-                  <p className="font-semibold text-slate-900">${order.amount || 0}</p>
+                  <p className="font-semibold text-slate-900">
+                    ${order.amount || 0}
+                  </p>
                 </div>
                 <div>
                   <p className="text-sm text-slate-600">Created</p>
@@ -175,14 +217,18 @@ export default function ClientOrderDetail() {
                 </div>
                 <div>
                   <p className="text-sm text-slate-600">Countries</p>
-                  <p className="font-semibold text-slate-900">{order.countries?.join(", ") || "N/A"}</p>
+                  <p className="font-semibold text-slate-900">
+                    {order.countries?.join(", ") || "N/A"}
+                  </p>
                 </div>
                 {order.history && order.history.length > 0 && (
                   <div>
                     <p className="text-sm text-slate-600">Last Updated</p>
                     <p className="font-semibold text-slate-900 flex items-center gap-2">
                       <Clock className="w-4 h-4 text-slate-500" />
-                      {new Date(order.history[order.history.length - 1].createdAt).toLocaleDateString()}
+                      {new Date(
+                        order.history[order.history.length - 1].createdAt,
+                      ).toLocaleDateString()}
                     </p>
                   </div>
                 )}
@@ -197,7 +243,9 @@ export default function ClientOrderDetail() {
 
             {/* Workflow Progress */}
             <div className="bg-white rounded-lg border border-slate-200 p-6">
-              <h2 className="text-lg font-semibold text-slate-900 mb-6">Progress</h2>
+              <h2 className="text-lg font-semibold text-slate-900 mb-6">
+                Progress
+              </h2>
               <div className="space-y-4">
                 {workflowStages.map((stage, index) => {
                   const isCompleted = index < currentStageIndex;
@@ -211,11 +259,15 @@ export default function ClientOrderDetail() {
                             isCompleted
                               ? "bg-green-100 text-green-700"
                               : isCurrent
-                              ? "bg-blue-100 text-blue-700 ring-2 ring-blue-300"
-                              : "bg-slate-100 text-slate-400"
+                                ? "bg-blue-100 text-blue-700 ring-2 ring-blue-300"
+                                : "bg-slate-100 text-slate-400"
                           }`}
                         >
-                          {isCompleted ? <CheckCircle2 className="w-5 h-5" /> : index + 1}
+                          {isCompleted ? (
+                            <CheckCircle2 className="w-5 h-5" />
+                          ) : (
+                            index + 1
+                          )}
                         </div>
                         {index < workflowStages.length - 1 && (
                           <div
@@ -231,14 +283,16 @@ export default function ClientOrderDetail() {
                             isCompleted
                               ? "text-green-700"
                               : isCurrent
-                              ? "text-blue-700"
-                              : "text-slate-500"
+                                ? "text-blue-700"
+                                : "text-slate-500"
                           }`}
                         >
                           {stage.label}
                         </p>
                         {isCurrent && (
-                          <p className="text-xs text-blue-600 mt-1">Current stage</p>
+                          <p className="text-xs text-blue-600 mt-1">
+                            Current stage
+                          </p>
                         )}
                       </div>
                     </div>
@@ -250,7 +304,9 @@ export default function ClientOrderDetail() {
             {/* Documents */}
             {order.operationFiles && order.operationFiles.length > 0 && (
               <div className="bg-white rounded-lg border border-slate-200 p-6">
-                <h2 className="text-lg font-semibold text-slate-900 mb-4">Documents</h2>
+                <h2 className="text-lg font-semibold text-slate-900 mb-4">
+                  Documents
+                </h2>
                 <div className="space-y-3">
                   {order.operationFiles
                     .filter((f) => f.visibleToClient !== false)
@@ -260,12 +316,17 @@ export default function ClientOrderDetail() {
                         className="flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-200 hover:bg-slate-100 transition"
                       >
                         <div>
-                          <p className="font-medium text-slate-900">{file.fileName}</p>
+                          <p className="font-medium text-slate-900">
+                            {file.fileName}
+                          </p>
                           <p className="text-xs text-slate-600 mt-1">
-                            Uploaded: {new Date(file.uploadedAt).toLocaleDateString()}
+                            Uploaded:{" "}
+                            {new Date(file.uploadedAt).toLocaleDateString()}
                           </p>
                           {file.description && (
-                            <p className="text-xs text-slate-600 mt-1">{file.description}</p>
+                            <p className="text-xs text-slate-600 mt-1">
+                              {file.description}
+                            </p>
                           )}
                         </div>
                         <Button
@@ -289,25 +350,37 @@ export default function ClientOrderDetail() {
             {/* Company Information */}
             {order.companyInfo && (
               <div className="bg-white rounded-lg border border-slate-200 p-6">
-                <h2 className="text-lg font-semibold text-slate-900 mb-4">Company Information</h2>
+                <h2 className="text-lg font-semibold text-slate-900 mb-4">
+                  Company Information
+                </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <p className="text-sm text-slate-600">Company Name</p>
-                    <p className="font-semibold text-slate-900">{order.companyInfo.companyName}</p>
+                    <p className="font-semibold text-slate-900">
+                      {order.companyInfo.companyName}
+                    </p>
                   </div>
                   <div>
                     <p className="text-sm text-slate-600">Price Per Share</p>
-                    <p className="font-semibold text-slate-900">{order.currency} {order.companyInfo.pricePerShare}</p>
+                    <p className="font-semibold text-slate-900">
+                      {order.currency} {order.companyInfo.pricePerShare}
+                    </p>
                   </div>
                   <div>
                     <p className="text-sm text-slate-600">Total Capital</p>
-                    <p className="font-semibold text-slate-900">{order.currency} {order.companyInfo.totalCapital}</p>
+                    <p className="font-semibold text-slate-900">
+                      {order.currency} {order.companyInfo.totalCapital}
+                    </p>
                   </div>
                 </div>
                 {order.companyInfo.companyActivities && (
                   <div className="mt-4 pt-4 border-t border-slate-200">
-                    <p className="text-sm text-slate-600">Business Activities</p>
-                    <p className="text-slate-900 mt-2">{order.companyInfo.companyActivities}</p>
+                    <p className="text-sm text-slate-600">
+                      Business Activities
+                    </p>
+                    <p className="text-slate-900 mt-2">
+                      {order.companyInfo.companyActivities}
+                    </p>
                   </div>
                 )}
               </div>
@@ -316,10 +389,15 @@ export default function ClientOrderDetail() {
             {/* Shareholders */}
             {order.shareholders && order.shareholders.length > 0 && (
               <div className="bg-white rounded-lg border border-slate-200 p-6">
-                <h2 className="text-lg font-semibold text-slate-900 mb-4">Shareholders & Ownership</h2>
+                <h2 className="text-lg font-semibold text-slate-900 mb-4">
+                  Shareholders & Ownership
+                </h2>
                 <div className="space-y-4">
                   {order.shareholders.map((shareholder, index) => (
-                    <div key={index} className="border border-slate-200 rounded-lg p-4">
+                    <div
+                      key={index}
+                      className="border border-slate-200 rounded-lg p-4"
+                    >
                       <div className="flex items-start justify-between mb-3">
                         <div>
                           <p className="font-semibold text-slate-900">
@@ -334,23 +412,34 @@ export default function ClientOrderDetail() {
                         <div>
                           <p className="text-slate-600">Date of Birth</p>
                           <p className="font-medium text-slate-900">
-                            {new Date(shareholder.dateOfBirth).toLocaleDateString()}
+                            {new Date(
+                              shareholder.dateOfBirth,
+                            ).toLocaleDateString()}
                           </p>
                         </div>
                         <div>
                           <p className="text-slate-600">Nationality</p>
-                          <p className="font-medium text-slate-900">{shareholder.nationality}</p>
+                          <p className="font-medium text-slate-900">
+                            {shareholder.nationality}
+                          </p>
                         </div>
                       </div>
                       {shareholder.passportFile && (
                         <div className="mt-3 pt-3 border-t border-slate-200">
-                          <p className="text-sm text-slate-600 mb-2 font-medium">Passport Document</p>
+                          <p className="text-sm text-slate-600 mb-2 font-medium">
+                            Passport Document
+                          </p>
                           <div className="flex items-start gap-3">
                             <div className="flex-1">
-                              <p className="text-sm font-medium text-slate-900">{shareholder.passportFile.fileName}</p>
+                              <p className="text-sm font-medium text-slate-900">
+                                {shareholder.passportFile.fileName}
+                              </p>
                               {shareholder.passportFile.fileSize && (
                                 <p className="text-xs text-slate-500 mt-1">
-                                  {(shareholder.passportFile.fileSize / 1024).toFixed(1)} KB
+                                  {(
+                                    shareholder.passportFile.fileSize / 1024
+                                  ).toFixed(1)}{" "}
+                                  KB
                                 </p>
                               )}
                             </div>
@@ -360,8 +449,11 @@ export default function ClientOrderDetail() {
                                 size="sm"
                                 onClick={() => {
                                   const link = document.createElement("a");
-                                  link.href = shareholder.passportFile?.fileUrl || "#";
-                                  link.download = shareholder.passportFile?.fileName || "passport";
+                                  link.href =
+                                    shareholder.passportFile?.fileUrl || "#";
+                                  link.download =
+                                    shareholder.passportFile?.fileName ||
+                                    "passport";
                                   link.click();
                                 }}
                                 className="flex items-center gap-1 whitespace-nowrap"
@@ -377,7 +469,12 @@ export default function ClientOrderDetail() {
                   ))}
                   <div className="bg-purple-50 border border-purple-200 rounded-lg p-3">
                     <p className="text-sm font-medium text-purple-700">
-                      Total Ownership: {order.shareholders.reduce((sum, sh) => sum + sh.ownershipPercentage, 0)}%
+                      Total Ownership:{" "}
+                      {order.shareholders.reduce(
+                        (sum, sh) => sum + sh.ownershipPercentage,
+                        0,
+                      )}
+                      %
                     </p>
                   </div>
                 </div>
@@ -387,12 +484,21 @@ export default function ClientOrderDetail() {
             {/* Tracking Number */}
             {order.trackingNumber && (
               <div className="bg-white rounded-lg border border-slate-200 p-6">
-                <h2 className="text-lg font-semibold text-slate-900 mb-4">Shipping Tracking</h2>
+                <h2 className="text-lg font-semibold text-slate-900 mb-4">
+                  Shipping Tracking
+                </h2>
                 <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
                   <p className="text-sm text-slate-600 mb-1">Tracking Number</p>
-                  <p className="font-mono font-semibold text-slate-900 text-lg">{order.trackingNumber}</p>
+                  <p className="font-mono font-semibold text-slate-900 text-lg">
+                    {order.trackingNumber}
+                  </p>
                   <p className="text-xs text-slate-600 mt-2">
-                    Added: {order.trackingNumberAddedAt ? new Date(order.trackingNumberAddedAt).toLocaleDateString() : "N/A"}
+                    Added:{" "}
+                    {order.trackingNumberAddedAt
+                      ? new Date(
+                          order.trackingNumberAddedAt,
+                        ).toLocaleDateString()
+                      : "N/A"}
                   </p>
                 </div>
               </div>
@@ -405,7 +511,9 @@ export default function ClientOrderDetail() {
             {product && (
               <div className="bg-white rounded-lg border border-slate-200 p-6">
                 <h3 className="font-semibold text-slate-900 mb-3">Product</h3>
-                <p className="font-medium text-slate-900 mb-2">{product.name}</p>
+                <p className="font-medium text-slate-900 mb-2">
+                  {product.name}
+                </p>
                 <div className="space-y-2 text-sm">
                   {product.services.hasApostille && (
                     <div className="flex items-center gap-2 text-slate-600">
@@ -438,12 +546,20 @@ export default function ClientOrderDetail() {
             {/* Contact Info */}
             {salesStaff && (
               <div className="bg-white rounded-lg border border-slate-200 p-6">
-                <h3 className="font-semibold text-slate-900 mb-3">Your Account Manager</h3>
+                <h3 className="font-semibold text-slate-900 mb-3">
+                  Your Account Manager
+                </h3>
                 <p className="font-medium text-slate-900 mb-1">
                   {salesStaff.firstName} {salesStaff.lastName}
                 </p>
-                <p className="text-sm text-slate-600 mb-3">{salesStaff.email}</p>
-                <Button variant="outline" className="w-full" onClick={() => navigate("/client/messages")}>
+                <p className="text-sm text-slate-600 mb-3">
+                  {salesStaff.email}
+                </p>
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => navigate("/client/messages")}
+                >
                   Send Message
                 </Button>
               </div>
@@ -452,7 +568,9 @@ export default function ClientOrderDetail() {
             {/* Activity Timeline */}
             {order.history && order.history.length > 0 && (
               <div className="bg-white rounded-lg border border-slate-200 p-6">
-                <h3 className="font-semibold text-slate-900 mb-4">Activity Timeline</h3>
+                <h3 className="font-semibold text-slate-900 mb-4">
+                  Activity Timeline
+                </h3>
                 <div className="space-y-4">
                   {order.history
                     .slice()
@@ -469,7 +587,9 @@ export default function ClientOrderDetail() {
                         </div>
                         <div className="flex-1 pt-1">
                           <p className="font-medium text-slate-900">
-                            {entry.newStatus?.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())}
+                            {entry.newStatus
+                              ?.replace(/_/g, " ")
+                              .replace(/\b\w/g, (l) => l.toUpperCase())}
                           </p>
                           <p className="text-xs text-slate-600 mt-1">
                             {new Date(entry.createdAt).toLocaleDateString()} at{" "}
@@ -479,7 +599,10 @@ export default function ClientOrderDetail() {
                             })}
                           </p>
                           <p className="text-xs text-slate-600 mt-1">
-                            by <span className="font-medium">{entry.actionByName}</span>
+                            by{" "}
+                            <span className="font-medium">
+                              {entry.actionByName}
+                            </span>
                           </p>
                           {entry.description && (
                             <p className="text-xs text-slate-700 mt-2 bg-slate-50 p-2 rounded">
@@ -488,7 +611,8 @@ export default function ClientOrderDetail() {
                           )}
                           {entry.reason && (
                             <p className="text-xs text-red-600 mt-2 bg-red-50 p-2 rounded">
-                              <span className="font-medium">Reason:</span> {entry.reason}
+                              <span className="font-medium">Reason:</span>{" "}
+                              {entry.reason}
                             </p>
                           )}
                         </div>

@@ -54,21 +54,29 @@ export default function ClientOrders() {
     // Filter by status
     if (filterStatus !== "all") {
       orders = orders.filter((o) =>
-        filterStatus === "completed" ? o.status.includes("completed") : filterStatus === "rejected" ? o.status.includes("rejected") : !o.status.includes("completed") && !o.status.includes("rejected")
+        filterStatus === "completed"
+          ? o.status.includes("completed")
+          : filterStatus === "rejected"
+            ? o.status.includes("rejected")
+            : !o.status.includes("completed") && !o.status.includes("rejected"),
       );
     }
 
     // Search
     if (searchTerm) {
-      orders = orders.filter((o) =>
-        o.orderNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        o.description.toLowerCase().includes(searchTerm.toLowerCase())
+      orders = orders.filter(
+        (o) =>
+          o.orderNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          o.description.toLowerCase().includes(searchTerm.toLowerCase()),
       );
     }
 
     // Sort
     if (sortBy === "date") {
-      orders.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      orders.sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      );
     } else {
       orders.sort((a, b) => (b.amount || 0) - (a.amount || 0));
     }
@@ -104,14 +112,26 @@ export default function ClientOrders() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-slate-900">My Orders</h1>
-            <p className="text-slate-600 mt-2">Track the status of all your orders</p>
+            <p className="text-slate-600 mt-2">
+              Track the status of all your orders
+            </p>
           </div>
           <Button
             onClick={() => navigate("/client/orders/new")}
             className="bg-primary-600 hover:bg-primary-700"
           >
-            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            <svg
+              className="w-4 h-4 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 4v16m8-8H4"
+              />
             </svg>
             Add Order
           </Button>
@@ -168,7 +188,8 @@ export default function ClientOrders() {
           )}
 
           <p className="text-sm text-slate-600">
-            Showing {clientOrders.length} order{clientOrders.length !== 1 ? "s" : ""}
+            Showing {clientOrders.length} order
+            {clientOrders.length !== 1 ? "s" : ""}
           </p>
         </div>
 
@@ -193,15 +214,21 @@ export default function ClientOrders() {
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <h3 className="text-lg font-semibold text-slate-900">{order.orderNumber}</h3>
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
+                      <h3 className="text-lg font-semibold text-slate-900">
+                        {order.orderNumber}
+                      </h3>
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}
+                      >
                         {getStatusLabel(order.status)}
                       </span>
                     </div>
                     <p className="text-slate-600 mb-3">{order.description}</p>
                     <div className="flex flex-wrap gap-6 text-sm text-slate-600">
                       <div>
-                        <p className="font-medium text-slate-900">${order.amount || 0}</p>
+                        <p className="font-medium text-slate-900">
+                          ${order.amount || 0}
+                        </p>
                         <p className="text-xs text-slate-500">Amount</p>
                       </div>
                       <div>
@@ -211,19 +238,26 @@ export default function ClientOrders() {
                         <p className="text-xs text-slate-500">Created</p>
                       </div>
                       <div>
-                        <p className="font-medium text-slate-900">{order.serviceType}</p>
+                        <p className="font-medium text-slate-900">
+                          {order.serviceType}
+                        </p>
                         <p className="text-xs text-slate-500">Service</p>
                       </div>
-                      {order.operationFiles && order.operationFiles.length > 0 && (
-                        <div>
-                          <p className="font-medium text-slate-900">{order.operationFiles.length}</p>
-                          <p className="text-xs text-slate-500">Documents</p>
-                        </div>
-                      )}
+                      {order.operationFiles &&
+                        order.operationFiles.length > 0 && (
+                          <div>
+                            <p className="font-medium text-slate-900">
+                              {order.operationFiles.length}
+                            </p>
+                            <p className="text-xs text-slate-500">Documents</p>
+                          </div>
+                        )}
                       {order.history && order.history.length > 0 && (
                         <div>
                           <p className="font-medium text-slate-900">
-                            {new Date(order.history[order.history.length - 1].createdAt).toLocaleDateString()}
+                            {new Date(
+                              order.history[order.history.length - 1].createdAt,
+                            ).toLocaleDateString()}
                           </p>
                           <p className="text-xs text-slate-500">Last Update</p>
                         </div>

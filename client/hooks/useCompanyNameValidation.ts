@@ -43,7 +43,7 @@ export function useCompanyNameValidation() {
 
     try {
       const response = await fetch(
-        `/api/companies-house/search?companyName=${encodeURIComponent(companyName)}`
+        `/api/companies-house/search?companyName=${encodeURIComponent(companyName)}`,
       );
 
       if (!response.ok) {
@@ -69,20 +69,23 @@ export function useCompanyNameValidation() {
     }
   }, []);
 
-  const validateWithDebounce = useCallback((companyName: string) => {
-    if (debounceTimer.current) {
-      clearTimeout(debounceTimer.current);
-    }
+  const validateWithDebounce = useCallback(
+    (companyName: string) => {
+      if (debounceTimer.current) {
+        clearTimeout(debounceTimer.current);
+      }
 
-    setValidationResult((prev) => ({
-      ...prev,
-      isChecking: true,
-    }));
+      setValidationResult((prev) => ({
+        ...prev,
+        isChecking: true,
+      }));
 
-    debounceTimer.current = setTimeout(() => {
-      checkCompanyName(companyName);
-    }, 800);
-  }, [checkCompanyName]);
+      debounceTimer.current = setTimeout(() => {
+        checkCompanyName(companyName);
+      }, 800);
+    },
+    [checkCompanyName],
+  );
 
   useEffect(() => {
     return () => {

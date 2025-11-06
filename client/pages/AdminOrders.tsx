@@ -140,12 +140,19 @@ const statusConfig: Record<
   },
 };
 
-type PaymentStatus = "all" | "paid" | "pending" | "partial" | "overdue" | "failed";
+type PaymentStatus =
+  | "all"
+  | "paid"
+  | "pending"
+  | "partial"
+  | "overdue"
+  | "failed";
 
 export default function AdminOrders() {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
-  const [paymentStatusFilter, setPaymentStatusFilter] = useState<PaymentStatus>("all");
+  const [paymentStatusFilter, setPaymentStatusFilter] =
+    useState<PaymentStatus>("all");
   const [sortBy, setSortBy] = useState<string>("recent");
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
@@ -161,7 +168,7 @@ export default function AdminOrders() {
     setExpandedRows(newExpanded);
   };
 
-  const getPaymentStatus = (order: typeof mockOrders[0]): PaymentStatus => {
+  const getPaymentStatus = (order: (typeof mockOrders)[0]): PaymentStatus => {
     if (!order.paymentHistory || order.paymentHistory.length === 0) {
       return "pending";
     }
@@ -198,7 +205,9 @@ export default function AdminOrders() {
     return match ? parseInt(match[1], 10) : 5;
   };
 
-  const calculateExpectedCompletion = (order: Order): { date: Date; daysRemaining: number } => {
+  const calculateExpectedCompletion = (
+    order: Order,
+  ): { date: Date; daysRemaining: number } => {
     if (order.productId) {
       const product = mockProducts.find((p) => p.id === order.productId);
       if (product) {
@@ -212,7 +221,7 @@ export default function AdminOrders() {
         expectedDate.setHours(0, 0, 0, 0);
 
         const daysRemaining = Math.ceil(
-          (expectedDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+          (expectedDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24),
         );
 
         return { date: expectedDate, daysRemaining };
@@ -228,7 +237,7 @@ export default function AdminOrders() {
     expectedDate.setHours(0, 0, 0, 0);
 
     const daysRemaining = Math.ceil(
-      (expectedDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+      (expectedDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24),
     );
 
     return { date: expectedDate, daysRemaining };
@@ -247,12 +256,12 @@ export default function AdminOrders() {
           if (orderData) {
             const order = JSON.parse(orderData);
             // Check if this order is already in mockOrders
-            const exists = orders.some(o => o.id === order.id);
+            const exists = orders.some((o) => o.id === order.id);
             if (!exists) {
               orders.push(order);
             } else {
               // Update with latest from localStorage
-              const index = orders.findIndex(o => o.id === order.id);
+              const index = orders.findIndex((o) => o.id === order.id);
               orders[index] = order;
             }
           }
@@ -274,7 +283,7 @@ export default function AdminOrders() {
         order.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
         getUserName(order.userId)
           .toLowerCase()
-          .includes(searchQuery.toLowerCase())
+          .includes(searchQuery.toLowerCase()),
     );
   }
 
@@ -286,14 +295,16 @@ export default function AdminOrders() {
         return daysRemaining < 0;
       });
     } else {
-      filteredOrders = filteredOrders.filter((order) => order.status === statusFilter);
+      filteredOrders = filteredOrders.filter(
+        (order) => order.status === statusFilter,
+      );
     }
   }
 
   if (startDate) {
     const start = new Date(startDate);
     filteredOrders = filteredOrders.filter(
-      (order) => new Date(order.createdAt) >= start
+      (order) => new Date(order.createdAt) >= start,
     );
   }
 
@@ -301,23 +312,25 @@ export default function AdminOrders() {
     const end = new Date(endDate);
     end.setHours(23, 59, 59, 999);
     filteredOrders = filteredOrders.filter(
-      (order) => new Date(order.createdAt) <= end
+      (order) => new Date(order.createdAt) <= end,
     );
   }
 
   if (paymentStatusFilter !== "all") {
     filteredOrders = filteredOrders.filter(
-      (order) => getPaymentStatus(order) === paymentStatusFilter
+      (order) => getPaymentStatus(order) === paymentStatusFilter,
     );
   }
 
   if (sortBy === "recent") {
     filteredOrders.sort(
-      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
     );
   } else if (sortBy === "oldest") {
     filteredOrders.sort(
-      (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      (a, b) =>
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
     );
   } else if (sortBy === "amount_high") {
     filteredOrders.sort((a, b) => b.amount - a.amount);
@@ -327,11 +340,11 @@ export default function AdminOrders() {
 
   // Calculate summary statistics
   const totalOrders = allOrders.length;
-  const completedOrders = allOrders.filter((o) => o.status === "completed").length;
+  const completedOrders = allOrders.filter(
+    (o) => o.status === "completed",
+  ).length;
   const pendingOrders = allOrders.filter(
-    (o) =>
-      o.status !== "completed" &&
-      !o.status.startsWith("rejected")
+    (o) => o.status !== "completed" && !o.status.startsWith("rejected"),
   ).length;
   const overdueOrders = allOrders.filter((order) => {
     if (order.status === "completed") return false;
@@ -348,7 +361,9 @@ export default function AdminOrders() {
         <div className="p-8">
           {/* Header */}
           <div className="mb-8 flex items-center justify-between">
-            <h1 className="text-4xl font-bold text-slate-900 mb-2">Orders Management</h1>
+            <h1 className="text-4xl font-bold text-slate-900 mb-2">
+              Orders Management
+            </h1>
             <Link to="/admin/orders/new">
               <Button className="bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white flex items-center gap-2">
                 <Plus className="w-5 h-5" />
@@ -360,29 +375,48 @@ export default function AdminOrders() {
           {/* Summary Stats */}
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
             <div className="bg-white rounded-lg border border-slate-200 p-4">
-              <p className="text-slate-500 text-xs font-medium mb-2 truncate">Total Orders</p>
+              <p className="text-slate-500 text-xs font-medium mb-2 truncate">
+                Total Orders
+              </p>
               <p className="text-2xl font-bold text-slate-900">{totalOrders}</p>
             </div>
             <div className="bg-white rounded-lg border border-slate-200 p-4">
-              <p className="text-slate-500 text-xs font-medium mb-2 truncate">Paid/Completed</p>
-              <p className="text-2xl font-bold text-green-600">{completedOrders}</p>
+              <p className="text-slate-500 text-xs font-medium mb-2 truncate">
+                Paid/Completed
+              </p>
+              <p className="text-2xl font-bold text-green-600">
+                {completedOrders}
+              </p>
             </div>
             <div className="bg-white rounded-lg border border-slate-200 p-4">
-              <p className="text-slate-500 text-xs font-medium mb-2 truncate">Pending</p>
-              <p className="text-2xl font-bold text-yellow-600">{pendingOrders}</p>
+              <p className="text-slate-500 text-xs font-medium mb-2 truncate">
+                Pending
+              </p>
+              <p className="text-2xl font-bold text-yellow-600">
+                {pendingOrders}
+              </p>
             </div>
             <div className="bg-white rounded-lg border border-slate-200 p-4">
-              <p className="text-slate-500 text-xs font-medium mb-2 truncate">Overdue</p>
+              <p className="text-slate-500 text-xs font-medium mb-2 truncate">
+                Overdue
+              </p>
               <p className="text-2xl font-bold text-red-600">{overdueOrders}</p>
             </div>
             <div className="bg-white rounded-lg border border-slate-200 p-4">
-              <p className="text-slate-500 text-xs font-medium mb-2 truncate">Refunded</p>
+              <p className="text-slate-500 text-xs font-medium mb-2 truncate">
+                Refunded
+              </p>
               <p className="text-2xl font-bold text-slate-900">0</p>
             </div>
             <div className="bg-white rounded-lg border border-slate-200 p-4">
-              <p className="text-slate-500 text-xs font-medium mb-2 truncate">Total Revenue</p>
+              <p className="text-slate-500 text-xs font-medium mb-2 truncate">
+                Total Revenue
+              </p>
               <p className="text-sm font-bold text-slate-900 truncate">
-                ${totalRevenue.toLocaleString('en-US', { maximumFractionDigits: 0 })}
+                $
+                {totalRevenue.toLocaleString("en-US", {
+                  maximumFractionDigits: 0,
+                })}
               </p>
             </div>
           </div>
@@ -410,10 +444,18 @@ export default function AdminOrders() {
                   <SelectItem value="all">All Statuses</SelectItem>
                   <SelectItem value="overdue">Overdue</SelectItem>
                   <SelectItem value="new">New</SelectItem>
-                  <SelectItem value="pending_sales_review">Pending Sales Review</SelectItem>
-                  <SelectItem value="rejected_by_sales">Rejected by Sales</SelectItem>
-                  <SelectItem value="pending_operation">Pending Operation</SelectItem>
-                  <SelectItem value="rejected_by_operation">Rejected by Operation</SelectItem>
+                  <SelectItem value="pending_sales_review">
+                    Pending Sales Review
+                  </SelectItem>
+                  <SelectItem value="rejected_by_sales">
+                    Rejected by Sales
+                  </SelectItem>
+                  <SelectItem value="pending_operation">
+                    Pending Operation
+                  </SelectItem>
+                  <SelectItem value="rejected_by_operation">
+                    Rejected by Operation
+                  </SelectItem>
                   <SelectItem value="pending_operation_manager_review">
                     Pending Manager Review
                   </SelectItem>
@@ -423,14 +465,23 @@ export default function AdminOrders() {
                   <SelectItem value="awaiting_client_acceptance">
                     Awaiting Client Acceptance
                   </SelectItem>
-                  <SelectItem value="rejected_by_client">Rejected by Client</SelectItem>
-                  <SelectItem value="shipping_preparation">Shipping Preparation</SelectItem>
+                  <SelectItem value="rejected_by_client">
+                    Rejected by Client
+                  </SelectItem>
+                  <SelectItem value="shipping_preparation">
+                    Shipping Preparation
+                  </SelectItem>
                   <SelectItem value="completed">Completed</SelectItem>
                 </SelectContent>
               </Select>
 
               {/* Payment Status Filter */}
-              <Select value={paymentStatusFilter} onValueChange={(value) => setPaymentStatusFilter(value as PaymentStatus)}>
+              <Select
+                value={paymentStatusFilter}
+                onValueChange={(value) =>
+                  setPaymentStatusFilter(value as PaymentStatus)
+                }
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Payment Status" />
                 </SelectTrigger>
@@ -482,8 +533,12 @@ export default function AdminOrders() {
                 <SelectContent>
                   <SelectItem value="recent">Most Recent</SelectItem>
                   <SelectItem value="oldest">Oldest First</SelectItem>
-                  <SelectItem value="amount_high">Amount: High to Low</SelectItem>
-                  <SelectItem value="amount_low">Amount: Low to High</SelectItem>
+                  <SelectItem value="amount_high">
+                    Amount: High to Low
+                  </SelectItem>
+                  <SelectItem value="amount_low">
+                    Amount: Low to High
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -579,7 +634,9 @@ export default function AdminOrders() {
                         <td className="px-6 py-4 text-sm text-slate-600">
                           <div>
                             <p className="font-medium text-slate-900">
-                              {client ? `${client.firstName} ${client.lastName}` : "Unknown"}
+                              {client
+                                ? `${client.firstName} ${client.lastName}`
+                                : "Unknown"}
                             </p>
                             <p className="text-xs text-slate-500">
                               {client ? client.email : ""}
@@ -601,11 +658,14 @@ export default function AdminOrders() {
                           </div>
                         </td>
                         <td className="px-6 py-4 text-sm text-slate-600">
-                          {new Date(order.createdAt).toLocaleDateString("en-US", {
-                            month: "2-digit",
-                            day: "2-digit",
-                            year: "numeric",
-                          })}
+                          {new Date(order.createdAt).toLocaleDateString(
+                            "en-US",
+                            {
+                              month: "2-digit",
+                              day: "2-digit",
+                              year: "numeric",
+                            },
+                          )}
                         </td>
                         <td className="px-6 py-4 text-center">
                           <Link to={`/admin/orders/${order.id}`}>
@@ -616,7 +676,10 @@ export default function AdminOrders() {
                         </td>
                       </tr>,
                       isExpanded && (
-                        <tr key={`${order.id}-expand`} className="bg-slate-50 border-b border-slate-200">
+                        <tr
+                          key={`${order.id}-expand`}
+                          className="bg-slate-50 border-b border-slate-200"
+                        >
                           <td colSpan={7} className="px-6 py-6">
                             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-3xl">
                               <div className="bg-white rounded-lg p-4 border border-slate-200">
@@ -639,7 +702,7 @@ export default function AdminOrders() {
                                 {order.productId ? (
                                   (() => {
                                     const product = mockProducts.find(
-                                      (p) => p.id === order.productId
+                                      (p) => p.id === order.productId,
                                     );
                                     return (
                                       <p className="text-lg font-bold text-slate-900">
@@ -648,7 +711,9 @@ export default function AdminOrders() {
                                     );
                                   })()
                                 ) : (
-                                  <p className="text-lg font-bold text-slate-900">5 days</p>
+                                  <p className="text-lg font-bold text-slate-900">
+                                    5 days
+                                  </p>
                                 )}
                               </div>
 
@@ -674,7 +739,10 @@ export default function AdminOrders() {
                                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-700">
                                     <AlertCircle className="w-4 h-4" />
                                     {Math.abs(daysRemaining)} day
-                                    {Math.abs(daysRemaining) !== 1 ? "s" : ""} overdue
+                                    {Math.abs(daysRemaining) !== 1
+                                      ? "s"
+                                      : ""}{" "}
+                                    overdue
                                   </div>
                                 )}
                               </div>
@@ -697,7 +765,10 @@ export default function AdminOrders() {
                   })
                 ) : (
                   <tr>
-                    <td colSpan={7} className="px-6 py-8 text-center text-slate-500">
+                    <td
+                      colSpan={7}
+                      className="px-6 py-8 text-center text-slate-500"
+                    >
                       No orders found
                     </td>
                   </tr>

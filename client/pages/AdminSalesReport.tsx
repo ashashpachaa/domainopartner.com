@@ -1,12 +1,25 @@
 import { useState, useMemo } from "react";
-import { Download, TrendingUp, DollarSign, Package, Clock, CheckCircle2, AlertCircle, Calendar } from "lucide-react";
+import {
+  Download,
+  TrendingUp,
+  DollarSign,
+  Package,
+  Clock,
+  CheckCircle2,
+  AlertCircle,
+  Calendar,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import AdminLayout from "@/components/AdminLayout";
 import { mockOrders, mockInvoices, mockStaff, mockUsers } from "@/lib/mockData";
 
 export default function AdminSalesReport() {
-  const [dateRange, setDateRange] = useState<"month" | "quarter" | "year" | "custom">("month");
-  const [selectedMonth, setSelectedMonth] = useState<string>(new Date().toISOString().substring(0, 7));
+  const [dateRange, setDateRange] = useState<
+    "month" | "quarter" | "year" | "custom"
+  >("month");
+  const [selectedMonth, setSelectedMonth] = useState<string>(
+    new Date().toISOString().substring(0, 7),
+  );
   const [customStartDate, setCustomStartDate] = useState<string>("");
   const [customEndDate, setCustomEndDate] = useState<string>("");
   const [staffSearch, setStaffSearch] = useState<string>("");
@@ -15,7 +28,7 @@ export default function AdminSalesReport() {
   // Calculate monthly sales
   const monthlySales = useMemo(() => {
     const salesByMonth: Record<string, number> = {};
-    
+
     mockOrders.forEach((order) => {
       const month = order.createdAt.substring(0, 7);
       if (!salesByMonth[month]) salesByMonth[month] = 0;
@@ -27,7 +40,10 @@ export default function AdminSalesReport() {
       .map(([month, total]) => ({
         month,
         total,
-        monthName: new Date(month + "-01").toLocaleString("default", { month: "long", year: "numeric" }),
+        monthName: new Date(month + "-01").toLocaleString("default", {
+          month: "long",
+          year: "numeric",
+        }),
       }));
   }, []);
 
@@ -122,7 +138,10 @@ export default function AdminSalesReport() {
     // Calculate averages
     Object.keys(metrics).forEach((staffId) => {
       const data = metrics[staffId];
-      data.avgOrderValue = data.ordersCreated > 0 ? Math.round(data.totalOrderValue / data.ordersCreated) : 0;
+      data.avgOrderValue =
+        data.ordersCreated > 0
+          ? Math.round(data.totalOrderValue / data.ordersCreated)
+          : 0;
     });
 
     // Filter by staff search and department
@@ -131,7 +150,7 @@ export default function AdminSalesReport() {
       filtered = filtered.filter(
         (s) =>
           s.staffName.toLowerCase().includes(staffSearch.toLowerCase()) ||
-          s.department.toLowerCase().includes(staffSearch.toLowerCase())
+          s.department.toLowerCase().includes(staffSearch.toLowerCase()),
       );
     }
     if (departmentFilter) {
@@ -139,17 +158,33 @@ export default function AdminSalesReport() {
     }
 
     return filtered.sort((a, b) => b.totalOrderValue - a.totalOrderValue);
-  }, [dateRange, customStartDate, customEndDate, staffSearch, departmentFilter]);
+  }, [
+    dateRange,
+    customStartDate,
+    customEndDate,
+    staffSearch,
+    departmentFilter,
+  ]);
 
   const globalMetrics = {
     totalSales: mockOrders.reduce((sum, o) => sum + (o.amount || 0), 0),
     totalOrders: mockOrders.length,
-    avgOrderValue: mockOrders.length > 0 ? Math.round(mockOrders.reduce((sum, o) => sum + (o.amount || 0), 0) / mockOrders.length) : 0,
+    avgOrderValue:
+      mockOrders.length > 0
+        ? Math.round(
+            mockOrders.reduce((sum, o) => sum + (o.amount || 0), 0) /
+              mockOrders.length,
+          )
+        : 0,
     totalInvoices: mockInvoices.length,
     invoicesPaid: mockInvoices.filter((i) => i.status === "paid").length,
     invoicesPending: mockInvoices.filter((i) => i.status === "pending").length,
-    paidAmount: mockInvoices.filter((i) => i.status === "paid").reduce((sum, i) => sum + (i.amount || 0), 0),
-    pendingAmount: mockInvoices.filter((i) => i.status === "pending").reduce((sum, i) => sum + (i.amount || 0), 0),
+    paidAmount: mockInvoices
+      .filter((i) => i.status === "paid")
+      .reduce((sum, i) => sum + (i.amount || 0), 0),
+    pendingAmount: mockInvoices
+      .filter((i) => i.status === "pending")
+      .reduce((sum, i) => sum + (i.amount || 0), 0),
   };
 
   return (
@@ -162,7 +197,8 @@ export default function AdminSalesReport() {
             Sales Report
           </h1>
           <p className="text-slate-600">
-            Comprehensive sales metrics, order tracking, and invoice management across all staff
+            Comprehensive sales metrics, order tracking, and invoice management
+            across all staff
           </p>
         </div>
 
@@ -171,7 +207,9 @@ export default function AdminSalesReport() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
             {/* Date Range Selection */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">Date Range</label>
+              <label className="block text-sm font-medium text-slate-700 mb-2">
+                Date Range
+              </label>
               <select
                 value={dateRange}
                 onChange={(e) => setDateRange(e.target.value as any)}
@@ -187,7 +225,9 @@ export default function AdminSalesReport() {
             {/* Custom Date Range - Start */}
             {dateRange === "custom" && (
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">From Date</label>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  From Date
+                </label>
                 <input
                   type="date"
                   value={customStartDate}
@@ -200,7 +240,9 @@ export default function AdminSalesReport() {
             {/* Custom Date Range - End */}
             {dateRange === "custom" && (
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">To Date</label>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  To Date
+                </label>
                 <input
                   type="date"
                   value={customEndDate}
@@ -212,7 +254,9 @@ export default function AdminSalesReport() {
 
             {/* Staff Search */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">Staff/Department</label>
+              <label className="block text-sm font-medium text-slate-700 mb-2">
+                Staff/Department
+              </label>
               <input
                 type="text"
                 value={staffSearch}
@@ -224,18 +268,22 @@ export default function AdminSalesReport() {
 
             {/* Department Filter */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">Department</label>
+              <label className="block text-sm font-medium text-slate-700 mb-2">
+                Department
+              </label>
               <select
                 value={departmentFilter}
                 onChange={(e) => setDepartmentFilter(e.target.value)}
                 className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:border-blue-500 focus:ring-blue-500 bg-white"
               >
                 <option value="">All Departments</option>
-                {Array.from(new Set(mockStaff.map((s) => s.department))).map((dept) => (
-                  <option key={dept} value={dept}>
-                    {dept}
-                  </option>
-                ))}
+                {Array.from(new Set(mockStaff.map((s) => s.department))).map(
+                  (dept) => (
+                    <option key={dept} value={dept}>
+                      {dept}
+                    </option>
+                  ),
+                )}
               </select>
             </div>
           </div>
@@ -262,11 +310,15 @@ export default function AdminSalesReport() {
           <div className="bg-white rounded-lg p-6 border border-slate-200 shadow-sm">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs font-semibold text-slate-600 uppercase mb-1">Total Sales</p>
+                <p className="text-xs font-semibold text-slate-600 uppercase mb-1">
+                  Total Sales
+                </p>
                 <p className="text-3xl font-bold text-slate-900">
                   ${(globalMetrics.totalSales / 1000).toFixed(1)}K
                 </p>
-                <p className="text-xs text-slate-500 mt-2">{globalMetrics.totalOrders} orders</p>
+                <p className="text-xs text-slate-500 mt-2">
+                  {globalMetrics.totalOrders} orders
+                </p>
               </div>
               <DollarSign className="w-10 h-10 text-green-600 opacity-20" />
             </div>
@@ -275,8 +327,12 @@ export default function AdminSalesReport() {
           <div className="bg-white rounded-lg p-6 border border-slate-200 shadow-sm">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs font-semibold text-slate-600 uppercase mb-1">Avg Order Value</p>
-                <p className="text-3xl font-bold text-slate-900">${globalMetrics.avgOrderValue}</p>
+                <p className="text-xs font-semibold text-slate-600 uppercase mb-1">
+                  Avg Order Value
+                </p>
+                <p className="text-3xl font-bold text-slate-900">
+                  ${globalMetrics.avgOrderValue}
+                </p>
               </div>
               <Package className="w-10 h-10 text-blue-600 opacity-20" />
             </div>
@@ -285,9 +341,15 @@ export default function AdminSalesReport() {
           <div className="bg-white rounded-lg p-6 border border-slate-200 shadow-sm">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs font-semibold text-slate-600 uppercase mb-1">Invoices Paid</p>
-                <p className="text-3xl font-bold text-green-600">${(globalMetrics.paidAmount / 1000).toFixed(1)}K</p>
-                <p className="text-xs text-slate-500 mt-2">{globalMetrics.invoicesPaid} invoices</p>
+                <p className="text-xs font-semibold text-slate-600 uppercase mb-1">
+                  Invoices Paid
+                </p>
+                <p className="text-3xl font-bold text-green-600">
+                  ${(globalMetrics.paidAmount / 1000).toFixed(1)}K
+                </p>
+                <p className="text-xs text-slate-500 mt-2">
+                  {globalMetrics.invoicesPaid} invoices
+                </p>
               </div>
               <CheckCircle2 className="w-10 h-10 text-green-600 opacity-20" />
             </div>
@@ -296,9 +358,15 @@ export default function AdminSalesReport() {
           <div className="bg-white rounded-lg p-6 border border-slate-200 shadow-sm">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs font-semibold text-slate-600 uppercase mb-1">Invoices Pending</p>
-                <p className="text-3xl font-bold text-amber-600">${(globalMetrics.pendingAmount / 1000).toFixed(1)}K</p>
-                <p className="text-xs text-slate-500 mt-2">{globalMetrics.invoicesPending} invoices</p>
+                <p className="text-xs font-semibold text-slate-600 uppercase mb-1">
+                  Invoices Pending
+                </p>
+                <p className="text-3xl font-bold text-amber-600">
+                  ${(globalMetrics.pendingAmount / 1000).toFixed(1)}K
+                </p>
+                <p className="text-xs text-slate-500 mt-2">
+                  {globalMetrics.invoicesPending} invoices
+                </p>
               </div>
               <AlertCircle className="w-10 h-10 text-amber-600 opacity-20" />
             </div>
@@ -318,8 +386,12 @@ export default function AdminSalesReport() {
               return (
                 <div key={item.month} className="flex flex-col gap-2">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm font-medium text-slate-900">{item.monthName}</span>
-                    <span className="text-sm font-bold text-blue-600">${(item.total / 1000).toFixed(1)}K</span>
+                    <span className="text-sm font-medium text-slate-900">
+                      {item.monthName}
+                    </span>
+                    <span className="text-sm font-bold text-blue-600">
+                      ${(item.total / 1000).toFixed(1)}K
+                    </span>
                   </div>
                   <div className="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
                     <div
@@ -340,34 +412,60 @@ export default function AdminSalesReport() {
               <Package className="w-5 h-5 text-blue-600" />
               Sales Staff Performance
             </h2>
-            <p className="text-sm text-slate-600 mt-1">Detailed metrics for each sales representative</p>
+            <p className="text-sm text-slate-600 mt-1">
+              Detailed metrics for each sales representative
+            </p>
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-slate-50 border-b border-slate-200">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">Staff Name</th>
-                  <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">Orders</th>
-                  <th className="px-6 py-4 text-right text-xs font-bold text-slate-700 uppercase">Order Total</th>
-                  <th className="px-6 py-4 text-right text-xs font-bold text-slate-700 uppercase">Avg Order</th>
-                  <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">Invoices</th>
-                  <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">Paid</th>
-                  <th className="px-6 py-4 text-right text-xs font-bold text-slate-700 uppercase">Paid Amount</th>
-                  <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">Pending</th>
-                  <th className="px-6 py-4 text-right text-xs font-bold text-slate-700 uppercase">Pending Amount</th>
-                  <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">Collection Rate</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
+                    Staff Name
+                  </th>
+                  <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">
+                    Orders
+                  </th>
+                  <th className="px-6 py-4 text-right text-xs font-bold text-slate-700 uppercase">
+                    Order Total
+                  </th>
+                  <th className="px-6 py-4 text-right text-xs font-bold text-slate-700 uppercase">
+                    Avg Order
+                  </th>
+                  <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">
+                    Invoices
+                  </th>
+                  <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">
+                    Paid
+                  </th>
+                  <th className="px-6 py-4 text-right text-xs font-bold text-slate-700 uppercase">
+                    Paid Amount
+                  </th>
+                  <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">
+                    Pending
+                  </th>
+                  <th className="px-6 py-4 text-right text-xs font-bold text-slate-700 uppercase">
+                    Pending Amount
+                  </th>
+                  <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">
+                    Collection Rate
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200">
                 {staffMetrics.map((staff, idx) => {
                   const collectionRate =
                     staff.invoicesIssued > 0
-                      ? Math.round((staff.invoicesPaid / staff.invoicesIssued) * 100)
+                      ? Math.round(
+                          (staff.invoicesPaid / staff.invoicesIssued) * 100,
+                        )
                       : 0;
                   return (
                     <tr key={idx} className="hover:bg-slate-50 transition">
-                      <td className="px-6 py-4 font-medium text-slate-900">{staff.staffName}</td>
+                      <td className="px-6 py-4 font-medium text-slate-900">
+                        {staff.staffName}
+                      </td>
                       <td className="px-6 py-4 text-center">
                         <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
                           {staff.ordersCreated}
@@ -376,7 +474,9 @@ export default function AdminSalesReport() {
                       <td className="px-6 py-4 text-right font-semibold text-slate-900">
                         ${(staff.totalOrderValue / 1000).toFixed(1)}K
                       </td>
-                      <td className="px-6 py-4 text-right text-slate-700">${staff.avgOrderValue}</td>
+                      <td className="px-6 py-4 text-right text-slate-700">
+                        ${staff.avgOrderValue}
+                      </td>
                       <td className="px-6 py-4 text-center font-medium text-slate-900">
                         {staff.invoicesIssued}
                       </td>
@@ -405,14 +505,14 @@ export default function AdminSalesReport() {
                                 collectionRate >= 90
                                   ? "#dcfce7"
                                   : collectionRate >= 70
-                                  ? "#fef3c7"
-                                  : "#fee2e2",
+                                    ? "#fef3c7"
+                                    : "#fee2e2",
                               color:
                                 collectionRate >= 90
                                   ? "#166534"
                                   : collectionRate >= 70
-                                  ? "#92400e"
-                                  : "#991b1b",
+                                    ? "#92400e"
+                                    : "#991b1b",
                             }}
                           >
                             {collectionRate}%
@@ -441,9 +541,23 @@ export default function AdminSalesReport() {
             className="flex items-center gap-2"
             onClick={() => {
               const csv = [
-                ["Sales Staff Report", "Generated: " + new Date().toLocaleDateString()],
+                [
+                  "Sales Staff Report",
+                  "Generated: " + new Date().toLocaleDateString(),
+                ],
                 [""],
-                ["Staff Name", "Orders", "Order Total", "Avg Order", "Invoices", "Paid", "Paid Amount", "Pending", "Pending Amount", "Collection Rate"],
+                [
+                  "Staff Name",
+                  "Orders",
+                  "Order Total",
+                  "Avg Order",
+                  "Invoices",
+                  "Paid",
+                  "Paid Amount",
+                  "Pending",
+                  "Pending Amount",
+                  "Collection Rate",
+                ],
                 ...staffMetrics.map((s) => [
                   s.staffName,
                   s.ordersCreated,
@@ -476,7 +590,10 @@ export default function AdminSalesReport() {
             className="bg-blue-600 hover:bg-blue-700 flex items-center gap-2"
             onClick={() => {
               const csv = [
-                ["Monthly Sales Report", "Generated: " + new Date().toLocaleDateString()],
+                [
+                  "Monthly Sales Report",
+                  "Generated: " + new Date().toLocaleDateString(),
+                ],
                 [""],
                 ["Month", "Total Sales"],
                 ...monthlySales.map((m) => [m.monthName, `$${m.total}`]),

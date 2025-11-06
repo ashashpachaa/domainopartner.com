@@ -210,12 +210,22 @@ const App = () => (
           <Route path="/client/dashboard" element={<ClientDashboard />} />
           <Route path="/client/orders" element={<ClientOrders />} />
           <Route path="/client/orders/new" element={<ClientCreateOrder />} />
-          <Route path="/client/orders/:orderId" element={<ClientOrderDetail />} />
+          <Route
+            path="/client/orders/:orderId"
+            element={<ClientOrderDetail />}
+          />
           <Route path="/client/invoices" element={<ClientInvoices />} />
           <Route path="/client/documents" element={<ClientDocuments />} />
           <Route path="/client/companies" element={<ClientCompanies />} />
           <Route path="/client/profile" element={<ClientProfile />} />
-          <Route path="/client/messages" element={<div className="p-8"><h1 className="text-2xl font-bold">Messages Coming Soon</h1></div>} />
+          <Route
+            path="/client/messages"
+            element={
+              <div className="p-8">
+                <h1 className="text-2xl font-bold">Messages Coming Soon</h1>
+              </div>
+            }
+          />
 
           {/* Catch-all */}
           <Route path="*" element={<NotFound />} />

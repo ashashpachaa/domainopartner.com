@@ -25,17 +25,19 @@ export default function Login() {
 
         if (!user) {
           // Check if there's a pending client request
-          const clientRequest = mockClientRequests.find((r) => r.email === email);
+          const clientRequest = mockClientRequests.find(
+            (r) => r.email === email,
+          );
 
           if (clientRequest) {
             if (clientRequest.status === "pending_approval") {
               setError(
-                "⏳ Your account request is pending admin approval. You will be notified once approved."
+                "⏳ Your account request is pending admin approval. You will be notified once approved.",
               );
               toast.info("Your signup is awaiting admin approval");
             } else if (clientRequest.status === "rejected") {
               setError(
-                `❌ Your account request was rejected. Reason: ${clientRequest.rejectionReason || "Not provided"}`
+                `❌ Your account request was rejected. Reason: ${clientRequest.rejectionReason || "Not provided"}`,
               );
               toast.error("Your signup was rejected");
             } else {
@@ -95,22 +97,26 @@ export default function Login() {
             <h1 className="text-3xl font-bold text-slate-900 mb-2">
               Client Portal
             </h1>
-            <p className="text-slate-600">
-              Login to manage your orders
-            </p>
+            <p className="text-slate-600">Login to manage your orders</p>
           </div>
 
           {error && (
-            <div className={`mb-6 p-4 rounded-lg border ${
-              error.includes("❌") || error.includes("rejected")
-                ? "bg-red-50 border-red-200"
-                : "bg-yellow-50 border-yellow-200"
-            }`}>
-              <p className={`text-sm font-medium ${
+            <div
+              className={`mb-6 p-4 rounded-lg border ${
                 error.includes("❌") || error.includes("rejected")
-                  ? "text-red-700"
-                  : "text-yellow-700"
-              }`}>{error}</p>
+                  ? "bg-red-50 border-red-200"
+                  : "bg-yellow-50 border-yellow-200"
+              }`}
+            >
+              <p
+                className={`text-sm font-medium ${
+                  error.includes("❌") || error.includes("rejected")
+                    ? "text-red-700"
+                    : "text-yellow-700"
+                }`}
+              >
+                {error}
+              </p>
             </div>
           )}
 
@@ -157,19 +163,29 @@ export default function Login() {
               disabled={isLoading}
               className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white h-12 font-semibold flex items-center justify-center gap-2"
             >
-              {isLoading ? "Logging in..." : <>
-                Sign In
-                <ArrowRight className="w-4 h-4" />
-              </>}
+              {isLoading ? (
+                "Logging in..."
+              ) : (
+                <>
+                  Sign In
+                  <ArrowRight className="w-4 h-4" />
+                </>
+              )}
             </Button>
           </form>
 
           {/* Demo Credentials */}
           <div className="mt-6 p-4 bg-slate-50 rounded-lg">
-            <p className="text-xs text-slate-600 font-medium mb-2">📝 Demo Credentials:</p>
+            <p className="text-xs text-slate-600 font-medium mb-2">
+              📝 Demo Credentials:
+            </p>
             <div className="text-xs text-slate-600 space-y-1">
-              <p><span className="font-medium">Email:</span> client@domaino.com</p>
-              <p><span className="font-medium">Password:</span> any 6+ characters</p>
+              <p>
+                <span className="font-medium">Email:</span> client@domaino.com
+              </p>
+              <p>
+                <span className="font-medium">Password:</span> any 6+ characters
+              </p>
             </div>
           </div>
 
@@ -177,7 +193,10 @@ export default function Login() {
           <div className="mt-6 text-center">
             <p className="text-slate-600 text-sm">
               Don't have an account?{" "}
-              <Link to="/signup" className="text-blue-600 hover:text-blue-700 font-medium">
+              <Link
+                to="/signup"
+                className="text-blue-600 hover:text-blue-700 font-medium"
+              >
                 Sign up here
               </Link>
             </p>
@@ -186,7 +205,10 @@ export default function Login() {
 
         {/* Footer */}
         <div className="text-center mt-8">
-          <Link to="/admin/login" className="text-slate-400 hover:text-slate-600 text-sm">
+          <Link
+            to="/admin/login"
+            className="text-slate-400 hover:text-slate-600 text-sm"
+          >
             Admin Login ���
           </Link>
         </div>

@@ -20,7 +20,11 @@ function getVisionClient() {
     throw new Error("Google Vision API credentials not configured");
   }
 
-  const credentialsPath = path.join(process.cwd(), ".credentials", "vision.json");
+  const credentialsPath = path.join(
+    process.cwd(),
+    ".credentials",
+    "vision.json",
+  );
 
   if (!fs.existsSync(path.dirname(credentialsPath))) {
     fs.mkdirSync(path.dirname(credentialsPath), { recursive: true });
@@ -41,10 +45,48 @@ function parsePassportText(text: string): ExtractedPassportData {
   let confidenceScore = 0;
 
   // Common label words and document text to filter out
-  const labelWords = new Set(["Full", "Name", "Given", "Family", "Surname", "First", "Last", "Date", "Of", "Birth", "Sex", "M", "F", "Nationality", "Passport", "Number", "Valid", "Until", "ARAB", "REPUBLIC", "EGYPT", "UNITED", "STATES", "KINGDOM", "ISSUING", "OFFICE", "PLACE", "TYPE"]);
+  const labelWords = new Set([
+    "Full",
+    "Name",
+    "Given",
+    "Family",
+    "Surname",
+    "First",
+    "Last",
+    "Date",
+    "Of",
+    "Birth",
+    "Sex",
+    "M",
+    "F",
+    "Nationality",
+    "Passport",
+    "Number",
+    "Valid",
+    "Until",
+    "ARAB",
+    "REPUBLIC",
+    "EGYPT",
+    "UNITED",
+    "STATES",
+    "KINGDOM",
+    "ISSUING",
+    "OFFICE",
+    "PLACE",
+    "TYPE",
+  ]);
 
   // Known country and region names that shouldn't be treated as person names
-  const bannedPhrases = ["ARAB REPUBLIC", "REPUBLIC OF", "UNITED STATES", "UNITED KINGDOM", "ISSUING OFFICE", "PLACE OF", "TYPE OF", "MINISTRY OF"];
+  const bannedPhrases = [
+    "ARAB REPUBLIC",
+    "REPUBLIC OF",
+    "UNITED STATES",
+    "UNITED KINGDOM",
+    "ISSUING OFFICE",
+    "PLACE OF",
+    "TYPE OF",
+    "MINISTRY OF",
+  ];
 
   // === DATE OF BIRTH EXTRACTION ===
   const datePatterns = [
@@ -71,7 +113,14 @@ function parsePassportText(text: string): ExtractedPassportData {
         const dayNum = parseInt(day);
         const yearNum = parseInt(year);
 
-        if (monthNum > 0 && monthNum <= 12 && dayNum > 0 && dayNum <= 31 && yearNum > 1900 && yearNum < 2100) {
+        if (
+          monthNum > 0 &&
+          monthNum <= 12 &&
+          dayNum > 0 &&
+          dayNum <= 31 &&
+          yearNum > 1900 &&
+          yearNum < 2100
+        ) {
           result.dateOfBirth = `${year}-${month}-${day}`;
           confidenceScore += 0.25;
           break;
@@ -90,7 +139,8 @@ function parsePassportText(text: string): ExtractedPassportData {
     confidenceScore += 0.25;
   } else {
     // Try pattern-based extraction
-    const nationalityPattern = /(?:Nationality|National|Citizenship)[:\s]+([A-Z][a-z]+)/i;
+    const nationalityPattern =
+      /(?:Nationality|National|Citizenship)[:\s]+([A-Z][a-z]+)/i;
     const match = text.match(nationalityPattern);
     if (match && match[1] && !labelWords.has(match[1])) {
       result.nationality = match[1];
@@ -103,19 +153,27 @@ function parsePassportText(text: string): ExtractedPassportData {
   // This is more reliable than trying to guess from all capital sequences
 
   // Try to find explicit "Full Name" field patterns
-  const fullNamePattern = /(?:Full Name|Full\s+Name|Surname|Given Names?)[:\s]*([A-Z][A-Za-z\s]+?)(?:\n|Date|Nationality|Sex|Gender|Place|Issuing|$)/i;
+  const fullNamePattern =
+    /(?:Full Name|Full\s+Name|Surname|Given Names?)[:\s]*([A-Z][A-Za-z\s]+?)(?:\n|Date|Nationality|Sex|Gender|Place|Issuing|$)/i;
   let fullNameMatch = text.match(fullNamePattern);
 
   if (fullNameMatch && fullNameMatch[1]) {
     let extractedName = fullNameMatch[1].trim();
 
     // Remove any trailing label-like words
-    extractedName = extractedName.replace(/\s+(and|or|from|by|for|the|of)$/i, "");
+    extractedName = extractedName.replace(
+      /\s+(and|or|from|by|for|the|of)$/i,
+      "",
+    );
 
     // Skip if it contains unwanted words
-    if (!extractedName.includes("PASSPORT") && !extractedName.includes("REPUBLIC") &&
-        !extractedName.includes("NO") && extractedName.length > 3 && extractedName.length < 60) {
-
+    if (
+      !extractedName.includes("PASSPORT") &&
+      !extractedName.includes("REPUBLIC") &&
+      !extractedName.includes("NO") &&
+      extractedName.length > 3 &&
+      extractedName.length < 60
+    ) {
       const nameParts = extractedName.split(/\s+/);
       if (nameParts.length >= 2) {
         result.firstName = nameParts[0];
@@ -143,8 +201,13 @@ function parsePassportText(text: string): ExtractedPassportData {
       if (/[0-9<>]+/.test(trimmedLine)) continue;
 
       // Skip known label lines
-      if (labelWords.has(trimmedLine) || trimmedLine.includes("Passport") ||
-          trimmedLine.includes("Date") || trimmedLine.includes("Place")) continue;
+      if (
+        labelWords.has(trimmedLine) ||
+        trimmedLine.includes("Passport") ||
+        trimmedLine.includes("Date") ||
+        trimmedLine.includes("Place")
+      )
+        continue;
 
       // Skip known banned phrases (countries, document headers, etc.)
       let isBannedPhrase = false;
@@ -161,11 +224,15 @@ function parsePassportText(text: string): ExtractedPassportData {
 
       if (words.length >= 2 && words.length <= 6) {
         // All words should start with capital letter
-        if (words.every(w => /^[A-Z]/.test(w) && w.length > 1)) {
+        if (words.every((w) => /^[A-Z]/.test(w) && w.length > 1)) {
           // Additional check: skip if contains too many "REPUBLIC", "ARAB", etc.
           const lineUpper = trimmedLine.toUpperCase();
-          if (lineUpper.includes("REPUBLIC") || lineUpper.includes("ARAB") ||
-              lineUpper.includes("UNITED") || lineUpper.includes("KINGDOM")) {
+          if (
+            lineUpper.includes("REPUBLIC") ||
+            lineUpper.includes("ARAB") ||
+            lineUpper.includes("UNITED") ||
+            lineUpper.includes("KINGDOM")
+          ) {
             continue;
           }
 
@@ -181,20 +248,37 @@ function parsePassportText(text: string): ExtractedPassportData {
 
   // === CONFIDENCE ADJUSTMENT ===
   // Penalize if extracted data looks suspicious
-  const suspiciousPatterns = ["PASSPORT", "REPUBLIC", "UNITED", "KINGDOM", "AND", "THE", "DOCUMENT"];
-  
-  if (result.firstName && suspiciousPatterns.some(p => result.firstName!.includes(p))) {
+  const suspiciousPatterns = [
+    "PASSPORT",
+    "REPUBLIC",
+    "UNITED",
+    "KINGDOM",
+    "AND",
+    "THE",
+    "DOCUMENT",
+  ];
+
+  if (
+    result.firstName &&
+    suspiciousPatterns.some((p) => result.firstName!.includes(p))
+  ) {
     confidenceScore = Math.max(0, confidenceScore - 0.3);
   }
-  
-  if (result.lastName && suspiciousPatterns.some(p => result.lastName!.includes(p))) {
+
+  if (
+    result.lastName &&
+    suspiciousPatterns.some((p) => result.lastName!.includes(p))
+  ) {
     confidenceScore = Math.max(0, confidenceScore - 0.3);
   }
 
   // Validate extracted names
-  if (result.firstName && result.firstName.length > 30) result.firstName = undefined;
-  if (result.lastName && result.lastName.length > 50) result.lastName = undefined;
-  if (result.nationality && result.nationality.length > 30) result.nationality = undefined;
+  if (result.firstName && result.firstName.length > 30)
+    result.firstName = undefined;
+  if (result.lastName && result.lastName.length > 50)
+    result.lastName = undefined;
+  if (result.nationality && result.nationality.length > 30)
+    result.nationality = undefined;
 
   result.confidence = Math.min(1, Math.max(0, confidenceScore));
 
@@ -211,21 +295,24 @@ export async function handleOCR(req: Request, res: Response) {
 
     // Validate file type - images only
     const validTypes = ["image/jpeg", "image/png", "image/jpg"];
-    if (!validTypes.includes(req.file.mimetype) && !req.file.mimetype.startsWith("image/")) {
-      res.status(400).json({ 
+    if (
+      !validTypes.includes(req.file.mimetype) &&
+      !req.file.mimetype.startsWith("image/")
+    ) {
+      res.status(400).json({
         success: false,
         error: "Invalid file type. Please upload a JPG or PNG image file.",
-        code: "INVALID_FORMAT"
+        code: "INVALID_FORMAT",
       });
       return;
     }
 
     // Check file size (max 20MB)
     if (req.file.size > 20 * 1024 * 1024) {
-      res.status(400).json({ 
+      res.status(400).json({
         success: false,
         error: "File size exceeds 20MB limit",
-        code: "SIZE_LIMIT"
+        code: "SIZE_LIMIT",
       });
       return;
     }
@@ -246,7 +333,10 @@ export async function handleOCR(req: Request, res: Response) {
           .jpeg({ quality: 85, progressive: true })
           .toBuffer();
       } catch (optimizeError) {
-        console.warn("Image optimization failed, using original:", optimizeError);
+        console.warn(
+          "Image optimization failed, using original:",
+          optimizeError,
+        );
       }
     }
 
@@ -271,8 +361,9 @@ export async function handleOCR(req: Request, res: Response) {
     if (!textAnnotations || textAnnotations.length === 0) {
       res.status(400).json({
         success: false,
-        error: "Could not extract text from the file. Ensure the image is clear and readable.",
-        code: "NO_TEXT_DETECTED"
+        error:
+          "Could not extract text from the file. Ensure the image is clear and readable.",
+        code: "NO_TEXT_DETECTED",
       });
       return;
     }
@@ -284,7 +375,7 @@ export async function handleOCR(req: Request, res: Response) {
       res.status(400).json({
         success: false,
         error: "Could not find readable text. Try uploading a clearer image.",
-        code: "INSUFFICIENT_TEXT"
+        code: "INSUFFICIENT_TEXT",
       });
       return;
     }
@@ -299,7 +390,7 @@ export async function handleOCR(req: Request, res: Response) {
     });
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    
+
     console.error("OCR Processing Error:", {
       message: errorMessage,
       timestamp: new Date().toISOString(),
@@ -313,23 +404,35 @@ export async function handleOCR(req: Request, res: Response) {
     };
 
     if (error instanceof Error) {
-      if (errorMessage.includes("PERMISSION_DENIED") || errorMessage.includes("permission")) {
+      if (
+        errorMessage.includes("PERMISSION_DENIED") ||
+        errorMessage.includes("permission")
+      ) {
         errorResponse = {
           success: false,
-          error: "Google Vision API permission issue. Please ensure billing is enabled.",
+          error:
+            "Google Vision API permission issue. Please ensure billing is enabled.",
           code: "BILLING_NOT_ENABLED",
         };
-      } else if (errorMessage.includes("UNAUTHENTICATED") || errorMessage.includes("credentials")) {
+      } else if (
+        errorMessage.includes("UNAUTHENTICATED") ||
+        errorMessage.includes("credentials")
+      ) {
         errorResponse = {
           success: false,
-          error: "Server configuration error: Google credentials not properly configured.",
+          error:
+            "Server configuration error: Google credentials not properly configured.",
           code: "CREDENTIAL_ERROR",
         };
-      } else if (errorMessage.includes("timeout") || errorMessage.includes("DEADLINE")) {
+      } else if (
+        errorMessage.includes("timeout") ||
+        errorMessage.includes("DEADLINE")
+      ) {
         statusCode = 504;
         errorResponse = {
           success: false,
-          error: "Request timed out. Please try with a smaller or clearer image.",
+          error:
+            "Request timed out. Please try with a smaller or clearer image.",
           code: "TIMEOUT",
         };
       }

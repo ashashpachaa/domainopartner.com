@@ -19,8 +19,18 @@ import {
 import AdminLayout from "@/components/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { mockOrders, mockUsers, mockProducts, mockStaff, mockStageDeadlines, type OrderHistory } from "@/lib/mockData";
-import { fetchCompanyDetails, storeRegisteredCompany } from "@/hooks/useCompanyDetails";
+import {
+  mockOrders,
+  mockUsers,
+  mockProducts,
+  mockStaff,
+  mockStageDeadlines,
+  type OrderHistory,
+} from "@/lib/mockData";
+import {
+  fetchCompanyDetails,
+  storeRegisteredCompany,
+} from "@/hooks/useCompanyDetails";
 import { toast } from "sonner";
 
 export default function AdminOperationDetail() {
@@ -38,13 +48,22 @@ export default function AdminOperationDetail() {
   const [financialReportFiles, setFinancialReportFiles] = useState<File[]>([]);
   const [financialReportNotes, setFinancialReportNotes] = useState("");
   const [trackingNumber, setTrackingNumber] = useState("");
-  const [activeTab, setActiveTab] = useState<"workflow" | "apostille" | "poa" | "financial_report" | "shipping" | "history">("workflow");
+  const [activeTab, setActiveTab] = useState<
+    | "workflow"
+    | "apostille"
+    | "poa"
+    | "financial_report"
+    | "shipping"
+    | "history"
+  >("workflow");
   const [currentTime, setCurrentTime] = useState(new Date());
   const [impersonateStaffId, setImpersonateStaffId] = useState<string>("");
   const [adminMode, setAdminMode] = useState(true);
   const [stageDeadlines, setStageDeadlines] = useState(mockStageDeadlines);
   const [showDeadlineSettings, setShowDeadlineSettings] = useState(false);
-  const [editingDeadlineId, setEditingDeadlineId] = useState<string | null>(null);
+  const [editingDeadlineId, setEditingDeadlineId] = useState<string | null>(
+    null,
+  );
   const [operationFormData, setOperationFormData] = useState({
     companyName: "",
     companyNumber: "",
@@ -82,7 +101,9 @@ export default function AdminOperationDetail() {
         !order.registeredCompany
       ) {
         try {
-          const result = await fetchCompanyDetails(order.companyInfo.companyName);
+          const result = await fetchCompanyDetails(
+            order.companyInfo.companyName,
+          );
           if (result.data) {
             result.data.orderId = order.id;
             result.data.userId = order.userId;
@@ -92,7 +113,9 @@ export default function AdminOperationDetail() {
             const updatedOrder = { ...order, registeredCompany: result.data };
             saveOrder(updatedOrder);
 
-            toast.success("Company registered and added to your companies list!");
+            toast.success(
+              "Company registered and added to your companies list!",
+            );
           } else if (result.error) {
             toast.warning(`Could not auto-register company: ${result.error}`);
           }
@@ -114,12 +137,15 @@ export default function AdminOperationDetail() {
   const currentUserId = localStorage.getItem("currentStaffId") || "S002"; // Default to manager for demo
 
   // Admin impersonation - use selected staff or current user
-  const effectiveUserId = adminMode && impersonateStaffId ? impersonateStaffId : currentUserId;
+  const effectiveUserId =
+    adminMode && impersonateStaffId ? impersonateStaffId : currentUserId;
 
   // Get current staff to check their role
   const currentStaff = mockStaff.find((s) => s.id === effectiveUserId);
   const isSalesStaff = currentStaff?.role === "sales";
-  const isAdmin = currentStaff?.role === "super_admin" || currentStaff?.role === "operation_manager";
+  const isAdmin =
+    currentStaff?.role === "super_admin" ||
+    currentStaff?.role === "operation_manager";
 
   // Live countdown timer
   useEffect(() => {
@@ -164,26 +190,59 @@ export default function AdminOperationDetail() {
 
   // Build dynamic workflow stages based on product services
   const getWorkflowStages = () => {
-    const stages: Array<{ id: string; label: string; icon: string; requiresUpload?: boolean }> = [
+    const stages: Array<{
+      id: string;
+      label: string;
+      icon: string;
+      requiresUpload?: boolean;
+    }> = [
       { id: "new", label: "Order Created", icon: "📋" },
       { id: "pending_sales_review", label: "Sales Review", icon: "👤" },
       { id: "pending_operation", label: "Operation Process", icon: "⚙️" },
-      { id: "pending_operation_manager_review", label: "Manager Review", icon: "✓" },
-      { id: "awaiting_client_acceptance", label: "Client Acceptance", icon: "������" },
+      {
+        id: "pending_operation_manager_review",
+        label: "Manager Review",
+        icon: "✓",
+      },
+      {
+        id: "awaiting_client_acceptance",
+        label: "Client Acceptance",
+        icon: "������",
+      },
     ];
 
     // Add conditional stages based on product services
     if (product?.services.hasApostille) {
-      stages.push({ id: "pending_apostille", label: "Apostille Processing", icon: "🔏", requiresUpload: true });
+      stages.push({
+        id: "pending_apostille",
+        label: "Apostille Processing",
+        icon: "🔏",
+        requiresUpload: true,
+      });
     }
     if (product?.services.hasPOA) {
-      stages.push({ id: "pending_poa", label: "Power of Attorney", icon: "📄", requiresUpload: true });
+      stages.push({
+        id: "pending_poa",
+        label: "Power of Attorney",
+        icon: "📄",
+        requiresUpload: true,
+      });
     }
     if (product?.services.hasFinancialReport) {
-      stages.push({ id: "pending_financial_report", label: "Financial Report", icon: "����", requiresUpload: true });
+      stages.push({
+        id: "pending_financial_report",
+        label: "Financial Report",
+        icon: "����",
+        requiresUpload: true,
+      });
     }
     if (product?.services.hasShipping) {
-      stages.push({ id: "shipping_preparation", label: "Shipping & Tracking", icon: "📦", requiresUpload: false });
+      stages.push({
+        id: "shipping_preparation",
+        label: "Shipping & Tracking",
+        icon: "📦",
+        requiresUpload: false,
+      });
     }
 
     stages.push({ id: "completed", label: "Completed", icon: "✅" });
@@ -192,7 +251,7 @@ export default function AdminOperationDetail() {
 
   const workflowStages = getWorkflowStages();
   const currentStageIndex = workflowStages.findIndex(
-    (s) => s.id === order.status
+    (s) => s.id === order.status,
   );
 
   // Determine if current user can take actions on this order
@@ -201,17 +260,42 @@ export default function AdminOperationDetail() {
     if (adminMode && impersonateStaffId) return true;
 
     if (order.status === "new") return true;
-    if (order.status === "pending_sales_review" && order.assignedToSalesId === effectiveUserId) return true;
-    if (order.status === "pending_operation" && order.assignedToOperationId === effectiveUserId) return true;
-    if (order.status === "pending_operation_manager_review" && order.assignedToManagerId === effectiveUserId) return true;
-    if (order.status === "awaiting_client_acceptance" && effectiveUserId === "client") return true;
-    if (["pending_apostille", "pending_poa", "pending_financial_report", "shipping_preparation"].includes(order.status) && order.assignedToManagerId === effectiveUserId) return true;
+    if (
+      order.status === "pending_sales_review" &&
+      order.assignedToSalesId === effectiveUserId
+    )
+      return true;
+    if (
+      order.status === "pending_operation" &&
+      order.assignedToOperationId === effectiveUserId
+    )
+      return true;
+    if (
+      order.status === "pending_operation_manager_review" &&
+      order.assignedToManagerId === effectiveUserId
+    )
+      return true;
+    if (
+      order.status === "awaiting_client_acceptance" &&
+      effectiveUserId === "client"
+    )
+      return true;
+    if (
+      [
+        "pending_apostille",
+        "pending_poa",
+        "pending_financial_report",
+        "shipping_preparation",
+      ].includes(order.status) &&
+      order.assignedToManagerId === effectiveUserId
+    )
+      return true;
     return false;
   };
 
   // Get the next status based on current status and workflow stages
   const getNextStatus = (): string => {
-    const currentIndex = workflowStages.findIndex(s => s.id === order.status);
+    const currentIndex = workflowStages.findIndex((s) => s.id === order.status);
     if (currentIndex < workflowStages.length - 1) {
       return workflowStages[currentIndex + 1].id;
     }
@@ -221,15 +305,15 @@ export default function AdminOperationDetail() {
   // Get rejection status based on current status
   const getRejectionStatus = (): string => {
     const rejectionMap: { [key: string]: string } = {
-      "new": "new",
-      "pending_sales_review": "rejected_by_sales",
-      "pending_operation": "rejected_by_operation",
-      "pending_operation_manager_review": "pending_operation",
-      "awaiting_client_acceptance": "pending_operation_manager_review",
-      "pending_apostille": "rejected_by_apostille",
-      "pending_poa": "rejected_by_poa",
-      "pending_financial_report": "rejected_by_financial_report",
-      "shipping_preparation": "rejected_by_shipping",
+      new: "new",
+      pending_sales_review: "rejected_by_sales",
+      pending_operation: "rejected_by_operation",
+      pending_operation_manager_review: "pending_operation",
+      awaiting_client_acceptance: "pending_operation_manager_review",
+      pending_apostille: "rejected_by_apostille",
+      pending_poa: "rejected_by_poa",
+      pending_financial_report: "rejected_by_financial_report",
+      shipping_preparation: "rejected_by_shipping",
     };
     return rejectionMap[order.status] || order.status;
   };
@@ -238,11 +322,14 @@ export default function AdminOperationDetail() {
     if (canAccept()) {
       // Check if operation review form is required and completed
       if (order.status === "pending_operation") {
-        const isFormCompleted = operationFormData.companyName.trim() &&
-                               operationFormData.companyNumber.trim();
+        const isFormCompleted =
+          operationFormData.companyName.trim() &&
+          operationFormData.companyNumber.trim();
 
         if (!isFormCompleted) {
-          alert("Please complete the Operation Review Form before proceeding.\n\nBoth company name and company number must be provided.");
+          alert(
+            "Please complete the Operation Review Form before proceeding.\n\nBoth company name and company number must be provided.",
+          );
           return;
         }
       }
@@ -258,7 +345,8 @@ export default function AdminOperationDetail() {
         newStatus: nextStatus as any,
         actionType: "accept" as any,
         actionBy: effectiveUserId,
-        actionByName: currentStaff?.firstName + " " + currentStaff?.lastName || "Unknown",
+        actionByName:
+          currentStaff?.firstName + " " + currentStaff?.lastName || "Unknown",
         description: `${currentStaff?.firstName} accepted the order - moved to ${getStatusLabel(nextStatus)}`,
         createdAt: new Date().toISOString(),
       };
@@ -279,7 +367,8 @@ export default function AdminOperationDetail() {
         updatedOrder.operationReviewForm = {
           isCompleted: true,
           submittedBy: effectiveUserId,
-          submittedByName: currentStaff?.firstName + " " + currentStaff?.lastName || "Unknown",
+          submittedByName:
+            currentStaff?.firstName + " " + currentStaff?.lastName || "Unknown",
           submittedAt: new Date().toISOString(),
           companyName: operationFormData.companyName,
           companyNumber: operationFormData.companyNumber,
@@ -325,7 +414,10 @@ export default function AdminOperationDetail() {
     if (canAccept()) {
       const rejectionStatus = getRejectionStatus();
       const currentStaff = mockStaff.find((s) => s.id === effectiveUserId);
-      const isReworkFlow = ["pending_operation_manager_review", "awaiting_client_acceptance"].includes(order.status);
+      const isReworkFlow = [
+        "pending_operation_manager_review",
+        "awaiting_client_acceptance",
+      ].includes(order.status);
 
       // Add history entry
       const newHistoryEntry = {
@@ -335,7 +427,8 @@ export default function AdminOperationDetail() {
         newStatus: rejectionStatus as any,
         actionType: "reject" as any,
         actionBy: effectiveUserId,
-        actionByName: currentStaff?.firstName + " " + currentStaff?.lastName || "Unknown",
+        actionByName:
+          currentStaff?.firstName + " " + currentStaff?.lastName || "Unknown",
         reason: rejectReason,
         description: isReworkFlow
           ? `${currentStaff?.firstName} sent back for rework - ${rejectReason}`
@@ -348,7 +441,8 @@ export default function AdminOperationDetail() {
         id: `C${order.id}-REJ-${Date.now()}`,
         orderId: order.id,
         commentBy: effectiveUserId,
-        commentByName: currentStaff?.firstName + " " + currentStaff?.lastName || "Unknown",
+        commentByName:
+          currentStaff?.firstName + " " + currentStaff?.lastName || "Unknown",
         commentByRole: currentStaff?.role as any,
         content: `⚠️ REJECTION/REWORK: ${rejectReason}`,
         isInternal: true,
@@ -359,7 +453,10 @@ export default function AdminOperationDetail() {
       updatedOrder.history = [...(order.history || []), newHistoryEntry];
       updatedOrder.comments = [...(order.comments || []), rejectionComment];
       updatedOrder.status = rejectionStatus as any;
-      updatedOrder.rejectionReasons = [...(order.rejectionReasons || []), rejectReason];
+      updatedOrder.rejectionReasons = [
+        ...(order.rejectionReasons || []),
+        rejectReason,
+      ];
 
       // Uncheck services when rejecting FROM those stages (going back for rework)
       if (order.status === "pending_apostille") {
@@ -390,24 +487,24 @@ export default function AdminOperationDetail() {
 
   const getStatusLabel = (status: string): string => {
     const labels: { [key: string]: string } = {
-      "new": "Order Created",
-      "pending_sales_review": "Sales Review",
-      "pending_operation": "Operation",
-      "pending_operation_manager_review": "Manager Review",
-      "awaiting_client_acceptance": "Client Acceptance",
-      "pending_apostille": "Apostille Processing",
-      "pending_poa": "Power of Attorney",
-      "pending_financial_report": "Financial Report",
-      "shipping_preparation": "Shipping & Tracking",
-      "completed": "Completed",
-      "rejected_by_sales": "Rejected by Sales",
-      "rejected_by_operation": "Rejected by Operation",
-      "rejected_by_operation_manager": "Rejected by Manager",
-      "rejected_by_client": "Rejected by Client",
-      "rejected_by_apostille": "Rejected by Apostille",
-      "rejected_by_poa": "Rejected by POA",
-      "rejected_by_financial_report": "Rejected by Financial Report",
-      "rejected_by_shipping": "Rejected by Shipping",
+      new: "Order Created",
+      pending_sales_review: "Sales Review",
+      pending_operation: "Operation",
+      pending_operation_manager_review: "Manager Review",
+      awaiting_client_acceptance: "Client Acceptance",
+      pending_apostille: "Apostille Processing",
+      pending_poa: "Power of Attorney",
+      pending_financial_report: "Financial Report",
+      shipping_preparation: "Shipping & Tracking",
+      completed: "Completed",
+      rejected_by_sales: "Rejected by Sales",
+      rejected_by_operation: "Rejected by Operation",
+      rejected_by_operation_manager: "Rejected by Manager",
+      rejected_by_client: "Rejected by Client",
+      rejected_by_apostille: "Rejected by Apostille",
+      rejected_by_poa: "Rejected by POA",
+      rejected_by_financial_report: "Rejected by Financial Report",
+      rejected_by_shipping: "Rejected by Shipping",
     };
     return labels[status] || status;
   };
@@ -426,7 +523,11 @@ export default function AdminOperationDetail() {
   };
 
   const handleAutoCompleteAll = () => {
-    if (!window.confirm("Auto-complete all workflow stages? This will move the order through all remaining stages and mark all services as complete.")) {
+    if (
+      !window.confirm(
+        "Auto-complete all workflow stages? This will move the order through all remaining stages and mark all services as complete.",
+      )
+    ) {
       return;
     }
 
@@ -448,12 +549,16 @@ export default function AdminOperationDetail() {
       const toStatus = stages[i];
       const staff = mockStaff.find(
         (s) =>
-          (toStatus === "pending_sales_review" && s.id === order.assignedToSalesId) ||
-          (toStatus === "pending_operation" && s.id === order.assignedToOperationId) ||
-          (toStatus === "pending_operation_manager_review" && s.id === order.assignedToManagerId) ||
+          (toStatus === "pending_sales_review" &&
+            s.id === order.assignedToSalesId) ||
+          (toStatus === "pending_operation" &&
+            s.id === order.assignedToOperationId) ||
+          (toStatus === "pending_operation_manager_review" &&
+            s.id === order.assignedToManagerId) ||
           (toStatus === "awaiting_client_acceptance" && s.role === "sales") ||
-          (toStatus === "shipping_preparation" && s.id === order.assignedToManagerId) ||
-          (toStatus === "completed" && s.id === order.assignedToManagerId)
+          (toStatus === "shipping_preparation" &&
+            s.id === order.assignedToManagerId) ||
+          (toStatus === "completed" && s.id === order.assignedToManagerId),
       );
 
       const historyEntry = {
@@ -490,7 +595,9 @@ export default function AdminOperationDetail() {
     }
 
     saveOrder(updatedOrder);
-    alert("Order auto-completed! All stages progressed and services marked complete.");
+    alert(
+      "Order auto-completed! All stages progressed and services marked complete.",
+    );
   };
 
   const handleFileUpload = () => {
@@ -515,7 +622,8 @@ export default function AdminOperationDetail() {
         fileName: file.name,
         fileSize: file.size,
         uploadedBy: currentUserId,
-        uploadedByName: currentStaff?.firstName + " " + currentStaff?.lastName || "Unknown",
+        uploadedByName:
+          currentStaff?.firstName + " " + currentStaff?.lastName || "Unknown",
         uploadedAt: new Date().toISOString(),
         stage: getFileStageFromStatus(order.status),
         fileType: "document" as any,
@@ -538,8 +646,11 @@ export default function AdminOperationDetail() {
     // Determine MIME type based on file extension
     let mimeType = "application/octet-stream";
     if (file.fileName.endsWith(".pdf")) mimeType = "application/pdf";
-    else if (file.fileName.endsWith(".doc") || file.fileName.endsWith(".docx")) mimeType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-    else if (file.fileName.endsWith(".jpg") || file.fileName.endsWith(".jpeg")) mimeType = "image/jpeg";
+    else if (file.fileName.endsWith(".doc") || file.fileName.endsWith(".docx"))
+      mimeType =
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+    else if (file.fileName.endsWith(".jpg") || file.fileName.endsWith(".jpeg"))
+      mimeType = "image/jpeg";
     else if (file.fileName.endsWith(".png")) mimeType = "image/png";
 
     // Create a blob with file information
@@ -579,16 +690,34 @@ export default function AdminOperationDetail() {
     setSelectedFiles(selectedFiles.filter((_, i) => i !== index));
   };
 
-  const getFileStageFromStatus = (status: string): "sales" | "operation" | "manager" | "apostille" | "poa" | "financial_report" | "shipping" => {
-    const stageMap: { [key: string]: "sales" | "operation" | "manager" | "apostille" | "poa" | "financial_report" | "shipping" } = {
-      "pending_sales_review": "sales",
-      "pending_operation": "operation",
-      "pending_operation_manager_review": "manager",
-      "pending_apostille": "apostille",
-      "pending_poa": "poa",
-      "pending_financial_report": "financial_report",
-      "shipping_preparation": "shipping",
-      "awaiting_client_acceptance": "manager",
+  const getFileStageFromStatus = (
+    status: string,
+  ):
+    | "sales"
+    | "operation"
+    | "manager"
+    | "apostille"
+    | "poa"
+    | "financial_report"
+    | "shipping" => {
+    const stageMap: {
+      [key: string]:
+        | "sales"
+        | "operation"
+        | "manager"
+        | "apostille"
+        | "poa"
+        | "financial_report"
+        | "shipping";
+    } = {
+      pending_sales_review: "sales",
+      pending_operation: "operation",
+      pending_operation_manager_review: "manager",
+      pending_apostille: "apostille",
+      pending_poa: "poa",
+      pending_financial_report: "financial_report",
+      shipping_preparation: "shipping",
+      awaiting_client_acceptance: "manager",
     };
     return stageMap[status] || "operation";
   };
@@ -646,7 +775,14 @@ export default function AdminOperationDetail() {
     let daysAllowed = 0;
 
     // Calculate cumulative deadline based on all stages up to current
-    const stageOrder = ["new", "pending_sales_review", "pending_operation", "pending_operation_manager_review", "awaiting_client_acceptance", "shipping_preparation"];
+    const stageOrder = [
+      "new",
+      "pending_sales_review",
+      "pending_operation",
+      "pending_operation_manager_review",
+      "awaiting_client_acceptance",
+      "shipping_preparation",
+    ];
     const currentStageIndex = stageOrder.indexOf(order.status);
     let cumulativeDays = 0;
 
@@ -662,16 +798,21 @@ export default function AdminOperationDetail() {
     switch (order.status) {
       case "new":
         stageName = "Order Created";
-        daysAllowed = stageDeadlines.find((d) => d.stageId === "new")?.daysAllowed || 3;
+        daysAllowed =
+          stageDeadlines.find((d) => d.stageId === "new")?.daysAllowed || 3;
         deadlineDate = addBusinessDays(createdDate, daysAllowed);
         affectedStaffId = null;
         break;
       case "pending_sales_review":
         stageName = "Sales Review";
-        daysAllowed = stageDeadlines.find((d) => d.stageId === "pending_sales_review")?.daysAllowed || 0.25;
+        daysAllowed =
+          stageDeadlines.find((d) => d.stageId === "pending_sales_review")
+            ?.daysAllowed || 0.25;
         // For cumulative calculation, use hours for quick stages
         if (daysAllowed < 1) {
-          deadlineDate = new Date(createdDate.getTime() + daysAllowed * 24 * 60 * 60 * 1000);
+          deadlineDate = new Date(
+            createdDate.getTime() + daysAllowed * 24 * 60 * 60 * 1000,
+          );
         } else {
           deadlineDate = addBusinessDays(createdDate, cumulativeDays);
         }
@@ -679,25 +820,36 @@ export default function AdminOperationDetail() {
         break;
       case "pending_operation":
         stageName = "Operation Processing";
-        daysAllowed = stageDeadlines.find((d) => d.stageId === "pending_operation")?.daysAllowed || 3;
+        daysAllowed =
+          stageDeadlines.find((d) => d.stageId === "pending_operation")
+            ?.daysAllowed || 3;
         deadlineDate = addBusinessDays(createdDate, cumulativeDays);
         affectedStaffId = order.assignedToOperationId || null;
         break;
       case "pending_operation_manager_review":
         stageName = "Manager Review";
-        daysAllowed = stageDeadlines.find((d) => d.stageId === "pending_operation_manager_review")?.daysAllowed || 1;
+        daysAllowed =
+          stageDeadlines.find(
+            (d) => d.stageId === "pending_operation_manager_review",
+          )?.daysAllowed || 1;
         deadlineDate = addBusinessDays(createdDate, cumulativeDays);
         affectedStaffId = order.assignedToManagerId || null;
         break;
       case "awaiting_client_acceptance":
         stageName = "Client Acceptance Review";
-        daysAllowed = stageDeadlines.find((d) => d.stageId === "awaiting_client_acceptance")?.daysAllowed || 1;
+        daysAllowed =
+          stageDeadlines.find((d) => d.stageId === "awaiting_client_acceptance")
+            ?.daysAllowed || 1;
         deadlineDate = addBusinessDays(createdDate, cumulativeDays);
         affectedStaffId = order.assignedToSalesId || null;
         break;
       case "shipping_preparation":
-        stageName = product?.services.hasApostille ? "Apostille Processing" : "Shipping Preparation";
-        daysAllowed = stageDeadlines.find((d) => d.stageId === "shipping_preparation")?.daysAllowed || 2;
+        stageName = product?.services.hasApostille
+          ? "Apostille Processing"
+          : "Shipping Preparation";
+        daysAllowed =
+          stageDeadlines.find((d) => d.stageId === "shipping_preparation")
+            ?.daysAllowed || 2;
         deadlineDate = addBusinessDays(createdDate, cumulativeDays);
         affectedStaffId = order.assignedToManagerId || null;
         break;
@@ -719,7 +871,9 @@ export default function AdminOperationDetail() {
       : null;
     const timeRemaining = deadlineDate.getTime() - now.getTime();
     const daysRemaining = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-    const hoursRemaining = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const hoursRemaining = Math.floor(
+      (timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+    );
     const isOverdue = now > deadlineDate;
     const isApproaching = timeRemaining < 6 * 60 * 60 * 1000 && !isOverdue; // Less than 6 hours
 
@@ -733,7 +887,14 @@ export default function AdminOperationDetail() {
       isApproaching,
       daysAllowed,
     };
-  }, [order.status, order.createdAt, order.assignedToSalesId, order.assignedToOperationId, order.assignedToManagerId, stageDeadlines]);
+  }, [
+    order.status,
+    order.createdAt,
+    order.assignedToSalesId,
+    order.assignedToOperationId,
+    order.assignedToManagerId,
+    stageDeadlines,
+  ]);
 
   // Get deadline info for all stages
   const getStageDealinesInfo = useMemo(() => {
@@ -746,7 +907,8 @@ export default function AdminOperationDetail() {
 
       // Calculate days allowed for each stage
       if (stage.id === "new") daysAllowed = 3;
-      else if (stage.id === "pending_sales_review") daysAllowed = 0.25; // 6 hours
+      else if (stage.id === "pending_sales_review")
+        daysAllowed = 0.25; // 6 hours
       else if (stage.id === "pending_operation") daysAllowed = 3;
       else if (stage.id === "pending_operation_manager_review") daysAllowed = 1;
       else if (stage.id === "awaiting_client_acceptance") daysAllowed = 1;
@@ -760,7 +922,9 @@ export default function AdminOperationDetail() {
       let deadlineDate: Date;
 
       if (daysAllowed < 1) {
-        deadlineDate = new Date(createdDate.getTime() + daysAllowed * 24 * 60 * 60 * 1000);
+        deadlineDate = new Date(
+          createdDate.getTime() + daysAllowed * 24 * 60 * 60 * 1000,
+        );
       } else {
         deadlineDate = addBusinessDays(createdDate, Math.floor(cumulativeDays));
       }
@@ -776,8 +940,12 @@ export default function AdminOperationDetail() {
     return stageDeadlines.map((stage) => {
       const timeRemaining = stage.deadlineDate.getTime() - now.getTime();
       const daysRemaining = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-      const hoursRemaining = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutesRemaining = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+      const hoursRemaining = Math.floor(
+        (timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+      );
+      const minutesRemaining = Math.floor(
+        (timeRemaining % (1000 * 60 * 60)) / (1000 * 60),
+      );
 
       return {
         ...stage,
@@ -786,13 +954,22 @@ export default function AdminOperationDetail() {
         hoursRemaining,
         minutesRemaining,
         isOverdue: now > stage.deadlineDate,
-        isApproaching: timeRemaining < 6 * 60 * 60 * 1000 && !(now > stage.deadlineDate),
+        isApproaching:
+          timeRemaining < 6 * 60 * 60 * 1000 && !(now > stage.deadlineDate),
       };
     });
   }, [order.createdAt, currentTime, workflowStages]);
 
   const getDeadlineColor = () => {
-    if (["completed", "rejected_by_sales", "rejected_by_operation", "rejected_by_operation_manager", "rejected_by_client"].includes(order.status)) {
+    if (
+      [
+        "completed",
+        "rejected_by_sales",
+        "rejected_by_operation",
+        "rejected_by_operation_manager",
+        "rejected_by_client",
+      ].includes(order.status)
+    ) {
       return "bg-slate-50 border-slate-200";
     }
     if (getDeadlineInfo.isOverdue) {
@@ -805,7 +982,15 @@ export default function AdminOperationDetail() {
   };
 
   const getDeadlineTextColor = () => {
-    if (["completed", "rejected_by_sales", "rejected_by_operation", "rejected_by_operation_manager", "rejected_by_client"].includes(order.status)) {
+    if (
+      [
+        "completed",
+        "rejected_by_sales",
+        "rejected_by_operation",
+        "rejected_by_operation_manager",
+        "rejected_by_client",
+      ].includes(order.status)
+    ) {
       return "text-slate-700";
     }
     if (getDeadlineInfo.isOverdue) {
@@ -822,7 +1007,10 @@ export default function AdminOperationDetail() {
       <div className="space-y-6">
         {/* Header */}
         <Link to="/admin/operations">
-          <Button variant="ghost" className="gap-2 text-slate-600 hover:text-slate-900">
+          <Button
+            variant="ghost"
+            className="gap-2 text-slate-600 hover:text-slate-900"
+          >
             <ArrowLeft className="w-4 h-4" />
             Back to Operations
           </Button>
@@ -861,7 +1049,9 @@ export default function AdminOperationDetail() {
         {adminMode && (
           <div className="bg-amber-50 rounded-lg p-6 border-2 border-amber-200">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-bold text-amber-900">🔑 Admin Controls</h3>
+              <h3 className="text-lg font-bold text-amber-900">
+                🔑 Admin Controls
+              </h3>
               <button
                 onClick={() => setShowDeadlineSettings(!showDeadlineSettings)}
                 className="text-sm px-3 py-1 rounded bg-amber-200 text-amber-900 hover:bg-amber-300 font-medium"
@@ -873,7 +1063,9 @@ export default function AdminOperationDetail() {
             {/* Deadline Settings */}
             {showDeadlineSettings && (
               <div className="bg-white rounded-lg p-6 mb-6 border-2 border-amber-300">
-                <h4 className="font-bold text-slate-900 mb-4">⏱️ Configure Stage Deadlines</h4>
+                <h4 className="font-bold text-slate-900 mb-4">
+                  ⏱️ Configure Stage Deadlines
+                </h4>
                 <div className="space-y-4 max-h-96 overflow-y-auto">
                   {stageDeadlines.map((deadline) => (
                     <div
@@ -886,10 +1078,16 @@ export default function AdminOperationDetail() {
                     >
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex-1">
-                          <p className="font-semibold text-slate-900">{deadline.stageName}</p>
-                          <p className="text-xs text-slate-600 mt-1">{deadline.description}</p>
+                          <p className="font-semibold text-slate-900">
+                            {deadline.stageName}
+                          </p>
+                          <p className="text-xs text-slate-600 mt-1">
+                            {deadline.description}
+                          </p>
                           {deadline.notes && (
-                            <p className="text-xs text-slate-500 mt-1 italic">Note: {deadline.notes}</p>
+                            <p className="text-xs text-slate-500 mt-1 italic">
+                              Note: {deadline.notes}
+                            </p>
                           )}
                         </div>
                         <div className="flex items-center gap-3 flex-shrink-0">
@@ -899,20 +1097,29 @@ export default function AdminOperationDetail() {
                                 type="number"
                                 step="0.25"
                                 value={
-                                  stageDeadlines.find((d) => d.id === deadline.id)?.daysAllowed || 0
+                                  stageDeadlines.find(
+                                    (d) => d.id === deadline.id,
+                                  )?.daysAllowed || 0
                                 }
                                 onChange={(e) => {
                                   setStageDeadlines(
                                     stageDeadlines.map((d) =>
                                       d.id === deadline.id
-                                        ? { ...d, daysAllowed: parseFloat(e.target.value) }
-                                        : d
-                                    )
+                                        ? {
+                                            ...d,
+                                            daysAllowed: parseFloat(
+                                              e.target.value,
+                                            ),
+                                          }
+                                        : d,
+                                    ),
                                   );
                                 }}
                                 className="w-20 px-2 py-1 border border-blue-400 rounded text-sm"
                               />
-                              <span className="text-sm text-slate-600 w-16">days</span>
+                              <span className="text-sm text-slate-600 w-16">
+                                days
+                              </span>
                               <button
                                 onClick={() => setEditingDeadlineId(null)}
                                 className="px-3 py-1 rounded bg-green-600 text-white text-xs font-semibold hover:bg-green-700"
@@ -931,7 +1138,9 @@ export default function AdminOperationDetail() {
                                 </p>
                               </div>
                               <button
-                                onClick={() => setEditingDeadlineId(deadline.id)}
+                                onClick={() =>
+                                  setEditingDeadlineId(deadline.id)
+                                }
                                 className="px-3 py-1 rounded bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700"
                               >
                                 Edit
@@ -946,8 +1155,9 @@ export default function AdminOperationDetail() {
                 <div className="mt-4 p-3 bg-blue-50 rounded border border-blue-200 text-xs text-blue-800">
                   <p className="font-semibold mb-1">💡 Tip:</p>
                   <p>
-                    Update deadline values (in days) for each workflow stage. Use decimals for hours
-                    (e.g., 0.25 = 6 hours). Changes apply to all new orders using these stages.
+                    Update deadline values (in days) for each workflow stage.
+                    Use decimals for hours (e.g., 0.25 = 6 hours). Changes apply
+                    to all new orders using these stages.
                   </p>
                 </div>
               </div>
@@ -973,7 +1183,11 @@ export default function AdminOperationDetail() {
                 </select>
                 {impersonateStaffId && (
                   <p className="text-xs text-amber-700 mt-2">
-                    ✓ Acting as {mockStaff.find(s => s.id === impersonateStaffId)?.firstName}
+                    ✓ Acting as{" "}
+                    {
+                      mockStaff.find((s) => s.id === impersonateStaffId)
+                        ?.firstName
+                    }
                   </p>
                 )}
               </div>
@@ -1002,7 +1216,8 @@ export default function AdminOperationDetail() {
                       type="checkbox"
                       checked={order.completedServices.apostilleComplete}
                       onChange={(e) => {
-                        order.completedServices.apostilleComplete = e.target.checked;
+                        order.completedServices.apostilleComplete =
+                          e.target.checked;
                         window.location.reload();
                       }}
                       className="rounded"
@@ -1014,7 +1229,8 @@ export default function AdminOperationDetail() {
                       type="checkbox"
                       checked={order.completedServices.shippingComplete}
                       onChange={(e) => {
-                        order.completedServices.shippingComplete = e.target.checked;
+                        order.completedServices.shippingComplete =
+                          e.target.checked;
                         window.location.reload();
                       }}
                       className="rounded"
@@ -1038,12 +1254,15 @@ export default function AdminOperationDetail() {
                       type="checkbox"
                       checked={order.completedServices.financialReportComplete}
                       onChange={(e) => {
-                        order.completedServices.financialReportComplete = e.target.checked;
+                        order.completedServices.financialReportComplete =
+                          e.target.checked;
                         window.location.reload();
                       }}
                       className="rounded"
                     />
-                    <span className="text-sm text-amber-900">Financial Report</span>
+                    <span className="text-sm text-amber-900">
+                      Financial Report
+                    </span>
                   </label>
                 </div>
               </div>
@@ -1058,13 +1277,17 @@ export default function AdminOperationDetail() {
             <div>
               <div className="flex items-center gap-2 mb-2">
                 <User className="w-4 h-4 text-slate-600" />
-                <p className="text-xs font-semibold text-slate-600 uppercase">Created By</p>
+                <p className="text-xs font-semibold text-slate-600 uppercase">
+                  Created By
+                </p>
               </div>
               <p className={`text-sm font-medium ${getDeadlineTextColor()}`}>
                 {order.createdByStaffId
-                  ? mockStaff.find((s) => s.id === order.createdByStaffId)?.firstName +
+                  ? mockStaff.find((s) => s.id === order.createdByStaffId)
+                      ?.firstName +
                     " " +
-                    mockStaff.find((s) => s.id === order.createdByStaffId)?.lastName
+                    mockStaff.find((s) => s.id === order.createdByStaffId)
+                      ?.lastName
                   : "Unknown"}
               </p>
             </div>
@@ -1073,7 +1296,9 @@ export default function AdminOperationDetail() {
             <div>
               <div className="flex items-center gap-2 mb-2">
                 <Clock className="w-4 h-4 text-slate-600" />
-                <p className="text-xs font-semibold text-slate-600 uppercase">Current Stage</p>
+                <p className="text-xs font-semibold text-slate-600 uppercase">
+                  Current Stage
+                </p>
               </div>
               <p className={`text-sm font-medium ${getDeadlineTextColor()}`}>
                 {getDeadlineInfo.stageName}
@@ -1081,116 +1306,152 @@ export default function AdminOperationDetail() {
             </div>
 
             {/* Deadline & Countdown */}
-            {getDeadlineInfo.deadlineDate && !["completed", "rejected_by_sales", "rejected_by_operation", "rejected_by_operation_manager", "rejected_by_client"].includes(order.status) && (
-              <div>
-                <div className="flex items-center gap-2 mb-2">
-                  <Calendar className="w-4 h-4 text-slate-600" />
-                  <p className="text-xs font-semibold text-slate-600 uppercase">Deadline</p>
+            {getDeadlineInfo.deadlineDate &&
+              ![
+                "completed",
+                "rejected_by_sales",
+                "rejected_by_operation",
+                "rejected_by_operation_manager",
+                "rejected_by_client",
+              ].includes(order.status) && (
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <Calendar className="w-4 h-4 text-slate-600" />
+                    <p className="text-xs font-semibold text-slate-600 uppercase">
+                      Deadline
+                    </p>
+                  </div>
+                  <p
+                    className={`text-sm font-medium ${getDeadlineTextColor()}`}
+                  >
+                    {getDeadlineInfo.deadlineDate.toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </p>
+                  <p
+                    className={`text-xs mt-1 font-semibold ${
+                      getDeadlineInfo.isOverdue
+                        ? "text-red-600"
+                        : getDeadlineInfo.isApproaching
+                          ? "text-yellow-600"
+                          : "text-blue-600"
+                    }`}
+                  >
+                    {getDeadlineInfo.isOverdue ? (
+                      <>���️ OVERDUE</>
+                    ) : (
+                      <>
+                        {getDeadlineInfo.daysRemaining}d{" "}
+                        {getDeadlineInfo.hoursRemaining}h remaining
+                      </>
+                    )}
+                  </p>
                 </div>
-                <p className={`text-sm font-medium ${getDeadlineTextColor()}`}>
-                  {getDeadlineInfo.deadlineDate.toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                  })}
-                </p>
-                <p className={`text-xs mt-1 font-semibold ${
-                  getDeadlineInfo.isOverdue
-                    ? "text-red-600"
-                    : getDeadlineInfo.isApproaching
-                    ? "text-yellow-600"
-                    : "text-blue-600"
-                }`}>
-                  {getDeadlineInfo.isOverdue ? (
-                    <>���️ OVERDUE</>
-                  ) : (
-                    <>
-                      {getDeadlineInfo.daysRemaining}d {getDeadlineInfo.hoursRemaining}h remaining
-                    </>
-                  )}
-                </p>
-              </div>
-            )}
+              )}
 
             {/* Affected Staff */}
-            {getDeadlineInfo.affectedStaff && !["completed", "rejected_by_sales", "rejected_by_operation", "rejected_by_operation_manager", "rejected_by_client"].includes(order.status) && (
-              <div>
-                <div className="flex items-center gap-2 mb-2">
-                  <AlertCircle className="w-4 h-4 text-slate-600" />
-                  <p className="text-xs font-semibold text-slate-600 uppercase">Responsible</p>
-                </div>
-                <p className={`text-sm font-medium ${getDeadlineTextColor()}`}>
-                  {getDeadlineInfo.affectedStaff.firstName} {getDeadlineInfo.affectedStaff.lastName}
-                </p>
-                {(getDeadlineInfo.isOverdue || getDeadlineInfo.isApproaching) && (
-                  <p className={`text-xs mt-1 font-semibold ${
-                    getDeadlineInfo.isOverdue
-                      ? "text-red-600"
-                      : "text-yellow-600"
-                  }`}>
-                    ⚠️ Performance Impact
+            {getDeadlineInfo.affectedStaff &&
+              ![
+                "completed",
+                "rejected_by_sales",
+                "rejected_by_operation",
+                "rejected_by_operation_manager",
+                "rejected_by_client",
+              ].includes(order.status) && (
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <AlertCircle className="w-4 h-4 text-slate-600" />
+                    <p className="text-xs font-semibold text-slate-600 uppercase">
+                      Responsible
+                    </p>
+                  </div>
+                  <p
+                    className={`text-sm font-medium ${getDeadlineTextColor()}`}
+                  >
+                    {getDeadlineInfo.affectedStaff.firstName}{" "}
+                    {getDeadlineInfo.affectedStaff.lastName}
                   </p>
-                )}
-              </div>
-            )}
+                  {(getDeadlineInfo.isOverdue ||
+                    getDeadlineInfo.isApproaching) && (
+                    <p
+                      className={`text-xs mt-1 font-semibold ${
+                        getDeadlineInfo.isOverdue
+                          ? "text-red-600"
+                          : "text-yellow-600"
+                      }`}
+                    >
+                      ⚠️ Performance Impact
+                    </p>
+                  )}
+                </div>
+              )}
           </div>
         </div>
 
         {/* Workflow Action Buttons */}
-        {!["completed", "rejected_by_sales", "rejected_by_operation", "rejected_by_operation_manager", "rejected_by_client"].includes(order.status) && canAccept() && (
-          <div className="bg-white rounded-lg p-6 border border-slate-200 flex gap-3 items-center">
-            <Button
-              onClick={handleAccept}
-              className="bg-green-600 hover:bg-green-700 text-white gap-2"
-            >
-              <CheckCircle2 className="w-4 h-4" />
-              Accept & Move Forward
-            </Button>
-
-            {!showRejectForm ? (
+        {![
+          "completed",
+          "rejected_by_sales",
+          "rejected_by_operation",
+          "rejected_by_operation_manager",
+          "rejected_by_client",
+        ].includes(order.status) &&
+          canAccept() && (
+            <div className="bg-white rounded-lg p-6 border border-slate-200 flex gap-3 items-center">
               <Button
-                onClick={() => setShowRejectForm(true)}
-                variant="destructive"
-                className="gap-2"
+                onClick={handleAccept}
+                className="bg-green-600 hover:bg-green-700 text-white gap-2"
               >
-                <AlertCircle className="w-4 h-4" />
-                Reject Order
+                <CheckCircle2 className="w-4 h-4" />
+                Accept & Move Forward
               </Button>
-            ) : (
-              <div className="flex-1 flex gap-2 items-end">
-                <div className="flex-1">
-                  <label className="block text-sm font-medium text-slate-900 mb-2">
-                    Rejection Reason
-                  </label>
-                  <textarea
-                    value={rejectReason}
-                    onChange={(e) => setRejectReason(e.target.value)}
-                    placeholder="Please explain why you're rejecting this order..."
-                    rows={2}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:border-red-500 focus:ring-red-500 resize-none"
-                  />
+
+              {!showRejectForm ? (
+                <Button
+                  onClick={() => setShowRejectForm(true)}
+                  variant="destructive"
+                  className="gap-2"
+                >
+                  <AlertCircle className="w-4 h-4" />
+                  Reject Order
+                </Button>
+              ) : (
+                <div className="flex-1 flex gap-2 items-end">
+                  <div className="flex-1">
+                    <label className="block text-sm font-medium text-slate-900 mb-2">
+                      Rejection Reason
+                    </label>
+                    <textarea
+                      value={rejectReason}
+                      onChange={(e) => setRejectReason(e.target.value)}
+                      placeholder="Please explain why you're rejecting this order..."
+                      rows={2}
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:border-red-500 focus:ring-red-500 resize-none"
+                    />
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      onClick={handleReject}
+                      variant="destructive"
+                      disabled={!rejectReason.trim()}
+                    >
+                      Submit Rejection
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        setShowRejectForm(false);
+                        setRejectReason("");
+                      }}
+                      variant="outline"
+                    >
+                      Cancel
+                    </Button>
+                  </div>
                 </div>
-                <div className="flex gap-2">
-                  <Button
-                    onClick={handleReject}
-                    variant="destructive"
-                    disabled={!rejectReason.trim()}
-                  >
-                    Submit Rejection
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      setShowRejectForm(false);
-                      setRejectReason("");
-                    }}
-                    variant="outline"
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
+              )}
+            </div>
+          )}
 
         {/* Client Information Section */}
         {user && (
@@ -1203,40 +1464,62 @@ export default function AdminOperationDetail() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {/* Name */}
               <div className="bg-white rounded-lg p-4 border border-purple-100">
-                <p className="text-xs font-semibold text-slate-600 uppercase mb-2">Client Name</p>
-                <p className="text-base font-medium text-slate-900">{user.firstName} {user.lastName}</p>
+                <p className="text-xs font-semibold text-slate-600 uppercase mb-2">
+                  Client Name
+                </p>
+                <p className="text-base font-medium text-slate-900">
+                  {user.firstName} {user.lastName}
+                </p>
               </div>
 
               {/* Email */}
               <div className="bg-white rounded-lg p-4 border border-purple-100">
-                <p className="text-xs font-semibold text-slate-600 uppercase mb-2">Email</p>
-                <p className="text-sm text-slate-900 break-all">{user.email || "N/A"}</p>
+                <p className="text-xs font-semibold text-slate-600 uppercase mb-2">
+                  Email
+                </p>
+                <p className="text-sm text-slate-900 break-all">
+                  {user.email || "N/A"}
+                </p>
               </div>
 
               {/* Phone */}
               <div className="bg-white rounded-lg p-4 border border-purple-100">
-                <p className="text-xs font-semibold text-slate-600 uppercase mb-2">WhatsApp</p>
-                <p className="text-sm text-slate-900">{user.whatsappNumber || "N/A"}</p>
+                <p className="text-xs font-semibold text-slate-600 uppercase mb-2">
+                  WhatsApp
+                </p>
+                <p className="text-sm text-slate-900">
+                  {user.whatsappNumber || "N/A"}
+                </p>
               </div>
 
               {/* Company */}
               <div className="bg-white rounded-lg p-4 border border-purple-100">
-                <p className="text-xs font-semibold text-slate-600 uppercase mb-2">Company</p>
-                <p className="text-sm text-slate-900">{user.companyName || "N/A"}</p>
+                <p className="text-xs font-semibold text-slate-600 uppercase mb-2">
+                  Company
+                </p>
+                <p className="text-sm text-slate-900">
+                  {user.companyName || "N/A"}
+                </p>
               </div>
 
               {/* Country */}
               {user.country && (
                 <div className="bg-white rounded-lg p-4 border border-purple-100">
-                  <p className="text-xs font-semibold text-slate-600 uppercase mb-2">Country</p>
+                  <p className="text-xs font-semibold text-slate-600 uppercase mb-2">
+                    Country
+                  </p>
                   <p className="text-sm text-slate-900">{user.country}</p>
                 </div>
               )}
 
               {/* Account Created */}
               <div className="bg-white rounded-lg p-4 border border-purple-100">
-                <p className="text-xs font-semibold text-slate-600 uppercase mb-2">Account Created</p>
-                <p className="text-sm text-slate-900">{new Date(user.createdAt).toLocaleDateString()}</p>
+                <p className="text-xs font-semibold text-slate-600 uppercase mb-2">
+                  Account Created
+                </p>
+                <p className="text-sm text-slate-900">
+                  {new Date(user.createdAt).toLocaleDateString()}
+                </p>
               </div>
             </div>
           </div>
@@ -1252,27 +1535,47 @@ export default function AdminOperationDetail() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-white rounded-lg p-4 border border-blue-100">
-                <p className="text-xs font-semibold text-slate-600 uppercase mb-2">Company Name</p>
-                <p className="text-sm font-semibold text-slate-900">{order.companyInfo.companyName}</p>
+                <p className="text-xs font-semibold text-slate-600 uppercase mb-2">
+                  Company Name
+                </p>
+                <p className="text-sm font-semibold text-slate-900">
+                  {order.companyInfo.companyName}
+                </p>
               </div>
               <div className="bg-white rounded-lg p-4 border border-blue-100">
-                <p className="text-xs font-semibold text-slate-600 uppercase mb-2">Total Capital</p>
-                <p className="text-sm font-semibold text-slate-900">{order.currency} {order.companyInfo.totalCapital}</p>
+                <p className="text-xs font-semibold text-slate-600 uppercase mb-2">
+                  Total Capital
+                </p>
+                <p className="text-sm font-semibold text-slate-900">
+                  {order.currency} {order.companyInfo.totalCapital}
+                </p>
               </div>
               <div className="bg-white rounded-lg p-4 border border-blue-100">
-                <p className="text-xs font-semibold text-slate-600 uppercase mb-2">Price Per Share</p>
-                <p className="text-sm font-semibold text-slate-900">{order.currency} {order.companyInfo.pricePerShare}</p>
+                <p className="text-xs font-semibold text-slate-600 uppercase mb-2">
+                  Price Per Share
+                </p>
+                <p className="text-sm font-semibold text-slate-900">
+                  {order.currency} {order.companyInfo.pricePerShare}
+                </p>
               </div>
               <div className="bg-white rounded-lg p-4 border border-blue-100">
-                <p className="text-xs font-semibold text-slate-600 uppercase mb-2">Currency</p>
-                <p className="text-sm font-semibold text-slate-900">{order.currency}</p>
+                <p className="text-xs font-semibold text-slate-600 uppercase mb-2">
+                  Currency
+                </p>
+                <p className="text-sm font-semibold text-slate-900">
+                  {order.currency}
+                </p>
               </div>
             </div>
 
             {order.companyInfo.companyActivities && (
               <div className="mt-6 bg-white rounded-lg p-4 border border-blue-100">
-                <p className="text-xs font-semibold text-slate-600 uppercase mb-2">Business Activities</p>
-                <p className="text-sm text-slate-900 whitespace-pre-wrap">{order.companyInfo.companyActivities}</p>
+                <p className="text-xs font-semibold text-slate-600 uppercase mb-2">
+                  Business Activities
+                </p>
+                <p className="text-sm text-slate-900 whitespace-pre-wrap">
+                  {order.companyInfo.companyActivities}
+                </p>
               </div>
             )}
           </div>
@@ -1290,27 +1593,45 @@ export default function AdminOperationDetail() {
               <table className="w-full">
                 <thead>
                   <tr className="border-b-2 border-amber-200">
-                    <th className="text-left px-4 py-3 font-semibold text-slate-700">Name</th>
-                    <th className="text-left px-4 py-3 font-semibold text-slate-700">Date of Birth</th>
-                    <th className="text-left px-4 py-3 font-semibold text-slate-700">Nationality</th>
-                    <th className="text-center px-4 py-3 font-semibold text-slate-700">Ownership %</th>
-                    <th className="text-center px-4 py-3 font-semibold text-slate-700">Passport</th>
+                    <th className="text-left px-4 py-3 font-semibold text-slate-700">
+                      Name
+                    </th>
+                    <th className="text-left px-4 py-3 font-semibold text-slate-700">
+                      Date of Birth
+                    </th>
+                    <th className="text-left px-4 py-3 font-semibold text-slate-700">
+                      Nationality
+                    </th>
+                    <th className="text-center px-4 py-3 font-semibold text-slate-700">
+                      Ownership %
+                    </th>
+                    <th className="text-center px-4 py-3 font-semibold text-slate-700">
+                      Passport
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {order.shareholders.map((shareholder, index) => (
-                    <tr key={shareholder.id} className={index % 2 === 0 ? "bg-white" : "bg-amber-50"}>
+                    <tr
+                      key={shareholder.id}
+                      className={index % 2 === 0 ? "bg-white" : "bg-amber-50"}
+                    >
                       <td className="px-4 py-4 border-b border-amber-100">
                         <div>
-                          <p className="font-medium text-slate-900">{shareholder.firstName} {shareholder.lastName}</p>
+                          <p className="font-medium text-slate-900">
+                            {shareholder.firstName} {shareholder.lastName}
+                          </p>
                         </div>
                       </td>
                       <td className="px-4 py-4 border-b border-amber-100 text-slate-700">
-                        {new Date(shareholder.dateOfBirth).toLocaleDateString("en-US", {
-                          year: "numeric",
-                          month: "short",
-                          day: "numeric",
-                        })}
+                        {new Date(shareholder.dateOfBirth).toLocaleDateString(
+                          "en-US",
+                          {
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                          },
+                        )}
                       </td>
                       <td className="px-4 py-4 border-b border-amber-100 text-slate-700">
                         {shareholder.nationality}
@@ -1323,9 +1644,13 @@ export default function AdminOperationDetail() {
                       <td className="px-4 py-4 border-b border-amber-100">
                         {shareholder.passportFile ? (
                           <div className="flex flex-col gap-1">
-                            <div className="text-sm font-medium text-slate-900">{shareholder.passportFile.fileName}</div>
+                            <div className="text-sm font-medium text-slate-900">
+                              {shareholder.passportFile.fileName}
+                            </div>
                             <div className="text-xs text-slate-500">
-                              {shareholder.passportFile.fileSize ? `${(shareholder.passportFile.fileSize / 1024).toFixed(1)} KB` : ''}
+                              {shareholder.passportFile.fileSize
+                                ? `${(shareholder.passportFile.fileSize / 1024).toFixed(1)} KB`
+                                : ""}
                             </div>
                             {shareholder.passportFile.fileUrl && (
                               <a
@@ -1339,7 +1664,9 @@ export default function AdminOperationDetail() {
                             )}
                           </div>
                         ) : (
-                          <span className="text-slate-500 text-sm">No file</span>
+                          <span className="text-slate-500 text-sm">
+                            No file
+                          </span>
                         )}
                       </td>
                     </tr>
@@ -1351,9 +1678,14 @@ export default function AdminOperationDetail() {
             {/* Total Ownership Summary */}
             <div className="mt-6 pt-6 border-t-2 border-amber-200">
               <div className="flex items-center justify-between">
-                <span className="font-semibold text-slate-700">Total Ownership:</span>
+                <span className="font-semibold text-slate-700">
+                  Total Ownership:
+                </span>
                 <span className="text-lg font-bold text-amber-700">
-                  {order.shareholders.reduce((sum, sh) => sum + sh.ownershipPercentage, 0).toFixed(2)}%
+                  {order.shareholders
+                    .reduce((sum, sh) => sum + sh.ownershipPercentage, 0)
+                    .toFixed(2)}
+                  %
                 </span>
               </div>
             </div>
@@ -1370,13 +1702,19 @@ export default function AdminOperationDetail() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
             {/* Order Number */}
             <div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
-              <p className="text-xs font-semibold text-slate-600 uppercase mb-2">Order Number</p>
-              <p className="text-base font-mono font-bold text-slate-900">{order.orderNumber}</p>
+              <p className="text-xs font-semibold text-slate-600 uppercase mb-2">
+                Order Number
+              </p>
+              <p className="text-base font-mono font-bold text-slate-900">
+                {order.orderNumber}
+              </p>
             </div>
 
             {/* Created Date */}
             <div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
-              <p className="text-xs font-semibold text-slate-600 uppercase mb-2">Created Date</p>
+              <p className="text-xs font-semibold text-slate-600 uppercase mb-2">
+                Created Date
+              </p>
               <p className="text-base font-medium text-slate-900">
                 {new Date(order.createdAt).toLocaleDateString("en-US", {
                   year: "numeric",
@@ -1388,20 +1726,26 @@ export default function AdminOperationDetail() {
 
             {/* Amount & Currency - Only visible to Sales and Admin */}
             <div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
-              <p className="text-xs font-semibold text-slate-600 uppercase mb-2">Amount</p>
+              <p className="text-xs font-semibold text-slate-600 uppercase mb-2">
+                Amount
+              </p>
               {isSalesStaff || isAdmin ? (
                 <p className="text-lg font-bold text-slate-900">
                   {order.currency} {order.amount.toLocaleString()}
                 </p>
               ) : (
-                <p className="text-sm text-slate-500 italic">Restricted - Sales & Admin Only</p>
+                <p className="text-sm text-slate-500 italic">
+                  Restricted - Sales & Admin Only
+                </p>
               )}
             </div>
           </div>
 
           {/* Description */}
           <div className="mb-6">
-            <label className="text-xs font-semibold text-slate-600 uppercase mb-2 block">Description</label>
+            <label className="text-xs font-semibold text-slate-600 uppercase mb-2 block">
+              Description
+            </label>
             <p className="text-sm text-slate-700 bg-slate-50 p-4 rounded-lg border border-slate-200">
               {order.description || "N/A"}
             </p>
@@ -1410,14 +1754,18 @@ export default function AdminOperationDetail() {
           {/* Service Type & Countries */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div>
-              <label className="text-xs font-semibold text-slate-600 uppercase mb-2 block">Service Type</label>
+              <label className="text-xs font-semibold text-slate-600 uppercase mb-2 block">
+                Service Type
+              </label>
               <p className="text-sm font-medium text-slate-900 bg-slate-50 p-3 rounded-lg border border-slate-200">
                 {order.serviceType || "N/A"}
               </p>
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-slate-600 uppercase mb-2 block">Countries</label>
+              <label className="text-xs font-semibold text-slate-600 uppercase mb-2 block">
+                Countries
+              </label>
               <div className="flex flex-wrap gap-2">
                 {order.countries && order.countries.length > 0 ? (
                   order.countries.map((country, index) => (
@@ -1438,7 +1786,9 @@ export default function AdminOperationDetail() {
           {/* Sales Representative */}
           {order.assignedToSalesId && (
             <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-lg border border-green-200">
-              <label className="text-xs font-semibold text-slate-600 uppercase mb-2 block">Assigned Sales Representative</label>
+              <label className="text-xs font-semibold text-slate-600 uppercase mb-2 block">
+                Assigned Sales Representative
+              </label>
               <p className="text-base font-medium text-slate-900">
                 {getStaffName(order.assignedToSalesId)}
               </p>
@@ -1457,172 +1807,254 @@ export default function AdminOperationDetail() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {/* Product Details */}
               <div className="bg-white rounded-lg p-6 border border-blue-100">
-                <h3 className="text-lg font-bold text-slate-900 mb-3">Product Details</h3>
+                <h3 className="text-lg font-bold text-slate-900 mb-3">
+                  Product Details
+                </h3>
                 <div className="space-y-3">
                   <div>
-                    <p className="text-xs font-semibold text-slate-600 uppercase mb-1">Product Name</p>
-                    <p className="text-base font-medium text-slate-900">{product.name}</p>
+                    <p className="text-xs font-semibold text-slate-600 uppercase mb-1">
+                      Product Name
+                    </p>
+                    <p className="text-base font-medium text-slate-900">
+                      {product.name}
+                    </p>
                   </div>
                   <div>
-                    <p className="text-xs font-semibold text-slate-600 uppercase mb-1">Description</p>
-                    <p className="text-sm text-slate-700">{product.description}</p>
+                    <p className="text-xs font-semibold text-slate-600 uppercase mb-1">
+                      Description
+                    </p>
+                    <p className="text-sm text-slate-700">
+                      {product.description}
+                    </p>
                   </div>
                   <div className="grid grid-cols-2 gap-4 pt-3 border-t border-slate-200">
                     {/* Price - Only show to Sales staff */}
                     {isSalesStaff ? (
                       <div>
-                        <p className="text-xs font-semibold text-slate-600 uppercase mb-1">Price</p>
+                        <p className="text-xs font-semibold text-slate-600 uppercase mb-1">
+                          Price
+                        </p>
                         <p className="text-lg font-bold text-blue-600">
                           {product.currency} {product.price.toLocaleString()}
                         </p>
                       </div>
                     ) : (
                       <div>
-                        <p className="text-xs font-semibold text-slate-600 uppercase mb-1">Price</p>
-                        <p className="text-sm text-slate-500 italic">Restricted - Sales Only</p>
+                        <p className="text-xs font-semibold text-slate-600 uppercase mb-1">
+                          Price
+                        </p>
+                        <p className="text-sm text-slate-500 italic">
+                          Restricted - Sales Only
+                        </p>
                       </div>
                     )}
                     <div>
-                      <p className="text-xs font-semibold text-slate-600 uppercase mb-1">Duration</p>
-                      <p className="text-sm text-slate-900">{product.duration}</p>
+                      <p className="text-xs font-semibold text-slate-600 uppercase mb-1">
+                        Duration
+                      </p>
+                      <p className="text-sm text-slate-900">
+                        {product.duration}
+                      </p>
                     </div>
                   </div>
                   <div>
-                    <p className="text-xs font-semibold text-slate-600 uppercase mb-2">Requirements</p>
-                    <p className="text-sm text-slate-700">{product.requirements}</p>
+                    <p className="text-xs font-semibold text-slate-600 uppercase mb-2">
+                      Requirements
+                    </p>
+                    <p className="text-sm text-slate-700">
+                      {product.requirements}
+                    </p>
                   </div>
                 </div>
               </div>
 
               {/* Services Status */}
               <div className="bg-white rounded-lg p-6 border border-blue-100">
-                <h3 className="text-lg font-bold text-slate-900 mb-4">Services Status</h3>
+                <h3 className="text-lg font-bold text-slate-900 mb-4">
+                  Services Status
+                </h3>
                 <div className="space-y-3">
                   {/* Apostille */}
                   <div className="flex items-center justify-between p-3 rounded-lg border border-slate-200">
                     <div className="flex items-center gap-3">
-                      <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
-                        order.completedServices.apostilleComplete
-                          ? "bg-green-600 border-green-600"
-                          : product.services.hasApostille
-                          ? "border-orange-400"
-                          : "border-slate-300"
-                      }`}>
+                      <div
+                        className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
+                          order.completedServices.apostilleComplete
+                            ? "bg-green-600 border-green-600"
+                            : product.services.hasApostille
+                              ? "border-orange-400"
+                              : "border-slate-300"
+                        }`}
+                      >
                         {order.completedServices.apostilleComplete && (
-                          <span className="text-white text-xs font-bold">✓</span>
+                          <span className="text-white text-xs font-bold">
+                            ✓
+                          </span>
                         )}
                       </div>
                       <div>
-                        <p className="font-medium text-slate-900">Apostille Certification</p>
+                        <p className="font-medium text-slate-900">
+                          Apostille Certification
+                        </p>
                         <p className="text-xs text-slate-600">
-                          {product.services.hasApostille ? "Required" : "Not included"}
+                          {product.services.hasApostille
+                            ? "Required"
+                            : "Not included"}
                         </p>
                       </div>
                     </div>
-                    <span className={`text-xs font-semibold px-2 py-1 rounded ${
-                      order.completedServices.apostilleComplete
-                        ? "bg-green-100 text-green-700"
+                    <span
+                      className={`text-xs font-semibold px-2 py-1 rounded ${
+                        order.completedServices.apostilleComplete
+                          ? "bg-green-100 text-green-700"
+                          : product.services.hasApostille
+                            ? "bg-orange-100 text-orange-700"
+                            : "bg-slate-100 text-slate-600"
+                      }`}
+                    >
+                      {order.completedServices.apostilleComplete
+                        ? "Done"
                         : product.services.hasApostille
-                        ? "bg-orange-100 text-orange-700"
-                        : "bg-slate-100 text-slate-600"
-                    }`}>
-                      {order.completedServices.apostilleComplete ? "Done" : product.services.hasApostille ? "Pending" : "N/A"}
+                          ? "Pending"
+                          : "N/A"}
                     </span>
                   </div>
 
                   {/* POA */}
                   <div className="flex items-center justify-between p-3 rounded-lg border border-slate-200">
                     <div className="flex items-center gap-3">
-                      <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
-                        order.completedServices.poaComplete
-                          ? "bg-green-600 border-green-600"
-                          : product.services.hasPOA
-                          ? "border-orange-400"
-                          : "border-slate-300"
-                      }`}>
+                      <div
+                        className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
+                          order.completedServices.poaComplete
+                            ? "bg-green-600 border-green-600"
+                            : product.services.hasPOA
+                              ? "border-orange-400"
+                              : "border-slate-300"
+                        }`}
+                      >
                         {order.completedServices.poaComplete && (
-                          <span className="text-white text-xs font-bold">✓</span>
+                          <span className="text-white text-xs font-bold">
+                            ✓
+                          </span>
                         )}
                       </div>
                       <div>
-                        <p className="font-medium text-slate-900">Power of Attorney (POA)</p>
+                        <p className="font-medium text-slate-900">
+                          Power of Attorney (POA)
+                        </p>
                         <p className="text-xs text-slate-600">
-                          {product.services.hasPOA ? "Required" : "Not included"}
+                          {product.services.hasPOA
+                            ? "Required"
+                            : "Not included"}
                         </p>
                       </div>
                     </div>
-                    <span className={`text-xs font-semibold px-2 py-1 rounded ${
-                      order.completedServices.poaComplete
-                        ? "bg-green-100 text-green-700"
+                    <span
+                      className={`text-xs font-semibold px-2 py-1 rounded ${
+                        order.completedServices.poaComplete
+                          ? "bg-green-100 text-green-700"
+                          : product.services.hasPOA
+                            ? "bg-orange-100 text-orange-700"
+                            : "bg-slate-100 text-slate-600"
+                      }`}
+                    >
+                      {order.completedServices.poaComplete
+                        ? "Done"
                         : product.services.hasPOA
-                        ? "bg-orange-100 text-orange-700"
-                        : "bg-slate-100 text-slate-600"
-                    }`}>
-                      {order.completedServices.poaComplete ? "Done" : product.services.hasPOA ? "Pending" : "N/A"}
+                          ? "Pending"
+                          : "N/A"}
                     </span>
                   </div>
 
                   {/* Financial Report */}
                   <div className="flex items-center justify-between p-3 rounded-lg border border-slate-200">
                     <div className="flex items-center gap-3">
-                      <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
-                        order.completedServices.financialReportComplete
-                          ? "bg-green-600 border-green-600"
-                          : product.services.hasFinancialReport
-                          ? "border-orange-400"
-                          : "border-slate-300"
-                      }`}>
+                      <div
+                        className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
+                          order.completedServices.financialReportComplete
+                            ? "bg-green-600 border-green-600"
+                            : product.services.hasFinancialReport
+                              ? "border-orange-400"
+                              : "border-slate-300"
+                        }`}
+                      >
                         {order.completedServices.financialReportComplete && (
-                          <span className="text-white text-xs font-bold">✓</span>
+                          <span className="text-white text-xs font-bold">
+                            ✓
+                          </span>
                         )}
                       </div>
                       <div>
-                        <p className="font-medium text-slate-900">Financial Report</p>
+                        <p className="font-medium text-slate-900">
+                          Financial Report
+                        </p>
                         <p className="text-xs text-slate-600">
-                          {product.services.hasFinancialReport ? "Required" : "Not included"}
+                          {product.services.hasFinancialReport
+                            ? "Required"
+                            : "Not included"}
                         </p>
                       </div>
                     </div>
-                    <span className={`text-xs font-semibold px-2 py-1 rounded ${
-                      order.completedServices.financialReportComplete
-                        ? "bg-green-100 text-green-700"
+                    <span
+                      className={`text-xs font-semibold px-2 py-1 rounded ${
+                        order.completedServices.financialReportComplete
+                          ? "bg-green-100 text-green-700"
+                          : product.services.hasFinancialReport
+                            ? "bg-orange-100 text-orange-700"
+                            : "bg-slate-100 text-slate-600"
+                      }`}
+                    >
+                      {order.completedServices.financialReportComplete
+                        ? "Done"
                         : product.services.hasFinancialReport
-                        ? "bg-orange-100 text-orange-700"
-                        : "bg-slate-100 text-slate-600"
-                    }`}>
-                      {order.completedServices.financialReportComplete ? "Done" : product.services.hasFinancialReport ? "Pending" : "N/A"}
+                          ? "Pending"
+                          : "N/A"}
                     </span>
                   </div>
 
                   {/* Shipping */}
                   <div className="flex items-center justify-between p-3 rounded-lg border border-slate-200">
                     <div className="flex items-center gap-3">
-                      <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
-                        order.completedServices.shippingComplete
-                          ? "bg-green-600 border-green-600"
-                          : product.services.hasShipping
-                          ? "border-orange-400"
-                          : "border-slate-300"
-                      }`}>
+                      <div
+                        className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
+                          order.completedServices.shippingComplete
+                            ? "bg-green-600 border-green-600"
+                            : product.services.hasShipping
+                              ? "border-orange-400"
+                              : "border-slate-300"
+                        }`}
+                      >
                         {order.completedServices.shippingComplete && (
-                          <span className="text-white text-xs font-bold">✓</span>
+                          <span className="text-white text-xs font-bold">
+                            ✓
+                          </span>
                         )}
                       </div>
                       <div>
-                        <p className="font-medium text-slate-900">International Shipping</p>
+                        <p className="font-medium text-slate-900">
+                          International Shipping
+                        </p>
                         <p className="text-xs text-slate-600">
-                          {product.services.hasShipping ? "Required" : "Not included"}
+                          {product.services.hasShipping
+                            ? "Required"
+                            : "Not included"}
                         </p>
                       </div>
                     </div>
-                    <span className={`text-xs font-semibold px-2 py-1 rounded ${
-                      order.completedServices.shippingComplete
-                        ? "bg-green-100 text-green-700"
+                    <span
+                      className={`text-xs font-semibold px-2 py-1 rounded ${
+                        order.completedServices.shippingComplete
+                          ? "bg-green-100 text-green-700"
+                          : product.services.hasShipping
+                            ? "bg-orange-100 text-orange-700"
+                            : "bg-slate-100 text-slate-600"
+                      }`}
+                    >
+                      {order.completedServices.shippingComplete
+                        ? "Done"
                         : product.services.hasShipping
-                        ? "bg-orange-100 text-orange-700"
-                        : "bg-slate-100 text-slate-600"
-                    }`}>
-                      {order.completedServices.shippingComplete ? "Done" : product.services.hasShipping ? "Pending" : "N/A"}
+                          ? "Pending"
+                          : "N/A"}
                     </span>
                   </div>
                 </div>
@@ -1630,13 +2062,17 @@ export default function AdminOperationDetail() {
                 {/* Completion Summary */}
                 <div className="mt-6 pt-6 border-t border-slate-200">
                   <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-4">
-                    <p className="text-sm font-medium text-slate-900 mb-2">Overall Completion</p>
+                    <p className="text-sm font-medium text-slate-900 mb-2">
+                      Overall Completion
+                    </p>
                     <div className="w-full bg-slate-200 rounded-full h-2">
                       <div
                         className="bg-green-600 h-2 rounded-full transition-all"
                         style={{
                           width: `${
-                            (Object.values(order.completedServices).filter(Boolean).length /
+                            (Object.values(order.completedServices).filter(
+                              Boolean,
+                            ).length /
                               Object.values(order.completedServices).length) *
                             100
                           }%`,
@@ -1644,8 +2080,12 @@ export default function AdminOperationDetail() {
                       />
                     </div>
                     <p className="text-xs text-slate-600 mt-2">
-                      {Object.values(order.completedServices).filter(Boolean).length} of{" "}
-                      {Object.values(order.completedServices).length} services completed
+                      {
+                        Object.values(order.completedServices).filter(Boolean)
+                          .length
+                      }{" "}
+                      of {Object.values(order.completedServices).length}{" "}
+                      services completed
                     </p>
                   </div>
                 </div>
@@ -1679,15 +2119,18 @@ export default function AdminOperationDetail() {
                 const isCurrent = index === currentStageIndex;
 
                 return (
-                  <div key={stage.id} className="flex flex-col items-center flex-1 relative">
+                  <div
+                    key={stage.id}
+                    className="flex flex-col items-center flex-1 relative"
+                  >
                     {/* Stage Circle */}
                     <div
                       className={`w-12 h-12 rounded-full flex items-center justify-center text-xl mb-2 border-2 transition-all ${
                         isCompleted
                           ? "bg-green-600 border-green-600 text-white"
                           : isCurrent
-                          ? "bg-primary-600 border-primary-600 text-white shadow-lg"
-                          : "bg-white border-slate-300 text-slate-400"
+                            ? "bg-primary-600 border-primary-600 text-white shadow-lg"
+                            : "bg-white border-slate-300 text-slate-400"
                       }`}
                     >
                       {isCompleted ? (
@@ -1708,7 +2151,9 @@ export default function AdminOperationDetail() {
                     <div className="text-center max-w-[100px]">
                       {isCompleted ? (
                         <div className="text-xs">
-                          <p className="text-green-700 font-semibold">✓ Completed</p>
+                          <p className="text-green-700 font-semibold">
+                            ✓ Completed
+                          </p>
                         </div>
                       ) : (
                         <div className="text-xs">
@@ -1718,15 +2163,21 @@ export default function AdminOperationDetail() {
                             </div>
                           ) : stageDeadlineInfo.isApproaching ? (
                             <div className="text-yellow-600 font-semibold">
-                              <p>{stageDeadlineInfo.hoursRemaining}h {stageDeadlineInfo.minutesRemaining}m</p>
+                              <p>
+                                {stageDeadlineInfo.hoursRemaining}h{" "}
+                                {stageDeadlineInfo.minutesRemaining}m
+                              </p>
                               <p className="text-yellow-600">Approaching</p>
                             </div>
                           ) : (
                             <div className="text-slate-600">
                               <p className="font-semibold">
-                                {stageDeadlineInfo.daysRemaining}d {stageDeadlineInfo.hoursRemaining}h
+                                {stageDeadlineInfo.daysRemaining}d{" "}
+                                {stageDeadlineInfo.hoursRemaining}h
                               </p>
-                              <p className="text-slate-500 text-xs">{stageDeadlineInfo.daysAllowed} day(s)</p>
+                              <p className="text-slate-500 text-xs">
+                                {stageDeadlineInfo.daysAllowed} day(s)
+                              </p>
                             </div>
                           )}
                         </div>
@@ -1739,62 +2190,77 @@ export default function AdminOperationDetail() {
           </div>
 
           {/* Current Stage Timer - Large Display */}
-          {currentStageIndex >= 0 && currentStageIndex < workflowStages.length && (
-            <div className="mt-8 pt-6 border-t border-slate-200">
-              <h3 className="text-sm font-semibold text-slate-900 mb-4">
-                Current Stage: {workflowStages[currentStageIndex].label}
-              </h3>
-              <div className={`rounded-lg p-6 border-2 ${
-                getDeadlineInfo.isOverdue
-                  ? "bg-red-50 border-red-200"
-                  : getDeadlineInfo.isApproaching
-                  ? "bg-yellow-50 border-yellow-200"
-                  : "bg-blue-50 border-blue-200"
-              }`}>
-                <div className="text-center">
-                  <p className={`text-sm font-medium mb-2 ${
+          {currentStageIndex >= 0 &&
+            currentStageIndex < workflowStages.length && (
+              <div className="mt-8 pt-6 border-t border-slate-200">
+                <h3 className="text-sm font-semibold text-slate-900 mb-4">
+                  Current Stage: {workflowStages[currentStageIndex].label}
+                </h3>
+                <div
+                  className={`rounded-lg p-6 border-2 ${
                     getDeadlineInfo.isOverdue
-                      ? "text-red-700"
+                      ? "bg-red-50 border-red-200"
                       : getDeadlineInfo.isApproaching
-                      ? "text-yellow-700"
-                      : "text-blue-700"
-                  }`}>
-                    Time Remaining
-                  </p>
-                  <div className="text-4xl font-bold mb-2 font-mono" style={{
-                    color: getDeadlineInfo.isOverdue
-                      ? "#dc2626"
-                      : getDeadlineInfo.isApproaching
-                      ? "#ea580c"
-                      : "#2563eb"
-                  }}>
-                    {getDeadlineInfo.isOverdue ? (
-                      <span>OVERDUE ⚠️</span>
-                    ) : (
-                      <span>
-                        {getDeadlineInfo.daysRemaining}d {getDeadlineInfo.hoursRemaining}h
-                      </span>
-                    )}
+                        ? "bg-yellow-50 border-yellow-200"
+                        : "bg-blue-50 border-blue-200"
+                  }`}
+                >
+                  <div className="text-center">
+                    <p
+                      className={`text-sm font-medium mb-2 ${
+                        getDeadlineInfo.isOverdue
+                          ? "text-red-700"
+                          : getDeadlineInfo.isApproaching
+                            ? "text-yellow-700"
+                            : "text-blue-700"
+                      }`}
+                    >
+                      Time Remaining
+                    </p>
+                    <div
+                      className="text-4xl font-bold mb-2 font-mono"
+                      style={{
+                        color: getDeadlineInfo.isOverdue
+                          ? "#dc2626"
+                          : getDeadlineInfo.isApproaching
+                            ? "#ea580c"
+                            : "#2563eb",
+                      }}
+                    >
+                      {getDeadlineInfo.isOverdue ? (
+                        <span>OVERDUE ⚠️</span>
+                      ) : (
+                        <span>
+                          {getDeadlineInfo.daysRemaining}d{" "}
+                          {getDeadlineInfo.hoursRemaining}h
+                        </span>
+                      )}
+                    </div>
+                    <p
+                      className={`text-xs font-medium ${
+                        getDeadlineInfo.isOverdue
+                          ? "text-red-600"
+                          : getDeadlineInfo.isApproaching
+                            ? "text-yellow-600"
+                            : "text-blue-600"
+                      }`}
+                    >
+                      Deadline:{" "}
+                      {getDeadlineInfo.deadlineDate?.toLocaleDateString(
+                        "en-US",
+                        {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        },
+                      )}
+                    </p>
                   </div>
-                  <p className={`text-xs font-medium ${
-                    getDeadlineInfo.isOverdue
-                      ? "text-red-600"
-                      : getDeadlineInfo.isApproaching
-                      ? "text-yellow-600"
-                      : "text-blue-600"
-                  }`}>
-                    Deadline: {getDeadlineInfo.deadlineDate?.toLocaleDateString("en-US", {
-                      month: "short",
-                      day: "numeric",
-                      year: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </p>
                 </div>
               </div>
-            </div>
-          )}
+            )}
         </div>
 
         {/* Shipping & Tracking Information Section */}
@@ -1833,19 +2299,33 @@ export default function AdminOperationDetail() {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs text-green-700">
                         <div>
                           <p className="font-semibold">Added By:</p>
-                          <p>{order.trackingNumberAddedBy ? mockStaff.find(s => s.id === order.trackingNumberAddedBy)?.firstName + " " + mockStaff.find(s => s.id === order.trackingNumberAddedBy)?.lastName : "Unknown"}</p>
+                          <p>
+                            {order.trackingNumberAddedBy
+                              ? mockStaff.find(
+                                  (s) => s.id === order.trackingNumberAddedBy,
+                                )?.firstName +
+                                " " +
+                                mockStaff.find(
+                                  (s) => s.id === order.trackingNumberAddedBy,
+                                )?.lastName
+                              : "Unknown"}
+                          </p>
                         </div>
                         <div>
                           <p className="font-semibold">Added On:</p>
                           <p>
                             {order.trackingNumberAddedAt
-                              ? new Date(order.trackingNumberAddedAt).toLocaleDateString("en-US", {
+                              ? new Date(
+                                  order.trackingNumberAddedAt,
+                                ).toLocaleDateString("en-US", {
                                   month: "short",
                                   day: "numeric",
                                   year: "numeric",
                                 }) +
                                 " at " +
-                                new Date(order.trackingNumberAddedAt).toLocaleTimeString("en-US", {
+                                new Date(
+                                  order.trackingNumberAddedAt,
+                                ).toLocaleTimeString("en-US", {
                                   hour: "2-digit",
                                   minute: "2-digit",
                                 })
@@ -1854,7 +2334,8 @@ export default function AdminOperationDetail() {
                         </div>
                       </div>
                       <p className="text-xs text-green-600 mt-3">
-                        ✅ Tracking number is visible to the client in their dashboard
+                        ✅ Tracking number is visible to the client in their
+                        dashboard
                       </p>
                     </div>
                   </div>
@@ -1872,7 +2353,8 @@ export default function AdminOperationDetail() {
                         className="border-slate-300 focus:border-green-500 focus:ring-green-500"
                       />
                       <p className="text-xs text-slate-600 mt-2">
-                        Enter courier name and tracking number (e.g., FEDEX-794612345678)
+                        Enter courier name and tracking number (e.g.,
+                        FEDEX-794612345678)
                       </p>
                     </div>
 
@@ -1893,7 +2375,8 @@ export default function AdminOperationDetail() {
                 <p className="text-sm text-blue-900 flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-blue-600" />
                   <span>
-                    Once tracking is added, the client will be able to see it on their order dashboard.
+                    Once tracking is added, the client will be able to see it on
+                    their order dashboard.
                   </span>
                 </p>
               </div>
@@ -1903,7 +2386,14 @@ export default function AdminOperationDetail() {
 
         {/* Tabs */}
         <div className="flex gap-2 border-b border-slate-200 overflow-x-auto">
-          {["workflow", "apostille", "poa", "financial_report", "shipping", "history"].map((tab) => (
+          {[
+            "workflow",
+            "apostille",
+            "poa",
+            "financial_report",
+            "shipping",
+            "history",
+          ].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab as any)}
@@ -1916,14 +2406,14 @@ export default function AdminOperationDetail() {
               {tab === "workflow"
                 ? "Workflow & Files"
                 : tab === "apostille"
-                ? "Apostille"
-                : tab === "poa"
-                ? "POA"
-                : tab === "financial_report"
-                ? "Financial Report"
-                : tab === "shipping"
-                ? "Shipping"
-                : "Activity Log"}
+                  ? "Apostille"
+                  : tab === "poa"
+                    ? "POA"
+                    : tab === "financial_report"
+                      ? "Financial Report"
+                      : tab === "shipping"
+                        ? "Shipping"
+                        : "Activity Log"}
             </button>
           ))}
         </div>
@@ -1970,7 +2460,10 @@ export default function AdminOperationDetail() {
                         {selectedFiles.length} file(s) selected
                       </p>
                       {selectedFiles.map((file, idx) => (
-                        <div key={idx} className="p-3 bg-blue-50 rounded-lg border border-blue-200 flex items-center justify-between">
+                        <div
+                          key={idx}
+                          className="p-3 bg-blue-50 rounded-lg border border-blue-200 flex items-center justify-between"
+                        >
                           <div className="flex items-center gap-2 flex-1 min-w-0">
                             <FileText className="w-4 h-4 text-blue-600 flex-shrink-0" />
                             <div className="min-w-0">
@@ -2014,7 +2507,10 @@ export default function AdminOperationDetail() {
                   className="w-full bg-primary-600 hover:bg-primary-700 text-white disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Upload className="w-4 h-4 mr-2" />
-                  Upload {selectedFiles.length > 1 ? `${selectedFiles.length} Files` : "Files"}
+                  Upload{" "}
+                  {selectedFiles.length > 1
+                    ? `${selectedFiles.length} Files`
+                    : "Files"}
                 </Button>
               </div>
             </div>
@@ -2045,7 +2541,7 @@ export default function AdminOperationDetail() {
                             <span>
                               {new Date(file.uploadedAt).toLocaleDateString(
                                 "en-US",
-                                { month: "short", day: "numeric" }
+                                { month: "short", day: "numeric" },
                               )}
                             </span>
                             <span>•</span>
@@ -2082,17 +2578,23 @@ export default function AdminOperationDetail() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Company Name */}
                     <div className="bg-white rounded-lg p-4 border border-green-200">
-                      <p className="text-xs font-semibold text-slate-600 uppercase mb-1">Company Name</p>
+                      <p className="text-xs font-semibold text-slate-600 uppercase mb-1">
+                        Company Name
+                      </p>
                       <p className="text-sm font-medium text-slate-900">
-                        {order.operationReviewForm.companyName || "Not provided"}
+                        {order.operationReviewForm.companyName ||
+                          "Not provided"}
                       </p>
                     </div>
 
                     {/* Company Number */}
                     <div className="bg-white rounded-lg p-4 border border-green-200">
-                      <p className="text-xs font-semibold text-slate-600 uppercase mb-1">Company Number</p>
+                      <p className="text-xs font-semibold text-slate-600 uppercase mb-1">
+                        Company Number
+                      </p>
                       <p className="text-sm font-medium text-slate-900">
-                        {order.operationReviewForm.companyNumber || "Not provided"}
+                        {order.operationReviewForm.companyNumber ||
+                          "Not provided"}
                       </p>
                     </div>
                   </div>
@@ -2108,7 +2610,8 @@ export default function AdminOperationDetail() {
                   Operation Review Form (Required)
                 </h3>
                 <p className="text-sm text-slate-700 mb-6">
-                  Complete this form before moving the order to Manager Review. All fields are mandatory.
+                  Complete this form before moving the order to Manager Review.
+                  All fields are mandatory.
                 </p>
 
                 <div className="space-y-6">
@@ -2151,18 +2654,22 @@ export default function AdminOperationDetail() {
                   </div>
 
                   {/* Completion Status */}
-                  <div className={`rounded-lg p-4 border-2 ${
-                    operationFormData.companyName.trim() &&
-                    operationFormData.companyNumber.trim()
-                      ? "bg-green-50 border-green-200"
-                      : "bg-amber-50 border-amber-200"
-                  }`}>
-                    <p className={`text-sm font-semibold ${
+                  <div
+                    className={`rounded-lg p-4 border-2 ${
                       operationFormData.companyName.trim() &&
                       operationFormData.companyNumber.trim()
-                        ? "text-green-800"
-                        : "text-amber-800"
-                    }`}>
+                        ? "bg-green-50 border-green-200"
+                        : "bg-amber-50 border-amber-200"
+                    }`}
+                  >
+                    <p
+                      className={`text-sm font-semibold ${
+                        operationFormData.companyName.trim() &&
+                        operationFormData.companyNumber.trim()
+                          ? "text-green-800"
+                          : "text-amber-800"
+                      }`}
+                    >
                       {operationFormData.companyName.trim() &&
                       operationFormData.companyNumber.trim()
                         ? "✓ Form Complete - Ready to proceed to Manager Review"
@@ -2191,10 +2698,13 @@ export default function AdminOperationDetail() {
                   <p className="text-xs text-green-700">
                     Added on{" "}
                     {order.trackingNumberAddedAt
-                      ? new Date(order.trackingNumberAddedAt).toLocaleDateString(
-                          "en-US",
-                          { month: "short", day: "numeric", year: "numeric" }
-                        )
+                      ? new Date(
+                          order.trackingNumberAddedAt,
+                        ).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                        })
                       : "Unknown date"}{" "}
                     by {order.trackingNumberAddedBy || "Unknown"}
                   </p>
@@ -2243,7 +2753,8 @@ export default function AdminOperationDetail() {
                     Apostille Documents Upload
                   </h3>
                   <p className="text-sm text-slate-600 mb-6">
-                    Upload apostille documents for this order. Apostille is a certificate authenticating the origin of a document.
+                    Upload apostille documents for this order. Apostille is a
+                    certificate authenticating the origin of a document.
                   </p>
                   <div className="space-y-4">
                     <div>
@@ -2262,7 +2773,9 @@ export default function AdminOperationDetail() {
                         htmlFor="apostille-file-input"
                         className="flex items-center justify-center w-full px-4 py-3 border-2 border-dashed border-slate-300 rounded-lg cursor-pointer hover:border-primary-400 transition"
                       >
-                        <span className="text-slate-600">Click to select apostille documents or drag and drop</span>
+                        <span className="text-slate-600">
+                          Click to select apostille documents or drag and drop
+                        </span>
                       </label>
                       {apostilleFiles.length > 0 && (
                         <div className="mt-3 space-y-2">
@@ -2270,11 +2783,18 @@ export default function AdminOperationDetail() {
                             {apostilleFiles.length} file(s) selected
                           </p>
                           {apostilleFiles.map((file, idx) => (
-                            <div key={idx} className="flex items-center justify-between p-2 bg-slate-50 rounded border border-slate-200">
-                              <span className="text-sm text-slate-700">{file.name}</span>
+                            <div
+                              key={idx}
+                              className="flex items-center justify-between p-2 bg-slate-50 rounded border border-slate-200"
+                            >
+                              <span className="text-sm text-slate-700">
+                                {file.name}
+                              </span>
                               <button
                                 onClick={() => {
-                                  setApostilleFiles(apostilleFiles.filter((_, i) => i !== idx));
+                                  setApostilleFiles(
+                                    apostilleFiles.filter((_, i) => i !== idx),
+                                  );
                                 }}
                                 className="text-blue-600 hover:text-blue-800 ml-2 flex-shrink-0"
                               >
@@ -2287,7 +2807,9 @@ export default function AdminOperationDetail() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-slate-900 mb-2">Document Description (Optional)</label>
+                      <label className="block text-sm font-medium text-slate-900 mb-2">
+                        Document Description (Optional)
+                      </label>
                       <textarea
                         value={apostilleNotes}
                         onChange={(e) => setApostilleNotes(e.target.value)}
@@ -2307,7 +2829,10 @@ export default function AdminOperationDetail() {
                             fileName: apostilleFiles[0].name,
                             fileSize: apostilleFiles[0].size,
                             uploadedBy: effectiveUserId,
-                            uploadedByName: currentStaff?.firstName + " " + currentStaff?.lastName || "Unknown",
+                            uploadedByName:
+                              currentStaff?.firstName +
+                                " " +
+                                currentStaff?.lastName || "Unknown",
                             uploadedAt: new Date().toISOString(),
                             stage: "apostille",
                             fileType: "apostille",
@@ -2315,7 +2840,10 @@ export default function AdminOperationDetail() {
                             visibleToClient: false,
                           });
                           updatedOrder.completedServices.apostilleComplete = true;
-                          localStorage.setItem(`order_${orderId}`, JSON.stringify(updatedOrder));
+                          localStorage.setItem(
+                            `order_${orderId}`,
+                            JSON.stringify(updatedOrder),
+                          );
                           setApostilleFiles([]);
                           setApostilleNotes("");
                           setOrder(updatedOrder);
@@ -2331,22 +2859,40 @@ export default function AdminOperationDetail() {
                     </Button>
 
                     {/* Uploaded Files */}
-                    {order.operationFiles?.filter(f => f.stage === "apostille").length > 0 && (
+                    {order.operationFiles?.filter(
+                      (f) => f.stage === "apostille",
+                    ).length > 0 && (
                       <div className="mt-6 space-y-3">
-                        <h4 className="font-semibold text-slate-900">Uploaded Documents</h4>
-                        {order.operationFiles.filter(f => f.stage === "apostille").map((file) => (
-                          <div key={file.id} className="p-4 bg-green-50 rounded-lg border border-green-200">
-                            <div className="flex items-center justify-between">
-                              <div>
-                                <p className="font-medium text-slate-900">{file.fileName}</p>
-                                <p className="text-xs text-slate-600 mt-1">
-                                  Uploaded by {file.uploadedByName} on {new Date(file.uploadedAt).toLocaleDateString()}
-                                </p>
-                                {file.description && <p className="text-sm text-slate-700 mt-2">{file.description}</p>}
+                        <h4 className="font-semibold text-slate-900">
+                          Uploaded Documents
+                        </h4>
+                        {order.operationFiles
+                          .filter((f) => f.stage === "apostille")
+                          .map((file) => (
+                            <div
+                              key={file.id}
+                              className="p-4 bg-green-50 rounded-lg border border-green-200"
+                            >
+                              <div className="flex items-center justify-between">
+                                <div>
+                                  <p className="font-medium text-slate-900">
+                                    {file.fileName}
+                                  </p>
+                                  <p className="text-xs text-slate-600 mt-1">
+                                    Uploaded by {file.uploadedByName} on{" "}
+                                    {new Date(
+                                      file.uploadedAt,
+                                    ).toLocaleDateString()}
+                                  </p>
+                                  {file.description && (
+                                    <p className="text-sm text-slate-700 mt-2">
+                                      {file.description}
+                                    </p>
+                                  )}
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        ))}
+                          ))}
                       </div>
                     )}
                   </div>
@@ -2354,7 +2900,8 @@ export default function AdminOperationDetail() {
               ) : (
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                   <p className="text-blue-900">
-                    Apostille documents can only be uploaded when the order is in the Apostille Processing stage.
+                    Apostille documents can only be uploaded when the order is
+                    in the Apostille Processing stage.
                   </p>
                 </div>
               )
@@ -2414,7 +2961,10 @@ export default function AdminOperationDetail() {
                             {poaFiles.length} file(s) selected
                           </p>
                           {poaFiles.map((file, idx) => (
-                            <div key={idx} className="p-3 bg-blue-50 rounded-lg border border-blue-200 flex items-center justify-between">
+                            <div
+                              key={idx}
+                              className="p-3 bg-blue-50 rounded-lg border border-blue-200 flex items-center justify-between"
+                            >
                               <div className="flex items-center gap-2 flex-1 min-w-0">
                                 <FileText className="w-4 h-4 text-blue-600 flex-shrink-0" />
                                 <div className="min-w-0">
@@ -2427,7 +2977,11 @@ export default function AdminOperationDetail() {
                                 </div>
                               </div>
                               <button
-                                onClick={() => setPoaFiles(poaFiles.filter((_, i) => i !== idx))}
+                                onClick={() =>
+                                  setPoaFiles(
+                                    poaFiles.filter((_, i) => i !== idx),
+                                  )
+                                }
                                 className="text-blue-600 hover:text-blue-800 ml-2 flex-shrink-0"
                               >
                                 <X className="w-4 h-4" />
@@ -2462,7 +3016,9 @@ export default function AdminOperationDetail() {
                             fileName: poaFiles[0].name,
                             fileSize: poaFiles[0].size,
                             uploadedBy: effectiveUserId,
-                            uploadedByName: mockStaff.find(s => s.id === effectiveUserId)?.firstName || "Unknown",
+                            uploadedByName:
+                              mockStaff.find((s) => s.id === effectiveUserId)
+                                ?.firstName || "Unknown",
                             uploadedAt: new Date().toISOString(),
                             stage: "poa",
                             fileType: "poa",
@@ -2470,7 +3026,10 @@ export default function AdminOperationDetail() {
                             visibleToClient: false,
                           });
                           setOrder(updatedOrder);
-                          localStorage.setItem(`order_${orderId}`, JSON.stringify(updatedOrder));
+                          localStorage.setItem(
+                            `order_${orderId}`,
+                            JSON.stringify(updatedOrder),
+                          );
                           setPoaFiles([]);
                           setPoaNotes("");
                           alert("POA documents uploaded successfully!");
@@ -2486,30 +3045,44 @@ export default function AdminOperationDetail() {
                   </div>
                 )}
 
-
                 {/* Uploaded Files - Always visible */}
-                {order.operationFiles?.filter(f => f.stage === "poa").length > 0 && (
+                {order.operationFiles?.filter((f) => f.stage === "poa").length >
+                  0 && (
                   <div className="bg-white rounded-lg p-6 border border-slate-200">
-                    <h4 className="font-semibold text-slate-900 mb-4">POA Documents</h4>
+                    <h4 className="font-semibold text-slate-900 mb-4">
+                      POA Documents
+                    </h4>
                     <div className="space-y-3">
-                      {order.operationFiles.filter(f => f.stage === "poa").map((file) => (
-                        <div key={file.id} className="p-4 bg-green-50 rounded-lg border border-green-200">
-                          <div className="flex items-start justify-between">
-                            <div className="flex-1">
-                              <p className="font-medium text-slate-900">{file.fileName}</p>
-                              <p className="text-xs text-slate-600 mt-1">
-                                By {file.uploadedByName} on {new Date(file.uploadedAt).toLocaleDateString()}
-                              </p>
-                              {file.description && (
-                                <p className="text-sm text-slate-700 mt-2">{file.description}</p>
-                              )}
+                      {order.operationFiles
+                        .filter((f) => f.stage === "poa")
+                        .map((file) => (
+                          <div
+                            key={file.id}
+                            className="p-4 bg-green-50 rounded-lg border border-green-200"
+                          >
+                            <div className="flex items-start justify-between">
+                              <div className="flex-1">
+                                <p className="font-medium text-slate-900">
+                                  {file.fileName}
+                                </p>
+                                <p className="text-xs text-slate-600 mt-1">
+                                  By {file.uploadedByName} on{" "}
+                                  {new Date(
+                                    file.uploadedAt,
+                                  ).toLocaleDateString()}
+                                </p>
+                                {file.description && (
+                                  <p className="text-sm text-slate-700 mt-2">
+                                    {file.description}
+                                  </p>
+                                )}
+                              </div>
+                              <button className="ml-4 px-3 py-1 rounded bg-green-600 text-white text-sm font-semibold hover:bg-green-700">
+                                Download
+                              </button>
                             </div>
-                            <button className="ml-4 px-3 py-1 rounded bg-green-600 text-white text-sm font-semibold hover:bg-green-700">
-                              Download
-                            </button>
                           </div>
-                        </div>
-                      ))}
+                        ))}
                     </div>
                   </div>
                 )}
@@ -2570,7 +3143,10 @@ export default function AdminOperationDetail() {
                             {financialReportFiles.length} file(s) selected
                           </p>
                           {financialReportFiles.map((file, idx) => (
-                            <div key={idx} className="p-3 bg-blue-50 rounded-lg border border-blue-200 flex items-center justify-between">
+                            <div
+                              key={idx}
+                              className="p-3 bg-blue-50 rounded-lg border border-blue-200 flex items-center justify-between"
+                            >
                               <div className="flex items-center gap-2 flex-1 min-w-0">
                                 <FileText className="w-4 h-4 text-blue-600 flex-shrink-0" />
                                 <div className="min-w-0">
@@ -2583,7 +3159,13 @@ export default function AdminOperationDetail() {
                                 </div>
                               </div>
                               <button
-                                onClick={() => setFinancialReportFiles(financialReportFiles.filter((_, i) => i !== idx))}
+                                onClick={() =>
+                                  setFinancialReportFiles(
+                                    financialReportFiles.filter(
+                                      (_, i) => i !== idx,
+                                    ),
+                                  )
+                                }
                                 className="text-blue-600 hover:text-blue-800 ml-2 flex-shrink-0"
                               >
                                 <X className="w-4 h-4" />
@@ -2601,7 +3183,9 @@ export default function AdminOperationDetail() {
                       </label>
                       <textarea
                         value={financialReportNotes}
-                        onChange={(e) => setFinancialReportNotes(e.target.value)}
+                        onChange={(e) =>
+                          setFinancialReportNotes(e.target.value)
+                        }
                         placeholder="Please describe the financial report and any relevant details..."
                         rows={3}
                         className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500 resize-none"
@@ -2610,7 +3194,10 @@ export default function AdminOperationDetail() {
 
                     <Button
                       onClick={() => {
-                        if (financialReportFiles.length > 0 && financialReportNotes.trim()) {
+                        if (
+                          financialReportFiles.length > 0 &&
+                          financialReportNotes.trim()
+                        ) {
                           const updatedOrder = { ...order };
                           updatedOrder.operationFiles.push({
                             id: `file_${Date.now()}`,
@@ -2618,7 +3205,9 @@ export default function AdminOperationDetail() {
                             fileName: financialReportFiles[0].name,
                             fileSize: financialReportFiles[0].size,
                             uploadedBy: effectiveUserId,
-                            uploadedByName: mockStaff.find(s => s.id === effectiveUserId)?.firstName || "Unknown",
+                            uploadedByName:
+                              mockStaff.find((s) => s.id === effectiveUserId)
+                                ?.firstName || "Unknown",
                             uploadedAt: new Date().toISOString(),
                             stage: "financial_report",
                             fileType: "financial_report",
@@ -2626,10 +3215,15 @@ export default function AdminOperationDetail() {
                             visibleToClient: false,
                           });
                           setOrder(updatedOrder);
-                          localStorage.setItem(`order_${orderId}`, JSON.stringify(updatedOrder));
+                          localStorage.setItem(
+                            `order_${orderId}`,
+                            JSON.stringify(updatedOrder),
+                          );
                           setFinancialReportFiles([]);
                           setFinancialReportNotes("");
-                          alert("Financial Report documents uploaded successfully!");
+                          alert(
+                            "Financial Report documents uploaded successfully!",
+                          );
                         } else {
                           alert("Please select files and add a description");
                         }
@@ -2642,30 +3236,45 @@ export default function AdminOperationDetail() {
                   </div>
                 )}
 
-
                 {/* Uploaded Files - Always visible */}
-                {order.operationFiles?.filter(f => f.stage === "financial_report").length > 0 && (
+                {order.operationFiles?.filter(
+                  (f) => f.stage === "financial_report",
+                ).length > 0 && (
                   <div className="bg-white rounded-lg p-6 border border-slate-200">
-                    <h4 className="font-semibold text-slate-900 mb-4">Financial Report Documents</h4>
+                    <h4 className="font-semibold text-slate-900 mb-4">
+                      Financial Report Documents
+                    </h4>
                     <div className="space-y-3">
-                      {order.operationFiles.filter(f => f.stage === "financial_report").map((file) => (
-                        <div key={file.id} className="p-4 bg-green-50 rounded-lg border border-green-200">
-                          <div className="flex items-start justify-between">
-                            <div className="flex-1">
-                              <p className="font-medium text-slate-900">{file.fileName}</p>
-                              <p className="text-xs text-slate-600 mt-1">
-                                By {file.uploadedByName} on {new Date(file.uploadedAt).toLocaleDateString()}
-                              </p>
-                              {file.description && (
-                                <p className="text-sm text-slate-700 mt-2">{file.description}</p>
-                              )}
+                      {order.operationFiles
+                        .filter((f) => f.stage === "financial_report")
+                        .map((file) => (
+                          <div
+                            key={file.id}
+                            className="p-4 bg-green-50 rounded-lg border border-green-200"
+                          >
+                            <div className="flex items-start justify-between">
+                              <div className="flex-1">
+                                <p className="font-medium text-slate-900">
+                                  {file.fileName}
+                                </p>
+                                <p className="text-xs text-slate-600 mt-1">
+                                  By {file.uploadedByName} on{" "}
+                                  {new Date(
+                                    file.uploadedAt,
+                                  ).toLocaleDateString()}
+                                </p>
+                                {file.description && (
+                                  <p className="text-sm text-slate-700 mt-2">
+                                    {file.description}
+                                  </p>
+                                )}
+                              </div>
+                              <button className="ml-4 px-3 py-1 rounded bg-green-600 text-white text-sm font-semibold hover:bg-green-700">
+                                Download
+                              </button>
                             </div>
-                            <button className="ml-4 px-3 py-1 rounded bg-green-600 text-white text-sm font-semibold hover:bg-green-700">
-                              Download
-                            </button>
                           </div>
-                        </div>
-                      ))}
+                        ))}
                     </div>
                   </div>
                 )}
@@ -2718,7 +3327,8 @@ export default function AdminOperationDetail() {
                           const updatedOrder = { ...order };
                           updatedOrder.trackingNumber = trackingNumber;
                           updatedOrder.trackingNumberAddedBy = effectiveUserId;
-                          updatedOrder.trackingNumberAddedAt = new Date().toISOString();
+                          updatedOrder.trackingNumberAddedAt =
+                            new Date().toISOString();
                           updatedOrder.completedServices.shippingComplete = true;
                           updatedOrder.status = "completed";
 
@@ -2730,16 +3340,24 @@ export default function AdminOperationDetail() {
                             newStatus: "completed",
                             actionType: "status_transition",
                             actionBy: effectiveUserId,
-                            actionByName: currentStaff?.firstName + " " + currentStaff?.lastName || "Unknown",
+                            actionByName:
+                              currentStaff?.firstName +
+                                " " +
+                                currentStaff?.lastName || "Unknown",
                             createdAt: new Date().toISOString(),
                             details: `Tracking number added: ${trackingNumber}`,
                           };
                           updatedOrder.history.push(historyEntry);
 
                           setOrder(updatedOrder);
-                          localStorage.setItem(`order_${orderId}`, JSON.stringify(updatedOrder));
+                          localStorage.setItem(
+                            `order_${orderId}`,
+                            JSON.stringify(updatedOrder),
+                          );
                           setTrackingNumber("");
-                          alert("Tracking number added successfully! Order marked as completed.");
+                          alert(
+                            "Tracking number added successfully! Order marked as completed.",
+                          );
                         } else {
                           alert("Please enter a tracking number");
                         }
@@ -2752,20 +3370,31 @@ export default function AdminOperationDetail() {
                   </div>
                 )}
 
-
                 {/* Current Tracking Info - Always visible */}
                 {order.trackingNumber && (
                   <div className="bg-white rounded-lg p-6 border border-slate-200">
-                    <h4 className="font-semibold text-slate-900 mb-4">Tracking Information</h4>
+                    <h4 className="font-semibold text-slate-900 mb-4">
+                      Tracking Information
+                    </h4>
                     <div className="p-4 bg-green-50 rounded-lg border border-green-200">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <p className="font-medium text-slate-900">Tracking Number</p>
-                          <p className="text-lg font-bold text-primary-600 mt-1">{order.trackingNumber}</p>
+                          <p className="font-medium text-slate-900">
+                            Tracking Number
+                          </p>
+                          <p className="text-lg font-bold text-primary-600 mt-1">
+                            {order.trackingNumber}
+                          </p>
                           <p className="text-xs text-slate-600 mt-2">
-                            Added by {mockStaff.find(s => s.id === order.trackingNumberAddedBy)?.firstName || "Unknown"} on{" "}
+                            Added by{" "}
+                            {mockStaff.find(
+                              (s) => s.id === order.trackingNumberAddedBy,
+                            )?.firstName || "Unknown"}{" "}
+                            on{" "}
                             {order.trackingNumberAddedAt
-                              ? new Date(order.trackingNumberAddedAt).toLocaleDateString()
+                              ? new Date(
+                                  order.trackingNumberAddedAt,
+                                ).toLocaleDateString()
                               : "Unknown date"}
                           </p>
                         </div>
@@ -2793,18 +3422,30 @@ export default function AdminOperationDetail() {
               Activity Log
             </h3>
 
-            {(order.history && order.history.length > 0) || (order.comments && order.comments.length > 0) ? (
+            {(order.history && order.history.length > 0) ||
+            (order.comments && order.comments.length > 0) ? (
               <div className="space-y-4">
                 {[
-                  ...(order.history || []).map((e: any) => ({ ...e, type: "history" })),
-                  ...(order.comments || []).map((c: any) => ({ ...c, type: "comment", createdAt: c.createdAt }))
+                  ...(order.history || []).map((e: any) => ({
+                    ...e,
+                    type: "history",
+                  })),
+                  ...(order.comments || []).map((c: any) => ({
+                    ...c,
+                    type: "comment",
+                    createdAt: c.createdAt,
+                  })),
                 ]
-                  .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+                  .sort(
+                    (a, b) =>
+                      new Date(b.createdAt).getTime() -
+                      new Date(a.createdAt).getTime(),
+                  )
                   .map((event, index) => {
                     const isHistory = event.type === "history";
                     const isComment = event.type === "comment";
                     const description = isHistory
-                      ? (event.description || generateHistoryDescription(event))
+                      ? event.description || generateHistoryDescription(event)
                       : `Comment by ${event.commentByName}`;
                     const isInternal = isComment && event.isInternal;
 
@@ -2815,11 +3456,15 @@ export default function AdminOperationDetail() {
                           isInternal ? "bg-slate-50 p-3 rounded-lg" : ""
                         }`}
                       >
-                        <div className={`flex-shrink-0 w-2 h-2 rounded-full mt-2 ${
-                          isComment
-                            ? isInternal ? "bg-yellow-500" : "bg-blue-600"
-                            : "bg-primary-600"
-                        }`} />
+                        <div
+                          className={`flex-shrink-0 w-2 h-2 rounded-full mt-2 ${
+                            isComment
+                              ? isInternal
+                                ? "bg-yellow-500"
+                                : "bg-blue-600"
+                              : "bg-primary-600"
+                          }`}
+                        />
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-1">
                             <p className="text-sm font-medium text-slate-900">
@@ -2858,7 +3503,7 @@ export default function AdminOperationDetail() {
                                 year: "numeric",
                                 hour: "2-digit",
                                 minute: "2-digit",
-                              }
+                              },
                             )}
                           </p>
                         </div>

@@ -24,8 +24,18 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { mockOrders, Order, OrderStatus, mockUsers, mockStaff, mockProducts } from "@/lib/mockData";
-import { fetchCompanyDetails, storeRegisteredCompany } from "@/hooks/useCompanyDetails";
+import {
+  mockOrders,
+  Order,
+  OrderStatus,
+  mockUsers,
+  mockStaff,
+  mockProducts,
+} from "@/lib/mockData";
+import {
+  fetchCompanyDetails,
+  storeRegisteredCompany,
+} from "@/hooks/useCompanyDetails";
 import { toast } from "sonner";
 
 const statusConfig: Record<
@@ -103,7 +113,9 @@ const statusConfig: Record<
 export default function AdminOrderDetail() {
   const { orderId } = useParams<{ orderId: string }>();
   const navigate = useNavigate();
-  const [actionType, setActionType] = useState<"accept" | "reject" | null>(null);
+  const [actionType, setActionType] = useState<"accept" | "reject" | null>(
+    null,
+  );
   const [rejectReason, setRejectReason] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [shippingNumber, setShippingNumber] = useState("");
@@ -122,12 +134,12 @@ export default function AdminOrderDetail() {
           if (orderData) {
             const order = JSON.parse(orderData);
             // Check if this order is already in mockOrders
-            const exists = orders.some(o => o.id === order.id);
+            const exists = orders.some((o) => o.id === order.id);
             if (!exists) {
               orders.push(order);
             } else {
               // Update with latest from localStorage
-              const index = orders.findIndex(o => o.id === order.id);
+              const index = orders.findIndex((o) => o.id === order.id);
               orders[index] = order;
             }
           }
@@ -156,7 +168,9 @@ export default function AdminOrderDetail() {
       ) {
         setIsRegisteringCompany(true);
         try {
-          const result = await fetchCompanyDetails(order.companyInfo.companyName);
+          const result = await fetchCompanyDetails(
+            order.companyInfo.companyName,
+          );
           if (result.data) {
             result.data.orderId = order.id;
             result.data.userId = order.userId;
@@ -166,7 +180,9 @@ export default function AdminOrderDetail() {
             order.registeredCompany = result.data;
             localStorage.setItem(`order_${order.id}`, JSON.stringify(order));
 
-            toast.success("Company registered and added to your companies list!");
+            toast.success(
+              "Company registered and added to your companies list!",
+            );
           } else if (result.error) {
             toast.warning(`Could not auto-register company: ${result.error}`);
           }
@@ -186,7 +202,9 @@ export default function AdminOrderDetail() {
       <AdminLayout>
         <div className="flex-1 overflow-auto bg-slate-100 p-8">
           <div className="text-center">
-            <h2 className="text-xl font-bold text-slate-900">Order not found</h2>
+            <h2 className="text-xl font-bold text-slate-900">
+              Order not found
+            </h2>
             <Button onClick={() => navigate("/admin/orders")} className="mt-4">
               Back to Orders
             </Button>
@@ -212,8 +230,11 @@ export default function AdminOrderDetail() {
     // Determine MIME type based on file extension
     let mimeType = "application/octet-stream";
     if (file.fileName.endsWith(".pdf")) mimeType = "application/pdf";
-    else if (file.fileName.endsWith(".doc") || file.fileName.endsWith(".docx")) mimeType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-    else if (file.fileName.endsWith(".jpg") || file.fileName.endsWith(".jpeg")) mimeType = "image/jpeg";
+    else if (file.fileName.endsWith(".doc") || file.fileName.endsWith(".docx"))
+      mimeType =
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+    else if (file.fileName.endsWith(".jpg") || file.fileName.endsWith(".jpeg"))
+      mimeType = "image/jpeg";
     else if (file.fileName.endsWith(".png")) mimeType = "image/png";
 
     // Create a blob with file information
@@ -253,7 +274,7 @@ export default function AdminOrderDetail() {
           if (!hasApostille && !hasShipping) {
             // Auto-complete order
             alert(
-              `Order accepted and automatically completed!\n\nProduct "${product.name}" does not require apostille or shipping services.`
+              `Order accepted and automatically completed!\n\nProduct "${product.name}" does not require apostille or shipping services.`,
             );
           } else {
             // Send to shipping preparation
@@ -262,7 +283,7 @@ export default function AdminOrderDetail() {
             if (hasShipping) services.push("shipping");
 
             alert(
-              `Order accepted and sent to Operation Manager!\n\nProduct "${product.name}" requires: ${services.join(" and ")} services.`
+              `Order accepted and sent to Operation Manager!\n\nProduct "${product.name}" requires: ${services.join(" and ")} services.`,
             );
           }
         } else {
@@ -297,11 +318,14 @@ export default function AdminOrderDetail() {
   };
 
   const shouldShowSalesActions =
-    order.status === "pending_sales_review" || order.status === "rejected_by_operation";
+    order.status === "pending_sales_review" ||
+    order.status === "rejected_by_operation";
   const shouldShowOperationActions =
-    order.status === "pending_operation" || order.status === "rejected_by_operation_manager";
+    order.status === "pending_operation" ||
+    order.status === "rejected_by_operation_manager";
   const shouldShowManagerActions =
-    order.status === "pending_operation_manager_review" || order.status === "rejected_by_sales";
+    order.status === "pending_operation_manager_review" ||
+    order.status === "rejected_by_sales";
   const shouldShowClientActions = order.status === "awaiting_client_acceptance";
   const shouldShowShippingActions = order.status === "shipping_preparation";
 
@@ -311,11 +335,17 @@ export default function AdminOrderDetail() {
         <div className="p-8">
           {/* Header */}
           <div className="flex items-center gap-4 mb-8">
-            <Button variant="ghost" size="sm" onClick={() => navigate("/admin/orders")}>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => navigate("/admin/orders")}
+            >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back
             </Button>
-            <h1 className="text-4xl font-bold text-slate-900">{order.orderNumber}</h1>
+            <h1 className="text-4xl font-bold text-slate-900">
+              {order.orderNumber}
+            </h1>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -325,7 +355,9 @@ export default function AdminOrderDetail() {
               <div className={`rounded-lg border-2 p-6 ${config.bgColor}`}>
                 <div className="flex items-center justify-between">
                   <div>
-                    <h2 className={`text-2xl font-bold ${config.color}`}>{config.label}</h2>
+                    <h2 className={`text-2xl font-bold ${config.color}`}>
+                      {config.label}
+                    </h2>
                     <p className="text-slate-600 mt-1">{config.description}</p>
                   </div>
                   {order.status === "completed" && (
@@ -334,23 +366,34 @@ export default function AdminOrderDetail() {
                   {order.status.startsWith("rejected") && (
                     <XCircle className={`w-12 h-12 ${config.color}`} />
                   )}
-                  {!order.status.startsWith("rejected") && order.status !== "completed" && (
-                    <Clock className={`w-12 h-12 ${config.color}`} />
-                  )}
+                  {!order.status.startsWith("rejected") &&
+                    order.status !== "completed" && (
+                      <Clock className={`w-12 h-12 ${config.color}`} />
+                    )}
                 </div>
               </div>
 
               {/* Order Details */}
               <div className="bg-white rounded-lg border border-slate-200 p-6">
-                <h3 className="text-xl font-bold text-slate-900 mb-4">Order Details</h3>
+                <h3 className="text-xl font-bold text-slate-900 mb-4">
+                  Order Details
+                </h3>
                 <div className="grid grid-cols-2 gap-6">
                   <div>
-                    <label className="text-sm text-slate-500">Description</label>
-                    <p className="text-slate-900 font-medium mt-1">{order.description}</p>
+                    <label className="text-sm text-slate-500">
+                      Description
+                    </label>
+                    <p className="text-slate-900 font-medium mt-1">
+                      {order.description}
+                    </p>
                   </div>
                   <div>
-                    <label className="text-sm text-slate-500">Service Type</label>
-                    <p className="text-slate-900 font-medium mt-1">{order.serviceType}</p>
+                    <label className="text-sm text-slate-500">
+                      Service Type
+                    </label>
+                    <p className="text-slate-900 font-medium mt-1">
+                      {order.serviceType}
+                    </p>
                   </div>
                   <div>
                     <label className="text-sm text-slate-500 flex items-center gap-2">
@@ -381,7 +424,9 @@ export default function AdminOrderDetail() {
                   <div>
                     <label className="text-sm text-slate-500">Created By</label>
                     <p className="text-slate-900 font-medium mt-1">
-                      {client ? `${client.firstName} ${client.lastName}` : "Unknown Client"}
+                      {client
+                        ? `${client.firstName} ${client.lastName}`
+                        : "Unknown Client"}
                     </p>
                   </div>
                   <div>
@@ -395,7 +440,9 @@ export default function AdminOrderDetail() {
                   </div>
                   {order.completedAt && (
                     <div>
-                      <label className="text-sm text-slate-500">Completed Date</label>
+                      <label className="text-sm text-slate-500">
+                        Completed Date
+                      </label>
                       <p className="text-slate-900 font-medium mt-1">
                         {new Date(order.completedAt).toLocaleDateString()}
                       </p>
@@ -405,87 +452,118 @@ export default function AdminOrderDetail() {
               </div>
 
               {/* Product Information */}
-              {order.productId && mockProducts.find((p) => p.id === order.productId) && (
-                <div className="bg-blue-50 rounded-lg border border-blue-200 p-6">
-                  <h3 className="text-xl font-bold text-blue-900 mb-4">Product Information</h3>
-                  {(() => {
-                    const product = mockProducts.find((p) => p.id === order.productId);
-                    if (!product) return null;
+              {order.productId &&
+                mockProducts.find((p) => p.id === order.productId) && (
+                  <div className="bg-blue-50 rounded-lg border border-blue-200 p-6">
+                    <h3 className="text-xl font-bold text-blue-900 mb-4">
+                      Product Information
+                    </h3>
+                    {(() => {
+                      const product = mockProducts.find(
+                        (p) => p.id === order.productId,
+                      );
+                      if (!product) return null;
 
-                    const hasApostille = product.services.hasApostille;
-                    const hasShipping = product.services.hasShipping;
-                    const hasPOA = product.services.hasPOA;
+                      const hasApostille = product.services.hasApostille;
+                      const hasShipping = product.services.hasShipping;
+                      const hasPOA = product.services.hasPOA;
 
-                    return (
-                      <div className="space-y-4">
-                        <div>
-                          <label className="text-sm text-blue-700 font-semibold">Product Name</label>
-                          <p className="text-blue-900 font-medium mt-1">{product.name}</p>
-                        </div>
-                        <div>
-                          <label className="text-sm text-blue-700 font-semibold">Description</label>
-                          <p className="text-blue-900 mt-1">{product.description}</p>
-                        </div>
-                        <div className="grid grid-cols-3 gap-4">
+                      return (
+                        <div className="space-y-4">
                           <div>
-                            <label className="text-sm text-blue-700 font-semibold">Duration</label>
-                            <p className="text-blue-900 font-medium mt-1">{product.duration}</p>
-                          </div>
-                          <div>
-                            <label className="text-sm text-blue-700 font-semibold">Status</label>
-                            <p className="text-blue-900 font-medium mt-1 capitalize">{product.status}</p>
-                          </div>
-                        </div>
-                        <div className="pt-2 border-t border-blue-200">
-                          <label className="text-sm text-blue-700 font-semibold block mb-3">
-                            Included Services
-                          </label>
-                          <div className="flex gap-3">
-                            <div className="flex items-center gap-2">
-                              <div
-                                className={`w-3 h-3 rounded-full ${
-                                  hasApostille ? "bg-green-500" : "bg-slate-300"
-                                }`}
-                              />
-                              <span className="text-sm text-blue-900">Apostille</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <div
-                                className={`w-3 h-3 rounded-full ${
-                                  hasShipping ? "bg-green-500" : "bg-slate-300"
-                                }`}
-                              />
-                              <span className="text-sm text-blue-900">Shipping</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <div
-                                className={`w-3 h-3 rounded-full ${
-                                  hasPOA ? "bg-green-500" : "bg-slate-300"
-                                }`}
-                              />
-                              <span className="text-sm text-blue-900">POA</span>
-                            </div>
-                          </div>
-                        </div>
-                        {order.status === "awaiting_client_acceptance" && (
-                          <div className="pt-3 border-t border-blue-200">
-                            <p className="text-sm text-blue-700 font-semibold">
-                              {!hasApostille && !hasShipping
-                                ? "✓ Order will auto-complete when client accepts (no additional services required)"
-                                : `✓ Order will be sent to Operation Manager for ${[
-                                    hasApostille && "apostille",
-                                    hasShipping && "shipping",
-                                  ]
-                                    .filter(Boolean)
-                                    .join(" and ")} when client accepts`}
+                            <label className="text-sm text-blue-700 font-semibold">
+                              Product Name
+                            </label>
+                            <p className="text-blue-900 font-medium mt-1">
+                              {product.name}
                             </p>
                           </div>
-                        )}
-                      </div>
-                    );
-                  })()}
-                </div>
-              )}
+                          <div>
+                            <label className="text-sm text-blue-700 font-semibold">
+                              Description
+                            </label>
+                            <p className="text-blue-900 mt-1">
+                              {product.description}
+                            </p>
+                          </div>
+                          <div className="grid grid-cols-3 gap-4">
+                            <div>
+                              <label className="text-sm text-blue-700 font-semibold">
+                                Duration
+                              </label>
+                              <p className="text-blue-900 font-medium mt-1">
+                                {product.duration}
+                              </p>
+                            </div>
+                            <div>
+                              <label className="text-sm text-blue-700 font-semibold">
+                                Status
+                              </label>
+                              <p className="text-blue-900 font-medium mt-1 capitalize">
+                                {product.status}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="pt-2 border-t border-blue-200">
+                            <label className="text-sm text-blue-700 font-semibold block mb-3">
+                              Included Services
+                            </label>
+                            <div className="flex gap-3">
+                              <div className="flex items-center gap-2">
+                                <div
+                                  className={`w-3 h-3 rounded-full ${
+                                    hasApostille
+                                      ? "bg-green-500"
+                                      : "bg-slate-300"
+                                  }`}
+                                />
+                                <span className="text-sm text-blue-900">
+                                  Apostille
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <div
+                                  className={`w-3 h-3 rounded-full ${
+                                    hasShipping
+                                      ? "bg-green-500"
+                                      : "bg-slate-300"
+                                  }`}
+                                />
+                                <span className="text-sm text-blue-900">
+                                  Shipping
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <div
+                                  className={`w-3 h-3 rounded-full ${
+                                    hasPOA ? "bg-green-500" : "bg-slate-300"
+                                  }`}
+                                />
+                                <span className="text-sm text-blue-900">
+                                  POA
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                          {order.status === "awaiting_client_acceptance" && (
+                            <div className="pt-3 border-t border-blue-200">
+                              <p className="text-sm text-blue-700 font-semibold">
+                                {!hasApostille && !hasShipping
+                                  ? "✓ Order will auto-complete when client accepts (no additional services required)"
+                                  : `✓ Order will be sent to Operation Manager for ${[
+                                      hasApostille && "apostille",
+                                      hasShipping && "shipping",
+                                    ]
+                                      .filter(Boolean)
+                                      .join(" and ")} when client accepts`}
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })()}
+                  </div>
+                )}
 
               {/* Client Information */}
               <div className="bg-white rounded-lg border border-slate-200 p-6">
@@ -503,15 +581,21 @@ export default function AdminOrderDetail() {
                     </div>
                     <div>
                       <label className="text-sm text-slate-500">Company</label>
-                      <p className="text-slate-900 font-medium mt-1">{client.companyName}</p>
+                      <p className="text-slate-900 font-medium mt-1">
+                        {client.companyName}
+                      </p>
                     </div>
                     <div>
                       <label className="text-sm text-slate-500">Email</label>
-                      <p className="text-slate-900 font-medium mt-1">{client.email}</p>
+                      <p className="text-slate-900 font-medium mt-1">
+                        {client.email}
+                      </p>
                     </div>
                     <div>
                       <label className="text-sm text-slate-500">WhatsApp</label>
-                      <p className="text-slate-900 font-medium mt-1">{client.whatsappNumber}</p>
+                      <p className="text-slate-900 font-medium mt-1">
+                        {client.whatsappNumber}
+                      </p>
                     </div>
                     <div>
                       <label className="text-sm text-slate-500">Location</label>
@@ -521,10 +605,14 @@ export default function AdminOrderDetail() {
                     </div>
                     {order.clientAccepted && (
                       <div>
-                        <label className="text-sm text-slate-500">Client Status</label>
+                        <label className="text-sm text-slate-500">
+                          Client Status
+                        </label>
                         <div className="flex items-center gap-2 mt-1">
                           <CheckCircle className="w-4 h-4 text-green-600" />
-                          <span className="text-green-600 font-medium">Accepted</span>
+                          <span className="text-green-600 font-medium">
+                            Accepted
+                          </span>
                         </div>
                       </div>
                     )}
@@ -541,17 +629,25 @@ export default function AdminOrderDetail() {
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="text-sm text-slate-600 font-medium">Company Name</label>
-                      <p className="text-slate-900 font-semibold mt-1">{order.companyInfo.companyName}</p>
+                      <label className="text-sm text-slate-600 font-medium">
+                        Company Name
+                      </label>
+                      <p className="text-slate-900 font-semibold mt-1">
+                        {order.companyInfo.companyName}
+                      </p>
                     </div>
                     <div>
-                      <label className="text-sm text-slate-600 font-medium">Total Capital</label>
+                      <label className="text-sm text-slate-600 font-medium">
+                        Total Capital
+                      </label>
                       <p className="text-slate-900 font-semibold mt-1">
                         {order.currency} {order.companyInfo.totalCapital}
                       </p>
                     </div>
                     <div>
-                      <label className="text-sm text-slate-600 font-medium">Price Per Share</label>
+                      <label className="text-sm text-slate-600 font-medium">
+                        Price Per Share
+                      </label>
                       <p className="text-slate-900 font-semibold mt-1">
                         {order.currency} {order.companyInfo.pricePerShare}
                       </p>
@@ -559,8 +655,12 @@ export default function AdminOrderDetail() {
                   </div>
                   {order.companyInfo.companyActivities && (
                     <div className="mt-4 pt-4 border-t border-blue-200">
-                      <label className="text-sm text-slate-600 font-medium">Business Activities</label>
-                      <p className="text-slate-900 mt-2 whitespace-pre-wrap">{order.companyInfo.companyActivities}</p>
+                      <label className="text-sm text-slate-600 font-medium">
+                        Business Activities
+                      </label>
+                      <p className="text-slate-900 mt-2 whitespace-pre-wrap">
+                        {order.companyInfo.companyActivities}
+                      </p>
                     </div>
                   )}
                 </div>
@@ -577,23 +677,40 @@ export default function AdminOrderDetail() {
                     <table className="w-full">
                       <thead>
                         <tr className="border-b-2 border-amber-200">
-                          <th className="text-left px-4 py-3 font-semibold text-slate-700">Name</th>
-                          <th className="text-left px-4 py-3 font-semibold text-slate-700">Date of Birth</th>
-                          <th className="text-left px-4 py-3 font-semibold text-slate-700">Nationality</th>
-                          <th className="text-center px-4 py-3 font-semibold text-slate-700">Ownership %</th>
-                          <th className="text-center px-4 py-3 font-semibold text-slate-700">Passport</th>
+                          <th className="text-left px-4 py-3 font-semibold text-slate-700">
+                            Name
+                          </th>
+                          <th className="text-left px-4 py-3 font-semibold text-slate-700">
+                            Date of Birth
+                          </th>
+                          <th className="text-left px-4 py-3 font-semibold text-slate-700">
+                            Nationality
+                          </th>
+                          <th className="text-center px-4 py-3 font-semibold text-slate-700">
+                            Ownership %
+                          </th>
+                          <th className="text-center px-4 py-3 font-semibold text-slate-700">
+                            Passport
+                          </th>
                         </tr>
                       </thead>
                       <tbody>
                         {order.shareholders.map((shareholder, index) => (
-                          <tr key={shareholder.id} className={index % 2 === 0 ? "bg-white" : "bg-amber-50"}>
+                          <tr
+                            key={shareholder.id}
+                            className={
+                              index % 2 === 0 ? "bg-white" : "bg-amber-50"
+                            }
+                          >
                             <td className="px-4 py-4 border-b border-amber-100">
                               <p className="font-medium text-slate-900">
                                 {shareholder.firstName} {shareholder.lastName}
                               </p>
                             </td>
                             <td className="px-4 py-4 border-b border-amber-100 text-slate-700">
-                              {new Date(shareholder.dateOfBirth).toLocaleDateString("en-US", {
+                              {new Date(
+                                shareholder.dateOfBirth,
+                              ).toLocaleDateString("en-US", {
                                 year: "numeric",
                                 month: "short",
                                 day: "numeric",
@@ -610,14 +727,20 @@ export default function AdminOrderDetail() {
                             <td className="px-4 py-4 border-b border-amber-100">
                               {shareholder.passportFile ? (
                                 <div className="flex flex-col gap-1">
-                                  <div className="text-sm font-medium text-slate-900">{shareholder.passportFile.fileName}</div>
+                                  <div className="text-sm font-medium text-slate-900">
+                                    {shareholder.passportFile.fileName}
+                                  </div>
                                   <div className="text-xs text-slate-500">
-                                    {shareholder.passportFile.fileSize ? `${(shareholder.passportFile.fileSize / 1024).toFixed(1)} KB` : ''}
+                                    {shareholder.passportFile.fileSize
+                                      ? `${(shareholder.passportFile.fileSize / 1024).toFixed(1)} KB`
+                                      : ""}
                                   </div>
                                   {shareholder.passportFile.fileUrl && (
                                     <a
                                       href={shareholder.passportFile.fileUrl}
-                                      download={shareholder.passportFile.fileName}
+                                      download={
+                                        shareholder.passportFile.fileName
+                                      }
                                       className="inline-flex items-center justify-center gap-1 px-2 py-1 bg-blue-100 hover:bg-blue-200 text-blue-700 rounded text-xs font-medium transition w-fit"
                                     >
                                       <Download className="w-3 h-3" />
@@ -626,7 +749,9 @@ export default function AdminOrderDetail() {
                                   )}
                                 </div>
                               ) : (
-                                <span className="text-slate-500 text-sm">No file</span>
+                                <span className="text-slate-500 text-sm">
+                                  No file
+                                </span>
                               )}
                             </td>
                           </tr>
@@ -705,7 +830,8 @@ export default function AdminOrderDetail() {
                                 Amount
                               </label>
                               <p className="text-slate-900 font-bold mt-1">
-                                {payment.amount.toLocaleString()} {payment.currency}
+                                {payment.amount.toLocaleString()}{" "}
+                                {payment.currency}
                               </p>
                             </div>
                             <div>
@@ -713,11 +839,14 @@ export default function AdminOrderDetail() {
                                 Due Date
                               </label>
                               <p className="text-slate-900 font-medium mt-1">
-                                {new Date(payment.dueDate).toLocaleDateString("en-US", {
-                                  month: "short",
-                                  day: "numeric",
-                                  year: "numeric",
-                                })}
+                                {new Date(payment.dueDate).toLocaleDateString(
+                                  "en-US",
+                                  {
+                                    month: "short",
+                                    day: "numeric",
+                                    year: "numeric",
+                                  },
+                                )}
                               </p>
                             </div>
                             {payment.paidDate && (
@@ -726,7 +855,9 @@ export default function AdminOrderDetail() {
                                   Paid Date
                                 </label>
                                 <p className="text-slate-900 font-medium mt-1">
-                                  {new Date(payment.paidDate).toLocaleDateString("en-US", {
+                                  {new Date(
+                                    payment.paidDate,
+                                  ).toLocaleDateString("en-US", {
                                     month: "short",
                                     day: "numeric",
                                     year: "numeric",
@@ -759,7 +890,10 @@ export default function AdminOrderDetail() {
                   </h3>
                   <ul className="space-y-2">
                     {order.rejectionReasons.map((reason, index) => (
-                      <li key={index} className="text-red-700 flex items-start gap-2">
+                      <li
+                        key={index}
+                        className="text-red-700 flex items-start gap-2"
+                      >
                         <span className="text-red-600 mt-1">•</span>
                         <span>{reason}</span>
                       </li>
@@ -793,7 +927,7 @@ export default function AdminOrderDetail() {
                               <span>
                                 {new Date(file.uploadedAt).toLocaleDateString(
                                   "en-US",
-                                  { month: "short", day: "numeric" }
+                                  { month: "short", day: "numeric" },
                                 )}
                               </span>
                               <span>•</span>
@@ -802,7 +936,9 @@ export default function AdminOrderDetail() {
                               </span>
                             </div>
                             {file.description && (
-                              <p className="text-xs text-slate-600 mt-2">{file.description}</p>
+                              <p className="text-xs text-slate-600 mt-2">
+                                {file.description}
+                              </p>
                             )}
                           </div>
                         </div>
@@ -829,7 +965,10 @@ export default function AdminOrderDetail() {
                 </h3>
                 <div className="space-y-4">
                   {order.history.map((entry, index) => (
-                    <div key={entry.id} className="pb-4 border-b border-slate-200 last:border-b-0">
+                    <div
+                      key={entry.id}
+                      className="pb-4 border-b border-slate-200 last:border-b-0"
+                    >
                       <div className="flex items-start justify-between">
                         <div>
                           <p className="text-sm font-semibold text-slate-900">
@@ -872,7 +1011,9 @@ export default function AdminOrderDetail() {
             <div className="space-y-6">
               {/* Assignment Info */}
               <div className="bg-white rounded-lg border border-slate-200 p-6">
-                <h3 className="text-lg font-bold text-slate-900 mb-4">Assigned To</h3>
+                <h3 className="text-lg font-bold text-slate-900 mb-4">
+                  Assigned To
+                </h3>
                 <div className="space-y-3">
                   {order.assignedToSalesId && (
                     <div>
@@ -884,7 +1025,9 @@ export default function AdminOrderDetail() {
                   )}
                   {order.assignedToOperationId && (
                     <div>
-                      <label className="text-xs text-slate-500">Operation</label>
+                      <label className="text-xs text-slate-500">
+                        Operation
+                      </label>
                       <p className="text-sm font-medium text-slate-900">
                         {getStaffName(order.assignedToOperationId)}
                       </p>
@@ -908,7 +1051,9 @@ export default function AdminOrderDetail() {
                 shouldShowClientActions ||
                 shouldShowShippingActions) && (
                 <div className="bg-white rounded-lg border border-slate-200 p-6">
-                  <h3 className="text-lg font-bold text-slate-900 mb-4">Actions</h3>
+                  <h3 className="text-lg font-bold text-slate-900 mb-4">
+                    Actions
+                  </h3>
                   <div className="space-y-3">
                     {(shouldShowSalesActions ||
                       shouldShowOperationActions ||
@@ -956,42 +1101,44 @@ export default function AdminOrderDetail() {
               {actionType === "accept" ? "Accept Order" : "Reject Order"}
             </DialogTitle>
             <DialogDescription>
-              {actionType === "accept" ? (
-                order.status === "awaiting_client_acceptance" && order.productId ? (
-                  (() => {
-                    const product = mockProducts.find((p) => p.id === order.productId);
-                    if (product) {
-                      const hasApostille = product.services.hasApostille;
-                      const hasShipping = product.services.hasShipping;
+              {actionType === "accept"
+                ? order.status === "awaiting_client_acceptance" &&
+                  order.productId
+                  ? (() => {
+                      const product = mockProducts.find(
+                        (p) => p.id === order.productId,
+                      );
+                      if (product) {
+                        const hasApostille = product.services.hasApostille;
+                        const hasShipping = product.services.hasShipping;
 
-                      if (!hasApostille && !hasShipping) {
-                        return (
-                          <span>
-                            This order will be <strong>automatically completed</strong> when the client
-                            accepts it, as the product "{product.name}" requires no additional services.
-                          </span>
-                        );
-                      } else {
-                        const services = [];
-                        if (hasApostille) services.push("apostille");
-                        if (hasShipping) services.push("shipping");
+                        if (!hasApostille && !hasShipping) {
+                          return (
+                            <span>
+                              This order will be{" "}
+                              <strong>automatically completed</strong> when the
+                              client accepts it, as the product "{product.name}"
+                              requires no additional services.
+                            </span>
+                          );
+                        } else {
+                          const services = [];
+                          if (hasApostille) services.push("apostille");
+                          if (hasShipping) services.push("shipping");
 
-                        return (
-                          <span>
-                            This order will be sent to the Operation Manager for{" "}
-                            <strong>{services.join(" and ")}</strong> when the client accepts it.
-                          </span>
-                        );
+                          return (
+                            <span>
+                              This order will be sent to the Operation Manager
+                              for <strong>{services.join(" and ")}</strong> when
+                              the client accepts it.
+                            </span>
+                          );
+                        }
                       }
-                    }
-                    return "Are you sure you want to accept this order? It will move to the next stage.";
-                  })()
-                ) : (
-                  "Are you sure you want to accept this order? It will move to the next stage."
-                )
-              ) : (
-                "Please provide a reason for rejecting this order."
-              )}
+                      return "Are you sure you want to accept this order? It will move to the next stage.";
+                    })()
+                  : "Are you sure you want to accept this order? It will move to the next stage."
+                : "Please provide a reason for rejecting this order."}
             </DialogDescription>
           </DialogHeader>
 
@@ -1011,7 +1158,9 @@ export default function AdminOrderDetail() {
             </Button>
             <Button
               onClick={actionType === "accept" ? handleAccept : handleReject}
-              className={actionType === "accept" ? "bg-green-600 hover:bg-green-700" : ""}
+              className={
+                actionType === "accept" ? "bg-green-600 hover:bg-green-700" : ""
+              }
               variant={actionType === "reject" ? "destructive" : "default"}
             >
               {actionType === "accept" ? "Accept" : "Reject"}
@@ -1039,10 +1188,16 @@ export default function AdminOrderDetail() {
           </div>
 
           <div className="flex gap-3">
-            <Button variant="outline" onClick={() => setShowShippingModal(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setShowShippingModal(false)}
+            >
               Cancel
             </Button>
-            <Button onClick={handleShippingSubmit} className="bg-blue-600 hover:bg-blue-700">
+            <Button
+              onClick={handleShippingSubmit}
+              className="bg-blue-600 hover:bg-blue-700"
+            >
               Complete Order
             </Button>
           </div>

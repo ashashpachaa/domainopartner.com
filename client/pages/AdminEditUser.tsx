@@ -30,11 +30,11 @@ export default function AdminEditUser() {
       subscriptionStatus: "active",
       createdAt: new Date().toISOString().split("T")[0],
       lastLogin: new Date().toISOString(),
-    }
+    },
   );
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -86,7 +86,9 @@ export default function AdminEditUser() {
         localStorage.setItem(`user_${newUser.id}`, JSON.stringify(newUser));
         localStorage.setItem("mockUsers", JSON.stringify(mockUsers));
 
-        toast.success(`User ${newUser.firstName} ${newUser.lastName} created successfully!`);
+        toast.success(
+          `User ${newUser.firstName} ${newUser.lastName} created successfully!`,
+        );
         navigate("/admin/users");
       } else {
         // Update existing user
@@ -98,7 +100,10 @@ export default function AdminEditUser() {
         const userIndex = mockUsers.findIndex((u) => u.id === userId);
         if (userIndex >= 0) {
           mockUsers[userIndex] = updatedUser;
-          localStorage.setItem(`user_${updatedUser.id}`, JSON.stringify(updatedUser));
+          localStorage.setItem(
+            `user_${updatedUser.id}`,
+            JSON.stringify(updatedUser),
+          );
           localStorage.setItem("mockUsers", JSON.stringify(mockUsers));
         }
 
@@ -313,9 +318,7 @@ export default function AdminEditUser() {
 
             {/* Actions */}
             <div className="pt-6 border-t border-slate-200 flex gap-3 justify-end">
-              <Link
-                to={isNew ? "/admin/dashboard" : `/admin/users/${userId}`}
-              >
+              <Link to={isNew ? "/admin/dashboard" : `/admin/users/${userId}`}>
                 <Button variant="outline">Cancel</Button>
               </Link>
               <Button className="bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white gap-2">

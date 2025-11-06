@@ -57,11 +57,15 @@ export default function AdminStaff() {
       const matchesStatusFilter =
         filterStatus === "all" || member.status === filterStatus;
 
-      return matchesSearch && matchesRoleFilter && matchesDepartmentFilter && matchesStatusFilter;
+      return (
+        matchesSearch &&
+        matchesRoleFilter &&
+        matchesDepartmentFilter &&
+        matchesStatusFilter
+      );
     })
     .sort(
-      (a, b) =>
-        new Date(b.joinDate).getTime() - new Date(a.joinDate).getTime()
+      (a, b) => new Date(b.joinDate).getTime() - new Date(a.joinDate).getTime(),
     );
 
   const deleteStaff = (staffId: string) => {
@@ -134,7 +138,7 @@ export default function AdminStaff() {
                   <option key={dept} value={dept}>
                     {dept}
                   </option>
-                )
+                ),
               )}
             </select>
 
@@ -237,7 +241,10 @@ export default function AdminStaff() {
                       View
                     </Button>
                   </Link>
-                  <Link to={`/admin/staff/${member.id}/edit`} className="flex-1">
+                  <Link
+                    to={`/admin/staff/${member.id}/edit`}
+                    className="flex-1"
+                  >
                     <Button
                       variant="ghost"
                       size="sm"
@@ -276,11 +283,13 @@ export default function AdminStaff() {
             </p>
           </div>
           <div className="bg-white rounded-lg p-4 border border-slate-200">
-            <p className="text-slate-600 text-xs font-medium mb-1">
-              Admins
-            </p>
+            <p className="text-slate-600 text-xs font-medium mb-1">Admins</p>
             <p className="text-2xl font-bold text-blue-600">
-              {staff.filter((s) => s.role === "admin" || s.role === "super_admin").length}
+              {
+                staff.filter(
+                  (s) => s.role === "admin" || s.role === "super_admin",
+                ).length
+              }
             </p>
           </div>
           <div className="bg-white rounded-lg p-4 border border-slate-200">

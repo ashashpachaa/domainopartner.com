@@ -36,12 +36,12 @@ export default function AdminOperations() {
           if (orderData) {
             const order = JSON.parse(orderData);
             // Check if this order is already in mockOrders
-            const exists = orders.some(o => o.id === order.id);
+            const exists = orders.some((o) => o.id === order.id);
             if (!exists) {
               orders.push(order);
             } else {
               // Update with latest from localStorage
-              const index = orders.findIndex(o => o.id === order.id);
+              const index = orders.findIndex((o) => o.id === order.id);
               orders[index] = order;
             }
           }
@@ -61,7 +61,7 @@ export default function AdminOperations() {
       order.status !== "rejected_by_sales" &&
       order.status !== "rejected_by_operation" &&
       order.status !== "rejected_by_operation_manager" &&
-      order.status !== "rejected_by_client"
+      order.status !== "rejected_by_client",
   );
 
   const filteredOrders = activeOrders.filter((order) => {
@@ -89,9 +89,7 @@ export default function AdminOperations() {
 
   const sortedOrders = [...filteredOrders].sort((a, b) => {
     if (sortBy === "date") {
-      return (
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-      );
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     } else if (sortBy === "customer") {
       const userA = mockUsers.find((u) => u.id === a.userId);
       const userB = mockUsers.find((u) => u.id === b.userId);
@@ -198,7 +196,9 @@ export default function AdminOperations() {
               <option value="pending_operation_manager_review">
                 Manager Review
               </option>
-              <option value="awaiting_client_acceptance">Awaiting Client</option>
+              <option value="awaiting_client_acceptance">
+                Awaiting Client
+              </option>
               <option value="shipping_preparation">Shipping Prep</option>
             </select>
 
@@ -327,7 +327,7 @@ export default function AdminOperations() {
                         <td className="px-6 py-4">
                           <span
                             className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(
-                              order.status
+                              order.status,
                             )}`}
                           >
                             {getStatusLabel(order.status)}
@@ -353,7 +353,8 @@ export default function AdminOperations() {
 
                         {/* Files Uploaded */}
                         <td className="px-6 py-4 text-center">
-                          {order.operationFiles && order.operationFiles.length > 0 ? (
+                          {order.operationFiles &&
+                          order.operationFiles.length > 0 ? (
                             <div className="flex items-center justify-center gap-2">
                               <FileText className="w-4 h-4 text-blue-600" />
                               <span className="font-medium text-blue-600">
@@ -417,9 +418,11 @@ export default function AdminOperations() {
               Awaiting Client
             </p>
             <p className="text-3xl font-bold text-purple-600">
-              {activeOrders.filter(
-                (o) => o.status === "awaiting_client_acceptance"
-              ).length}
+              {
+                activeOrders.filter(
+                  (o) => o.status === "awaiting_client_acceptance",
+                ).length
+              }
             </p>
           </div>
           <div className="bg-white rounded-lg p-6 border border-slate-200">
@@ -437,7 +440,7 @@ export default function AdminOperations() {
             <p className="text-3xl font-bold text-blue-600">
               {activeOrders.reduce(
                 (sum, o) => sum + (o.operationFiles?.length || 0),
-                0
+                0,
               )}
             </p>
           </div>

@@ -1,5 +1,15 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { LogOut, Menu, X, LayoutDashboard, Package, FileText, Settings, MessageSquare, Building2 } from "lucide-react";
+import {
+  LogOut,
+  Menu,
+  X,
+  LayoutDashboard,
+  Package,
+  FileText,
+  Settings,
+  MessageSquare,
+  Building2,
+} from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
@@ -13,7 +23,9 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
-  const userName = currentUser.firstName ? `${currentUser.firstName} ${currentUser.lastName}` : "Client";
+  const userName = currentUser.firstName
+    ? `${currentUser.firstName} ${currentUser.lastName}`
+    : "Client";
 
   const menuItems = [
     { label: "Dashboard", path: "/client/dashboard", icon: LayoutDashboard },
@@ -35,7 +47,9 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   return (
     <div className="flex h-screen bg-slate-100">
       {/* Sidebar */}
-      <div className={`${sidebarOpen ? "w-64" : "w-0"} transition-all duration-300 bg-white border-r border-slate-200 flex flex-col overflow-hidden`}>
+      <div
+        className={`${sidebarOpen ? "w-64" : "w-0"} transition-all duration-300 bg-white border-r border-slate-200 flex flex-col overflow-hidden`}
+      >
         {/* Logo */}
         <div className="p-6 border-b border-slate-200">
           <h1 className="text-2xl font-bold text-primary-600">ClientHub</h1>
@@ -88,7 +102,11 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
             onClick={() => setSidebarOpen(!sidebarOpen)}
             className="text-slate-600 hover:text-slate-900"
           >
-            {sidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {sidebarOpen ? (
+              <X className="w-6 h-6" />
+            ) : (
+              <Menu className="w-6 h-6" />
+            )}
           </button>
           <div className="flex items-center gap-4">
             <div className="text-right hidden md:block">
@@ -99,9 +117,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
         </div>
 
         {/* Content Area */}
-        <div className="flex-1 overflow-y-auto p-6">
-          {children}
-        </div>
+        <div className="flex-1 overflow-y-auto p-6">{children}</div>
       </div>
     </div>
   );

@@ -52,17 +52,19 @@ export default function AdminClientRequests() {
         request.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
         request.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
         request.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        request.companyName.toLowerCase().includes(searchQuery.toLowerCase())
+        request.companyName.toLowerCase().includes(searchQuery.toLowerCase()),
     );
   }
 
   if (statusFilter !== "all") {
-    filteredRequests = filteredRequests.filter((request) => request.status === statusFilter);
+    filteredRequests = filteredRequests.filter(
+      (request) => request.status === statusFilter,
+    );
   }
 
   if (startDate) {
     filteredRequests = filteredRequests.filter(
-      (request) => new Date(request.createdAt) >= new Date(startDate)
+      (request) => new Date(request.createdAt) >= new Date(startDate),
     );
   }
 
@@ -70,25 +72,31 @@ export default function AdminClientRequests() {
     const endDateTime = new Date(endDate);
     endDateTime.setHours(23, 59, 59, 999);
     filteredRequests = filteredRequests.filter(
-      (request) => new Date(request.createdAt) <= endDateTime
+      (request) => new Date(request.createdAt) <= endDateTime,
     );
   }
 
   if (sortBy === "recent") {
     filteredRequests.sort(
-      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
     );
   } else if (sortBy === "oldest") {
     filteredRequests.sort(
-      (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      (a, b) =>
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
     );
   }
 
   const pendingCount = mockClientRequests.filter(
-    (r) => r.status === "pending_approval"
+    (r) => r.status === "pending_approval",
   ).length;
-  const approvedCount = mockClientRequests.filter((r) => r.status === "approved").length;
-  const rejectedCount = mockClientRequests.filter((r) => r.status === "rejected").length;
+  const approvedCount = mockClientRequests.filter(
+    (r) => r.status === "approved",
+  ).length;
+  const rejectedCount = mockClientRequests.filter(
+    (r) => r.status === "rejected",
+  ).length;
 
   return (
     <AdminLayout>
@@ -96,8 +104,12 @@ export default function AdminClientRequests() {
         <div className="p-8">
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-4xl font-bold text-slate-900 mb-2">Client Requests</h1>
-            <p className="text-slate-600">Review and manage new client signup applications</p>
+            <h1 className="text-4xl font-bold text-slate-900 mb-2">
+              Client Requests
+            </h1>
+            <p className="text-slate-600">
+              Review and manage new client signup applications
+            </p>
           </div>
 
           {/* Summary Cards */}
@@ -106,7 +118,9 @@ export default function AdminClientRequests() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-slate-600 text-sm">Pending Approval</p>
-                  <p className="text-2xl font-bold text-yellow-600 mt-1">{pendingCount}</p>
+                  <p className="text-2xl font-bold text-yellow-600 mt-1">
+                    {pendingCount}
+                  </p>
                 </div>
                 <Clock className="w-8 h-8 text-yellow-600 opacity-50" />
               </div>
@@ -115,7 +129,9 @@ export default function AdminClientRequests() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-slate-600 text-sm">Approved</p>
-                  <p className="text-2xl font-bold text-green-600 mt-1">{approvedCount}</p>
+                  <p className="text-2xl font-bold text-green-600 mt-1">
+                    {approvedCount}
+                  </p>
                 </div>
                 <CheckCircle className="w-8 h-8 text-green-600 opacity-50" />
               </div>
@@ -124,7 +140,9 @@ export default function AdminClientRequests() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-slate-600 text-sm">Rejected</p>
-                  <p className="text-2xl font-bold text-red-600 mt-1">{rejectedCount}</p>
+                  <p className="text-2xl font-bold text-red-600 mt-1">
+                    {rejectedCount}
+                  </p>
                 </div>
                 <XCircle className="w-8 h-8 text-red-600 opacity-50" />
               </div>
@@ -152,7 +170,9 @@ export default function AdminClientRequests() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Status</SelectItem>
-                  <SelectItem value="pending_approval">Pending Approval</SelectItem>
+                  <SelectItem value="pending_approval">
+                    Pending Approval
+                  </SelectItem>
                   <SelectItem value="approved">Approved</SelectItem>
                   <SelectItem value="rejected">Rejected</SelectItem>
                 </SelectContent>
@@ -194,7 +214,10 @@ export default function AdminClientRequests() {
                   className="border-slate-300 focus:border-primary-500 focus:ring-primary-500"
                 />
               </div>
-              {(startDate || endDate || searchQuery || statusFilter !== "all") && (
+              {(startDate ||
+                endDate ||
+                searchQuery ||
+                statusFilter !== "all") && (
                 <div className="flex items-end">
                   <button
                     onClick={() => {
@@ -256,7 +279,9 @@ export default function AdminClientRequests() {
                         <td className="px-6 py-4 text-sm text-slate-600">
                           {request.companyName}
                         </td>
-                        <td className="px-6 py-4 text-sm text-slate-600">{request.email}</td>
+                        <td className="px-6 py-4 text-sm text-slate-600">
+                          {request.email}
+                        </td>
                         <td className="px-6 py-4 text-sm text-slate-600">
                           <span className="px-2 py-1 bg-slate-100 text-slate-700 rounded text-xs font-semibold capitalize">
                             {request.subscriptionPlan}
@@ -285,7 +310,10 @@ export default function AdminClientRequests() {
                   })
                 ) : (
                   <tr>
-                    <td colSpan={7} className="px-6 py-8 text-center text-slate-500">
+                    <td
+                      colSpan={7}
+                      className="px-6 py-8 text-center text-slate-500"
+                    >
                       No client requests found
                     </td>
                   </tr>
@@ -296,7 +324,8 @@ export default function AdminClientRequests() {
 
           {/* Summary */}
           <div className="mt-4 text-sm text-slate-600">
-            Showing {filteredRequests.length} of {mockClientRequests.length} requests
+            Showing {filteredRequests.length} of {mockClientRequests.length}{" "}
+            requests
           </div>
         </div>
       </div>

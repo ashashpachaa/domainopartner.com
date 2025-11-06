@@ -63,7 +63,7 @@ export default function SignUp() {
     }
 
     const emailExists = mockUsers.some(
-      (u) => u.email.toLowerCase() === formData.email.toLowerCase()
+      (u) => u.email.toLowerCase() === formData.email.toLowerCase(),
     );
     if (emailExists) {
       toast.error("An account with this email already exists");
@@ -107,10 +107,18 @@ export default function SignUp() {
         };
 
         mockClientRequests.push(newClientRequest);
-        localStorage.setItem(`clientRequest_${newRequestId}`, JSON.stringify(newClientRequest));
-        localStorage.setItem("mockClientRequests", JSON.stringify(mockClientRequests));
+        localStorage.setItem(
+          `clientRequest_${newRequestId}`,
+          JSON.stringify(newClientRequest),
+        );
+        localStorage.setItem(
+          "mockClientRequests",
+          JSON.stringify(mockClientRequests),
+        );
 
-        toast.success("Account request submitted! An admin will review your application shortly.");
+        toast.success(
+          "Account request submitted! An admin will review your application shortly.",
+        );
         toast.info("You will be notified via email once approved.");
 
         // Redirect to a pending status page or login
@@ -245,11 +253,17 @@ export default function SignUp() {
                 />
                 <label className="text-sm text-slate-600">
                   I agree to the{" "}
-                  <a href="#" className="text-primary-600 hover:text-primary-700 font-medium">
+                  <a
+                    href="#"
+                    className="text-primary-600 hover:text-primary-700 font-medium"
+                  >
                     Terms of Service
                   </a>{" "}
                   and{" "}
-                  <a href="#" className="text-primary-600 hover:text-primary-700 font-medium">
+                  <a
+                    href="#"
+                    className="text-primary-600 hover:text-primary-700 font-medium"
+                  >
                     Privacy Policy
                   </a>
                 </label>
@@ -294,7 +308,10 @@ export default function SignUp() {
             {/* Sign In Link */}
             <p className="text-center mt-6 text-slate-600">
               Already have an account?{" "}
-              <Link to="/signin" className="text-primary-600 hover:text-primary-700 font-semibold">
+              <Link
+                to="/signin"
+                className="text-primary-600 hover:text-primary-700 font-semibold"
+              >
                 Sign in
               </Link>
             </p>

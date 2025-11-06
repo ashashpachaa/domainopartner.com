@@ -16,7 +16,7 @@ export async function handleCompanySearch(req: any, res: any) {
 
   try {
     const searchUrl = `https://api.companieshouse.gov.uk/search/companies?q=${encodeURIComponent(
-      companyName
+      companyName,
     )}&items_per_page=10`;
 
     const response = await fetch(searchUrl, {
@@ -28,7 +28,9 @@ export async function handleCompanySearch(req: any, res: any) {
     });
 
     if (!response.ok) {
-      console.error(`Companies House API error: ${response.status} ${response.statusText}`);
+      console.error(
+        `Companies House API error: ${response.status} ${response.statusText}`,
+      );
       return res.status(response.status).json({
         error: `Companies House API error: ${response.statusText}`,
         status: response.status,
@@ -70,7 +72,10 @@ export async function handleCompanySearch(req: any, res: any) {
 
     const similarMatch = data.items?.find((item: any) => {
       const normalizedTitle = normalizeForComparison(item.title || "");
-      return normalizedTitle.includes(normalizedQuery) || normalizedQuery.includes(normalizedTitle);
+      return (
+        normalizedTitle.includes(normalizedQuery) ||
+        normalizedQuery.includes(normalizedTitle)
+      );
     });
 
     res.json({
@@ -117,7 +122,9 @@ export async function handleCompanyDetails(req: any, res: any) {
     });
 
     if (!response.ok) {
-      console.error(`Companies House API error: ${response.status} ${response.statusText}`);
+      console.error(
+        `Companies House API error: ${response.status} ${response.statusText}`,
+      );
       return res.status(response.status).json({
         error: `Failed to fetch company details: ${response.statusText}`,
         status: response.status,
@@ -126,19 +133,25 @@ export async function handleCompanyDetails(req: any, res: any) {
 
     const data = await response.json();
 
-    const incorporationDate = data.date_of_creation ? new Date(data.date_of_creation).toISOString().split('T')[0] : null;
+    const incorporationDate = data.date_of_creation
+      ? new Date(data.date_of_creation).toISOString().split("T")[0]
+      : null;
 
     // Calculate next renewal date (3 years from incorporation or anniversary)
     let nextRenewalDate = null;
     if (incorporationDate) {
       const incDate = new Date(incorporationDate);
-      const nextRenewal = new Date(incDate.getFullYear() + 3, incDate.getMonth(), incDate.getDate());
-      nextRenewalDate = nextRenewal.toISOString().split('T')[0];
+      const nextRenewal = new Date(
+        incDate.getFullYear() + 3,
+        incDate.getMonth(),
+        incDate.getDate(),
+      );
+      nextRenewalDate = nextRenewal.toISOString().split("T")[0];
     }
 
     // Get accounts filing date
     const accountsFilingDate = data.accounts?.next_made_up_to
-      ? new Date(data.accounts.next_made_up_to).toISOString().split('T')[0]
+      ? new Date(data.accounts.next_made_up_to).toISOString().split("T")[0]
       : null;
 
     res.json({

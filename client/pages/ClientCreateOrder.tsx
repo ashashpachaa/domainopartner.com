@@ -4,7 +4,16 @@ import { mockOrders, mockProducts, Shareholder } from "@/lib/mockData";
 import ClientLayout from "@/components/ClientLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, AlertCircle, Plus, Trash2, Edit2, X, Check, Loader } from "lucide-react";
+import {
+  ArrowLeft,
+  AlertCircle,
+  Plus,
+  Trash2,
+  Edit2,
+  X,
+  Check,
+  Loader,
+} from "lucide-react";
 import { toast } from "sonner";
 import { useCompanyNameValidation } from "@/hooks/useCompanyNameValidation";
 
@@ -35,14 +44,17 @@ export default function ClientCreateOrder() {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [isDragging, setIsDragging] = useState(false);
   const [shareholders, setShareholders] = useState<Shareholder[]>([]);
-  const [editingShareholderId, setEditingShareholderId] = useState<string | null>(null);
+  const [editingShareholderId, setEditingShareholderId] = useState<
+    string | null
+  >(null);
   const [shareholderForm, setShareholderForm] = useState({
     fullName: "",
     dateOfBirth: "",
     nationality: "",
     ownershipPercentage: "",
   });
-  const [shareholderPassportFile, setShareholderPassportFile] = useState<File | null>(null);
+  const [shareholderPassportFile, setShareholderPassportFile] =
+    useState<File | null>(null);
   const [showShareholderForm, setShowShareholderForm] = useState(false);
 
   const MAX_FILE_SIZE = 5 * 1024 * 1024 * 1024; // 5GB in bytes
@@ -118,7 +130,9 @@ export default function ClientCreateOrder() {
     });
   };
 
-  const handleShareholderPassportSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleShareholderPassportSelect = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       if (file.size > 50 * 1024 * 1024) {
@@ -149,7 +163,12 @@ export default function ClientCreateOrder() {
       return false;
     }
     const percentage = parseFloat(shareholderForm.ownershipPercentage);
-    if (!shareholderForm.ownershipPercentage || isNaN(percentage) || percentage <= 0 || percentage > 100) {
+    if (
+      !shareholderForm.ownershipPercentage ||
+      isNaN(percentage) ||
+      percentage <= 0 ||
+      percentage > 100
+    ) {
       toast.error("Ownership percentage must be between 0 and 100");
       return false;
     }
@@ -173,16 +192,22 @@ export default function ClientCreateOrder() {
       dateOfBirth: shareholderForm.dateOfBirth,
       nationality: shareholderForm.nationality,
       ownershipPercentage: parseFloat(shareholderForm.ownershipPercentage),
-      passportFile: shareholderPassportFile ? {
-        fileName: shareholderPassportFile.name,
-        fileSize: shareholderPassportFile.size,
-        fileUrl: URL.createObjectURL(shareholderPassportFile),
-        uploadedAt: new Date().toISOString(),
-      } : undefined,
+      passportFile: shareholderPassportFile
+        ? {
+            fileName: shareholderPassportFile.name,
+            fileSize: shareholderPassportFile.size,
+            fileUrl: URL.createObjectURL(shareholderPassportFile),
+            uploadedAt: new Date().toISOString(),
+          }
+        : undefined,
     };
 
     if (editingShareholderId) {
-      setShareholders(shareholders.map((sh) => (sh.id === editingShareholderId ? newShareholder : sh)));
+      setShareholders(
+        shareholders.map((sh) =>
+          sh.id === editingShareholderId ? newShareholder : sh,
+        ),
+      );
       toast.success("Shareholder updated");
       setEditingShareholderId(null);
     } else {
@@ -233,7 +258,9 @@ export default function ClientCreateOrder() {
     }
     const totalPercentage = getTotalOwnershipPercentage();
     if (Math.abs(totalPercentage - 100) > 0.01) {
-      toast.error(`Ownership percentages must add up to 100% (currently ${totalPercentage.toFixed(2)}%)`);
+      toast.error(
+        `Ownership percentages must add up to 100% (currently ${totalPercentage.toFixed(2)}%)`,
+      );
       return false;
     }
     return true;
@@ -242,12 +269,21 @@ export default function ClientCreateOrder() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.description || !formData.productId || !formData.serviceType || !formData.countries || !formData.amount) {
+    if (
+      !formData.description ||
+      !formData.productId ||
+      !formData.serviceType ||
+      !formData.countries ||
+      !formData.amount
+    ) {
       toast.error("Please fill in all required fields");
       return;
     }
 
-    if (formData.serviceType === "Company Formation" && !validateShareholders()) {
+    if (
+      formData.serviceType === "Company Formation" &&
+      !validateShareholders()
+    ) {
       return;
     }
 
@@ -257,22 +293,32 @@ export default function ClientCreateOrder() {
         return;
       }
       if (companyValidation.isAvailable === false) {
-        toast.error("This company name is already registered. Please choose a different name.");
+        toast.error(
+          "This company name is already registered. Please choose a different name.",
+        );
         return;
       }
       if (companyValidation.isAvailable === null) {
-        toast.error("Please wait for company name availability check to complete");
+        toast.error(
+          "Please wait for company name availability check to complete",
+        );
         return;
       }
       if (!companyInfo.companyActivities.trim()) {
         toast.error("Company activities description is required");
         return;
       }
-      if (!companyInfo.totalCapital || parseFloat(companyInfo.totalCapital) <= 0) {
+      if (
+        !companyInfo.totalCapital ||
+        parseFloat(companyInfo.totalCapital) <= 0
+      ) {
         toast.error("Total capital must be greater than 0");
         return;
       }
-      if (!companyInfo.pricePerShare || parseFloat(companyInfo.pricePerShare) <= 0) {
+      if (
+        !companyInfo.pricePerShare ||
+        parseFloat(companyInfo.pricePerShare) <= 0
+      ) {
         toast.error("Price per share must be greater than 0");
         return;
       }
@@ -351,8 +397,14 @@ export default function ClientCreateOrder() {
           hasPOA: false,
           hasFinancialReport: false,
         },
-        shareholders: formData.serviceType === "Company Formation" ? shareholders : undefined,
-        companyInfo: formData.serviceType === "Company Formation" ? companyInfo : undefined,
+        shareholders:
+          formData.serviceType === "Company Formation"
+            ? shareholders
+            : undefined,
+        companyInfo:
+          formData.serviceType === "Company Formation"
+            ? companyInfo
+            : undefined,
       };
 
       mockOrders.push(newOrder);
@@ -379,8 +431,12 @@ export default function ClientCreateOrder() {
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Orders
           </Button>
-          <h1 className="text-3xl font-bold text-slate-900">Create New Order</h1>
-          <p className="text-slate-600 mt-2">Fill in the details below to request a new service</p>
+          <h1 className="text-3xl font-bold text-slate-900">
+            Create New Order
+          </h1>
+          <p className="text-slate-600 mt-2">
+            Fill in the details below to request a new service
+          </p>
         </div>
 
         {/* Form Card */}
@@ -408,16 +464,26 @@ export default function ClientCreateOrder() {
             {/* Product Details */}
             {selectedProduct && (
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <h3 className="font-semibold text-blue-900 mb-2">Included Services</h3>
+                <h3 className="font-semibold text-blue-900 mb-2">
+                  Included Services
+                </h3>
                 <div className="space-y-1 text-sm text-blue-700">
-                  {selectedProduct.services.hasApostille && <p>✓ Apostille Processing</p>}
-                  {selectedProduct.services.hasPOA && <p>✓ Power of Attorney</p>}
-                  {selectedProduct.services.hasFinancialReport && <p>✓ Financial Report</p>}
+                  {selectedProduct.services.hasApostille && (
+                    <p>✓ Apostille Processing</p>
+                  )}
+                  {selectedProduct.services.hasPOA && (
+                    <p>✓ Power of Attorney</p>
+                  )}
+                  {selectedProduct.services.hasFinancialReport && (
+                    <p>✓ Financial Report</p>
+                  )}
                   {selectedProduct.services.hasShipping && <p>✓ Shipping</p>}
                   {!selectedProduct.services.hasApostille &&
                     !selectedProduct.services.hasPOA &&
                     !selectedProduct.services.hasFinancialReport &&
-                    !selectedProduct.services.hasShipping && <p>Standard processing</p>}
+                    !selectedProduct.services.hasShipping && (
+                      <p>Standard processing</p>
+                    )}
                 </div>
               </div>
             )}
@@ -429,7 +495,9 @@ export default function ClientCreateOrder() {
               </label>
               <textarea
                 value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, description: e.target.value })
+                }
                 placeholder="Describe what service you need..."
                 className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500"
                 rows={4}
@@ -443,7 +511,9 @@ export default function ClientCreateOrder() {
               </label>
               <select
                 value={formData.serviceType}
-                onChange={(e) => setFormData({ ...formData, serviceType: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, serviceType: e.target.value })
+                }
                 className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500 bg-white"
               >
                 <option value="">Select service type...</option>
@@ -463,11 +533,17 @@ export default function ClientCreateOrder() {
                 type="text"
                 value={formData.countries}
                 disabled={!selectedProduct}
-                placeholder={selectedProduct ? "Auto-populated from product" : "Select a product first"}
+                placeholder={
+                  selectedProduct
+                    ? "Auto-populated from product"
+                    : "Select a product first"
+                }
                 className="bg-slate-50 cursor-not-allowed"
               />
               <p className="text-xs text-slate-500 mt-1">
-                {selectedProduct ? "Auto-populated from product details (non-editable)" : "Select a product to auto-populate"}
+                {selectedProduct
+                  ? "Auto-populated from product details (non-editable)"
+                  : "Select a product to auto-populate"}
               </p>
             </div>
 
@@ -481,12 +557,16 @@ export default function ClientCreateOrder() {
                   type="number"
                   value={formData.amount}
                   disabled={!selectedProduct}
-                  placeholder={selectedProduct ? "0.00" : "Select a product first"}
+                  placeholder={
+                    selectedProduct ? "0.00" : "Select a product first"
+                  }
                   step="0.01"
                   className="bg-slate-50 cursor-not-allowed"
                 />
                 <p className="text-xs text-slate-500 mt-1">
-                  {selectedProduct ? "Auto-populated from product (non-editable)" : "Select a product to auto-populate"}
+                  {selectedProduct
+                    ? "Auto-populated from product (non-editable)"
+                    : "Select a product to auto-populate"}
                 </p>
               </div>
               <div>
@@ -504,7 +584,9 @@ export default function ClientCreateOrder() {
                   <option value="AED">AED</option>
                 </select>
                 <p className="text-xs text-slate-500 mt-1">
-                  {selectedProduct ? "Auto-populated from product (non-editable)" : "Select a product first"}
+                  {selectedProduct
+                    ? "Auto-populated from product (non-editable)"
+                    : "Select a product first"}
                 </p>
               </div>
             </div>
@@ -513,9 +595,12 @@ export default function ClientCreateOrder() {
             {formData.serviceType === "Company Formation" && (
               <div className="bg-purple-50 border border-purple-200 rounded-lg p-6 space-y-4">
                 <div>
-                  <h3 className="font-semibold text-slate-900 mb-2">Shareholders & Ownership Structure *</h3>
+                  <h3 className="font-semibold text-slate-900 mb-2">
+                    Shareholders & Ownership Structure *
+                  </h3>
                   <p className="text-sm text-slate-600 mb-4">
-                    Add all company shareholders. Ownership percentages must add up to 100%.
+                    Add all company shareholders. Ownership percentages must add
+                    up to 100%.
                   </p>
                 </div>
 
@@ -533,13 +618,20 @@ export default function ClientCreateOrder() {
                               {shareholder.firstName} {shareholder.lastName}
                             </p>
                             <div className="grid grid-cols-2 gap-2 mt-2 text-sm text-slate-600">
-                              <p>DOB: {new Date(shareholder.dateOfBirth).toLocaleDateString()}</p>
+                              <p>
+                                DOB:{" "}
+                                {new Date(
+                                  shareholder.dateOfBirth,
+                                ).toLocaleDateString()}
+                              </p>
                               <p>Nationality: {shareholder.nationality}</p>
                               <p className="font-medium text-slate-900">
                                 Ownership: {shareholder.ownershipPercentage}%
                               </p>
                               {shareholder.passportFile && (
-                                <p className="text-green-600">✓ Passport uploaded</p>
+                                <p className="text-green-600">
+                                  ✓ Passport uploaded
+                                </p>
                               )}
                             </div>
                           </div>
@@ -569,9 +661,14 @@ export default function ClientCreateOrder() {
 
                 {/* Ownership Total */}
                 {shareholders.length > 0 && (
-                  <div className={`p-3 rounded-lg ${Math.abs(getTotalOwnershipPercentage() - 100) < 0.01 ? 'bg-green-50 border border-green-200' : 'bg-yellow-50 border border-yellow-200'}`}>
-                    <p className={`text-sm font-medium ${Math.abs(getTotalOwnershipPercentage() - 100) < 0.01 ? 'text-green-700' : 'text-yellow-700'}`}>
-                      Total Ownership: {getTotalOwnershipPercentage().toFixed(2)}%
+                  <div
+                    className={`p-3 rounded-lg ${Math.abs(getTotalOwnershipPercentage() - 100) < 0.01 ? "bg-green-50 border border-green-200" : "bg-yellow-50 border border-yellow-200"}`}
+                  >
+                    <p
+                      className={`text-sm font-medium ${Math.abs(getTotalOwnershipPercentage() - 100) < 0.01 ? "text-green-700" : "text-yellow-700"}`}
+                    >
+                      Total Ownership:{" "}
+                      {getTotalOwnershipPercentage().toFixed(2)}%
                     </p>
                   </div>
                 )}
@@ -590,7 +687,9 @@ export default function ClientCreateOrder() {
                   <div className="bg-white rounded-lg border border-slate-200 p-4 space-y-4">
                     <div className="flex items-center justify-between mb-4">
                       <h4 className="font-semibold text-slate-900">
-                        {editingShareholderId ? "Edit Shareholder" : "Add Shareholder"}
+                        {editingShareholderId
+                          ? "Edit Shareholder"
+                          : "Add Shareholder"}
                       </h4>
                       <button
                         type="button"
@@ -608,10 +707,17 @@ export default function ClientCreateOrder() {
                       <Input
                         type="text"
                         value={shareholderForm.fullName || ""}
-                        onChange={(e) => setShareholderForm({ ...shareholderForm, fullName: e.target.value })}
+                        onChange={(e) =>
+                          setShareholderForm({
+                            ...shareholderForm,
+                            fullName: e.target.value,
+                          })
+                        }
                         placeholder="e.g., Ahmed Sameh Elmorsy"
                       />
-                      <p className="text-xs text-slate-500 mt-1">First and last name</p>
+                      <p className="text-xs text-slate-500 mt-1">
+                        First and last name
+                      </p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -622,7 +728,12 @@ export default function ClientCreateOrder() {
                         <Input
                           type="date"
                           value={shareholderForm.dateOfBirth}
-                          onChange={(e) => setShareholderForm({ ...shareholderForm, dateOfBirth: e.target.value })}
+                          onChange={(e) =>
+                            setShareholderForm({
+                              ...shareholderForm,
+                              dateOfBirth: e.target.value,
+                            })
+                          }
                         />
                       </div>
                       <div>
@@ -632,7 +743,12 @@ export default function ClientCreateOrder() {
                         <Input
                           type="text"
                           value={shareholderForm.nationality}
-                          onChange={(e) => setShareholderForm({ ...shareholderForm, nationality: e.target.value })}
+                          onChange={(e) =>
+                            setShareholderForm({
+                              ...shareholderForm,
+                              nationality: e.target.value,
+                            })
+                          }
                           placeholder="e.g., American, British"
                         />
                       </div>
@@ -645,7 +761,12 @@ export default function ClientCreateOrder() {
                       <Input
                         type="number"
                         value={shareholderForm.ownershipPercentage}
-                        onChange={(e) => setShareholderForm({ ...shareholderForm, ownershipPercentage: e.target.value })}
+                        onChange={(e) =>
+                          setShareholderForm({
+                            ...shareholderForm,
+                            ownershipPercentage: e.target.value,
+                          })
+                        }
                         placeholder="0.00"
                         min="0"
                         max="100"
@@ -663,9 +784,13 @@ export default function ClientCreateOrder() {
                         accept=".jpg,.jpeg,.png"
                         className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500"
                       />
-                      <p className="text-xs text-slate-500 mt-1">Max 50MB. Supported formats: JPG, PNG</p>
+                      <p className="text-xs text-slate-500 mt-1">
+                        Max 50MB. Supported formats: JPG, PNG
+                      </p>
                       {shareholderPassportFile && (
-                        <p className="text-sm text-green-600 mt-2">✓ {shareholderPassportFile.name} selected</p>
+                        <p className="text-sm text-green-600 mt-2">
+                          ✓ {shareholderPassportFile.name} selected
+                        </p>
                       )}
                     </div>
 
@@ -675,7 +800,9 @@ export default function ClientCreateOrder() {
                         onClick={addShareholder}
                         className="flex-1 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition"
                       >
-                        {editingShareholderId ? "Update Shareholder" : "Add Shareholder"}
+                        {editingShareholderId
+                          ? "Update Shareholder"
+                          : "Add Shareholder"}
                       </button>
                       <button
                         type="button"
@@ -694,7 +821,9 @@ export default function ClientCreateOrder() {
             {formData.serviceType === "Company Formation" && (
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 space-y-4">
                 <div>
-                  <h3 className="font-semibold text-slate-900 mb-2">Company Information *</h3>
+                  <h3 className="font-semibold text-slate-900 mb-2">
+                    Company Information *
+                  </h3>
                   <p className="text-sm text-slate-600 mb-4">
                     Provide details about the company being formed.
                   </p>
@@ -709,7 +838,10 @@ export default function ClientCreateOrder() {
                       type="text"
                       value={companyInfo.companyName}
                       onChange={(e) => {
-                        setCompanyInfo({ ...companyInfo, companyName: e.target.value });
+                        setCompanyInfo({
+                          ...companyInfo,
+                          companyName: e.target.value,
+                        });
                         companyValidation.validateWithDebounce(e.target.value);
                       }}
                       placeholder="e.g., Acme Corporation Ltd"
@@ -717,8 +849,8 @@ export default function ClientCreateOrder() {
                         companyValidation.isAvailable === false
                           ? "border-red-500 focus:border-red-500"
                           : companyValidation.isAvailable === true
-                          ? "border-green-500 focus:border-green-500"
-                          : ""
+                            ? "border-green-500 focus:border-green-500"
+                            : ""
                       }`}
                     />
                     <div className="absolute right-3 top-2.5">
@@ -744,29 +876,36 @@ export default function ClientCreateOrder() {
                       {companyValidation.exactMatch && (
                         <div className="text-xs text-red-600 space-y-1 mt-2">
                           <p>
-                            <strong>Registered as:</strong> {companyValidation.exactMatch.title}
+                            <strong>Registered as:</strong>{" "}
+                            {companyValidation.exactMatch.title}
                           </p>
                           {companyValidation.exactMatch.company_number && (
                             <p>
-                              <strong>Company Number:</strong> {companyValidation.exactMatch.company_number}
+                              <strong>Company Number:</strong>{" "}
+                              {companyValidation.exactMatch.company_number}
                             </p>
                           )}
                           {companyValidation.exactMatch.address_snippet && (
                             <p>
-                              <strong>Address:</strong> {companyValidation.exactMatch.address_snippet}
+                              <strong>Address:</strong>{" "}
+                              {companyValidation.exactMatch.address_snippet}
                             </p>
                           )}
                         </div>
                       )}
                       {(companyValidation.results as any[])?.length > 0 && (
                         <div className="text-xs text-red-600 mt-2">
-                          <p className="font-medium mb-1">Similar registered companies:</p>
+                          <p className="font-medium mb-1">
+                            Similar registered companies:
+                          </p>
                           <ul className="list-disc list-inside space-y-0.5">
-                            {(companyValidation.results as any[]).slice(0, 3).map((company: any) => (
-                              <li key={company.company_number}>
-                                {company.title} ({company.company_number})
-                              </li>
-                            ))}
+                            {(companyValidation.results as any[])
+                              .slice(0, 3)
+                              .map((company: any) => (
+                                <li key={company.company_number}>
+                                  {company.title} ({company.company_number})
+                                </li>
+                              ))}
                           </ul>
                         </div>
                       )}
@@ -802,7 +941,12 @@ export default function ClientCreateOrder() {
                   </label>
                   <textarea
                     value={companyInfo.companyActivities}
-                    onChange={(e) => setCompanyInfo({ ...companyInfo, companyActivities: e.target.value })}
+                    onChange={(e) =>
+                      setCompanyInfo({
+                        ...companyInfo,
+                        companyActivities: e.target.value,
+                      })
+                    }
                     placeholder="Describe the company's main business activities..."
                     className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500"
                     rows={3}
@@ -817,11 +961,18 @@ export default function ClientCreateOrder() {
                     <Input
                       type="number"
                       value={companyInfo.totalCapital}
-                      onChange={(e) => setCompanyInfo({ ...companyInfo, totalCapital: e.target.value })}
+                      onChange={(e) =>
+                        setCompanyInfo({
+                          ...companyInfo,
+                          totalCapital: e.target.value,
+                        })
+                      }
                       placeholder="e.g., 100000"
                       step="0.01"
                     />
-                    <p className="text-xs text-slate-500 mt-1">Enter amount in {formData.currency}</p>
+                    <p className="text-xs text-slate-500 mt-1">
+                      Enter amount in {formData.currency}
+                    </p>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-slate-900 mb-2">
@@ -830,11 +981,18 @@ export default function ClientCreateOrder() {
                     <Input
                       type="number"
                       value={companyInfo.pricePerShare}
-                      onChange={(e) => setCompanyInfo({ ...companyInfo, pricePerShare: e.target.value })}
+                      onChange={(e) =>
+                        setCompanyInfo({
+                          ...companyInfo,
+                          pricePerShare: e.target.value,
+                        })
+                      }
                       placeholder="e.g., 100"
                       step="0.01"
                     />
-                    <p className="text-xs text-slate-500 mt-1">Price per share in {formData.currency}</p>
+                    <p className="text-xs text-slate-500 mt-1">
+                      Price per share in {formData.currency}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -885,7 +1043,9 @@ export default function ClientCreateOrder() {
                       <p className="font-medium text-slate-900">
                         Drag and drop your files here
                       </p>
-                      <p className="text-sm text-slate-600">or click to select</p>
+                      <p className="text-sm text-slate-600">
+                        or click to select
+                      </p>
                     </div>
                     <p className="text-xs text-slate-500 mt-2">
                       Max 5 files, 5GB total
@@ -899,7 +1059,8 @@ export default function ClientCreateOrder() {
                 <div className="mt-4 space-y-2">
                   <div className="flex items-center justify-between mb-3">
                     <p className="text-sm font-medium text-slate-900">
-                      {uploadedFiles.length} file{uploadedFiles.length !== 1 ? "s" : ""} uploaded
+                      {uploadedFiles.length} file
+                      {uploadedFiles.length !== 1 ? "s" : ""} uploaded
                     </p>
                     <p className="text-xs text-slate-600">
                       {getFileSize(getTotalUploadSize())} / 5GB
@@ -923,7 +1084,9 @@ export default function ClientCreateOrder() {
                           <p className="text-sm font-medium text-slate-900 truncate">
                             {file.name}
                           </p>
-                          <p className="text-xs text-slate-500">{getFileSize(file.size)}</p>
+                          <p className="text-xs text-slate-500">
+                            {getFileSize(file.size)}
+                          </p>
                         </div>
                       </div>
                       <button
@@ -946,7 +1109,9 @@ export default function ClientCreateOrder() {
               </label>
               <textarea
                 value={formData.notes}
-                onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, notes: e.target.value })
+                }
                 placeholder="Any additional information or special requirements..."
                 className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500"
                 rows={3}
@@ -958,7 +1123,11 @@ export default function ClientCreateOrder() {
               <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
               <div className="text-sm text-blue-700">
                 <p className="font-medium mb-1">Next Steps</p>
-                <p>After submitting your order, our team will review it and contact you within 24 hours to confirm the details and timeline.</p>
+                <p>
+                  After submitting your order, our team will review it and
+                  contact you within 24 hours to confirm the details and
+                  timeline.
+                </p>
               </div>
             </div>
 
@@ -973,7 +1142,10 @@ export default function ClientCreateOrder() {
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Back to Orders
               </Button>
-              <Button type="submit" className="flex-1 bg-primary-600 hover:bg-primary-700">
+              <Button
+                type="submit"
+                className="flex-1 bg-primary-600 hover:bg-primary-700"
+              >
                 Create Order
               </Button>
             </div>

@@ -5,7 +5,9 @@ import { Input } from "@/components/ui/input";
 import { User, Mail, Phone, MapPin, Building } from "lucide-react";
 
 export default function ClientProfile() {
-  const [currentUser] = useState(JSON.parse(localStorage.getItem("currentUser") || "{}"));
+  const [currentUser] = useState(
+    JSON.parse(localStorage.getItem("currentUser") || "{}"),
+  );
   const [isEditing, setIsEditing] = useState(false);
 
   return (
@@ -13,14 +15,20 @@ export default function ClientProfile() {
       <div className="max-w-2xl space-y-6">
         {/* Header */}
         <div>
-          <h1 className="text-3xl font-bold text-slate-900">Account Settings</h1>
-          <p className="text-slate-600 mt-2">Manage your profile and account information</p>
+          <h1 className="text-3xl font-bold text-slate-900">
+            Account Settings
+          </h1>
+          <p className="text-slate-600 mt-2">
+            Manage your profile and account information
+          </p>
         </div>
 
         {/* Profile Card */}
         <div className="bg-white rounded-lg border border-slate-200 p-8">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-semibold text-slate-900">Personal Information</h2>
+            <h2 className="text-lg font-semibold text-slate-900">
+              Personal Information
+            </h2>
             <Button
               onClick={() => setIsEditing(!isEditing)}
               variant={isEditing ? "destructive" : "default"}
@@ -38,19 +46,33 @@ export default function ClientProfile() {
                   First Name
                 </label>
                 {isEditing ? (
-                  <Input value={currentUser.firstName} disabled className="bg-slate-50" />
+                  <Input
+                    value={currentUser.firstName}
+                    disabled
+                    className="bg-slate-50"
+                  />
                 ) : (
-                  <p className="text-slate-900 font-medium">{currentUser.firstName}</p>
+                  <p className="text-slate-900 font-medium">
+                    {currentUser.firstName}
+                  </p>
                 )}
               </div>
 
               {/* Last Name */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Last Name</label>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Last Name
+                </label>
                 {isEditing ? (
-                  <Input value={currentUser.lastName} disabled className="bg-slate-50" />
+                  <Input
+                    value={currentUser.lastName}
+                    disabled
+                    className="bg-slate-50"
+                  />
                 ) : (
-                  <p className="text-slate-900 font-medium">{currentUser.lastName}</p>
+                  <p className="text-slate-900 font-medium">
+                    {currentUser.lastName}
+                  </p>
                 )}
               </div>
 
@@ -61,9 +83,15 @@ export default function ClientProfile() {
                   Email Address
                 </label>
                 {isEditing ? (
-                  <Input value={currentUser.email} disabled className="bg-slate-50" />
+                  <Input
+                    value={currentUser.email}
+                    disabled
+                    className="bg-slate-50"
+                  />
                 ) : (
-                  <p className="text-slate-900 font-medium">{currentUser.email}</p>
+                  <p className="text-slate-900 font-medium">
+                    {currentUser.email}
+                  </p>
                 )}
               </div>
 
@@ -74,19 +102,33 @@ export default function ClientProfile() {
                   Phone Number
                 </label>
                 {isEditing ? (
-                  <Input value={currentUser.phone || ""} disabled className="bg-slate-50" />
+                  <Input
+                    value={currentUser.phone || ""}
+                    disabled
+                    className="bg-slate-50"
+                  />
                 ) : (
-                  <p className="text-slate-900 font-medium">{currentUser.phone || "Not provided"}</p>
+                  <p className="text-slate-900 font-medium">
+                    {currentUser.phone || "Not provided"}
+                  </p>
                 )}
               </div>
 
               {/* WhatsApp */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">WhatsApp</label>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  WhatsApp
+                </label>
                 {isEditing ? (
-                  <Input value={currentUser.whatsappNumber || ""} disabled className="bg-slate-50" />
+                  <Input
+                    value={currentUser.whatsappNumber || ""}
+                    disabled
+                    className="bg-slate-50"
+                  />
                 ) : (
-                  <p className="text-slate-900 font-medium">{currentUser.whatsappNumber || "Not provided"}</p>
+                  <p className="text-slate-900 font-medium">
+                    {currentUser.whatsappNumber || "Not provided"}
+                  </p>
                 )}
               </div>
 
@@ -97,9 +139,15 @@ export default function ClientProfile() {
                   Company Name
                 </label>
                 {isEditing ? (
-                  <Input value={currentUser.companyName || ""} disabled className="bg-slate-50" />
+                  <Input
+                    value={currentUser.companyName || ""}
+                    disabled
+                    className="bg-slate-50"
+                  />
                 ) : (
-                  <p className="text-slate-900 font-medium">{currentUser.companyName || "Not provided"}</p>
+                  <p className="text-slate-900 font-medium">
+                    {currentUser.companyName || "Not provided"}
+                  </p>
                 )}
               </div>
 
@@ -110,9 +158,15 @@ export default function ClientProfile() {
                   Country
                 </label>
                 {isEditing ? (
-                  <Input value={currentUser.country || ""} disabled className="bg-slate-50" />
+                  <Input
+                    value={currentUser.country || ""}
+                    disabled
+                    className="bg-slate-50"
+                  />
                 ) : (
-                  <p className="text-slate-900 font-medium">{currentUser.country || "Not provided"}</p>
+                  <p className="text-slate-900 font-medium">
+                    {currentUser.country || "Not provided"}
+                  </p>
                 )}
               </div>
             </div>
@@ -132,7 +186,9 @@ export default function ClientProfile() {
 
         {/* Account Status */}
         <div className="bg-white rounded-lg border border-slate-200 p-6">
-          <h2 className="text-lg font-semibold text-slate-900 mb-4">Account Status</h2>
+          <h2 className="text-lg font-semibold text-slate-900 mb-4">
+            Account Status
+          </h2>
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <p className="text-slate-600">Status</p>
@@ -143,7 +199,9 @@ export default function ClientProfile() {
             <div className="flex items-center justify-between">
               <p className="text-slate-600">Member Since</p>
               <p className="font-medium text-slate-900">
-                {currentUser.joinDate ? new Date(currentUser.joinDate).toLocaleDateString() : "N/A"}
+                {currentUser.joinDate
+                  ? new Date(currentUser.joinDate).toLocaleDateString()
+                  : "N/A"}
               </p>
             </div>
           </div>
@@ -153,7 +211,8 @@ export default function ClientProfile() {
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
           <h3 className="font-semibold text-blue-900 mb-2">Need Help?</h3>
           <p className="text-sm text-blue-700 mb-4">
-            If you need to update your information or have any questions, please contact our support team.
+            If you need to update your information or have any questions, please
+            contact our support team.
           </p>
           <Button variant="outline" className="border-blue-300 text-blue-700">
             Contact Support

@@ -7,7 +7,7 @@ export interface CompanyDetailsResult {
 }
 
 export async function fetchCompanyDetails(
-  companyNumber: string
+  companyNumber: string,
 ): Promise<CompanyDetailsResult> {
   if (!companyNumber || companyNumber.trim().length === 0) {
     return {
@@ -19,7 +19,7 @@ export async function fetchCompanyDetails(
 
   try {
     const response = await fetch(
-      `/api/companies-house/details?companyNumber=${encodeURIComponent(companyNumber)}`
+      `/api/companies-house/details?companyNumber=${encodeURIComponent(companyNumber)}`,
     );
 
     if (!response.ok) {
@@ -39,7 +39,11 @@ export async function fetchCompanyDetails(
       nextAccountsFilingDate: apiData.accounts?.nextFilingDate || "",
       registeredOffice: apiData.registeredOffice?.address_line_1,
       sicCodes: apiData.sic,
-      status: (apiData.status || "active") as "active" | "dissolved" | "liquidation" | "administration",
+      status: (apiData.status || "active") as
+        | "active"
+        | "dissolved"
+        | "liquidation"
+        | "administration",
       fetchedAt: new Date().toISOString(),
     };
 
@@ -58,7 +62,9 @@ export async function fetchCompanyDetails(
 }
 
 export function storeRegisteredCompany(company: RegisteredCompany) {
-  const companies = JSON.parse(localStorage.getItem("registeredCompanies") || "[]");
+  const companies = JSON.parse(
+    localStorage.getItem("registeredCompanies") || "[]",
+  );
   companies.push(company);
   localStorage.setItem("registeredCompanies", JSON.stringify(companies));
 }
@@ -67,12 +73,16 @@ export function getRegisteredCompanies(): RegisteredCompany[] {
   return JSON.parse(localStorage.getItem("registeredCompanies") || "[]");
 }
 
-export function getRegisteredCompaniesByUser(userId: string): RegisteredCompany[] {
+export function getRegisteredCompaniesByUser(
+  userId: string,
+): RegisteredCompany[] {
   const companies = getRegisteredCompanies();
   return companies.filter((c) => c.userId === userId);
 }
 
-export function getRegisteredCompaniesByOrder(orderId: string): RegisteredCompany | undefined {
+export function getRegisteredCompaniesByOrder(
+  orderId: string,
+): RegisteredCompany | undefined {
   const companies = getRegisteredCompanies();
   return companies.find((c) => c.orderId === orderId);
 }

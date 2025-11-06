@@ -4,7 +4,10 @@ import cors from "cors";
 import multer from "multer";
 import { handleDemo } from "./routes/demo";
 import { handleOCR } from "./routes/ocr";
-import { handleCompanySearch, handleCompanyDetails } from "./routes/companiesHouse";
+import {
+  handleCompanySearch,
+  handleCompanyDetails,
+} from "./routes/companiesHouse";
 
 const upload = multer({ storage: multer.memoryStorage() });
 

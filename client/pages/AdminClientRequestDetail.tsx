@@ -19,8 +19,12 @@ export default function AdminClientRequestDetail() {
 
     // If not found in mock data, check localStorage
     if (!foundRequest) {
-      const storedRequests = JSON.parse(localStorage.getItem("mockClientRequests") || "[]");
-      foundRequest = storedRequests.find((r: ClientRequest) => r.id === requestId);
+      const storedRequests = JSON.parse(
+        localStorage.getItem("mockClientRequests") || "[]",
+      );
+      foundRequest = storedRequests.find(
+        (r: ClientRequest) => r.id === requestId,
+      );
     }
 
     return foundRequest;
@@ -30,8 +34,13 @@ export default function AdminClientRequestDetail() {
     return (
       <AdminLayout>
         <div className="flex flex-col items-center justify-center py-20">
-          <h2 className="text-2xl font-bold text-slate-900 mb-4">Request not found</h2>
-          <Button onClick={() => navigate("/admin/dashboard")} className="bg-primary-600 hover:bg-primary-700">
+          <h2 className="text-2xl font-bold text-slate-900 mb-4">
+            Request not found
+          </h2>
+          <Button
+            onClick={() => navigate("/admin/dashboard")}
+            className="bg-primary-600 hover:bg-primary-700"
+          >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Dashboard
           </Button>
@@ -48,7 +57,9 @@ export default function AdminClientRequestDetail() {
       // Update client request status
       request.status = "approved";
       request.reviewedAt = new Date().toISOString();
-      const currentAdmin = JSON.parse(localStorage.getItem("currentUser") || "{}");
+      const currentAdmin = JSON.parse(
+        localStorage.getItem("currentUser") || "{}",
+      );
       request.reviewedBy = currentAdmin.id || "admin";
 
       // Create actual user account
@@ -73,12 +84,20 @@ export default function AdminClientRequestDetail() {
       mockUsers.push(newUser);
 
       // Save to localStorage
-      localStorage.setItem(`clientRequest_${requestId}`, JSON.stringify(request));
+      localStorage.setItem(
+        `clientRequest_${requestId}`,
+        JSON.stringify(request),
+      );
       localStorage.setItem(`user_${newUserId}`, JSON.stringify(newUser));
-      localStorage.setItem("mockClientRequests", JSON.stringify(mockClientRequests));
+      localStorage.setItem(
+        "mockClientRequests",
+        JSON.stringify(mockClientRequests),
+      );
       localStorage.setItem("mockUsers", JSON.stringify(mockUsers));
 
-      toast.success(`✅ ${request.firstName} ${request.lastName}'s account has been approved!`);
+      toast.success(
+        `✅ ${request.firstName} ${request.lastName}'s account has been approved!`,
+      );
       navigate("/admin/dashboard");
     } catch (error: any) {
       toast.error("Error approving request: " + error.message);
@@ -101,14 +120,24 @@ export default function AdminClientRequestDetail() {
       request.status = "rejected";
       request.reviewedAt = new Date().toISOString();
       request.rejectionReason = rejectionReason;
-      const currentAdmin = JSON.parse(localStorage.getItem("currentUser") || "{}");
+      const currentAdmin = JSON.parse(
+        localStorage.getItem("currentUser") || "{}",
+      );
       request.reviewedBy = currentAdmin.id || "admin";
 
       // Save to localStorage
-      localStorage.setItem(`clientRequest_${requestId}`, JSON.stringify(request));
-      localStorage.setItem("mockClientRequests", JSON.stringify(mockClientRequests));
+      localStorage.setItem(
+        `clientRequest_${requestId}`,
+        JSON.stringify(request),
+      );
+      localStorage.setItem(
+        "mockClientRequests",
+        JSON.stringify(mockClientRequests),
+      );
 
-      toast.success(`❌ Request rejected. ${request.firstName} will be notified.`);
+      toast.success(
+        `❌ Request rejected. ${request.firstName} will be notified.`,
+      );
       navigate("/admin/dashboard");
     } catch (error: any) {
       toast.error("Error rejecting request: " + error.message);
@@ -144,58 +173,90 @@ export default function AdminClientRequestDetail() {
                 {request.status === "pending_approval" && (
                   <>
                     <Clock className="w-6 h-6 text-yellow-600" />
-                    <span className="text-lg font-semibold text-yellow-600">Pending Review</span>
+                    <span className="text-lg font-semibold text-yellow-600">
+                      Pending Review
+                    </span>
                   </>
                 )}
                 {request.status === "approved" && (
                   <>
                     <CheckCircle2 className="w-6 h-6 text-green-600" />
-                    <span className="text-lg font-semibold text-green-600">Approved</span>
+                    <span className="text-lg font-semibold text-green-600">
+                      Approved
+                    </span>
                   </>
                 )}
                 {request.status === "rejected" && (
                   <>
                     <XCircle className="w-6 h-6 text-red-600" />
-                    <span className="text-lg font-semibold text-red-600">Rejected</span>
+                    <span className="text-lg font-semibold text-red-600">
+                      Rejected
+                    </span>
                   </>
                 )}
               </div>
-              <p className="text-sm text-slate-500">Applied: {new Date(request.createdAt).toLocaleDateString()}</p>
+              <p className="text-sm text-slate-500">
+                Applied: {new Date(request.createdAt).toLocaleDateString()}
+              </p>
             </div>
           </div>
 
           {/* Request Information */}
           <div className="grid grid-cols-2 gap-6 mb-6 pb-6 border-b border-slate-200">
             <div>
-              <label className="text-sm font-medium text-slate-600">Company Name</label>
-              <p className="text-slate-900 font-medium mt-1">{request.companyName || "Not provided"}</p>
+              <label className="text-sm font-medium text-slate-600">
+                Company Name
+              </label>
+              <p className="text-slate-900 font-medium mt-1">
+                {request.companyName || "Not provided"}
+              </p>
             </div>
             <div>
-              <label className="text-sm font-medium text-slate-600">Subscription Plan</label>
-              <p className="text-slate-900 font-medium mt-1 capitalize">{request.subscriptionPlan}</p>
+              <label className="text-sm font-medium text-slate-600">
+                Subscription Plan
+              </label>
+              <p className="text-slate-900 font-medium mt-1 capitalize">
+                {request.subscriptionPlan}
+              </p>
             </div>
             <div>
-              <label className="text-sm font-medium text-slate-600">Country</label>
-              <p className="text-slate-900 font-medium mt-1">{request.country || "Not provided"}</p>
+              <label className="text-sm font-medium text-slate-600">
+                Country
+              </label>
+              <p className="text-slate-900 font-medium mt-1">
+                {request.country || "Not provided"}
+              </p>
             </div>
             <div>
               <label className="text-sm font-medium text-slate-600">City</label>
-              <p className="text-slate-900 font-medium mt-1">{request.city || "Not provided"}</p>
+              <p className="text-slate-900 font-medium mt-1">
+                {request.city || "Not provided"}
+              </p>
             </div>
             <div>
-              <label className="text-sm font-medium text-slate-600">WhatsApp</label>
-              <p className="text-slate-900 font-medium mt-1">{request.whatsappNumber || "Not provided"}</p>
+              <label className="text-sm font-medium text-slate-600">
+                WhatsApp
+              </label>
+              <p className="text-slate-900 font-medium mt-1">
+                {request.whatsappNumber || "Not provided"}
+              </p>
             </div>
             <div>
-              <label className="text-sm font-medium text-slate-600">Website</label>
-              <p className="text-slate-900 font-medium mt-1">{request.website || "Not provided"}</p>
+              <label className="text-sm font-medium text-slate-600">
+                Website
+              </label>
+              <p className="text-slate-900 font-medium mt-1">
+                {request.website || "Not provided"}
+              </p>
             </div>
           </div>
 
           {/* Rejection Reason (if rejected) */}
           {request.status === "rejected" && request.rejectionReason && (
             <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-sm font-medium text-red-700 mb-2">Rejection Reason:</p>
+              <p className="text-sm font-medium text-red-700 mb-2">
+                Rejection Reason:
+              </p>
               <p className="text-red-600">{request.rejectionReason}</p>
             </div>
           )}
@@ -204,8 +265,8 @@ export default function AdminClientRequestDetail() {
           {request.reviewedAt && (
             <div className="mb-6 p-4 bg-slate-50 border border-slate-200 rounded-lg">
               <p className="text-sm text-slate-600">
-                Reviewed on {new Date(request.reviewedAt).toLocaleDateString()} by{" "}
-                <span className="font-medium">Admin</span>
+                Reviewed on {new Date(request.reviewedAt).toLocaleDateString()}{" "}
+                by <span className="font-medium">Admin</span>
               </p>
             </div>
           )}

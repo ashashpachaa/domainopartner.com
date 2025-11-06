@@ -18,7 +18,9 @@ import { mockProducts, Product } from "@/lib/mockData";
 export default function AdminProducts() {
   const [products, setProducts] = useState<Product[]>(mockProducts);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterStatus, setFilterStatus] = useState<"all" | "active" | "inactive">("all");
+  const [filterStatus, setFilterStatus] = useState<
+    "all" | "active" | "inactive"
+  >("all");
   const [serviceFilter, setServiceFilter] = useState<string>("");
 
   const filteredProducts = products.filter((product) => {
@@ -29,15 +31,15 @@ export default function AdminProducts() {
     const matchesStatusFilter =
       filterStatus === "all" || product.status === filterStatus;
 
-    const matchesServiceFilter = !serviceFilter || (
+    const matchesServiceFilter =
+      !serviceFilter ||
       (serviceFilter === "apostille" && product.services.hasApostille) ||
       (serviceFilter === "poa" && product.services.hasPOA) ||
       (serviceFilter === "shipping" && product.services.hasShipping) ||
       (serviceFilter === "no-services" &&
         !product.services.hasApostille &&
         !product.services.hasPOA &&
-        !product.services.hasShipping)
-    );
+        !product.services.hasShipping);
 
     return matchesSearch && matchesStatusFilter && matchesServiceFilter;
   });
@@ -53,8 +55,8 @@ export default function AdminProducts() {
       products.map((p) =>
         p.id === productId
           ? { ...p, status: p.status === "active" ? "inactive" : "active" }
-          : p
-      )
+          : p,
+      ),
     );
   };
 
@@ -159,9 +161,7 @@ export default function AdminProducts() {
                     <h3 className="text-lg font-bold text-slate-900">
                       {product.name}
                     </h3>
-                    <p className="text-sm text-slate-600 mt-1">
-                      {product.id}
-                    </p>
+                    <p className="text-sm text-slate-600 mt-1">{product.id}</p>
                   </div>
                   <div
                     className={`px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 ${
@@ -186,7 +186,9 @@ export default function AdminProducts() {
 
                 {/* Price */}
                 <div className="mb-4 p-3 bg-primary-50 rounded-lg">
-                  <p className="text-xs text-slate-500 uppercase tracking-wide">Price</p>
+                  <p className="text-xs text-slate-500 uppercase tracking-wide">
+                    Price
+                  </p>
                   <p className="text-xl font-bold text-primary-600 mt-1">
                     {product.currency} {product.price.toLocaleString()}
                   </p>
@@ -196,7 +198,9 @@ export default function AdminProducts() {
                 <div className="space-y-2 mb-4 text-sm">
                   <div>
                     <label className="text-slate-500">Duration</label>
-                    <p className="text-slate-900 font-medium">{product.duration}</p>
+                    <p className="text-slate-900 font-medium">
+                      {product.duration}
+                    </p>
                   </div>
                   <div>
                     <label className="text-slate-500">Services</label>
@@ -237,7 +241,10 @@ export default function AdminProducts() {
                       View
                     </Button>
                   </Link>
-                  <Link to={`/admin/products/${product.id}/edit`} className="flex-1">
+                  <Link
+                    to={`/admin/products/${product.id}/edit`}
+                    className="flex-1"
+                  >
                     <Button
                       variant="outline"
                       size="sm"
@@ -279,7 +286,9 @@ export default function AdminProducts() {
             <p className="text-slate-600 text-sm font-medium mb-2">
               Total Products
             </p>
-            <p className="text-3xl font-bold text-slate-900">{products.length}</p>
+            <p className="text-3xl font-bold text-slate-900">
+              {products.length}
+            </p>
           </div>
           <div className="bg-white rounded-lg p-6 border border-slate-200">
             <p className="text-slate-600 text-sm font-medium mb-2">Active</p>

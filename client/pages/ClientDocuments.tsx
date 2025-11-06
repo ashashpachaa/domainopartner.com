@@ -24,7 +24,10 @@ export default function ClientDocuments() {
             });
         }
       });
-    return docs.sort((a, b) => new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime());
+    return docs.sort(
+      (a, b) =>
+        new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime(),
+    );
   }, [currentUser.id]);
 
   return (
@@ -40,24 +43,35 @@ export default function ClientDocuments() {
           <div className="bg-white rounded-lg border border-slate-200 p-12 text-center">
             <FileText className="w-12 h-12 mx-auto text-slate-300 mb-4" />
             <p className="text-slate-600 font-medium">No documents yet</p>
-            <p className="text-slate-500 text-sm">Documents will appear here as your orders progress</p>
+            <p className="text-slate-500 text-sm">
+              Documents will appear here as your orders progress
+            </p>
           </div>
         ) : (
           <div className="space-y-4">
             {allDocuments.map((doc, idx) => (
-              <div key={idx} className="bg-white rounded-lg border border-slate-200 p-6">
+              <div
+                key={idx}
+                className="bg-white rounded-lg border border-slate-200 p-6"
+              >
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
                       <FileText className="w-5 h-5 text-primary-600" />
-                      <h3 className="font-semibold text-slate-900">{doc.fileName}</h3>
+                      <h3 className="font-semibold text-slate-900">
+                        {doc.fileName}
+                      </h3>
                     </div>
-                    <p className="text-sm text-slate-600 mb-2">Order: {doc.orderNumber}</p>
+                    <p className="text-sm text-slate-600 mb-2">
+                      Order: {doc.orderNumber}
+                    </p>
                     <p className="text-xs text-slate-500">
                       Uploaded: {new Date(doc.uploadedAt).toLocaleDateString()}
                     </p>
                     {doc.notes && (
-                      <p className="text-sm text-slate-600 mt-2 italic">{doc.notes}</p>
+                      <p className="text-sm text-slate-600 mt-2 italic">
+                        {doc.notes}
+                      </p>
                     )}
                   </div>
                   <Button

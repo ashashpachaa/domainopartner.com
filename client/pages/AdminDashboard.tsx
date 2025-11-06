@@ -17,29 +17,41 @@ import {
   Clock,
 } from "lucide-react";
 import { useState, useEffect } from "react";
-import { mockUsers, User, UserStatus, mockClientRequests, ClientRequestStatus } from "@/lib/mockData";
+import {
+  mockUsers,
+  User,
+  UserStatus,
+  mockClientRequests,
+  ClientRequestStatus,
+} from "@/lib/mockData";
 import { toast } from "sonner";
 
 export default function AdminDashboard() {
-  const [activeTab, setActiveTab] = useState<"users" | "client-requests">("users");
+  const [activeTab, setActiveTab] = useState<"users" | "client-requests">(
+    "users",
+  );
   const [users, setUsers] = useState<User[]>(mockUsers);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState<UserStatus | "all">("all");
   const [clientRequests, setClientRequests] = useState(mockClientRequests);
   const [clientSearchTerm, setClientSearchTerm] = useState("");
-  const [clientFilterStatus, setClientFilterStatus] = useState<ClientRequestStatus | "all">("all");
+  const [clientFilterStatus, setClientFilterStatus] = useState<
+    ClientRequestStatus | "all"
+  >("all");
   const [notificationDismissed, setNotificationDismissed] = useState(false);
   const [showNotificationToast, setShowNotificationToast] = useState(false);
 
   // Load client requests from both mock data and localStorage
   useEffect(() => {
     const allRequests = [...mockClientRequests];
-    const storedRequests = JSON.parse(localStorage.getItem("mockClientRequests") || "[]");
+    const storedRequests = JSON.parse(
+      localStorage.getItem("mockClientRequests") || "[]",
+    );
 
     // Merge and remove duplicates
     const merged = [...allRequests];
     for (const request of storedRequests) {
-      if (!merged.find(r => r.id === request.id)) {
+      if (!merged.find((r) => r.id === request.id)) {
         merged.push(request);
       }
     }
@@ -50,7 +62,7 @@ export default function AdminDashboard() {
   // Show notification for pending client requests
   useEffect(() => {
     const pendingCount = clientRequests.filter(
-      (r) => r.status === "pending_approval"
+      (r) => r.status === "pending_approval",
     ).length;
     if (pendingCount > 0 && !notificationDismissed && !showNotificationToast) {
       setShowNotificationToast(true);
@@ -63,7 +75,8 @@ export default function AdminDashboard() {
                 New Client Signup{pendingCount > 1 ? "s" : ""}
               </p>
               <p className="text-sm text-blue-700 mt-1">
-                {pendingCount} client request{pendingCount > 1 ? "s" : ""} pending approval
+                {pendingCount} client request{pendingCount > 1 ? "s" : ""}{" "}
+                pending approval
               </p>
             </div>
             <button
@@ -96,16 +109,22 @@ export default function AdminDashboard() {
     })
     .sort(
       (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
     );
 
   const filteredClientRequests = clientRequests
     .filter((request) => {
       const matchesSearch =
-        request.firstName.toLowerCase().includes(clientSearchTerm.toLowerCase()) ||
-        request.lastName.toLowerCase().includes(clientSearchTerm.toLowerCase()) ||
+        request.firstName
+          .toLowerCase()
+          .includes(clientSearchTerm.toLowerCase()) ||
+        request.lastName
+          .toLowerCase()
+          .includes(clientSearchTerm.toLowerCase()) ||
         request.email.toLowerCase().includes(clientSearchTerm.toLowerCase()) ||
-        request.companyName.toLowerCase().includes(clientSearchTerm.toLowerCase());
+        request.companyName
+          .toLowerCase()
+          .includes(clientSearchTerm.toLowerCase());
 
       const matchesFilter =
         clientFilterStatus === "all" || request.status === clientFilterStatus;
@@ -114,21 +133,18 @@ export default function AdminDashboard() {
     })
     .sort(
       (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
     );
 
   const pendingClientCount = clientRequests.filter(
-    (r) => r.status === "pending_approval"
+    (r) => r.status === "pending_approval",
   ).length;
 
-  const updateUserStatus = (
-    userId: string,
-    newStatus: UserStatus
-  ) => {
+  const updateUserStatus = (userId: string, newStatus: UserStatus) => {
     setUsers(
       users.map((user) =>
-        user.id === userId ? { ...user, status: newStatus } : user
-      )
+        user.id === userId ? { ...user, status: newStatus } : user,
+      ),
     );
   };
 
@@ -314,12 +330,17 @@ export default function AdminDashboard() {
                     {filteredUsers.length === 0 ? (
                       <tr>
                         <td colSpan={7} className="px-6 py-8 text-center">
-                          <p className="text-slate-600 text-sm">No users found</p>
+                          <p className="text-slate-600 text-sm">
+                            No users found
+                          </p>
                         </td>
                       </tr>
                     ) : (
                       filteredUsers.map((user) => (
-                        <tr key={user.id} className="hover:bg-slate-50 transition">
+                        <tr
+                          key={user.id}
+                          className="hover:bg-slate-50 transition"
+                        >
                           <td className="px-6 py-4">
                             <div>
                               <p className="font-medium text-slate-900">
@@ -348,7 +369,7 @@ export default function AdminDashboard() {
                             <div className="flex items-center gap-2">
                               <span
                                 className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(
-                                  user.status
+                                  user.status,
                                 )}`}
                               >
                                 {getStatusIcon(user.status)}
@@ -458,10 +479,14 @@ export default function AdminDashboard() {
                 <p className="text-slate-600 text-sm font-medium mb-2">
                   Total Users
                 </p>
-                <p className="text-3xl font-bold text-slate-900">{users.length}</p>
+                <p className="text-3xl font-bold text-slate-900">
+                  {users.length}
+                </p>
               </div>
               <div className="bg-white rounded-lg p-6 border border-slate-200">
-                <p className="text-slate-600 text-sm font-medium mb-2">Active</p>
+                <p className="text-slate-600 text-sm font-medium mb-2">
+                  Active
+                </p>
                 <p className="text-3xl font-bold text-green-600">
                   {users.filter((u) => u.status === "active").length}
                 </p>
@@ -495,7 +520,13 @@ export default function AdminDashboard() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-slate-600 text-sm">Pending Approval</p>
-                    <p className="text-2xl font-bold text-yellow-600 mt-1">{clientRequests.filter(r => r.status === "pending_approval").length}</p>
+                    <p className="text-2xl font-bold text-yellow-600 mt-1">
+                      {
+                        clientRequests.filter(
+                          (r) => r.status === "pending_approval",
+                        ).length
+                      }
+                    </p>
                   </div>
                   <Clock className="w-8 h-8 text-yellow-600 opacity-50" />
                 </div>
@@ -504,7 +535,12 @@ export default function AdminDashboard() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-slate-600 text-sm">Approved</p>
-                    <p className="text-2xl font-bold text-green-600 mt-1">{clientRequests.filter(r => r.status === "approved").length}</p>
+                    <p className="text-2xl font-bold text-green-600 mt-1">
+                      {
+                        clientRequests.filter((r) => r.status === "approved")
+                          .length
+                      }
+                    </p>
                   </div>
                   <CheckCircle2 className="w-8 h-8 text-green-600 opacity-50" />
                 </div>
@@ -513,7 +549,12 @@ export default function AdminDashboard() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-slate-600 text-sm">Rejected</p>
-                    <p className="text-2xl font-bold text-red-600 mt-1">{clientRequests.filter(r => r.status === "rejected").length}</p>
+                    <p className="text-2xl font-bold text-red-600 mt-1">
+                      {
+                        clientRequests.filter((r) => r.status === "rejected")
+                          .length
+                      }
+                    </p>
                   </div>
                   <X className="w-8 h-8 text-red-600 opacity-50" />
                 </div>
@@ -536,7 +577,9 @@ export default function AdminDashboard() {
                 <select
                   value={clientFilterStatus}
                   onChange={(e) =>
-                    setClientFilterStatus(e.target.value as ClientRequestStatus | "all")
+                    setClientFilterStatus(
+                      e.target.value as ClientRequestStatus | "all",
+                    )
                   }
                   className="px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500 bg-white"
                 >
@@ -547,7 +590,8 @@ export default function AdminDashboard() {
                 </select>
               </div>
               <p className="text-sm text-slate-600 mt-3">
-                Showing {filteredClientRequests.length} of {clientRequests.length} requests
+                Showing {filteredClientRequests.length} of{" "}
+                {clientRequests.length} requests
               </p>
             </div>
 
@@ -584,12 +628,17 @@ export default function AdminDashboard() {
                     {filteredClientRequests.length === 0 ? (
                       <tr>
                         <td colSpan={7} className="px-6 py-8 text-center">
-                          <p className="text-slate-600 text-sm">No client requests found</p>
+                          <p className="text-slate-600 text-sm">
+                            No client requests found
+                          </p>
                         </td>
                       </tr>
                     ) : (
                       filteredClientRequests.map((request) => (
-                        <tr key={request.id} className="hover:bg-slate-50 transition">
+                        <tr
+                          key={request.id}
+                          className="hover:bg-slate-50 transition"
+                        >
                           <td className="px-6 py-4">
                             <p className="font-medium text-slate-900">
                               {request.firstName} {request.lastName}
@@ -610,7 +659,7 @@ export default function AdminDashboard() {
                             <div className="flex items-center gap-1">
                               <span
                                 className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${getClientRequestStatusColor(
-                                  request.status
+                                  request.status,
                                 )}`}
                               >
                                 {getClientRequestStatusIcon(request.status)}

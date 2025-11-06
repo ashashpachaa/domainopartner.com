@@ -43,14 +43,24 @@ export default function ClientInvoices() {
 
   // Generate invoices from orders + load from mockInvoices
   const clientInvoices = useMemo(() => {
-    let invoices: Invoice[] = [...mockInvoices.filter((i) => i.userId === currentUser.id)];
+    let invoices: Invoice[] = [
+      ...mockInvoices.filter((i) => i.userId === currentUser.id),
+    ];
 
     // Auto-generate invoices from orders that don't have invoices yet
     for (const order of allClientOrders) {
       // Check if an invoice already exists for this order
-      const invoiceExists = invoices.some((inv) => inv.description && inv.description.includes(order.id));
+      const invoiceExists = invoices.some(
+        (inv) => inv.description && inv.description.includes(order.id),
+      );
 
-      if (!invoiceExists && order.status && (order.status.includes("pending") || order.status.includes("completed") || order.status.includes("awaiting"))) {
+      if (
+        !invoiceExists &&
+        order.status &&
+        (order.status.includes("pending") ||
+          order.status.includes("completed") ||
+          order.status.includes("awaiting"))
+      ) {
         // Create an invoice for this order
         const newInvoice: Invoice = {
           id: `INV-${order.id}-001`,
@@ -60,7 +70,11 @@ export default function ClientInvoices() {
           currency: order.currency || "USD",
           status: order.status.includes("completed") ? "pending" : "pending",
           issueDate: order.createdAt,
-          dueDate: new Date(new Date(order.createdAt).getTime() + 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+          dueDate: new Date(
+            new Date(order.createdAt).getTime() + 30 * 24 * 60 * 60 * 1000,
+          )
+            .toISOString()
+            .split("T")[0],
           paidDate: undefined,
           createdAt: order.createdAt,
           createdByStaffId: "S003",
@@ -93,7 +107,10 @@ export default function ClientInvoices() {
       invoices = invoices.filter((i) => i.status === filterStatus);
     }
 
-    return invoices.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    return invoices.sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    );
   }, [currentUser.id, filterStatus, allClientOrders]);
 
   const stats = useMemo(() => {
@@ -128,15 +145,21 @@ export default function ClientInvoices() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg p-6 border border-slate-200">
             <p className="text-sm text-slate-600 mb-2">Total Amount</p>
-            <p className="text-3xl font-bold text-slate-900">${(stats.total / 1000).toFixed(1)}K</p>
+            <p className="text-3xl font-bold text-slate-900">
+              ${(stats.total / 1000).toFixed(1)}K
+            </p>
           </div>
           <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-6 border border-green-200">
             <p className="text-sm text-green-700 mb-2">Paid</p>
-            <p className="text-3xl font-bold text-green-900">${(stats.paid / 1000).toFixed(1)}K</p>
+            <p className="text-3xl font-bold text-green-900">
+              ${(stats.paid / 1000).toFixed(1)}K
+            </p>
           </div>
           <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-lg p-6 border border-yellow-200">
             <p className="text-sm text-yellow-700 mb-2">Pending</p>
-            <p className="text-3xl font-bold text-yellow-900">${(stats.pending / 1000).toFixed(1)}K</p>
+            <p className="text-3xl font-bold text-yellow-900">
+              ${(stats.pending / 1000).toFixed(1)}K
+            </p>
           </div>
         </div>
 
@@ -153,7 +176,9 @@ export default function ClientInvoices() {
                     : "bg-slate-100 text-slate-700 hover:bg-slate-200"
                 }`}
               >
-                {status === "all" ? "All" : status.charAt(0).toUpperCase() + status.slice(1)}
+                {status === "all"
+                  ? "All"
+                  : status.charAt(0).toUpperCase() + status.slice(1)}
               </button>
             ))}
           </div>
@@ -171,33 +196,59 @@ export default function ClientInvoices() {
               <table className="w-full">
                 <thead className="bg-slate-50 border-b border-slate-200">
                   <tr>
-                    <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900">Invoice ID</th>
-                    <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900">Amount</th>
-                    <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900">Status</th>
-                    <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900">Issue Date</th>
-                    <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900">Due Date</th>
-                    <th className="px-6 py-3 text-center text-sm font-semibold text-slate-900">Action</th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900">
+                      Invoice ID
+                    </th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900">
+                      Amount
+                    </th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900">
+                      Status
+                    </th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900">
+                      Issue Date
+                    </th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-slate-900">
+                      Due Date
+                    </th>
+                    <th className="px-6 py-3 text-center text-sm font-semibold text-slate-900">
+                      Action
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200">
                   {clientInvoices.map((invoice) => (
-                    <tr key={invoice.id} className="hover:bg-slate-50 transition">
+                    <tr
+                      key={invoice.id}
+                      className="hover:bg-slate-50 transition"
+                    >
                       <td className="px-6 py-4">
-                        <p className="font-medium text-slate-900">{invoice.id}</p>
+                        <p className="font-medium text-slate-900">
+                          {invoice.id}
+                        </p>
                       </td>
                       <td className="px-6 py-4">
-                        <p className="font-semibold text-slate-900">${invoice.amount || 0}</p>
+                        <p className="font-semibold text-slate-900">
+                          ${invoice.amount || 0}
+                        </p>
                       </td>
                       <td className="px-6 py-4">
-                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(invoice.status)}`}>
-                          {invoice.status.charAt(0).toUpperCase() + invoice.status.slice(1)}
+                        <span
+                          className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(invoice.status)}`}
+                        >
+                          {invoice.status.charAt(0).toUpperCase() +
+                            invoice.status.slice(1)}
                         </span>
                       </td>
                       <td className="px-6 py-4 text-slate-600">
-                        {invoice.createdAt ? new Date(invoice.createdAt).toLocaleDateString() : "N/A"}
+                        {invoice.createdAt
+                          ? new Date(invoice.createdAt).toLocaleDateString()
+                          : "N/A"}
                       </td>
                       <td className="px-6 py-4 text-slate-600">
-                        {invoice.dueDate ? new Date(invoice.dueDate).toLocaleDateString() : "N/A"}
+                        {invoice.dueDate
+                          ? new Date(invoice.dueDate).toLocaleDateString()
+                          : "N/A"}
                       </td>
                       <td className="px-6 py-4 text-center">
                         <Button

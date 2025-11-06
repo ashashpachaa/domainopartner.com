@@ -767,9 +767,57 @@ export default function AdminOperationDetail() {
               </h3>
 
               <div className="space-y-4">
+                {/* File Selection Area */}
                 <div>
                   <label className="block text-sm font-medium text-slate-900 mb-2">
-                    File Notes/Description
+                    Select File *
+                  </label>
+                  <input
+                    type="file"
+                    onChange={handleFileSelect}
+                    accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                    className="hidden"
+                    id="file-input"
+                  />
+                  <label
+                    htmlFor="file-input"
+                    className="border-2 border-dashed border-slate-300 rounded-lg p-8 text-center hover:border-primary-500 cursor-pointer transition-colors flex flex-col items-center"
+                  >
+                    <FileText className="w-12 h-12 text-slate-400 mx-auto mb-3" />
+                    <p className="text-sm font-medium text-slate-900 mb-1">
+                      Click to upload file or drag and drop
+                    </p>
+                    <p className="text-xs text-slate-600">
+                      PDF, DOC, DOCX, JPG, PNG (Max 10MB)
+                    </p>
+                  </label>
+                  {selectedFile && (
+                    <div className="mt-3 p-3 bg-blue-50 rounded-lg border border-blue-200 flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <FileText className="w-4 h-4 text-blue-600" />
+                        <div>
+                          <p className="text-sm font-medium text-blue-900">
+                            {selectedFile.name}
+                          </p>
+                          <p className="text-xs text-blue-700">
+                            {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
+                          </p>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => setSelectedFile(null)}
+                        className="text-blue-600 hover:text-blue-800"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                {/* File Description */}
+                <div>
+                  <label className="block text-sm font-medium text-slate-900 mb-2">
+                    File Notes/Description *
                   </label>
                   <textarea
                     value={fileNotes}
@@ -780,20 +828,10 @@ export default function AdminOperationDetail() {
                   />
                 </div>
 
-                <div className="border-2 border-dashed border-slate-300 rounded-lg p-8 text-center hover:border-primary-500 cursor-pointer transition-colors">
-                  <FileText className="w-12 h-12 text-slate-400 mx-auto mb-3" />
-                  <p className="text-sm font-medium text-slate-900 mb-1">
-                    Click to upload file or drag and drop
-                  </p>
-                  <p className="text-xs text-slate-600">
-                    PDF, DOC, DOCX, JPG, PNG (Max 10MB)
-                  </p>
-                </div>
-
                 <Button
                   onClick={handleFileUpload}
-                  disabled={!fileNotes.trim()}
-                  className="w-full bg-primary-600 hover:bg-primary-700 text-white"
+                  disabled={!selectedFile || !fileNotes.trim()}
+                  className="w-full bg-primary-600 hover:bg-primary-700 text-white disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Upload className="w-4 h-4 mr-2" />
                   Upload File

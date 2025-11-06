@@ -248,6 +248,25 @@ export default function ClientCreateOrder() {
       return;
     }
 
+    if (formData.serviceType === "Company Formation") {
+      if (!companyInfo.companyName.trim()) {
+        toast.error("Company name is required");
+        return;
+      }
+      if (!companyInfo.companyActivities.trim()) {
+        toast.error("Company activities description is required");
+        return;
+      }
+      if (!companyInfo.totalCapital || parseFloat(companyInfo.totalCapital) <= 0) {
+        toast.error("Total capital must be greater than 0");
+        return;
+      }
+      if (!companyInfo.pricePerShare || parseFloat(companyInfo.pricePerShare) <= 0) {
+        toast.error("Price per share must be greater than 0");
+        return;
+      }
+    }
+
     try {
       const maxOrderNum = mockOrders
         .filter((o) => o.orderNumber.startsWith("ORD-"))

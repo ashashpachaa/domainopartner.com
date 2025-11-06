@@ -146,12 +146,29 @@ function parsePassportText(text: string): ExtractedPassportData {
       if (labelWords.has(trimmedLine) || trimmedLine.includes("Passport") ||
           trimmedLine.includes("Date") || trimmedLine.includes("Place")) continue;
 
+      // Skip known banned phrases (countries, document headers, etc.)
+      let isBannedPhrase = false;
+      for (const banned of bannedPhrases) {
+        if (trimmedLine.includes(banned)) {
+          isBannedPhrase = true;
+          break;
+        }
+      }
+      if (isBannedPhrase) continue;
+
       // Check if line looks like a name (multiple capital words)
       const words = trimmedLine.split(/\s+/);
 
       if (words.length >= 2 && words.length <= 6) {
         // All words should start with capital letter
         if (words.every(w => /^[A-Z]/.test(w) && w.length > 1)) {
+          // Additional check: skip if contains too many "REPUBLIC", "ARAB", etc.
+          const lineUpper = trimmedLine.toUpperCase();
+          if (lineUpper.includes("REPUBLIC") || lineUpper.includes("ARAB") ||
+              lineUpper.includes("UNITED") || lineUpper.includes("KINGDOM")) {
+            continue;
+          }
+
           // This looks like a name!
           result.firstName = words[0];
           result.lastName = words.slice(1).join(" ");

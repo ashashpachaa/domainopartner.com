@@ -476,10 +476,14 @@ export default function ClientCreateOrder() {
                 <Input
                   type="number"
                   value={formData.amount}
-                  onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
-                  placeholder="0.00"
+                  disabled={!selectedProduct}
+                  placeholder={selectedProduct ? "0.00" : "Select a product first"}
                   step="0.01"
+                  className="bg-slate-50 cursor-not-allowed"
                 />
+                <p className="text-xs text-slate-500 mt-1">
+                  {selectedProduct ? "Auto-populated from product (non-editable)" : "Select a product to auto-populate"}
+                </p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-900 mb-2">
@@ -487,14 +491,17 @@ export default function ClientCreateOrder() {
                 </label>
                 <select
                   value={formData.currency}
-                  onChange={(e) => setFormData({ ...formData, currency: e.target.value })}
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500 bg-white"
+                  disabled={!selectedProduct}
+                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500 bg-slate-50 cursor-not-allowed disabled:opacity-75"
                 >
                   <option value="USD">USD</option>
                   <option value="EUR">EUR</option>
                   <option value="GBP">GBP</option>
                   <option value="AED">AED</option>
                 </select>
+                <p className="text-xs text-slate-500 mt-1">
+                  {selectedProduct ? "Auto-populated from product (non-editable)" : "Select a product first"}
+                </p>
               </div>
             </div>
 

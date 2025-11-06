@@ -4,8 +4,9 @@ import { mockOrders, mockProducts, Shareholder } from "@/lib/mockData";
 import ClientLayout from "@/components/ClientLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, AlertCircle, Plus, Trash2, Edit2, X } from "lucide-react";
+import { ArrowLeft, AlertCircle, Plus, Trash2, Edit2, X, Check, Loader } from "lucide-react";
 import { toast } from "sonner";
+import { useCompanyNameValidation } from "@/hooks/useCompanyNameValidation";
 
 export default function ClientCreateOrder() {
   const navigate = useNavigate();

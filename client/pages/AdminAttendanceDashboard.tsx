@@ -4,8 +4,10 @@ import AdminLayout from "@/components/AdminLayout";
 import { Calendar, AlertCircle, CheckCircle2, TrendingDown, Users } from "lucide-react";
 
 export default function AdminAttendanceDashboard() {
-  const [dateFilter, setDateFilter] = useState<"today" | "week" | "month">("month");
+  const [dateFilter, setDateFilter] = useState<"today" | "week" | "month" | "custom">("month");
   const [departmentFilter, setDepartmentFilter] = useState<string>("all");
+  const [customStartDate, setCustomStartDate] = useState<string>("");
+  const [customEndDate, setCustomEndDate] = useState<string>("");
 
   const departments = Array.from(new Set(mockStaff.map((s) => s.department)));
 

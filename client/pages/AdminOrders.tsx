@@ -381,8 +381,8 @@ export default function AdminOrders() {
             </div>
             <div className="bg-white rounded-lg border border-slate-200 p-4">
               <p className="text-slate-500 text-xs font-medium mb-2 truncate">Total Revenue</p>
-              <p className="text-lg font-bold text-slate-900 whitespace-nowrap">
-                ${(totalRevenue / 1000).toFixed(0)}K
+              <p className="text-sm font-bold text-slate-900 truncate">
+                ${totalRevenue.toLocaleString('en-US', { maximumFractionDigits: 0 })}
               </p>
             </div>
           </div>

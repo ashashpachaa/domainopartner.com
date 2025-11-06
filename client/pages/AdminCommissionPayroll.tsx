@@ -375,10 +375,10 @@ export default function AdminCommissionPayroll() {
             </table>
           </div>
 
-          {staffMetrics.length === 0 && (
+          {filteredStaffMetrics.length === 0 && (
             <div className="flex flex-col items-center justify-center py-12">
               <AlertCircle className="w-12 h-12 text-slate-300 mb-3" />
-              <p className="text-slate-600">No sales staff found</p>
+              <p className="text-slate-600">{staffMetrics.length === 0 ? "No sales staff found" : "No results matching your filters"}</p>
             </div>
           )}
         </div>

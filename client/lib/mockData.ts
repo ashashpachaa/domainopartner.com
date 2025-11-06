@@ -69,6 +69,7 @@ export interface Product {
     hasApostille: boolean;
     hasShipping: boolean;
     hasPOA: boolean;
+    hasFinancialReport: boolean;
   };
   createdAt: string;
   status: "active" | "inactive";

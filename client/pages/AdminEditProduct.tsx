@@ -26,6 +26,7 @@ export default function AdminEditProduct() {
         hasApostille: false,
         hasShipping: false,
         hasPOA: false,
+        hasFinancialReport: false,
       },
       createdAt: new Date().toISOString(),
       status: "active",
@@ -287,6 +288,22 @@ export default function AdminEditProduct() {
                     <p className="font-medium text-slate-900">Shipping</p>
                     <p className="text-sm text-slate-600">
                       Document shipping and delivery services
+                    </p>
+                  </div>
+                </label>
+
+                <label className="flex items-center gap-3 p-4 border border-slate-200 rounded-lg hover:bg-slate-50 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    name="services.hasFinancialReport"
+                    checked={formData.services?.hasFinancialReport || false}
+                    onChange={handleChange}
+                    className="w-4 h-4 rounded text-primary-600 focus:ring-primary-500"
+                  />
+                  <div>
+                    <p className="font-medium text-slate-900">Financial Report</p>
+                    <p className="text-sm text-slate-600">
+                      Comprehensive financial analysis and reporting service
                     </p>
                   </div>
                 </label>

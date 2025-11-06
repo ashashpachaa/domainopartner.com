@@ -104,7 +104,7 @@ export default function AdminEditProduct() {
     if (isNewProduct) {
       // Create new product object
       const newProduct: Product = {
-        id: formData.id || `P${(mockProducts.length + 1).toString().padStart(3, "0")}`,
+        id: formData.id || `P${nextProductNum.toString().padStart(3, "0")}`,
         name: formData.name,
         description: formData.description,
         duration: formData.duration,

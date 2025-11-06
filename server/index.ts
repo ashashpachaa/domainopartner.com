@@ -27,8 +27,9 @@ export function createServer() {
   // OCR endpoint
   app.post("/api/ocr/passport", upload.single("image"), handleOCR);
 
-  // Companies House API endpoint
+  // Companies House API endpoints
   app.get("/api/companies-house/search", handleCompanySearch);
+  app.get("/api/companies-house/details", handleCompanyDetails);
 
   return app;
 }

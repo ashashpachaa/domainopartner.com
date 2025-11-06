@@ -14,7 +14,16 @@ export default function AdminClientRequestDetail() {
   const [isProcessing, setIsProcessing] = useState(false);
 
   const request = useMemo(() => {
-    return mockClientRequests.find((r) => r.id === requestId);
+    // Check in mock data first
+    let foundRequest = mockClientRequests.find((r) => r.id === requestId);
+
+    // If not found in mock data, check localStorage
+    if (!foundRequest) {
+      const storedRequests = JSON.parse(localStorage.getItem("mockClientRequests") || "[]");
+      foundRequest = storedRequests.find((r: ClientRequest) => r.id === requestId);
+    }
+
+    return foundRequest;
   }, [requestId]);
 
   if (!request) {

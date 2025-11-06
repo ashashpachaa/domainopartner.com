@@ -1520,7 +1520,7 @@ export default function AdminOperationDetail() {
                       Click to upload file or drag and drop
                     </p>
                     <p className="text-xs text-slate-600">
-                      PDF, DOC, DOCX, JPG, PNG (Max 10MB)
+                      PDF, DOC, DOCX, JPG, PNG (Max 5GB per file)
                     </p>
                   </label>
                   {selectedFiles.length > 0 && (

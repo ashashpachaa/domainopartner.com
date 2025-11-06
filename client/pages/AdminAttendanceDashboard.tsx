@@ -191,6 +191,50 @@ export default function AdminAttendanceDashboard() {
                 ))}
               </div>
             </div>
+          </div>
+
+          {/* Custom Date Range Inputs */}
+          {dateFilter === "custom" && (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-slate-50 rounded-lg border border-slate-200">
+              <div>
+                <label className="block text-sm font-medium text-slate-900 mb-2">
+                  From Date
+                </label>
+                <input
+                  type="date"
+                  value={customStartDate}
+                  onChange={(e) => setCustomStartDate(e.target.value)}
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-900 mb-2">
+                  To Date
+                </label>
+                <input
+                  type="date"
+                  value={customEndDate}
+                  onChange={(e) => setCustomEndDate(e.target.value)}
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500"
+                />
+              </div>
+              {(customStartDate || customEndDate) && (
+                <div className="flex items-end">
+                  <button
+                    onClick={() => {
+                      setCustomStartDate("");
+                      setCustomEndDate("");
+                    }}
+                    className="text-primary-600 hover:text-primary-700 text-sm font-medium"
+                  >
+                    Clear dates
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-slate-900 mb-2">
                 Department

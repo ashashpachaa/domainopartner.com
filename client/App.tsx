@@ -128,6 +128,10 @@ const App = () => (
             element={<AdminRoute element={<AdminStaff />} />}
           />
           <Route
+            path="/admin/staff/new"
+            element={<AdminRoute element={<AdminEditStaff />} />}
+          />
+          <Route
             path="/admin/staff/:staffId/commission"
             element={<AdminRoute element={<AdminStaffCommission />} />}
           />

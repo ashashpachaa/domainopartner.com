@@ -948,6 +948,13 @@ export const mockOrders: Order[] = [
       poaComplete: false,
       financialReportComplete: false,
     },
+    operationReviewForm: {
+      isCompleted: false,
+      operationNotes: "",
+      qualityCheck: false,
+      documentsVerified: false,
+      complianceReview: false,
+    },
   },
   {
     id: "O002",

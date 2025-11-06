@@ -449,49 +449,60 @@ export default function AdminOperationDetail() {
     let stageName = "";
     let daysAllowed = 0;
 
-    // Get deadline config from stageDeadlines array
-    const deadlineConfig = stageDeadlines.find((d) => d.stageId === order.status);
+    // Calculate cumulative deadline based on all stages up to current
+    const stageOrder = ["new", "pending_sales_review", "pending_operation", "pending_operation_manager_review", "awaiting_client_acceptance", "shipping_preparation"];
+    const currentStageIndex = stageOrder.indexOf(order.status);
+    let cumulativeDays = 0;
+
+    // Sum up all days from stages up to and including current stage
+    for (let i = 0; i <= currentStageIndex; i++) {
+      const stageId = stageOrder[i];
+      const config = stageDeadlines.find((d) => d.stageId === stageId);
+      if (config) {
+        cumulativeDays += config.daysAllowed;
+      }
+    }
 
     switch (order.status) {
       case "new":
         stageName = "Order Created";
-        daysAllowed = deadlineConfig?.daysAllowed || 3;
+        daysAllowed = stageDeadlines.find((d) => d.stageId === "new")?.daysAllowed || 3;
         deadlineDate = addBusinessDays(createdDate, daysAllowed);
         affectedStaffId = null;
         break;
       case "pending_sales_review":
         stageName = "Sales Review";
-        daysAllowed = deadlineConfig?.daysAllowed || 0.25;
-        // For hours (less than 1 day), use milliseconds; for days, use addBusinessDays
+        daysAllowed = stageDeadlines.find((d) => d.stageId === "pending_sales_review")?.daysAllowed || 0.25;
+        // For cumulative calculation, use hours for quick stages
         if (daysAllowed < 1) {
           deadlineDate = new Date(createdDate.getTime() + daysAllowed * 24 * 60 * 60 * 1000);
         } else {
-          deadlineDate = addBusinessDays(createdDate, daysAllowed);
+          deadlineDate = addBusinessDays(createdDate, cumulativeDays);
         }
         affectedStaffId = order.assignedToSalesId || null;
         break;
       case "pending_operation":
         stageName = "Operation Processing";
-        daysAllowed = deadlineConfig?.daysAllowed || 3;
-        deadlineDate = addBusinessDays(createdDate, daysAllowed);
+        daysAllowed = stageDeadlines.find((d) => d.stageId === "pending_operation")?.daysAllowed || 3;
+        deadlineDate = addBusinessDays(createdDate, cumulativeDays);
         affectedStaffId = order.assignedToOperationId || null;
         break;
       case "pending_operation_manager_review":
         stageName = "Manager Review";
-        daysAllowed = deadlineConfig?.daysAllowed || 1;
-        deadlineDate = addBusinessDays(createdDate, daysAllowed);
+        daysAllowed = stageDeadlines.find((d) => d.stageId === "pending_operation_manager_review")?.daysAllowed || 1;
+        deadlineDate = addBusinessDays(createdDate, cumulativeDays);
         affectedStaffId = order.assignedToManagerId || null;
         break;
       case "awaiting_client_acceptance":
         stageName = "Client Acceptance Review";
-        daysAllowed = deadlineConfig?.daysAllowed || 1;
-        deadlineDate = addBusinessDays(createdDate, daysAllowed);
+        daysAllowed = stageDeadlines.find((d) => d.stageId === "awaiting_client_acceptance")?.daysAllowed || 1;
+        deadlineDate = addBusinessDays(createdDate, cumulativeDays);
         affectedStaffId = order.assignedToSalesId || null;
         break;
       case "shipping_preparation":
         stageName = product?.services.hasApostille ? "Apostille Processing" : "Shipping Preparation";
-        daysAllowed = deadlineConfig?.daysAllowed || 2;
-        deadlineDate = addBusinessDays(createdDate, daysAllowed);
+        daysAllowed = stageDeadlines.find((d) => d.stageId === "shipping_preparation")?.daysAllowed || 2;
+        deadlineDate = addBusinessDays(createdDate, cumulativeDays);
         affectedStaffId = order.assignedToManagerId || null;
         break;
       default:

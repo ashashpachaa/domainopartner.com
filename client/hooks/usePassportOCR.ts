@@ -21,33 +21,43 @@ export function usePassportOCR() {
       // Dynamically import Tesseract to avoid bundle issues
       const Tesseract = (await import("tesseract.js")).default;
 
-      const reader = new FileReader();
-      const imageData = await new Promise<string>((resolve, reject) => {
-        reader.onload = () => resolve(reader.result as string);
-        reader.onerror = () => reject(new Error("Failed to read file"));
-        reader.readAsDataURL(file);
-      });
+      // Read file as array buffer for better compatibility
+      const arrayBuffer = await file.arrayBuffer();
+      const uint8Array = new Uint8Array(arrayBuffer);
 
-      const result = await Tesseract.recognize(imageData, "eng", {
-        logger: (m: any) => {
-          if (m.status === "recognizing") {
-            setProgress(Math.round(m.progress * 100));
-          }
-        },
-      });
+      // Create image element to validate format
+      const blob = new Blob([uint8Array], { type: file.type });
+      const imageUrl = URL.createObjectURL(blob);
 
-      const text = result.data.text;
-      if (!text || text.trim().length < 10) {
-        toast.error("Could not extract text from passport. Please check image quality.");
+      try {
+        const result = await Tesseract.recognize(imageUrl, "eng", {
+          logger: (m: any) => {
+            if (m.status === "recognizing") {
+              setProgress(Math.round(m.progress * 100));
+            }
+          },
+        });
+
+        const text = result.data.text;
+
+        // Clean up blob URL
+        URL.revokeObjectURL(imageUrl);
+
+        if (!text || text.trim().length < 10) {
+          toast.error("Could not extract text from passport. Please check image quality.");
+          setIsProcessing(false);
+          return null;
+        }
+
+        const extractedData = parsePassportText(text);
         setIsProcessing(false);
-        return null;
+        setProgress(0);
+
+        return extractedData;
+      } catch (recognizeError) {
+        URL.revokeObjectURL(imageUrl);
+        throw recognizeError;
       }
-
-      const extractedData = parsePassportText(text);
-      setIsProcessing(false);
-      setProgress(0);
-
-      return extractedData;
     } catch (error) {
       console.error("OCR Error:", error);
       setIsProcessing(false);

@@ -1187,6 +1187,19 @@ export const mockOrders: Order[] = [
     operationFiles: [],
     clientCanViewFiles: true,
     clientCanViewTracking: true,
+    comments: [],
+    requiredServices: {
+      hasApostille: false,
+      hasShipping: false,
+      hasPOA: false,
+      hasFinancialReport: false,
+    },
+    completedServices: {
+      apostilleComplete: false,
+      shippingComplete: false,
+      poaComplete: false,
+      financialReportComplete: false,
+    },
   },
   {
     id: "O005",

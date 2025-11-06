@@ -33,6 +33,12 @@ export default function AdminOperationDetail() {
   const [stageDeadlines, setStageDeadlines] = useState(mockStageDeadlines);
   const [showDeadlineSettings, setShowDeadlineSettings] = useState(false);
   const [editingDeadlineId, setEditingDeadlineId] = useState<string | null>(null);
+  const [operationFormData, setOperationFormData] = useState({
+    qualityCheck: false,
+    documentsVerified: false,
+    complianceReview: false,
+    operationNotes: "",
+  });
 
   // Load order from localStorage or mockData
   const getOrder = () => {

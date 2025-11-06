@@ -1617,6 +1617,7 @@ export const mockOrders: Order[] = [
         stage: "sales",
         fileType: "document",
         description: "Multi-country setup documents",
+        visibleToClient: false,
       },
       {
         id: "F008-2",
@@ -1629,6 +1630,7 @@ export const mockOrders: Order[] = [
         stage: "sales",
         fileType: "document",
         description: "Canada tax ID proof (resubmitted)",
+        visibleToClient: false,
       },
       {
         id: "F008-3",
@@ -1641,6 +1643,7 @@ export const mockOrders: Order[] = [
         stage: "operation",
         fileType: "document",
         description: "US and Mexico registration documents",
+        visibleToClient: false,
       },
       {
         id: "F008-4",
@@ -1653,10 +1656,24 @@ export const mockOrders: Order[] = [
         stage: "manager",
         fileType: "document",
         description: "Final approval letter from manager",
+        visibleToClient: false,
       },
     ],
     clientCanViewFiles: false,
     clientCanViewTracking: false,
+    comments: [],
+    requiredServices: {
+      hasApostille: true,
+      hasShipping: true,
+      hasPOA: true,
+      hasFinancialReport: true,
+    },
+    completedServices: {
+      apostilleComplete: false,
+      shippingComplete: false,
+      poaComplete: false,
+      financialReportComplete: false,
+    },
   },
   {
     id: "O009",

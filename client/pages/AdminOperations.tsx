@@ -183,6 +183,45 @@ export default function AdminOperations() {
             </select>
           </div>
 
+          {/* Date Range Filters */}
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex-1">
+              <label className="block text-xs font-medium text-slate-600 mb-2">
+                From Date
+              </label>
+              <Input
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                className="border-slate-300 focus:border-primary-500 focus:ring-primary-500"
+              />
+            </div>
+            <div className="flex-1">
+              <label className="block text-xs font-medium text-slate-600 mb-2">
+                To Date
+              </label>
+              <Input
+                type="date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+                className="border-slate-300 focus:border-primary-500 focus:ring-primary-500"
+              />
+            </div>
+            {(startDate || endDate) && (
+              <div className="flex items-end">
+                <button
+                  onClick={() => {
+                    setStartDate("");
+                    setEndDate("");
+                  }}
+                  className="text-primary-600 hover:text-primary-700 text-sm font-medium"
+                >
+                  Clear dates
+                </button>
+              </div>
+            )}
+          </div>
+
           <p className="text-sm text-slate-600">
             Showing {sortedOrders.length} of {activeOrders.length} active orders
           </p>

@@ -89,6 +89,7 @@ export default function AdminWorkflowSettings() {
   ];
 
   return (
+    <AdminLayout>
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
       {/* Header */}
       <div className="bg-white border-b border-slate-200 sticky top-0 z-40">
@@ -268,5 +269,6 @@ export default function AdminWorkflowSettings() {
         </div>
       </div>
     </div>
+    </AdminLayout>
   );
 }

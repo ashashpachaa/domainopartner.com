@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { mockInvoices, mockOrders } from "@/lib/mockData";
+import { mockInvoices, mockOrders, Invoice } from "@/lib/mockData";
 import ClientLayout from "@/components/ClientLayout";
 import { Button } from "@/components/ui/button";
 import { Download, FileText, DollarSign } from "lucide-react";
@@ -8,15 +8,93 @@ export default function ClientInvoices() {
   const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
   const [filterStatus, setFilterStatus] = useState<string>("all");
 
-  const clientInvoices = useMemo(() => {
-    let invoices = mockInvoices.filter((i) => i.userId === currentUser.id);
+  // Get all client's orders (from mockOrders + localStorage)
+  const allClientOrders = useMemo(() => {
+    const orders = mockOrders.filter((o) => o.userId === currentUser.id);
 
+    // Load orders from localStorage that might have been created by this client
+    try {
+      const keys = Object.keys(localStorage);
+      for (const key of keys) {
+        if (key.startsWith("order_")) {
+          const orderData = localStorage.getItem(key);
+          if (orderData) {
+            const order = JSON.parse(orderData);
+            if (order.userId === currentUser.id) {
+              // Check if this order is already in mockOrders
+              const exists = orders.some((o) => o.id === order.id);
+              if (!exists) {
+                orders.push(order);
+              } else {
+                // Update with latest from localStorage
+                const index = orders.findIndex((o) => o.id === order.id);
+                orders[index] = order;
+              }
+            }
+          }
+        }
+      }
+    } catch (e) {
+      console.warn("Failed to load orders from localStorage:", e);
+    }
+
+    return orders;
+  }, [currentUser.id]);
+
+  // Generate invoices from orders + load from mockInvoices
+  const clientInvoices = useMemo(() => {
+    let invoices: Invoice[] = [...mockInvoices.filter((i) => i.userId === currentUser.id)];
+
+    // Auto-generate invoices from orders that don't have invoices yet
+    for (const order of allClientOrders) {
+      // Check if an invoice already exists for this order
+      const invoiceExists = invoices.some((inv) => inv.description && inv.description.includes(order.id));
+
+      if (!invoiceExists && order.status && (order.status.includes("pending") || order.status.includes("completed") || order.status.includes("awaiting"))) {
+        // Create an invoice for this order
+        const newInvoice: Invoice = {
+          id: `INV-${order.id}-001`,
+          userId: order.userId,
+          invoiceNumber: `INV-${new Date().getFullYear()}-${order.orderNumber}`,
+          amount: order.amount || 0,
+          currency: order.currency || "USD",
+          status: order.status.includes("completed") ? "pending" : "pending",
+          issueDate: order.createdAt,
+          dueDate: new Date(new Date(order.createdAt).getTime() + 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+          paidDate: undefined,
+          createdAt: order.createdAt,
+          createdByStaffId: "S003",
+          description: `Invoice for Order ${order.orderNumber} (${order.description})`,
+          items: [
+            {
+              description: order.description || "Service",
+              quantity: 1,
+              unitPrice: order.amount || 0,
+            },
+          ],
+          history: [
+            {
+              id: `H-${order.id}-1`,
+              invoiceId: `INV-${order.id}-001`,
+              action: "created",
+              actionBy: "S003",
+              actionByName: "System",
+              description: "Invoice created from order",
+              createdAt: order.createdAt,
+            },
+          ],
+        };
+        invoices.push(newInvoice);
+      }
+    }
+
+    // Apply filters
     if (filterStatus !== "all") {
       invoices = invoices.filter((i) => i.status === filterStatus);
     }
 
     return invoices.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-  }, [currentUser.id, filterStatus]);
+  }, [currentUser.id, filterStatus, allClientOrders]);
 
   const stats = useMemo(() => {
     return {

@@ -252,6 +252,61 @@ export default function AdminEditStaff() {
               </div>
             </div>
 
+            {/* Working Hours */}
+            <div className="pt-6 border-t border-slate-200">
+              <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+                <Clock className="w-5 h-5 text-blue-600" />
+                Working Hours
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-900 mb-2">
+                    Start Time *
+                  </label>
+                  <Input
+                    type="time"
+                    name="workingHours.startTime"
+                    value={formData.workingHours?.startTime || "09:00"}
+                    onChange={handleChange}
+                    className="border-slate-300 focus:border-primary-500 focus:ring-primary-500"
+                    required
+                  />
+                  <p className="text-xs text-slate-500 mt-1">When the work day starts</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-900 mb-2">
+                    End Time *
+                  </label>
+                  <Input
+                    type="time"
+                    name="workingHours.endTime"
+                    value={formData.workingHours?.endTime || "18:00"}
+                    onChange={handleChange}
+                    className="border-slate-300 focus:border-primary-500 focus:ring-primary-500"
+                    required
+                  />
+                  <p className="text-xs text-slate-500 mt-1">When the work day ends</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-900 mb-2">
+                    Days Per Week *
+                  </label>
+                  <select
+                    name="workingHours.daysPerWeek"
+                    value={formData.workingHours?.daysPerWeek || 5}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500 bg-white"
+                    required
+                  >
+                    <option value={5}>5 days (Mon-Fri)</option>
+                    <option value={6}>6 days (Mon-Sat)</option>
+                    <option value={7}>7 days (Every day)</option>
+                  </select>
+                  <p className="text-xs text-slate-500 mt-1">Working days per week</p>
+                </div>
+              </div>
+            </div>
+
             {/* Workflow Permissions */}
             <div className="pt-6 border-t border-slate-200">
               <h2 className="text-lg font-semibold text-slate-900 mb-4">

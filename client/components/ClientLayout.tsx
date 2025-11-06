@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { LogOut, Menu, X, LayoutDashboard, Package, FileText, Settings, MessageSquare } from "lucide-react";
+import { LogOut, Menu, X, LayoutDashboard, Package, FileText, Settings, MessageSquare, Building2 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 

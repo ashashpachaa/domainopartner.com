@@ -149,6 +149,19 @@ export default function AdminOperationDetail() {
 
   const handleAccept = () => {
     if (canAccept()) {
+      // Check if operation review form is required and completed
+      if (order.status === "pending_operation") {
+        const isFormCompleted = operationFormData.qualityCheck &&
+                               operationFormData.documentsVerified &&
+                               operationFormData.complianceReview &&
+                               operationFormData.operationNotes.trim();
+
+        if (!isFormCompleted) {
+          alert("Please complete the Operation Review Form before proceeding.\n\nAll checkboxes must be checked and notes must be provided.");
+          return;
+        }
+      }
+
       const nextStatus = getNextStatus();
       const currentStaff = mockStaff.find((s) => s.id === effectiveUserId);
 

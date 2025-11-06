@@ -171,6 +171,7 @@ export interface OperationFile {
   orderId: string;
   fileName: string;
   fileSize: number; // in bytes
+  fileUrl?: string; // URL to download the file
   uploadedBy: string; // staffId
   uploadedByName: string;
   uploadedAt: string;

@@ -121,7 +121,7 @@ export default function AdminOperationDetail() {
   const handleAccept = () => {
     if (canAccept()) {
       const nextStatus = getNextStatus();
-      const currentStaff = mockStaff.find((s) => s.id === currentUserId);
+      const currentStaff = mockStaff.find((s) => s.id === effectiveUserId);
 
       // Add history entry
       const newHistoryEntry = {
@@ -130,7 +130,7 @@ export default function AdminOperationDetail() {
         previousStatus: order.status as any,
         newStatus: nextStatus as any,
         actionType: "accept" as any,
-        actionBy: currentUserId,
+        actionBy: effectiveUserId,
         actionByName: currentStaff?.firstName + " " + currentStaff?.lastName || "Unknown",
         description: `${currentStaff?.firstName} accepted the order - moved to ${getStatusLabel(nextStatus)}`,
         createdAt: new Date().toISOString(),
@@ -142,6 +142,10 @@ export default function AdminOperationDetail() {
       // Mark as completed if final stage
       if (nextStatus === "completed") {
         order.completedAt = new Date().toISOString().split("T")[0];
+        order.completedServices.apostilleComplete = true;
+        order.completedServices.shippingComplete = true;
+        order.completedServices.poaComplete = true;
+        order.completedServices.financialReportComplete = true;
       }
 
       alert(`Order accepted and moved to ${getStatusLabel(nextStatus)}`);

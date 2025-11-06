@@ -1507,6 +1507,7 @@ export default function AdminOperationDetail() {
                     type="file"
                     onChange={handleFileSelect}
                     accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                    multiple
                     className="hidden"
                     id="file-input"
                   />

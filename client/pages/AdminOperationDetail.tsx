@@ -41,10 +41,8 @@ export default function AdminOperationDetail() {
   const [showDeadlineSettings, setShowDeadlineSettings] = useState(false);
   const [editingDeadlineId, setEditingDeadlineId] = useState<string | null>(null);
   const [operationFormData, setOperationFormData] = useState({
-    qualityCheck: false,
-    documentsVerified: false,
-    complianceReview: false,
-    operationNotes: "",
+    companyName: "",
+    companyNumber: "",
   });
 
   // Load order from localStorage or mockData
@@ -93,10 +91,8 @@ export default function AdminOperationDetail() {
   useEffect(() => {
     if (order?.operationReviewForm) {
       setOperationFormData({
-        qualityCheck: order.operationReviewForm.qualityCheck || false,
-        documentsVerified: order.operationReviewForm.documentsVerified || false,
-        complianceReview: order.operationReviewForm.complianceReview || false,
-        operationNotes: order.operationReviewForm.operationNotes || "",
+        companyName: order.operationReviewForm.companyName || "",
+        companyNumber: order.operationReviewForm.companyNumber || "",
       });
     }
     if (order?.trackingNumber) {

@@ -20,6 +20,8 @@ export default function AdminOperations() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStage, setFilterStage] = useState<string>("all");
   const [sortBy, setSortBy] = useState<"date" | "customer" | "stage">("date");
+  const [startDate, setStartDate] = useState<string>("");
+  const [endDate, setEndDate] = useState<string>("");
 
   // Filter orders that are in active workflow (not completed or cancelled)
   const activeOrders = mockOrders.filter(

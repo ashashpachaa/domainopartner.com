@@ -163,7 +163,7 @@ export default function AdminOperationDetail() {
 
     if (canAccept()) {
       const rejectionStatus = getRejectionStatus();
-      const currentStaff = mockStaff.find((s) => s.id === currentUserId);
+      const currentStaff = mockStaff.find((s) => s.id === effectiveUserId);
 
       // Add history entry
       const newHistoryEntry = {
@@ -172,7 +172,7 @@ export default function AdminOperationDetail() {
         previousStatus: order.status as any,
         newStatus: rejectionStatus as any,
         actionType: "reject" as any,
-        actionBy: currentUserId,
+        actionBy: effectiveUserId,
         actionByName: currentStaff?.firstName + " " + currentStaff?.lastName || "Unknown",
         reason: rejectReason,
         description: `${currentStaff?.firstName} rejected the order - ${rejectReason}`,

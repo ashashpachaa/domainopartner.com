@@ -341,6 +341,7 @@ export default function ClientCreateOrder() {
           hasFinancialReport: false,
         },
         shareholders: formData.serviceType === "Company Formation" ? shareholders : undefined,
+        companyInfo: formData.serviceType === "Company Formation" ? companyInfo : undefined,
       };
 
       mockOrders.push(newOrder);

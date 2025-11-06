@@ -209,10 +209,8 @@ export interface OperationReviewForm {
   submittedBy?: string; // staffId
   submittedByName?: string;
   submittedAt?: string;
-  qualityCheck: boolean;
-  documentsVerified: boolean;
-  complianceReview: boolean;
-  operationNotes: string;
+  companyName: string;
+  companyNumber: string;
 }
 
 export interface Order {

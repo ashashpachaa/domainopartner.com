@@ -607,6 +607,28 @@ export default function AdminOrderDetail() {
                                 {shareholder.ownershipPercentage}%
                               </span>
                             </td>
+                            <td className="px-4 py-4 border-b border-amber-100">
+                              {shareholder.passportFile ? (
+                                <div className="flex flex-col gap-1">
+                                  <div className="text-sm font-medium text-slate-900">{shareholder.passportFile.fileName}</div>
+                                  <div className="text-xs text-slate-500">
+                                    {shareholder.passportFile.fileSize ? `${(shareholder.passportFile.fileSize / 1024).toFixed(1)} KB` : ''}
+                                  </div>
+                                  {shareholder.passportFile.fileUrl && (
+                                    <a
+                                      href={shareholder.passportFile.fileUrl}
+                                      download={shareholder.passportFile.fileName}
+                                      className="inline-flex items-center justify-center gap-1 px-2 py-1 bg-blue-100 hover:bg-blue-200 text-blue-700 rounded text-xs font-medium transition w-fit"
+                                    >
+                                      <Download className="w-3 h-3" />
+                                      Download
+                                    </a>
+                                  )}
+                                </div>
+                              ) : (
+                                <span className="text-slate-500 text-sm">No file</span>
+                              )}
+                            </td>
                           </tr>
                         ))}
                       </tbody>

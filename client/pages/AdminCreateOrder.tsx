@@ -202,10 +202,8 @@ export default function AdminCreateOrder() {
       },
       operationReviewForm: {
         isCompleted: false,
-        operationNotes: "",
-        qualityCheck: false,
-        documentsVerified: false,
-        complianceReview: false,
+        companyName: "",
+        companyNumber: "",
       },
       requiredServices: product?.services || {
         hasApostille: false,

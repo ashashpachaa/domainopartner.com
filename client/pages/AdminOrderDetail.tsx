@@ -564,6 +564,50 @@ export default function AdminOrderDetail() {
                 </div>
               )}
 
+              {/* Attached Documents */}
+              {order.operationFiles && order.operationFiles.length > 0 && (
+                <div className="bg-white rounded-lg border border-slate-200 p-6">
+                  <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <FileText className="w-5 h-5 text-blue-600" />
+                    Attached Documents ({order.operationFiles.length})
+                  </h3>
+                  <div className="space-y-3">
+                    {order.operationFiles.map((file) => (
+                      <div
+                        key={file.id}
+                        className="flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors"
+                      >
+                        <div className="flex items-center gap-3 flex-1">
+                          <FileText className="w-5 h-5 text-slate-400" />
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium text-slate-900 truncate">
+                              {file.fileName}
+                            </p>
+                            <div className="flex gap-2 text-xs text-slate-600 mt-1">
+                              <span>{file.uploadedByName}</span>
+                              <span>•</span>
+                              <span>
+                                {new Date(file.uploadedAt).toLocaleDateString(
+                                  "en-US",
+                                  { month: "short", day: "numeric" }
+                                )}
+                              </span>
+                              <span>•</span>
+                              <span className="bg-slate-200 text-slate-700 px-2 py-0.5 rounded text-xs">
+                                {file.stage}
+                              </span>
+                            </div>
+                            {file.description && (
+                              <p className="text-xs text-slate-600 mt-2">{file.description}</p>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {/* Order History */}
               <div className="bg-white rounded-lg border border-slate-200 p-6">
                 <h3 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">

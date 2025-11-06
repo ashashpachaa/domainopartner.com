@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { Download, TrendingUp, DollarSign, Award, AlertCircle, Calculator } from "lucide-react";
+import { Download, TrendingUp, DollarSign, Award, AlertCircle, Calculator, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import AdminLayout from "@/components/AdminLayout";
 import { mockOrders, mockInvoices, mockStaff, mockUsers } from "@/lib/mockData";
@@ -8,6 +8,11 @@ export default function AdminCommissionPayroll() {
   const [selectedStaffId, setSelectedStaffId] = useState<string>("");
   const [staffSearch, setStaffSearch] = useState<string>("");
   const [tierFilter, setTierFilter] = useState<string>("");
+  const [activeTab, setActiveTab] = useState<"overview" | "daily" | "monthly" | "yearly">("overview");
+  const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split("T")[0]);
+  const [selectedMonth, setSelectedMonth] = useState<string>(new Date().toISOString().substring(0, 7));
+  const [selectedYear, setSelectedYear] = useState<string>(new Date().getFullYear().toString());
+  const [expandedDayStaff, setExpandedDayStaff] = useState<string>("");
 
   // Commission tier structure
   const commissionTiers = {

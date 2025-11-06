@@ -159,12 +159,13 @@ export default function ClientCreateOrder() {
   };
 
   const validateShareholderForm = () => {
-    if (!shareholderForm.firstName.trim()) {
-      toast.error("First name is required");
+    if (!shareholderForm.fullName.trim()) {
+      toast.error("Full name is required");
       return false;
     }
-    if (!shareholderForm.lastName.trim()) {
-      toast.error("Last name is required");
+    const nameParts = shareholderForm.fullName.trim().split(/\s+/);
+    if (nameParts.length < 2) {
+      toast.error("Please enter both first and last name");
       return false;
     }
     if (!shareholderForm.dateOfBirth) {

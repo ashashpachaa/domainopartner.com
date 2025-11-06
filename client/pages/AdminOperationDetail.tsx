@@ -33,7 +33,7 @@ export default function AdminOperationDetail() {
   const [financialReportFiles, setFinancialReportFiles] = useState<File[]>([]);
   const [financialReportNotes, setFinancialReportNotes] = useState("");
   const [trackingNumber, setTrackingNumber] = useState("");
-  const [activeTab, setActiveTab] = useState<"workflow" | "poa" | "financial_report" | "shipping" | "history">("workflow");
+  const [activeTab, setActiveTab] = useState<"workflow" | "apostille" | "poa" | "financial_report" | "shipping" | "history">("workflow");
   const [currentTime, setCurrentTime] = useState(new Date());
   const [impersonateStaffId, setImpersonateStaffId] = useState<string>("");
   const [adminMode, setAdminMode] = useState(true);

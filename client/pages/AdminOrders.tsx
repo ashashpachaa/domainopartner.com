@@ -358,31 +358,31 @@ export default function AdminOrders() {
           </div>
 
           {/* Summary Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
-            <div className="bg-white rounded-lg border border-slate-200 p-6">
-              <p className="text-slate-500 text-sm font-medium mb-2">Total Orders</p>
-              <p className="text-3xl font-bold text-slate-900">{totalOrders}</p>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
+            <div className="bg-white rounded-lg border border-slate-200 p-4">
+              <p className="text-slate-500 text-xs font-medium mb-2 truncate">Total Orders</p>
+              <p className="text-2xl font-bold text-slate-900">{totalOrders}</p>
             </div>
-            <div className="bg-white rounded-lg border border-slate-200 p-6">
-              <p className="text-slate-500 text-sm font-medium mb-2">Paid/Completed</p>
-              <p className="text-3xl font-bold text-green-600">{completedOrders}</p>
+            <div className="bg-white rounded-lg border border-slate-200 p-4">
+              <p className="text-slate-500 text-xs font-medium mb-2 truncate">Paid/Completed</p>
+              <p className="text-2xl font-bold text-green-600">{completedOrders}</p>
             </div>
-            <div className="bg-white rounded-lg border border-slate-200 p-6">
-              <p className="text-slate-500 text-sm font-medium mb-2">Pending</p>
-              <p className="text-3xl font-bold text-yellow-600">{pendingOrders}</p>
+            <div className="bg-white rounded-lg border border-slate-200 p-4">
+              <p className="text-slate-500 text-xs font-medium mb-2 truncate">Pending</p>
+              <p className="text-2xl font-bold text-yellow-600">{pendingOrders}</p>
             </div>
-            <div className="bg-white rounded-lg border border-slate-200 p-6">
-              <p className="text-slate-500 text-sm font-medium mb-2">Overdue</p>
-              <p className="text-3xl font-bold text-red-600">{overdueOrders}</p>
+            <div className="bg-white rounded-lg border border-slate-200 p-4">
+              <p className="text-slate-500 text-xs font-medium mb-2 truncate">Overdue</p>
+              <p className="text-2xl font-bold text-red-600">{overdueOrders}</p>
             </div>
-            <div className="bg-white rounded-lg border border-slate-200 p-6">
-              <p className="text-slate-500 text-sm font-medium mb-2">Refunded</p>
-              <p className="text-3xl font-bold text-slate-900">0</p>
+            <div className="bg-white rounded-lg border border-slate-200 p-4">
+              <p className="text-slate-500 text-xs font-medium mb-2 truncate">Refunded</p>
+              <p className="text-2xl font-bold text-slate-900">0</p>
             </div>
-            <div className="bg-white rounded-lg border border-slate-200 p-6">
-              <p className="text-slate-500 text-sm font-medium mb-2">Total Revenue</p>
-              <p className="text-2xl font-bold text-slate-900">
-                {totalRevenue.toLocaleString()} USD
+            <div className="bg-white rounded-lg border border-slate-200 p-4">
+              <p className="text-slate-500 text-xs font-medium mb-2 truncate">Total Revenue</p>
+              <p className="text-lg font-bold text-slate-900 whitespace-nowrap">
+                ${(totalRevenue / 1000).toFixed(0)}K
               </p>
             </div>
           </div>

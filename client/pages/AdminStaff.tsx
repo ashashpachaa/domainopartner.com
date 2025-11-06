@@ -92,7 +92,7 @@ export default function AdminStaff() {
         </div>
 
         {/* Search & Filter */}
-        <div className="bg-white rounded-lg p-6 border border-slate-200">
+        <div className="bg-white rounded-lg p-6 border border-slate-200 space-y-4">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
@@ -120,7 +120,48 @@ export default function AdminStaff() {
               <option value="accounting">Accounting</option>
             </select>
           </div>
-          <p className="text-sm text-slate-600 mt-3">
+
+          {/* Additional Filters */}
+          <div className="flex flex-col md:flex-row gap-4">
+            <select
+              value={filterDepartment}
+              onChange={(e) => setFilterDepartment(e.target.value)}
+              className="flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500 bg-white"
+            >
+              <option value="">All Departments</option>
+              {Array.from(new Set(staff.map((s) => s.department))).map(
+                (dept) => (
+                  <option key={dept} value={dept}>
+                    {dept}
+                  </option>
+                )
+              )}
+            </select>
+
+            <select
+              value={filterStatus}
+              onChange={(e) => setFilterStatus(e.target.value)}
+              className="flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500 bg-white"
+            >
+              <option value="all">All Status</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </select>
+
+            {(filterDepartment || filterStatus !== "all") && (
+              <button
+                onClick={() => {
+                  setFilterDepartment("");
+                  setFilterStatus("all");
+                }}
+                className="text-primary-600 hover:text-primary-700 text-sm font-medium whitespace-nowrap"
+              >
+                Clear filters
+              </button>
+            )}
+          </div>
+
+          <p className="text-sm text-slate-600">
             Showing {filteredStaff.length} of {staff.length} staff members
           </p>
         </div>

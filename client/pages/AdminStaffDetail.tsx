@@ -234,6 +234,62 @@ export default function AdminStaffDetail() {
                 </p>
               </div>
             </div>
+
+            {/* Workflow Permissions Card */}
+            <div className="bg-white rounded-lg border border-slate-200 p-6">
+              <h2 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+                <Shield className="w-5 h-5 text-blue-600" />
+                Workflow Permissions
+              </h2>
+
+              {!member.workflowPermissions || member.workflowPermissions.length === 0 ? (
+                <p className="text-slate-600">No workflow permissions assigned</p>
+              ) : (
+                <div className="space-y-3">
+                  {member.workflowPermissions.map((permission) => (
+                    <div
+                      key={permission.stage}
+                      className={`p-4 rounded-lg border-2 transition-colors ${
+                        permission.canAccess
+                          ? "bg-green-50 border-green-200"
+                          : "bg-slate-50 border-slate-200"
+                      }`}
+                    >
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-slate-900">
+                            {permission.label}
+                          </h3>
+                          <p className="text-sm text-slate-600 mt-1">
+                            {permission.description}
+                          </p>
+                        </div>
+                        <div className="flex-shrink-0">
+                          {permission.canAccess ? (
+                            <span className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-green-800 text-xs font-semibold rounded-full">
+                              <span className="w-2 h-2 bg-green-600 rounded-full"></span>
+                              Assigned
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 px-3 py-1 bg-slate-100 text-slate-700 text-xs font-semibold rounded-full">
+                              <span className="w-2 h-2 bg-slate-400 rounded-full"></span>
+                              Not Assigned
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <div className="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                <p className="text-sm text-amber-900">
+                  <span className="font-semibold">Assigned Stages:</span>{" "}
+                  {member.workflowPermissions?.filter((p) => p.canAccess).length || 0} of {member.workflowPermissions?.length || 0}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
 

@@ -659,7 +659,99 @@ export default function AdminOperationDetail() {
         {/* Admin Controls */}
         {adminMode && (
           <div className="bg-amber-50 rounded-lg p-6 border-2 border-amber-200">
-            <h3 className="text-lg font-bold text-amber-900 mb-4">🔑 Admin Controls</h3>
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-lg font-bold text-amber-900">🔑 Admin Controls</h3>
+              <button
+                onClick={() => setShowDeadlineSettings(!showDeadlineSettings)}
+                className="text-sm px-3 py-1 rounded bg-amber-200 text-amber-900 hover:bg-amber-300 font-medium"
+              >
+                {showDeadlineSettings ? "Hide" : "Show"} Deadline Settings
+              </button>
+            </div>
+
+            {/* Deadline Settings */}
+            {showDeadlineSettings && (
+              <div className="bg-white rounded-lg p-6 mb-6 border-2 border-amber-300">
+                <h4 className="font-bold text-slate-900 mb-4">⏱️ Configure Stage Deadlines</h4>
+                <div className="space-y-4 max-h-96 overflow-y-auto">
+                  {stageDeadlines.map((deadline) => (
+                    <div
+                      key={deadline.id}
+                      className={`p-4 rounded-lg border-2 transition-all ${
+                        editingDeadlineId === deadline.id
+                          ? "border-blue-400 bg-blue-50"
+                          : "border-slate-200 bg-white"
+                      }`}
+                    >
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1">
+                          <p className="font-semibold text-slate-900">{deadline.stageName}</p>
+                          <p className="text-xs text-slate-600 mt-1">{deadline.description}</p>
+                          {deadline.notes && (
+                            <p className="text-xs text-slate-500 mt-1 italic">Note: {deadline.notes}</p>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-3 flex-shrink-0">
+                          {editingDeadlineId === deadline.id ? (
+                            <>
+                              <input
+                                type="number"
+                                step="0.25"
+                                value={
+                                  stageDeadlines.find((d) => d.id === deadline.id)?.daysAllowed || 0
+                                }
+                                onChange={(e) => {
+                                  setStageDeadlines(
+                                    stageDeadlines.map((d) =>
+                                      d.id === deadline.id
+                                        ? { ...d, daysAllowed: parseFloat(e.target.value) }
+                                        : d
+                                    )
+                                  );
+                                }}
+                                className="w-20 px-2 py-1 border border-blue-400 rounded text-sm"
+                              />
+                              <span className="text-sm text-slate-600 w-16">days</span>
+                              <button
+                                onClick={() => setEditingDeadlineId(null)}
+                                className="px-3 py-1 rounded bg-green-600 text-white text-xs font-semibold hover:bg-green-700"
+                              >
+                                Save
+                              </button>
+                            </>
+                          ) : (
+                            <>
+                              <div className="text-right">
+                                <p className="font-bold text-lg text-blue-600">
+                                  {deadline.daysAllowed}
+                                </p>
+                                <p className="text-xs text-slate-600">
+                                  {deadline.daysAllowed < 1 ? "hours" : "days"}
+                                </p>
+                              </div>
+                              <button
+                                onClick={() => setEditingDeadlineId(deadline.id)}
+                                className="px-3 py-1 rounded bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700"
+                              >
+                                Edit
+                              </button>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-4 p-3 bg-blue-50 rounded border border-blue-200 text-xs text-blue-800">
+                  <p className="font-semibold mb-1">💡 Tip:</p>
+                  <p>
+                    Update deadline values (in days) for each workflow stage. Use decimals for hours
+                    (e.g., 0.25 = 6 hours). Changes apply to all new orders using these stages.
+                  </p>
+                </div>
+              </div>
+            )}
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* Staff Impersonation */}
               <div>

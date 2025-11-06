@@ -48,6 +48,7 @@ export interface Staff {
   lastLogin: string;
   phone: string;
   workflowPermissions?: WorkflowPermission[];
+  workingHours: WorkingHours;
 }
 
 export interface User {

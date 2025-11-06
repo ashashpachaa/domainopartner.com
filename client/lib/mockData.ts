@@ -281,6 +281,22 @@ export interface Order {
     totalCapital: string;
     pricePerShare: string;
   };
+  registeredCompany?: RegisteredCompany; // Company registration details after completion
+}
+
+export interface RegisteredCompany {
+  id: string;
+  orderId: string;
+  userId: string;
+  companyNumber: string;
+  companyName: string;
+  incorporationDate: string; // YYYY-MM-DD
+  nextRenewalDate: string; // YYYY-MM-DD
+  nextAccountsFilingDate: string; // YYYY-MM-DD
+  registeredOffice?: string;
+  sicCodes?: string[];
+  status: "active" | "dissolved" | "liquidation" | "administration";
+  fetchedAt: string; // ISO timestamp when data was fetched from Companies House
 }
 
 export type InvoiceAction = "created" | "sent" | "viewed" | "payment_received" | "payment_failed" | "reminder_sent" | "status_changed" | "cancelled";

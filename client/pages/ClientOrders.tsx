@@ -14,9 +14,42 @@ export default function ClientOrders() {
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [sortBy, setSortBy] = useState<"date" | "amount">("date");
 
-  // Get client's orders
+  // Get all client's orders (from mockOrders + localStorage)
+  const allClientOrders = useMemo(() => {
+    const orders = mockOrders.filter((o) => o.userId === currentUser.id);
+
+    // Load orders from localStorage that might have been created by this client
+    try {
+      const keys = Object.keys(localStorage);
+      for (const key of keys) {
+        if (key.startsWith("order_")) {
+          const orderData = localStorage.getItem(key);
+          if (orderData) {
+            const order = JSON.parse(orderData);
+            if (order.userId === currentUser.id) {
+              // Check if this order is already in mockOrders
+              const exists = orders.some((o) => o.id === order.id);
+              if (!exists) {
+                orders.push(order);
+              } else {
+                // Update with latest from localStorage
+                const index = orders.findIndex((o) => o.id === order.id);
+                orders[index] = order;
+              }
+            }
+          }
+        }
+      }
+    } catch (e) {
+      console.warn("Failed to load orders from localStorage:", e);
+    }
+
+    return orders;
+  }, [currentUser.id]);
+
+  // Filter and sort client orders
   const clientOrders = useMemo(() => {
-    let orders = mockOrders.filter((o) => o.userId === currentUser.id);
+    let orders = [...allClientOrders];
 
     // Filter by status
     if (filterStatus !== "all") {
@@ -41,7 +74,7 @@ export default function ClientOrders() {
     }
 
     return orders;
-  }, [currentUser.id, filterStatus, searchTerm, sortBy]);
+  }, [allClientOrders, filterStatus, searchTerm, sortBy]);
 
   const getStatusColor = (status: string) => {
     if (status.includes("completed")) return "bg-green-100 text-green-800";

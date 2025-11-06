@@ -105,6 +105,7 @@ export default function StaffFinancialDashboard() {
       performanceBonus: Math.round(performanceBonus),
       totalCommission: Math.round(baseCommission + performanceBonus),
       rejectionFees,
+      rejectedOrderCount: rejectedOrders.length,
       deductedSalary,
       netSalary,
       pendingInvoices,

@@ -107,6 +107,7 @@ export interface Product {
   requirements: string; // e.g., "Valid ID, Company documents"
   price: number;
   currency: string; // e.g., "USD", "GBP", "EUR"
+  country: string; // e.g., "United Kingdom", "United States"
   services: {
     hasApostille: boolean;
     hasShipping: boolean;

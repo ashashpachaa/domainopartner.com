@@ -166,6 +166,97 @@ export default function AdminSalesReport() {
           </p>
         </div>
 
+        {/* Filters */}
+        <div className="bg-white rounded-lg border border-slate-200 p-6 mb-8 shadow-sm">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            {/* Date Range Selection */}
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">Date Range</label>
+              <select
+                value={dateRange}
+                onChange={(e) => setDateRange(e.target.value as any)}
+                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:border-blue-500 focus:ring-blue-500 bg-white"
+              >
+                <option value="month">Last 30 Days</option>
+                <option value="quarter">Last 90 Days</option>
+                <option value="year">Last Year</option>
+                <option value="custom">Custom Range</option>
+              </select>
+            </div>
+
+            {/* Custom Date Range - Start */}
+            {dateRange === "custom" && (
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">From Date</label>
+                <input
+                  type="date"
+                  value={customStartDate}
+                  onChange={(e) => setCustomStartDate(e.target.value)}
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:border-blue-500 focus:ring-blue-500"
+                />
+              </div>
+            )}
+
+            {/* Custom Date Range - End */}
+            {dateRange === "custom" && (
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">To Date</label>
+                <input
+                  type="date"
+                  value={customEndDate}
+                  onChange={(e) => setCustomEndDate(e.target.value)}
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:border-blue-500 focus:ring-blue-500"
+                />
+              </div>
+            )}
+
+            {/* Staff Search */}
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">Staff/Department</label>
+              <input
+                type="text"
+                value={staffSearch}
+                onChange={(e) => setStaffSearch(e.target.value)}
+                placeholder="Search staff or department..."
+                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:border-blue-500 focus:ring-blue-500"
+              />
+            </div>
+
+            {/* Department Filter */}
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">Department</label>
+              <select
+                value={departmentFilter}
+                onChange={(e) => setDepartmentFilter(e.target.value)}
+                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:border-blue-500 focus:ring-blue-500 bg-white"
+              >
+                <option value="">All Departments</option>
+                {Array.from(new Set(mockStaff.map((s) => s.department))).map((dept) => (
+                  <option key={dept} value={dept}>
+                    {dept}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Clear Filters */}
+          {(staffSearch || departmentFilter || dateRange === "custom") && (
+            <button
+              onClick={() => {
+                setStaffSearch("");
+                setDepartmentFilter("");
+                setDateRange("month");
+                setCustomStartDate("");
+                setCustomEndDate("");
+              }}
+              className="text-primary-600 hover:text-primary-700 text-sm font-medium mt-4"
+            >
+              Clear all filters
+            </button>
+          )}
+        </div>
+
         {/* Global Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           <div className="bg-white rounded-lg p-6 border border-slate-200 shadow-sm">

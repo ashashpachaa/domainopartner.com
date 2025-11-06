@@ -153,10 +153,14 @@ export async function handleOCR(req: Request, res: Response) {
       return;
     }
 
-    // Validate file type - accept images and PDFs
-    const validTypes = ["image/jpeg", "image/png", "image/jpg", "application/pdf"];
+    // Validate file type - images only
+    const validTypes = ["image/jpeg", "image/png", "image/jpg"];
     if (!validTypes.includes(req.file.mimetype) && !req.file.mimetype.startsWith("image/")) {
-      res.status(400).json({ error: "Invalid file type. Please upload an image or PDF file." });
+      res.status(400).json({
+        success: false,
+        error: "Invalid file type. Please upload a JPG or PNG image file.",
+        code: "INVALID_FORMAT"
+      });
       return;
     }
 

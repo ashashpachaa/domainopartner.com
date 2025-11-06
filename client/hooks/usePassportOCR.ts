@@ -18,10 +18,10 @@ export function usePassportOCR() {
     setProgress(10);
 
     try {
-      // Validate file type
-      const validTypes = ["image/jpeg", "image/png", "image/jpg", "application/pdf"];
+      // Validate file type - images only
+      const validTypes = ["image/jpeg", "image/png", "image/jpg"];
       if (!validTypes.includes(file.type) && !file.type.startsWith("image/")) {
-        toast.error("Please select a valid image file (JPG, PNG, or PDF)");
+        toast.error("Please select a valid image file (JPG or PNG)");
         setIsProcessing(false);
         return null;
       }

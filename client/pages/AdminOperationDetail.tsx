@@ -743,7 +743,7 @@ export default function AdminOperationDetail() {
           </div>
 
           {/* Current Stage Timer - Large Display */}
-          {isCurrent && currentStageIndex < workflowStages.length && (
+          {currentStageIndex >= 0 && currentStageIndex < workflowStages.length && (
             <div className="mt-8 pt-6 border-t border-slate-200">
               <h3 className="text-sm font-semibold text-slate-900 mb-4">
                 Current Stage: {workflowStages[currentStageIndex].label}

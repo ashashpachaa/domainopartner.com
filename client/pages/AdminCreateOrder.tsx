@@ -42,17 +42,16 @@ export default function AdminCreateOrder() {
     if (name === "productId") {
       const product = mockProducts.find(p => p.id === value);
       if (product) {
-        // Auto-fill amount and currency from product
-        const countryFromName = extractCountryFromProduct(product.name);
+        // Auto-fill amount, currency, and country from product
         setFormData((prev) => ({
           ...prev,
           productId: value,
           amount: product.price,
           currency: product.currency,
           serviceType: product.name,
-          countries: countryFromName ? [countryFromName] : [],
+          countries: [product.country],
         }));
-        setSelectedCountries(countryFromName ? [countryFromName] : []);
+        setSelectedCountries([product.country]);
       }
     } else {
       setFormData((prev) => ({
@@ -60,14 +59,6 @@ export default function AdminCreateOrder() {
         [name]: name === "amount" ? parseFloat(value) : value,
       }));
     }
-  };
-
-  const extractCountryFromProduct = (productName: string): string => {
-    if (productName.includes("UK")) return "United Kingdom";
-    if (productName.includes("USA")) return "United States";
-    if (productName.includes("Canada")) return "Canada";
-    if (productName.includes("Sweden")) return "Sweden";
-    return "";
   };
 
   const addCountry = () => {

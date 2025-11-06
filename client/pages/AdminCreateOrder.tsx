@@ -694,6 +694,94 @@ export default function AdminCreateOrder() {
                 </div>
               </div>
 
+              {/* Step 5: Document Upload */}
+              <div className="pb-8 border-b border-slate-200">
+                <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-100 text-primary-700 text-sm font-semibold">5</span>
+                  Attach Documents
+                </h2>
+                <p className="text-sm text-slate-600 mb-4">
+                  Upload customer documents. These will be visible in the order workflow automatically.
+                </p>
+
+                {/* File Upload Area */}
+                <div className="mb-6">
+                  <label className="block text-sm font-medium text-slate-900 mb-3">
+                    Upload Documents (Max 5GB per file)
+                  </label>
+                  <div className="border-2 border-dashed border-slate-300 rounded-lg p-8 text-center hover:border-primary-400 hover:bg-primary-50 transition cursor-pointer relative">
+                    <input
+                      type="file"
+                      multiple
+                      onChange={handleFileSelect}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                      accept="*"
+                    />
+                    <Upload className="w-8 h-8 text-slate-400 mx-auto mb-2" />
+                    <p className="text-sm font-medium text-slate-900 mb-1">
+                      Click to upload or drag and drop
+                    </p>
+                    <p className="text-xs text-slate-500">
+                      PDF, DOC, DOCX, XLS, XLSX, images, and more
+                    </p>
+                  </div>
+                </div>
+
+                {/* File Description */}
+                {uploadedFiles.length > 0 && (
+                  <div className="mb-6">
+                    <label className="block text-sm font-medium text-slate-900 mb-2">
+                      Document Description (Optional)
+                    </label>
+                    <textarea
+                      value={fileDescription}
+                      onChange={(e) => setFileDescription(e.target.value)}
+                      placeholder="Add a note about these documents..."
+                      rows={2}
+                      className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
+                    />
+                  </div>
+                )}
+
+                {/* Uploaded Files List */}
+                {uploadedFiles.length > 0 && (
+                  <div className="bg-slate-50 rounded-lg p-4">
+                    <h3 className="font-semibold text-slate-900 mb-3 flex items-center gap-2">
+                      <FileText className="w-4 h-4" />
+                      Attached Files ({uploadedFiles.length})
+                    </h3>
+                    <div className="space-y-2">
+                      {uploadedFiles.map((file, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center justify-between bg-white p-3 rounded border border-slate-200"
+                        >
+                          <div className="flex items-center gap-3 flex-1 min-w-0">
+                            <FileText className="w-4 h-4 text-primary-600 flex-shrink-0" />
+                            <div className="min-w-0">
+                              <p className="text-sm font-medium text-slate-900 truncate">
+                                {file.name}
+                              </p>
+                              <p className="text-xs text-slate-500">
+                                {formatFileSize(file.size)}
+                              </p>
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => removeFile(file.name)}
+                            className="ml-4 text-red-600 hover:text-red-700 transition flex-shrink-0"
+                            title="Remove file"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
               {/* Submit Button */}
               <div className="flex gap-4 pt-4">
                 <Button

@@ -1672,6 +1672,135 @@ export default function AdminOperationDetail() {
               </div>
             )}
 
+            {/* Operation Review Form - Only visible in Operation Processing stage */}
+            {order.status === "pending_operation" && (
+              <div className="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-lg p-8 border-2 border-indigo-200">
+                <h3 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+                  <CheckCircle2 className="w-6 h-6 text-indigo-600" />
+                  Operation Review Form (Required)
+                </h3>
+                <p className="text-sm text-slate-700 mb-6">
+                  Complete this form before moving the order to Manager Review. All fields are mandatory.
+                </p>
+
+                <div className="space-y-6">
+                  {/* Checkboxes Section */}
+                  <div className="bg-white rounded-lg p-6 border border-indigo-200">
+                    <h4 className="text-base font-semibold text-slate-900 mb-4">Quality & Compliance Checks</h4>
+                    <div className="space-y-4">
+                      <label className="flex items-start gap-3 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={operationFormData.qualityCheck}
+                          onChange={(e) =>
+                            setOperationFormData({
+                              ...operationFormData,
+                              qualityCheck: e.target.checked,
+                            })
+                          }
+                          className="w-5 h-5 mt-1 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                        />
+                        <div>
+                          <p className="font-medium text-slate-900">Quality Check Passed</p>
+                          <p className="text-sm text-slate-600 mt-1">
+                            Documents have been reviewed for quality, completeness, and accuracy
+                          </p>
+                        </div>
+                      </label>
+
+                      <label className="flex items-start gap-3 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={operationFormData.documentsVerified}
+                          onChange={(e) =>
+                            setOperationFormData({
+                              ...operationFormData,
+                              documentsVerified: e.target.checked,
+                            })
+                          }
+                          className="w-5 h-5 mt-1 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                        />
+                        <div>
+                          <p className="font-medium text-slate-900">Documents Verified</p>
+                          <p className="text-sm text-slate-600 mt-1">
+                            All required documents have been verified against the product requirements
+                          </p>
+                        </div>
+                      </label>
+
+                      <label className="flex items-start gap-3 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={operationFormData.complianceReview}
+                          onChange={(e) =>
+                            setOperationFormData({
+                              ...operationFormData,
+                              complianceReview: e.target.checked,
+                            })
+                          }
+                          className="w-5 h-5 mt-1 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                        />
+                        <div>
+                          <p className="font-medium text-slate-900">Compliance Review Completed</p>
+                          <p className="text-sm text-slate-600 mt-1">
+                            All documents comply with legal and regulatory requirements for the country/region
+                          </p>
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+
+                  {/* Notes Section */}
+                  <div className="bg-white rounded-lg p-6 border border-indigo-200">
+                    <label className="block text-base font-semibold text-slate-900 mb-3">
+                      Operation Notes *
+                    </label>
+                    <textarea
+                      value={operationFormData.operationNotes}
+                      onChange={(e) =>
+                        setOperationFormData({
+                          ...operationFormData,
+                          operationNotes: e.target.value,
+                        })
+                      }
+                      placeholder="Please provide a summary of the operation review. Include any issues found, corrections made, or special considerations for the manager review..."
+                      rows={4}
+                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:border-indigo-500 focus:ring-indigo-500 resize-none"
+                    />
+                    <p className="text-xs text-slate-600 mt-2">
+                      {operationFormData.operationNotes.length} characters entered
+                    </p>
+                  </div>
+
+                  {/* Completion Status */}
+                  <div className={`rounded-lg p-4 border-2 ${
+                    operationFormData.qualityCheck &&
+                    operationFormData.documentsVerified &&
+                    operationFormData.complianceReview &&
+                    operationFormData.operationNotes.trim()
+                      ? "bg-green-50 border-green-200"
+                      : "bg-amber-50 border-amber-200"
+                  }`}>
+                    <p className={`text-sm font-semibold ${
+                      operationFormData.qualityCheck &&
+                      operationFormData.documentsVerified &&
+                      operationFormData.complianceReview &&
+                      operationFormData.operationNotes.trim()
+                        ? "text-green-800"
+                        : "text-amber-800"
+                    }`}>
+                      {operationFormData.qualityCheck &&
+                      operationFormData.documentsVerified &&
+                      operationFormData.complianceReview &&
+                      operationFormData.operationNotes.trim()
+                        ? "✓ Form Complete - Ready to proceed to Manager Review"
+                        : "⚠ Form Incomplete - Complete all fields to proceed"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Tracking Number Section */}
             <div className="bg-white rounded-lg p-6 border border-slate-200">
               <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">

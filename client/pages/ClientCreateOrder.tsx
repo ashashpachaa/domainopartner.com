@@ -284,7 +284,7 @@ export default function ClientCreateOrder() {
           uploadedAt: new Date().toISOString(),
           stage: "sales" as const,
           fileType: "document" as const,
-          notes: `Client-uploaded file: ${file.name}`,
+          description: `Client-uploaded file: ${file.name}`,
           visibleToClient: true,
         })),
         clientCanViewFiles: true,

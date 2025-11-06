@@ -24,11 +24,18 @@ export default function AdminAttendanceDashboard() {
         .toISOString()
         .split("T")[0];
       records = records.filter((r) => r.date >= weekAgo);
-    } else {
+    } else if (dateFilter === "month") {
       const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)
         .toISOString()
         .split("T")[0];
       records = records.filter((r) => r.date >= monthAgo);
+    } else if (dateFilter === "custom") {
+      if (customStartDate) {
+        records = records.filter((r) => r.date >= customStartDate);
+      }
+      if (customEndDate) {
+        records = records.filter((r) => r.date <= customEndDate);
+      }
     }
 
     // Department filter

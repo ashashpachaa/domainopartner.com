@@ -133,25 +133,24 @@ export default function AdminOrderDetail() {
   };
 
   const handleDownloadFile = (file: any) => {
-    // Create a mock download by triggering a download with file metadata
-    const fileData = {
-      fileName: file.fileName,
-      fileSize: file.fileSize,
-      uploadedAt: file.uploadedAt,
-      uploadedBy: file.uploadedByName,
-      description: file.description,
-      stage: file.stage,
-    };
+    // Create a mock file download with the original filename
+    const fileData = `File: ${file.fileName}\nSize: ${file.fileSize} bytes\nUploaded By: ${file.uploadedByName}\nUploaded At: ${new Date(file.uploadedAt).toLocaleString()}\nStage: ${file.stage}\nDescription: ${file.description || "N/A"}\n\n--- File Content ---\nThis is a mock download of ${file.fileName}. In a production environment, this would contain the actual file content.`;
+
+    // Determine MIME type based on file extension
+    let mimeType = "application/octet-stream";
+    if (file.fileName.endsWith(".pdf")) mimeType = "application/pdf";
+    else if (file.fileName.endsWith(".doc") || file.fileName.endsWith(".docx")) mimeType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+    else if (file.fileName.endsWith(".jpg") || file.fileName.endsWith(".jpeg")) mimeType = "image/jpeg";
+    else if (file.fileName.endsWith(".png")) mimeType = "image/png";
 
     // Create a blob with file information
-    const dataStr = JSON.stringify(fileData, null, 2);
-    const dataBlob = new Blob([dataStr], { type: "application/json" });
+    const dataBlob = new Blob([fileData], { type: mimeType });
 
     // Create download link
     const url = URL.createObjectURL(dataBlob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `${file.fileName}.json`;
+    link.download = file.fileName;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

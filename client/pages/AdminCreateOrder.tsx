@@ -202,6 +202,9 @@ export default function AdminCreateOrder() {
     const product = mockProducts.find((p) => p.id === formData.productId);
 
     // In a real app, this would save to a database
+    const operationStaff = mockStaff.find((s) => s.role === "operation");
+    const managerStaff = mockStaff.find((s) => s.role === "operation_manager");
+
     const newOrder: Order = {
       id: orderId,
       orderNumber: formData.orderNumber || "",
@@ -215,6 +218,8 @@ export default function AdminCreateOrder() {
       userId: formData.userId,
       productId: formData.productId,
       assignedToSalesId: formData.assignedToSalesId,
+      assignedToOperationId: operationStaff?.id,
+      assignedToManagerId: managerStaff?.id,
       history: [
         {
           id: `H-${Date.now()}`,
@@ -233,6 +238,7 @@ export default function AdminCreateOrder() {
         orderId: orderId,
         fileName: file.name,
         fileSize: file.size,
+        fileUrl: `https://example.com/files/${file.name}`,
         uploadedBy: formData.assignedToSalesId || "system",
         uploadedByName:
           mockStaff.find((s) => s.id === formData.assignedToSalesId)
@@ -793,7 +799,7 @@ export default function AdminCreateOrder() {
                       <option value="TJS">TJS - Tajikistani Somoni</option>
                       <option value="TMT">TMT - Turkmenistani Manat</option>
                       <option value="TND">TND - Tunisian Dinar</option>
-                      <option value="TOP">TOP - Tongan Paʻanga</option>
+                      <option value="TOP">TOP - Tongan Pa��anga</option>
                       <option value="TRY">TRY - Turkish Lira</option>
                       <option value="TTD">
                         TTD - Trinidad and Tobago Dollar

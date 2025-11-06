@@ -447,6 +447,12 @@ export default function AdminOperationDetail() {
     let daysAllowed = 0;
 
     switch (order.status) {
+      case "new":
+        stageName = "Order Created";
+        daysAllowed = 3;
+        deadlineDate = addBusinessDays(createdDate, 3); // 3 days to assign to sales
+        affectedStaffId = null; // Waiting for admin/sales to assign
+        break;
       case "pending_sales_review":
         stageName = "Sales Review";
         daysAllowed = 0.25; // 6 hours

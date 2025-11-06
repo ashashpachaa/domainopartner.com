@@ -668,11 +668,11 @@ export default function ClientCreateOrder() {
                       <input
                         type="file"
                         onChange={handleShareholderPassportSelect}
-                        accept=".pdf,.jpg,.jpeg,.png"
+                        accept=".jpg,.jpeg,.png"
                         disabled={isOcrProcessing}
                         className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500 disabled:opacity-50"
                       />
-                      <p className="text-xs text-slate-500 mt-1">Max 50MB. Supported formats: PDF, JPG, PNG</p>
+                      <p className="text-xs text-slate-500 mt-1">Max 50MB. Supported formats: JPG, PNG (convert PDFs to images first)</p>
                       {shareholderPassportFile && (
                         <div className="mt-3 space-y-2">
                           <p className="text-sm text-green-600">✓ {shareholderPassportFile.name} selected</p>

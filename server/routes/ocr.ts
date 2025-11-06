@@ -96,54 +96,66 @@ function parsePassportText(text: string): ExtractedPassportData {
   }
 
   // === NAME EXTRACTION (MOST CRITICAL) ===
-  // Strategy: Look for sequences of words that look like names
-  // Names should be:
-  // 1. Capital letter words
-  // 2. NOT be common labels
-  // 3. Appear after passport headers or at the beginning
-  // 4. Be reasonably sized (typical names are 2-50 chars)
+  // Strategy: Look for "Full Name:" or similar fields and extract what comes after
+  // This is more reliable than trying to guess from all capital sequences
 
-  // Extract all capital letter word sequences
-  const allCapitalSequences = text.match(/\b[A-Z][A-Za-z]+(?:\s+[A-Z][A-Za-z]+)*\b/g) || [];
+  // Try to find explicit "Full Name" field patterns
+  const fullNamePattern = /(?:Full Name|Full\s+Name|Surname|Given Names?)[:\s]*([A-Z][A-Za-z\s]+?)(?:\n|Date|Nationality|Sex|Gender|Place|Issuing|$)/i;
+  let fullNameMatch = text.match(fullNamePattern);
 
-  // Filter for likely names
-  const candidateNames = allCapitalSequences
-    .filter((seq) => {
-      // Skip if too short or too long
-      if (seq.length < 4 || seq.length > 60) return false;
-      
-      // Skip if contains label words
-      if (labelWords.has(seq)) return false;
-      
-      // Skip document headers
-      if (seq.includes("PASSPORT") || seq.includes("REPUBLIC") || seq.includes("UNITED") || seq.includes("KINGDOM")) return false;
-      
-      // Skip numbers
-      if (/\d/.test(seq)) return false;
-      
-      // Must have at least 2 words (first + last name) or be a known single name pattern
-      const words = seq.split(/\s+/);
-      if (words.length < 2) return false;
-      
-      // Each word should be reasonably long (not just initials)
-      if (words.some(w => w.length === 1)) return false;
-      
-      return true;
-    })
-    .slice(0, 5); // Limit to first 5 candidates to avoid too much processing
+  if (fullNameMatch && fullNameMatch[1]) {
+    let extractedName = fullNameMatch[1].trim();
 
-  // Use the first good candidate as the name
-  if (candidateNames.length > 0) {
-    const fullName = candidateNames[0];
-    const nameParts = fullName.split(/\s+/);
-    
-    if (nameParts.length >= 2) {
-      result.firstName = nameParts[0];
-      result.lastName = nameParts.slice(1).join(" ");
-      confidenceScore += 0.25;
-    } else if (nameParts.length === 1) {
-      result.firstName = nameParts[0];
-      confidenceScore += 0.15; // Lower confidence if only first name
+    // Remove any trailing label-like words
+    extractedName = extractedName.replace(/\s+(and|or|from|by|for|the|of)$/i, "");
+
+    // Skip if it contains unwanted words
+    if (!extractedName.includes("PASSPORT") && !extractedName.includes("REPUBLIC") &&
+        !extractedName.includes("NO") && extractedName.length > 3 && extractedName.length < 60) {
+
+      const nameParts = extractedName.split(/\s+/);
+      if (nameParts.length >= 2) {
+        result.firstName = nameParts[0];
+        result.lastName = nameParts.slice(1).join(" ");
+        confidenceScore += 0.25;
+      } else if (nameParts.length === 1 && nameParts[0].length > 2) {
+        result.firstName = nameParts[0];
+        confidenceScore += 0.15;
+      }
+    }
+  }
+
+  // If still no name, fall back to looking for capital letter sequences, but more carefully
+  if (!result.firstName && !result.lastName) {
+    // Extract all capital letter sequences that are likely names
+    const lines = text.split("\n");
+
+    for (const line of lines) {
+      const trimmedLine = line.trim();
+
+      // Skip header lines and short lines
+      if (trimmedLine.length < 4 || trimmedLine.length > 60) continue;
+
+      // Skip lines with numbers or special formatting
+      if (/[0-9<>]+/.test(trimmedLine)) continue;
+
+      // Skip known label lines
+      if (labelWords.has(trimmedLine) || trimmedLine.includes("Passport") ||
+          trimmedLine.includes("Date") || trimmedLine.includes("Place")) continue;
+
+      // Check if line looks like a name (multiple capital words)
+      const words = trimmedLine.split(/\s+/);
+
+      if (words.length >= 2 && words.length <= 6) {
+        // All words should start with capital letter
+        if (words.every(w => /^[A-Z]/.test(w) && w.length > 1)) {
+          // This looks like a name!
+          result.firstName = words[0];
+          result.lastName = words.slice(1).join(" ");
+          confidenceScore += 0.2;
+          break;
+        }
+      }
     }
   }
 

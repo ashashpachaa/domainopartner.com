@@ -153,26 +153,45 @@ export async function handleOCR(req: Request, res: Response) {
       return;
     }
 
-    // Validate file type
-    if (!req.file.mimetype.startsWith("image/")) {
-      res.status(400).json({ error: "Invalid file type. Please upload an image file." });
+    // Validate file type - accept images and PDFs
+    const validTypes = ["image/jpeg", "image/png", "image/jpg", "application/pdf"];
+    if (!validTypes.includes(req.file.mimetype) && !req.file.mimetype.startsWith("image/")) {
+      res.status(400).json({ error: "Invalid file type. Please upload an image or PDF file." });
       return;
     }
 
-    // Check file size (max 10MB for OCR)
-    if (req.file.size > 10 * 1024 * 1024) {
-      res.status(400).json({ error: "File size exceeds 10MB limit" });
+    // Check file size (max 20MB)
+    if (req.file.size > 20 * 1024 * 1024) {
+      res.status(400).json({ error: "File size exceeds 20MB limit" });
       return;
     }
 
     // Initialize Vision API client
     const client = getVisionClient();
 
-    // Prepare the image data
-    const imageBuffer = req.file.buffer;
-    const base64Image = imageBuffer.toString("base64");
+    let processedBuffer = req.file.buffer;
 
-    // Call Google Vision API
+    // Optimize image if it's an image file (compress for faster processing)
+    if (req.file.mimetype.startsWith("image/")) {
+      try {
+        // Compress image while maintaining quality for OCR
+        processedBuffer = await sharp(req.file.buffer)
+          .resize(2000, 2000, {
+            fit: "inside",
+            withoutEnlargement: true,
+          })
+          .jpeg({ quality: 85, progressive: true })
+          .toBuffer();
+      } catch (optimizeError) {
+        console.warn("Image optimization failed, using original:", optimizeError);
+        // Continue with original buffer if optimization fails
+      }
+    }
+
+    // Prepare the image data
+    const base64Image = processedBuffer.toString("base64");
+
+    // Call Google Vision API with DOCUMENT_TEXT_DETECTION for better OCR
     const request = {
       image: {
         content: base64Image,
@@ -189,7 +208,7 @@ export async function handleOCR(req: Request, res: Response) {
 
     if (!textAnnotations || textAnnotations.length === 0) {
       res.status(400).json({
-        error: "Could not extract text from the image. Please ensure the image is clear and readable.",
+        error: "Could not extract text from the file. Ensure the image is clear and readable.",
       });
       return;
     }
@@ -197,9 +216,9 @@ export async function handleOCR(req: Request, res: Response) {
     // Get the full text from the first annotation (contains all text)
     const fullText = textAnnotations[0]?.description || "";
 
-    if (!fullText || fullText.trim().length < 10) {
+    if (!fullText || fullText.trim().length < 5) {
       res.status(400).json({
-        error: "Extracted text is too short. Please ensure the passport image is clear and complete.",
+        error: "Could not find readable text. Try uploading a clearer image or different scan.",
       });
       return;
     }
@@ -218,12 +237,14 @@ export async function handleOCR(req: Request, res: Response) {
 
     if (error instanceof Error) {
       if (error.message.includes("credentials")) {
-        res.status(500).json({ error: "Server configuration error: Google Vision API credentials not available" });
+        res.status(500).json({ error: "Server configuration error: OCR service unavailable" });
+      } else if (error.message.includes("timeout") || error.message.includes("DEADLINE")) {
+        res.status(500).json({ error: "Request timed out. Please try with a smaller or clearer image." });
       } else {
-        res.status(500).json({ error: `OCR processing failed: ${error.message}` });
+        res.status(500).json({ error: `Processing failed: ${error.message}` });
       }
     } else {
-      res.status(500).json({ error: "Failed to process image. Please try again." });
+      res.status(500).json({ error: "Failed to process file. Please try again." });
     }
   }
 }

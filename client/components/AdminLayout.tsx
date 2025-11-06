@@ -1,5 +1,5 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { Globe, Users, LogOut, Menu, X, Users2, FileText, TrendingUp, ShoppingCart, Package, Zap, Clock, Activity } from "lucide-react";
+import { Globe, Users, LogOut, Menu, X, Users2, FileText, TrendingUp, ShoppingCart, Package, Zap, Clock, Activity, BarChart3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ReactNode, useState } from "react";
 
@@ -116,6 +116,17 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           >
             <Activity className="w-5 h-5" />
             {sidebarOpen && <span className="font-medium">Attendance</span>}
+          </Link>
+          <Link
+            to="/admin/sales/report"
+            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition ${
+              isActive("/admin/sales/report")
+                ? "bg-primary-600 text-white"
+                : "text-slate-400 hover:bg-slate-800"
+            }`}
+          >
+            <BarChart3 className="w-5 h-5" />
+            {sidebarOpen && <span className="font-medium">Sales Report</span>}
           </Link>
           <Link
             to="/admin/products"

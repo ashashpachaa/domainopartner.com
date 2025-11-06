@@ -109,6 +109,9 @@ export default function ClientCreateOrder() {
     setFormData({
       ...formData,
       productId,
+      amount: product ? product.price.toString() : "",
+      currency: product ? product.currency : "USD",
+      countries: product ? product.country : "",
     });
   };
 

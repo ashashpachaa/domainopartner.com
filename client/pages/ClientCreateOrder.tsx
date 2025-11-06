@@ -222,8 +222,7 @@ export default function ClientCreateOrder() {
 
   const resetShareholderForm = () => {
     setShareholderForm({
-      firstName: "",
-      lastName: "",
+      fullName: "",
       dateOfBirth: "",
       nationality: "",
       ownershipPercentage: "",

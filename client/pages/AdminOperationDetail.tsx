@@ -661,7 +661,7 @@ export default function AdminOperationDetail() {
         {/* Workflow Progress */}
         <div className="bg-white rounded-lg p-8 border border-slate-200">
           <h2 className="text-xl font-bold text-slate-900 mb-6">
-            Workflow Progress
+            Workflow Progress & Deadlines
           </h2>
 
           <div className="relative">
@@ -675,32 +675,130 @@ export default function AdminOperationDetail() {
               />
             </div>
 
-            {/* Stages */}
+            {/* Stages with Deadlines */}
             <div className="relative z-10 flex justify-between">
-              {workflowStages.map((stage, index) => (
-                <div key={stage.id} className="flex flex-col items-center">
-                  <div
-                    className={`w-12 h-12 rounded-full flex items-center justify-center text-xl mb-2 border-2 ${
-                      index <= currentStageIndex
-                        ? "bg-primary-600 border-primary-600 text-white"
-                        : "bg-white border-slate-300 text-slate-400"
-                    }`}
-                  >
-                    {index < currentStageIndex ? (
-                      <CheckCircle2 className="w-6 h-6" />
-                    ) : index === currentStageIndex ? (
-                      <Clock className="w-6 h-6 animate-pulse" />
-                    ) : (
-                      <span>{index + 1}</span>
-                    )}
+              {workflowStages.map((stage, index) => {
+                const stageDeadlineInfo = getStageDealinesInfo[index];
+                const isCompleted = index < currentStageIndex;
+                const isCurrent = index === currentStageIndex;
+
+                return (
+                  <div key={stage.id} className="flex flex-col items-center flex-1 relative">
+                    {/* Stage Circle */}
+                    <div
+                      className={`w-12 h-12 rounded-full flex items-center justify-center text-xl mb-2 border-2 transition-all ${
+                        isCompleted
+                          ? "bg-green-600 border-green-600 text-white"
+                          : isCurrent
+                          ? "bg-primary-600 border-primary-600 text-white shadow-lg"
+                          : "bg-white border-slate-300 text-slate-400"
+                      }`}
+                    >
+                      {isCompleted ? (
+                        <CheckCircle2 className="w-6 h-6" />
+                      ) : isCurrent ? (
+                        <Clock className="w-6 h-6 animate-pulse" />
+                      ) : (
+                        <span>{index + 1}</span>
+                      )}
+                    </div>
+
+                    {/* Stage Label */}
+                    <p className="text-xs font-medium text-slate-900 text-center max-w-[80px] mb-2">
+                      {stage.label}
+                    </p>
+
+                    {/* Deadline Info - Show for all stages */}
+                    <div className="text-center max-w-[100px]">
+                      {isCompleted ? (
+                        <div className="text-xs">
+                          <p className="text-green-700 font-semibold">✓ Completed</p>
+                        </div>
+                      ) : (
+                        <div className="text-xs">
+                          {stageDeadlineInfo.isOverdue ? (
+                            <div className="text-red-600 font-semibold">
+                              <p>⚠️ OVERDUE</p>
+                            </div>
+                          ) : stageDeadlineInfo.isApproaching ? (
+                            <div className="text-yellow-600 font-semibold">
+                              <p>{stageDeadlineInfo.hoursRemaining}h {stageDeadlineInfo.minutesRemaining}m</p>
+                              <p className="text-yellow-600">Approaching</p>
+                            </div>
+                          ) : (
+                            <div className="text-slate-600">
+                              <p className="font-semibold">
+                                {stageDeadlineInfo.daysRemaining}d {stageDeadlineInfo.hoursRemaining}h
+                              </p>
+                              <p className="text-slate-500 text-xs">{stageDeadlineInfo.daysAllowed} day(s)</p>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  <p className="text-xs font-medium text-slate-900 text-center max-w-[80px]">
-                    {stage.label}
-                  </p>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
+
+          {/* Current Stage Timer - Large Display */}
+          {isCurrent && currentStageIndex < workflowStages.length && (
+            <div className="mt-8 pt-6 border-t border-slate-200">
+              <h3 className="text-sm font-semibold text-slate-900 mb-4">
+                Current Stage: {workflowStages[currentStageIndex].label}
+              </h3>
+              <div className={`rounded-lg p-6 border-2 ${
+                getDeadlineInfo.isOverdue
+                  ? "bg-red-50 border-red-200"
+                  : getDeadlineInfo.isApproaching
+                  ? "bg-yellow-50 border-yellow-200"
+                  : "bg-blue-50 border-blue-200"
+              }`}>
+                <div className="text-center">
+                  <p className={`text-sm font-medium mb-2 ${
+                    getDeadlineInfo.isOverdue
+                      ? "text-red-700"
+                      : getDeadlineInfo.isApproaching
+                      ? "text-yellow-700"
+                      : "text-blue-700"
+                  }`}>
+                    Time Remaining
+                  </p>
+                  <div className="text-4xl font-bold mb-2 font-mono" style={{
+                    color: getDeadlineInfo.isOverdue
+                      ? "#dc2626"
+                      : getDeadlineInfo.isApproaching
+                      ? "#ea580c"
+                      : "#2563eb"
+                  }}>
+                    {getDeadlineInfo.isOverdue ? (
+                      <span>OVERDUE ⚠️</span>
+                    ) : (
+                      <span>
+                        {getDeadlineInfo.daysRemaining}d {getDeadlineInfo.hoursRemaining}h
+                      </span>
+                    )}
+                  </div>
+                  <p className={`text-xs font-medium ${
+                    getDeadlineInfo.isOverdue
+                      ? "text-red-600"
+                      : getDeadlineInfo.isApproaching
+                      ? "text-yellow-600"
+                      : "text-blue-600"
+                  }`}>
+                    Deadline: {getDeadlineInfo.deadlineDate?.toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Shipping & Tracking Information Section */}

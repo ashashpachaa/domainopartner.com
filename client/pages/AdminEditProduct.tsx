@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import AdminLayout from "@/components/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft, Save } from "lucide-react";
 import { mockProducts, Product } from "@/lib/mockData";
+import { toast } from "sonner";
 
 export default function AdminEditProduct() {
   const { productId } = useParams<{ productId?: string }>();

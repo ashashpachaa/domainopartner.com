@@ -50,6 +50,12 @@ export default function AdminEditStaff() {
       status: "active",
       joinDate: new Date().toISOString().split("T")[0],
       lastLogin: new Date().toISOString(),
+      workflowPermissions: workflowStages.map((stage) => ({
+        stage: stage.value,
+        label: stage.label,
+        description: stage.description,
+        canAccess: false,
+      })),
     }
   );
 
@@ -58,6 +64,15 @@ export default function AdminEditStaff() {
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleWorkflowPermissionChange = (stage: WorkflowStage, canAccess: boolean) => {
+    setFormData((prev) => ({
+      ...prev,
+      workflowPermissions: prev.workflowPermissions?.map((perm) =>
+        perm.stage === stage ? { ...perm, canAccess } : perm
+      ),
+    }));
   };
 
   const handleSubmit = (e: FormEvent) => {

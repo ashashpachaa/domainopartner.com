@@ -134,9 +134,21 @@ export interface OperationFile {
   uploadedBy: string; // staffId
   uploadedByName: string;
   uploadedAt: string;
-  stage: "sales" | "operation" | "manager" | "apostille"; // workflow stage
-  fileType: "document" | "receipt" | "tracking" | "apostille";
+  stage: "sales" | "operation" | "manager" | "apostille" | "post_services"; // workflow stage
+  fileType: "document" | "receipt" | "tracking" | "apostille" | "financial_report" | "company_form";
   description?: string;
+  visibleToClient: boolean; // Individual document visibility toggle
+}
+
+export interface OrderComment {
+  id: string;
+  orderId: string;
+  commentBy: string; // staffId or "client"
+  commentByName: string;
+  commentByRole?: StaffRole | "client";
+  content: string;
+  isInternal: boolean; // If true, visible only to staff
+  createdAt: string;
 }
 
 export interface ApostilleDocument {
@@ -183,6 +195,19 @@ export interface Order {
   apostilleDocuments?: ApostilleDocument[]; // apostille documents if applicable
   clientCanViewFiles: boolean; // visibility to client
   clientCanViewTracking: boolean; // visibility of tracking to client
+  comments: OrderComment[]; // Comments with internal/public flags
+  requiredServices: {
+    hasApostille: boolean;
+    hasShipping: boolean;
+    hasPOA: boolean;
+    hasFinancialReport: boolean;
+  };
+  completedServices: {
+    apostilleComplete: boolean;
+    shippingComplete: boolean;
+    poaComplete: boolean;
+    financialReportComplete: boolean;
+  };
 }
 
 export type InvoiceAction = "created" | "sent" | "viewed" | "payment_received" | "payment_failed" | "reminder_sent" | "status_changed" | "cancelled";

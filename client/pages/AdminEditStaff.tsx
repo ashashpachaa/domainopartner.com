@@ -2,9 +2,9 @@ import AdminLayout from "@/components/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Save } from "lucide-react";
+import { ArrowLeft, Save, CheckCircle2 } from "lucide-react";
 import { FormEvent, useState } from "react";
-import { mockStaff, Staff, StaffRole } from "@/lib/mockData";
+import { mockStaff, Staff, StaffRole, WorkflowStage } from "@/lib/mockData";
 
 const staffRoles: { value: StaffRole; label: string }[] = [
   { value: "super_admin", label: "Super Admin" },
@@ -21,6 +21,14 @@ const departments = [
   "Sales",
   "Accounting",
   "Support",
+];
+
+const workflowStages: { value: WorkflowStage; label: string; description: string }[] = [
+  { value: "sales", label: "Sales Review", description: "Review and approve sales orders" },
+  { value: "operation", label: "Operation Process", description: "Handle order operations" },
+  { value: "manager", label: "Manager Review", description: "Review and approve operations" },
+  { value: "client", label: "Client Acceptance", description: "Handle client communications" },
+  { value: "shipping", label: "Shipping & Complete", description: "Manage shipping and completion" },
 ];
 
 export default function AdminEditStaff() {

@@ -233,47 +233,53 @@ export async function handleOCR(req: Request, res: Response) {
       rawText: fullText,
     });
   } catch (error) {
-    console.error("OCR Error Details:", {
-      error: error instanceof Error ? error.message : String(error),
-      type: error instanceof Error ? error.constructor.name : typeof error,
-      fullError: error,
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    const errorType = error instanceof Error ? error.constructor.name : typeof error;
+
+    console.error("OCR Processing Error:", {
+      message: errorMessage,
+      type: errorType,
+      timestamp: new Date().toISOString(),
     });
 
-    if (error instanceof Error) {
-      const errorMsg = error.message;
+    let statusCode = 500;
+    let errorResponse = {
+      success: false,
+      error: "Failed to process image. Please try again.",
+      code: "PROCESSING_ERROR",
+    };
 
+    if (error instanceof Error) {
       // Check for specific Google API errors
-      if (errorMsg.includes("PERMISSION_DENIED") || errorMsg.includes("permission")) {
-        res.status(500).json({
+      if (errorMessage.includes("PERMISSION_DENIED") || errorMessage.includes("permission")) {
+        errorResponse = {
+          success: false,
           error: "Google Vision API permission issue. Please ensure billing is enabled and wait 5-10 minutes for changes to propagate.",
           code: "BILLING_NOT_ENABLED",
-        });
-      } else if (errorMsg.includes("UNAUTHENTICATED") || errorMsg.includes("credentials")) {
-        res.status(500).json({
+        };
+      } else if (errorMessage.includes("UNAUTHENTICATED") || errorMessage.includes("credentials")) {
+        errorResponse = {
+          success: false,
           error: "Server configuration error: Google credentials not properly configured.",
           code: "CREDENTIAL_ERROR",
-        });
-      } else if (errorMsg.includes("timeout") || errorMsg.includes("DEADLINE")) {
-        res.status(500).json({
+        };
+      } else if (errorMessage.includes("timeout") || errorMessage.includes("DEADLINE")) {
+        statusCode = 504;
+        errorResponse = {
+          success: false,
           error: "Request timed out. Please try with a smaller or clearer image.",
           code: "TIMEOUT",
-        });
-      } else if (errorMsg.includes("INVALID_ARGUMENT")) {
-        res.status(500).json({
+        };
+      } else if (errorMessage.includes("INVALID_ARGUMENT")) {
+        statusCode = 400;
+        errorResponse = {
+          success: false,
           error: "Invalid image format. Please ensure the file is a clear JPG, PNG, or PDF.",
           code: "INVALID_FORMAT",
-        });
-      } else {
-        res.status(500).json({
-          error: `Processing failed: ${errorMsg}`,
-          code: "PROCESSING_ERROR",
-        });
+        };
       }
-    } else {
-      res.status(500).json({
-        error: "Failed to process file. Please try again.",
-        code: "UNKNOWN_ERROR",
-      });
     }
+
+    res.status(statusCode).json(errorResponse);
   }
 }

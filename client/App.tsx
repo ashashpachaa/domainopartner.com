@@ -197,6 +197,7 @@ const App = () => (
           {/* Client Routes */}
           <Route path="/client/dashboard" element={<ClientDashboard />} />
           <Route path="/client/orders" element={<ClientOrders />} />
+          <Route path="/client/orders/new" element={<ClientCreateOrder />} />
           <Route path="/client/orders/:orderId" element={<ClientOrderDetail />} />
           <Route path="/client/invoices" element={<ClientInvoices />} />
           <Route path="/client/documents" element={<ClientDocuments />} />

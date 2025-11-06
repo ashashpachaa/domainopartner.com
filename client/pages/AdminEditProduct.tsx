@@ -150,17 +150,32 @@ export default function AdminEditProduct() {
                 {/* Duration */}
                 <div>
                   <label className="block text-sm font-medium text-slate-900 mb-2">
-                    Duration *
+                    Duration (business days) *
                   </label>
-                  <Input
-                    type="text"
-                    name="duration"
-                    value={formData.duration || ""}
-                    onChange={handleChange}
-                    placeholder="e.g., 3-5 business days"
-                    required
-                    className="border-slate-300 focus:border-primary-500 focus:ring-primary-500"
-                  />
+                  <div className="flex gap-2 items-center">
+                    <Input
+                      type="text"
+                      name="duration"
+                      value={formData.duration?.replace(/ business days$/, "") || ""}
+                      onChange={(e) => {
+                        let value = e.target.value;
+                        // Remove " business days" if it was already added
+                        value = value.replace(/ business days$/, "");
+                        // Auto-add " business days" for display purposes
+                        handleChange({
+                          ...e,
+                          target: {
+                            ...e.target,
+                            value: value + " business days"
+                          }
+                        } as any);
+                      }}
+                      placeholder="e.g., 3-5"
+                      required
+                      className="border-slate-300 focus:border-primary-500 focus:ring-primary-500 flex-1"
+                    />
+                    <span className="text-sm text-slate-500 font-medium whitespace-nowrap">business days</span>
+                  </div>
                 </div>
 
                 {/* Requirements */}

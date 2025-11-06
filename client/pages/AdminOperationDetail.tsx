@@ -189,6 +189,20 @@ export default function AdminOperationDetail() {
         newHistoryEntry.description = `${currentStaff?.firstName} assigned this order to Sales Review`;
       }
 
+      // Save operation review form data when transitioning from pending_operation
+      if (order.status === "pending_operation") {
+        updatedOrder.operationReviewForm = {
+          isCompleted: true,
+          submittedBy: effectiveUserId,
+          submittedByName: currentStaff?.firstName + " " + currentStaff?.lastName || "Unknown",
+          submittedAt: new Date().toISOString(),
+          qualityCheck: operationFormData.qualityCheck,
+          documentsVerified: operationFormData.documentsVerified,
+          complianceReview: operationFormData.complianceReview,
+          operationNotes: operationFormData.operationNotes,
+        };
+      }
+
       // Mark as completed if final stage
       if (nextStatus === "completed") {
         updatedOrder.completedAt = new Date().toISOString().split("T")[0];

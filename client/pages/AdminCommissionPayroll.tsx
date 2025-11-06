@@ -400,7 +400,7 @@ export default function AdminCommissionPayroll() {
                   "Performance Bonus",
                   "Total Commission",
                 ],
-                ...staffMetrics.map((m) => [
+                ...filteredStaffMetrics.map((m) => [
                   m.staffName,
                   m.paidOrderCount,
                   m.appliedTier,

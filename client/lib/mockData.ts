@@ -2434,7 +2434,7 @@ export const mockOrders: Order[] = [
     requiredServices: {
       hasApostille: true,
       hasShipping: true,
-      hasPOA: false,
+      hasPOA: true,
       hasFinancialReport: true,
     },
     completedServices: {

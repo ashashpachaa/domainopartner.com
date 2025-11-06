@@ -18,6 +18,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   const menuItems = [
     { label: "Dashboard", path: "/client/dashboard", icon: LayoutDashboard },
     { label: "My Orders", path: "/client/orders", icon: Package },
+    { label: "Companies", path: "/client/companies", icon: Building2 },
     { label: "Invoices", path: "/client/invoices", icon: FileText },
     { label: "Documents", path: "/client/documents", icon: FileText },
     { label: "Messages", path: "/client/messages", icon: MessageSquare },

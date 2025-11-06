@@ -1776,6 +1776,7 @@ export const mockOrders: Order[] = [
         stage: "sales",
         fileType: "document",
         description: "UK company formation documents and requirements",
+        visibleToClient: true,
       },
       {
         id: "F009-2",
@@ -1788,6 +1789,7 @@ export const mockOrders: Order[] = [
         stage: "operation",
         fileType: "document",
         description: "UK Companies House registration confirmation",
+        visibleToClient: true,
       },
       {
         id: "F009-3",
@@ -1800,6 +1802,7 @@ export const mockOrders: Order[] = [
         stage: "manager",
         fileType: "document",
         description: "Certificate of Incorporation ready for apostille",
+        visibleToClient: true,
       },
     ],
     apostilleDocuments: [

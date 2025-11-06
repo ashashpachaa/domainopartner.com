@@ -708,7 +708,7 @@ export default function AdminOrders() {
 
           {/* Summary */}
           <div className="mt-6 text-sm text-slate-600">
-            Showing {filteredOrders.length} of {mockOrders.length} orders
+            Showing {filteredOrders.length} of {allOrders.length} orders
           </div>
         </div>
       </div>

@@ -47,9 +47,18 @@ export default function AdminDashboard() {
     setClientRequests(merged);
   }, []);
 
-  // Show notification for pending client requests on mount
+  // Show notification for pending client requests
   useEffect(() => {
-    const pendingCount = clientRequests.filter(
+    const allRequests = [...mockClientRequests];
+    const storedRequests = JSON.parse(localStorage.getItem("mockClientRequests") || "[]");
+    const merged = [...allRequests];
+    for (const request of storedRequests) {
+      if (!merged.find(r => r.id === request.id)) {
+        merged.push(request);
+      }
+    }
+
+    const pendingCount = merged.filter(
       (r) => r.status === "pending_approval"
     ).length;
     if (pendingCount > 0 && !notificationDismissed && !showNotificationToast) {

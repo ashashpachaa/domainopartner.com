@@ -31,13 +31,36 @@ export default function AdminSalesReport() {
       }));
   }, []);
 
+  // Calculate date range for filtering
+  const getDateRange = () => {
+    const now = new Date();
+    let startDate = new Date();
+    let endDate = new Date();
+
+    if (dateRange === "month") {
+      startDate.setMonth(now.getMonth() - 1);
+    } else if (dateRange === "quarter") {
+      startDate.setMonth(now.getMonth() - 3);
+    } else if (dateRange === "year") {
+      startDate.setFullYear(now.getFullYear() - 1);
+    } else if (dateRange === "custom") {
+      if (customStartDate) startDate = new Date(customStartDate);
+      if (customEndDate) endDate = new Date(customEndDate);
+      endDate.setHours(23, 59, 59, 999);
+    }
+
+    return { startDate, endDate };
+  };
+
   // Calculate per-staff metrics
   const staffMetrics = useMemo(() => {
+    const { startDate, endDate } = getDateRange();
     const metrics: Record<
       string,
       {
         staffId: string;
         staffName: string;
+        department: string;
         ordersCreated: number;
         totalOrderValue: number;
         avgOrderValue: number;
@@ -54,11 +77,15 @@ export default function AdminSalesReport() {
       const salesStaffId = order.assignedToSalesId;
       if (!salesStaffId) return;
 
+      const orderDate = new Date(order.createdAt);
+      if (orderDate < startDate || orderDate > endDate) return;
+
       if (!metrics[salesStaffId]) {
         const staff = mockStaff.find((s) => s.id === salesStaffId);
         metrics[salesStaffId] = {
           staffId: salesStaffId,
           staffName: staff ? `${staff.firstName} ${staff.lastName}` : "Unknown",
+          department: staff?.department || "Unknown",
           ordersCreated: 0,
           totalOrderValue: 0,
           avgOrderValue: 0,
@@ -76,7 +103,6 @@ export default function AdminSalesReport() {
 
     // Process invoices
     mockInvoices.forEach((invoice) => {
-      // Find which sales staff created this invoice (via associated order/user)
       const order = mockOrders.find((o) => o.userId === invoice.userId);
       const salesStaffId = order?.assignedToSalesId;
 
@@ -99,8 +125,21 @@ export default function AdminSalesReport() {
       data.avgOrderValue = data.ordersCreated > 0 ? Math.round(data.totalOrderValue / data.ordersCreated) : 0;
     });
 
-    return Object.values(metrics).sort((a, b) => b.totalOrderValue - a.totalOrderValue);
-  }, []);
+    // Filter by staff search and department
+    let filtered = Object.values(metrics);
+    if (staffSearch) {
+      filtered = filtered.filter(
+        (s) =>
+          s.staffName.toLowerCase().includes(staffSearch.toLowerCase()) ||
+          s.department.toLowerCase().includes(staffSearch.toLowerCase())
+      );
+    }
+    if (departmentFilter) {
+      filtered = filtered.filter((s) => s.department === departmentFilter);
+    }
+
+    return filtered.sort((a, b) => b.totalOrderValue - a.totalOrderValue);
+  }, [dateRange, customStartDate, customEndDate, staffSearch, departmentFilter]);
 
   const globalMetrics = {
     totalSales: mockOrders.reduce((sum, o) => sum + (o.amount || 0), 0),

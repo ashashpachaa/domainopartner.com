@@ -1233,12 +1233,16 @@ export default function AdminOperationDetail() {
               </p>
             </div>
 
-            {/* Amount & Currency */}
+            {/* Amount & Currency - Only visible to Sales and Admin */}
             <div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
               <p className="text-xs font-semibold text-slate-600 uppercase mb-2">Amount</p>
-              <p className="text-lg font-bold text-slate-900">
-                {order.currency} {order.amount.toLocaleString()}
-              </p>
+              {isSalesStaff || isAdmin ? (
+                <p className="text-lg font-bold text-slate-900">
+                  {order.currency} {order.amount.toLocaleString()}
+                </p>
+              ) : (
+                <p className="text-sm text-slate-500 italic">Restricted - Sales & Admin Only</p>
+              )}
             </div>
           </div>
 

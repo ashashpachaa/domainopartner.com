@@ -88,3 +88,78 @@ export async function handleCompanySearch(req: any, res: any) {
     });
   }
 }
+
+export async function handleCompanyDetails(req: any, res: any) {
+  const { companyNumber } = req.query;
+
+  if (!companyNumber || companyNumber.trim().length === 0) {
+    return res.status(400).json({
+      error: "Company number is required",
+    });
+  }
+
+  const apiKey = process.env.COMPANIES_HOUSE_API_KEY;
+  if (!apiKey) {
+    return res.status(500).json({
+      error: "Companies House API key not configured",
+    });
+  }
+
+  try {
+    const detailsUrl = `https://api.companieshouse.gov.uk/company/${companyNumber}`;
+
+    const response = await fetch(detailsUrl, {
+      method: "GET",
+      headers: {
+        Authorization: `Basic ${Buffer.from(apiKey + ":").toString("base64")}`,
+        Accept: "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      console.error(`Companies House API error: ${response.status} ${response.statusText}`);
+      return res.status(response.status).json({
+        error: `Failed to fetch company details: ${response.statusText}`,
+        status: response.status,
+      });
+    }
+
+    const data = await response.json();
+
+    const incorporationDate = data.date_of_creation ? new Date(data.date_of_creation).toISOString().split('T')[0] : null;
+
+    // Calculate next renewal date (3 years from incorporation or anniversary)
+    let nextRenewalDate = null;
+    if (incorporationDate) {
+      const incDate = new Date(incorporationDate);
+      const nextRenewal = new Date(incDate.getFullYear() + 3, incDate.getMonth(), incDate.getDate());
+      nextRenewalDate = nextRenewal.toISOString().split('T')[0];
+    }
+
+    // Get accounts filing date
+    const accountsFilingDate = data.accounts?.next_made_up_to
+      ? new Date(data.accounts.next_made_up_to).toISOString().split('T')[0]
+      : null;
+
+    res.json({
+      companyNumber: data.company_number,
+      companyName: data.company_name,
+      status: data.company_status,
+      incorporationDate: incorporationDate,
+      registeredOffice: data.registered_office_address,
+      sic: data.sic_codes,
+      accounts: {
+        nextFilingDate: accountsFilingDate,
+        nextDueDate: data.accounts?.next_accounts?.due_on,
+      },
+      nextRenewalDate: nextRenewalDate,
+      fullDetails: data,
+    });
+  } catch (error: any) {
+    console.error("Companies House API error:", error);
+    res.status(500).json({
+      error: "Failed to fetch company details",
+      details: error.message,
+    });
+  }
+}

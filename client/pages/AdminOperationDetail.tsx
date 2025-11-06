@@ -2417,10 +2417,27 @@ export default function AdminOperationDetail() {
                         updatedOrder.trackingNumber = trackingNumber;
                         updatedOrder.trackingNumberAddedBy = effectiveUserId;
                         updatedOrder.trackingNumberAddedAt = new Date().toISOString();
+                        updatedOrder.completedServices.shippingComplete = true;
+                        updatedOrder.status = "completed";
+
+                        // Add history entry for status transition
+                        const historyEntry: OrderHistory = {
+                          id: `H-${Date.now()}`,
+                          orderId: orderId!,
+                          previousStatus: "shipping_preparation",
+                          newStatus: "completed",
+                          actionType: "status_transition",
+                          actionBy: effectiveUserId,
+                          actionByName: currentStaff?.firstName + " " + currentStaff?.lastName || "Unknown",
+                          createdAt: new Date().toISOString(),
+                          details: `Tracking number added: ${trackingNumber}`,
+                        };
+                        updatedOrder.history.push(historyEntry);
+
                         setOrder(updatedOrder);
                         localStorage.setItem(`order_${orderId}`, JSON.stringify(updatedOrder));
                         setTrackingNumber("");
-                        alert("Tracking number added successfully!");
+                        alert("Tracking number added successfully! Order marked as completed.");
                       } else {
                         alert("Please enter a tracking number");
                       }

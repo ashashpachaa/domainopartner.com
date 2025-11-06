@@ -149,6 +149,22 @@ export default function AdminCreateOrder() {
       return;
     }
 
+    // Company name validation for company-related services
+    if (formData.serviceType?.toLowerCase().includes("company")) {
+      if (!companyName.trim()) {
+        toast.error("Company name is required for company formation orders");
+        return;
+      }
+      if (companyValidation.isAvailable === false) {
+        toast.error("This company name is already registered. Please choose a different name.");
+        return;
+      }
+      if (companyValidation.isAvailable === null) {
+        toast.error("Please wait for company name availability check to complete");
+        return;
+      }
+    }
+
     const orderId = formData.id || `O${String(nextOrderNum).padStart(3, "0")}`;
 
     // Get selected product to set requiredServices

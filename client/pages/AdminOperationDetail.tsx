@@ -23,6 +23,7 @@ export default function AdminOperationDetail() {
   const navigate = useNavigate();
   const [trackingInput, setTrackingInput] = useState("");
   const [fileNotes, setFileNotes] = useState("");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [rejectReason, setRejectReason] = useState("");
   const [showRejectForm, setShowRejectForm] = useState(false);
   const [activeTab, setActiveTab] = useState<"workflow" | "apostille" | "history">("workflow");
@@ -199,25 +200,46 @@ export default function AdminOperationDetail() {
   };
 
   const handleFileUpload = () => {
-    if (fileNotes.trim()) {
-      const currentStaff = mockStaff.find((s) => s.id === currentUserId);
-      const newFile = {
-        id: `F${order.operationFiles.length + 1}`,
-        orderId: order.id,
-        fileName: `Document_${new Date().getTime()}.pdf`,
-        fileSize: Math.random() * 5000000, // Random size in bytes
-        uploadedBy: currentUserId,
-        uploadedByName: currentStaff?.firstName + " " + currentStaff?.lastName || "Unknown",
-        uploadedAt: new Date().toISOString(),
-        stage: getFileStageFromStatus(order.status),
-        fileType: "document" as any,
-        description: fileNotes,
-      };
+    if (!selectedFile) {
+      alert("Please select a file first");
+      return;
+    }
 
-      order.operationFiles.push(newFile);
-      setFileNotes("");
-      alert("File uploaded successfully!");
-      window.location.reload();
+    if (!fileNotes.trim()) {
+      alert("Please add a description for the file");
+      return;
+    }
+
+    const currentStaff = mockStaff.find((s) => s.id === currentUserId);
+    const newFile = {
+      id: `F${order.operationFiles.length + 1}`,
+      orderId: order.id,
+      fileName: selectedFile.name,
+      fileSize: selectedFile.size,
+      uploadedBy: currentUserId,
+      uploadedByName: currentStaff?.firstName + " " + currentStaff?.lastName || "Unknown",
+      uploadedAt: new Date().toISOString(),
+      stage: getFileStageFromStatus(order.status),
+      fileType: "document" as any,
+      description: fileNotes,
+    };
+
+    order.operationFiles.push(newFile);
+    setFileNotes("");
+    setSelectedFile(null);
+    alert("File uploaded successfully!");
+    window.location.reload();
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const maxSize = 10 * 1024 * 1024; // 10MB
+      if (file.size > maxSize) {
+        alert("File size exceeds 10MB limit");
+        return;
+      }
+      setSelectedFile(file);
     }
   };
 

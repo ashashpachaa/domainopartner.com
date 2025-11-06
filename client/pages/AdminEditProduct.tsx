@@ -47,6 +47,16 @@ export default function AdminEditProduct() {
           [field]: checked,
         },
       }));
+    } else if (name === "duration") {
+      // Auto-append " business days" only if not already present
+      let finalValue = value;
+      if (value && !value.endsWith(" business days")) {
+        finalValue = value + " business days";
+      }
+      setFormData((prev) => ({
+        ...prev,
+        [name]: finalValue,
+      }));
     } else {
       setFormData((prev) => ({
         ...prev,

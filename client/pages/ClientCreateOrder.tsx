@@ -12,6 +12,8 @@ export default function ClientCreateOrder() {
   const navigate = useNavigate();
   const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
 
+  const companyValidation = useCompanyNameValidation();
+
   const [formData, setFormData] = useState({
     description: "",
     productId: "",

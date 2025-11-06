@@ -7,6 +7,15 @@ export interface Permission {
   description: string;
 }
 
+export type WorkflowStage = "sales" | "operation" | "manager" | "client" | "shipping";
+
+export interface WorkflowPermission {
+  stage: WorkflowStage;
+  label: string;
+  description: string;
+  canAccess: boolean;
+}
+
 export interface Staff {
   id: string;
   firstName: string;
@@ -18,6 +27,7 @@ export interface Staff {
   joinDate: string;
   lastLogin: string;
   phone: string;
+  workflowPermissions?: WorkflowPermission[];
 }
 
 export interface User {

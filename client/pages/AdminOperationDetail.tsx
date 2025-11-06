@@ -449,50 +449,50 @@ export default function AdminOperationDetail() {
     let stageName = "";
     let daysAllowed = 0;
 
+    // Get deadline config from stageDeadlines array
+    const deadlineConfig = stageDeadlines.find((d) => d.stageId === order.status);
+
     switch (order.status) {
       case "new":
         stageName = "Order Created";
-        daysAllowed = 3;
-        deadlineDate = addBusinessDays(createdDate, 3); // 3 days to assign to sales
-        affectedStaffId = null; // Waiting for admin/sales to assign
+        daysAllowed = deadlineConfig?.daysAllowed || 3;
+        deadlineDate = addBusinessDays(createdDate, daysAllowed);
+        affectedStaffId = null;
         break;
       case "pending_sales_review":
         stageName = "Sales Review";
-        daysAllowed = 0.25; // 6 hours
-        deadlineDate = new Date(createdDate.getTime() + 6 * 60 * 60 * 1000);
+        daysAllowed = deadlineConfig?.daysAllowed || 0.25;
+        // For hours (less than 1 day), use milliseconds; for days, use addBusinessDays
+        if (daysAllowed < 1) {
+          deadlineDate = new Date(createdDate.getTime() + daysAllowed * 24 * 60 * 60 * 1000);
+        } else {
+          deadlineDate = addBusinessDays(createdDate, daysAllowed);
+        }
         affectedStaffId = order.assignedToSalesId || null;
         break;
       case "pending_operation":
         stageName = "Operation Processing";
-        daysAllowed = 3;
-        deadlineDate = addBusinessDays(createdDate, 3);
+        daysAllowed = deadlineConfig?.daysAllowed || 3;
+        deadlineDate = addBusinessDays(createdDate, daysAllowed);
         affectedStaffId = order.assignedToOperationId || null;
         break;
       case "pending_operation_manager_review":
         stageName = "Manager Review";
-        daysAllowed = 1;
-        deadlineDate = addBusinessDays(createdDate, 4); // 3 days operation + 1 day manager
+        daysAllowed = deadlineConfig?.daysAllowed || 1;
+        deadlineDate = addBusinessDays(createdDate, daysAllowed);
         affectedStaffId = order.assignedToManagerId || null;
         break;
       case "awaiting_client_acceptance":
         stageName = "Client Acceptance Review";
-        daysAllowed = 1;
-        deadlineDate = addBusinessDays(createdDate, 5); // 3 days operation + 1 day manager + 1 day sales
+        daysAllowed = deadlineConfig?.daysAllowed || 1;
+        deadlineDate = addBusinessDays(createdDate, daysAllowed);
         affectedStaffId = order.assignedToSalesId || null;
         break;
       case "shipping_preparation":
-        // If apostille required, deadline is 1 day for apostille, then 2 days for tracking
-        if (product?.services.hasApostille) {
-          stageName = "Apostille Processing";
-          daysAllowed = 1;
-          deadlineDate = addBusinessDays(createdDate, 7); // 3 + 1 + 1 + 1 + 1 (apostille)
-          affectedStaffId = order.assignedToManagerId || null;
-        } else {
-          stageName = "Shipping Preparation";
-          daysAllowed = 2;
-          deadlineDate = addBusinessDays(createdDate, 8); // Total for tracking
-          affectedStaffId = order.assignedToManagerId || null;
-        }
+        stageName = product?.services.hasApostille ? "Apostille Processing" : "Shipping Preparation";
+        daysAllowed = deadlineConfig?.daysAllowed || 2;
+        deadlineDate = addBusinessDays(createdDate, daysAllowed);
+        affectedStaffId = order.assignedToManagerId || null;
         break;
       default:
         return {

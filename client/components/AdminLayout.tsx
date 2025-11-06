@@ -118,6 +118,17 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             {sidebarOpen && <span className="font-medium">Attendance</span>}
           </Link>
           <Link
+            to="/admin/companies"
+            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition ${
+              isActive("/admin/companies")
+                ? "bg-primary-600 text-white"
+                : "text-slate-400 hover:bg-slate-800"
+            }`}
+          >
+            <Building2 className="w-5 h-5" />
+            {sidebarOpen && <span className="font-medium">Companies</span>}
+          </Link>
+          <Link
             to="/admin/sales/report"
             className={`flex items-center gap-3 px-4 py-3 rounded-lg transition ${
               isActive("/admin/sales/report")

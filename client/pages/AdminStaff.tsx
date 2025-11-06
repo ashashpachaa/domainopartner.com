@@ -37,6 +37,8 @@ export default function AdminStaff() {
   const [staff, setStaff] = useState<Staff[]>(mockStaff);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterRole, setFilterRole] = useState<StaffRole | "all">("all");
+  const [filterDepartment, setFilterDepartment] = useState<string>("");
+  const [filterStatus, setFilterStatus] = useState<string>("all");
 
   const filteredStaff = staff
     .filter((member) => {

@@ -26,10 +26,20 @@ export default function AdminProducts() {
       product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       product.description.toLowerCase().includes(searchTerm.toLowerCase());
 
-    const matchesFilter =
+    const matchesStatusFilter =
       filterStatus === "all" || product.status === filterStatus;
 
-    return matchesSearch && matchesFilter;
+    const matchesServiceFilter = !serviceFilter || (
+      (serviceFilter === "apostille" && product.services.hasApostille) ||
+      (serviceFilter === "poa" && product.services.hasPOA) ||
+      (serviceFilter === "shipping" && product.services.hasShipping) ||
+      (serviceFilter === "no-services" &&
+        !product.services.hasApostille &&
+        !product.services.hasPOA &&
+        !product.services.hasShipping)
+    );
+
+    return matchesSearch && matchesStatusFilter && matchesServiceFilter;
   });
 
   const deleteProduct = (productId: string) => {

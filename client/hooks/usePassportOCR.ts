@@ -59,23 +59,35 @@ export function usePassportOCR() {
       setProgress(80);
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        let errorMessage = errorData.error || "Failed to process passport image";
+        let errorMessage = "Failed to process passport image";
 
-        // Map error codes to user-friendly messages
-        if (errorData.code === "BILLING_NOT_ENABLED") {
-          errorMessage =
-            "Google API not ready yet. Please wait 5-10 minutes after enabling billing and try again.";
-        } else if (errorData.code === "CREDENTIAL_ERROR") {
-          errorMessage = "Server configuration error. Please contact support.";
-        } else if (errorData.code === "INVALID_FORMAT") {
-          errorMessage = "Invalid image format. Please upload a clear JPG, PNG, or PDF of the passport.";
-        } else if (errorData.code === "TIMEOUT") {
-          errorMessage = "Extraction took too long. Please try with a clearer or smaller image.";
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.error || errorMessage;
+
+          // Map error codes to user-friendly messages
+          if (errorData.code === "BILLING_NOT_ENABLED") {
+            errorMessage =
+              "Google API not ready yet. Please wait 5-10 minutes after enabling billing and try again.";
+          } else if (errorData.code === "CREDENTIAL_ERROR") {
+            errorMessage = "Server configuration error. Please contact support.";
+          } else if (errorData.code === "INVALID_FORMAT") {
+            errorMessage = "Invalid image format. Please upload a clear JPG, PNG, or PDF of the passport.";
+          } else if (errorData.code === "TIMEOUT") {
+            errorMessage = "Extraction took too long. Please try with a clearer or smaller image.";
+          }
+
+          console.error("OCR Error Details:", {
+            status: response.status,
+            code: errorData.code,
+            message: errorData.error,
+          });
+        } catch (parseError) {
+          console.error("Failed to parse OCR error response:", parseError);
+          errorMessage = `Server error (${response.status}): Failed to process image`;
         }
 
         toast.error(errorMessage);
-        console.error("OCR Error Response:", errorData);
         setIsProcessing(false);
         setProgress(0);
         return null;

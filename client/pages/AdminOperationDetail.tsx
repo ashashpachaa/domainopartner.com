@@ -125,7 +125,7 @@ export default function AdminOperationDetail() {
   const getWorkflowStages = () => {
     const stages: Array<{ id: string; label: string; icon: string; requiresUpload?: boolean }> = [
       { id: "new", label: "Order Created", icon: "📋" },
-      { id: "pending_sales_review", label: "Sales Review", icon: "👤" },
+      { id: "pending_sales_review", label: "Sales Review", icon: "��" },
       { id: "pending_operation", label: "Operation Process", icon: "⚙️" },
       { id: "pending_operation_manager_review", label: "Manager Review", icon: "✓" },
       { id: "awaiting_client_acceptance", label: "Client Acceptance", icon: "����" },
@@ -2539,74 +2539,87 @@ export default function AdminOperationDetail() {
         {activeTab === "shipping" && (
           <div className="space-y-6">
             {product?.services.hasShipping ? (
-              order.status === "shipping_preparation" ? (
-                <div className="bg-white rounded-lg p-6 border border-slate-200">
-                  <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-                    <Package className="w-5 h-5 text-primary-600" />
-                    Shipping & Tracking
-                  </h3>
-                  <p className="text-sm text-slate-600 mb-6">
-                    Add tracking number for this shipment.
-                  </p>
+              <>
+                {order.status === "shipping_preparation" && (
+                  <div className="bg-white rounded-lg p-6 border border-slate-200">
+                    <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                      <Package className="w-5 h-5 text-primary-600" />
+                      Shipping & Tracking
+                    </h3>
+                    <p className="text-sm text-slate-600 mb-6">
+                      Add tracking number for this shipment.
+                    </p>
 
-                  {/* Tracking Number Input */}
-                  <div className="mb-6">
-                    <label className="block text-sm font-medium text-slate-900 mb-2">
-                      Tracking Number *
-                    </label>
-                    <input
-                      type="text"
-                      value={trackingNumber}
-                      onChange={(e) => setTrackingNumber(e.target.value)}
-                      placeholder="Enter shipping tracking number (e.g., DHL123456789)"
-                      className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500"
-                    />
-                    <p className="text-xs text-slate-600 mt-1">
-                      Enter the courier tracking number for this shipment
+                    {/* Tracking Number Input */}
+                    <div className="mb-6">
+                      <label className="block text-sm font-medium text-slate-900 mb-2">
+                        Tracking Number *
+                      </label>
+                      <input
+                        type="text"
+                        value={trackingNumber}
+                        onChange={(e) => setTrackingNumber(e.target.value)}
+                        placeholder="Enter shipping tracking number (e.g., DHL123456789)"
+                        className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500"
+                      />
+                      <p className="text-xs text-slate-600 mt-1">
+                        Enter the courier tracking number for this shipment
+                      </p>
+                    </div>
+
+                    <Button
+                      onClick={() => {
+                        if (trackingNumber.trim()) {
+                          const updatedOrder = { ...order };
+                          updatedOrder.trackingNumber = trackingNumber;
+                          updatedOrder.trackingNumberAddedBy = effectiveUserId;
+                          updatedOrder.trackingNumberAddedAt = new Date().toISOString();
+                          updatedOrder.completedServices.shippingComplete = true;
+                          updatedOrder.status = "completed";
+
+                          // Add history entry for status transition
+                          const historyEntry: OrderHistory = {
+                            id: `H-${Date.now()}`,
+                            orderId: orderId!,
+                            previousStatus: "shipping_preparation",
+                            newStatus: "completed",
+                            actionType: "status_transition",
+                            actionBy: effectiveUserId,
+                            actionByName: currentStaff?.firstName + " " + currentStaff?.lastName || "Unknown",
+                            createdAt: new Date().toISOString(),
+                            details: `Tracking number added: ${trackingNumber}`,
+                          };
+                          updatedOrder.history.push(historyEntry);
+
+                          setOrder(updatedOrder);
+                          localStorage.setItem(`order_${orderId}`, JSON.stringify(updatedOrder));
+                          setTrackingNumber("");
+                          alert("Tracking number added successfully! Order marked as completed.");
+                        } else {
+                          alert("Please enter a tracking number");
+                        }
+                      }}
+                      className="w-full bg-primary-600 hover:bg-primary-700"
+                    >
+                      <Save className="w-4 h-4 mr-2" />
+                      Add Tracking Number
+                    </Button>
+                  </div>
+                )}
+
+                {order.status !== "shipping_preparation" && !order.trackingNumber && (
+                  <div className="bg-amber-50 rounded-lg p-6 border border-amber-200">
+                    <p className="text-amber-900">
+                      No tracking number added yet. Tracking numbers can only be added during the Shipping stage.
                     </p>
                   </div>
+                )}
 
-                  <Button
-                    onClick={() => {
-                      if (trackingNumber.trim()) {
-                        const updatedOrder = { ...order };
-                        updatedOrder.trackingNumber = trackingNumber;
-                        updatedOrder.trackingNumberAddedBy = effectiveUserId;
-                        updatedOrder.trackingNumberAddedAt = new Date().toISOString();
-                        updatedOrder.completedServices.shippingComplete = true;
-                        updatedOrder.status = "completed";
-
-                        // Add history entry for status transition
-                        const historyEntry: OrderHistory = {
-                          id: `H-${Date.now()}`,
-                          orderId: orderId!,
-                          previousStatus: "shipping_preparation",
-                          newStatus: "completed",
-                          actionType: "status_transition",
-                          actionBy: effectiveUserId,
-                          actionByName: currentStaff?.firstName + " " + currentStaff?.lastName || "Unknown",
-                          createdAt: new Date().toISOString(),
-                          details: `Tracking number added: ${trackingNumber}`,
-                        };
-                        updatedOrder.history.push(historyEntry);
-
-                        setOrder(updatedOrder);
-                        localStorage.setItem(`order_${orderId}`, JSON.stringify(updatedOrder));
-                        setTrackingNumber("");
-                        alert("Tracking number added successfully! Order marked as completed.");
-                      } else {
-                        alert("Please enter a tracking number");
-                      }
-                    }}
-                    className="w-full bg-primary-600 hover:bg-primary-700"
-                  >
-                    <Save className="w-4 h-4 mr-2" />
-                    Add Tracking Number
-                  </Button>
-
-                  {/* Current Tracking Info */}
-                  {order.trackingNumber && (
-                    <div className="mt-6 p-4 bg-green-50 rounded-lg border border-green-200">
+                {/* Current Tracking Info - Always visible */}
+                {order.trackingNumber && (
+                  <div className="bg-white rounded-lg p-6 border border-slate-200">
+                    <h4 className="font-semibold text-slate-900 mb-4">Tracking Information</h4>
+                    <div className="p-4 bg-green-50 rounded-lg border border-green-200">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <p className="font-medium text-slate-900">Tracking Number</p>
@@ -2621,15 +2634,9 @@ export default function AdminOperationDetail() {
                         <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0" />
                       </div>
                     </div>
-                  )}
-                </div>
-              ) : (
-                <div className="bg-amber-50 rounded-lg p-6 border border-amber-200">
-                  <p className="text-amber-900">
-                    Shipping tracking is only available when the order is in the Shipping stage.
-                  </p>
-                </div>
-              )
+                  </div>
+                )}
+              </>
             ) : (
               <div className="bg-slate-50 rounded-lg p-6 border border-slate-200">
                 <p className="text-slate-600">

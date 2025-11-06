@@ -68,6 +68,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/staff/dashboard" element={<StaffDashboard />} />
 
           {/* Admin Routes */}

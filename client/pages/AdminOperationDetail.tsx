@@ -311,12 +311,19 @@ export default function AdminOperationDetail() {
       "pending_operation": "Operation",
       "pending_operation_manager_review": "Manager Review",
       "awaiting_client_acceptance": "Client Acceptance",
-      "shipping_preparation": "Shipping Preparation",
+      "pending_apostille": "Apostille Processing",
+      "pending_poa": "Power of Attorney",
+      "pending_financial_report": "Financial Report",
+      "shipping_preparation": "Shipping & Tracking",
       "completed": "Completed",
       "rejected_by_sales": "Rejected by Sales",
       "rejected_by_operation": "Rejected by Operation",
       "rejected_by_operation_manager": "Rejected by Manager",
       "rejected_by_client": "Rejected by Client",
+      "rejected_by_apostille": "Rejected by Apostille",
+      "rejected_by_poa": "Rejected by POA",
+      "rejected_by_financial_report": "Rejected by Financial Report",
+      "rejected_by_shipping": "Rejected by Shipping",
     };
     return labels[status] || status;
   };

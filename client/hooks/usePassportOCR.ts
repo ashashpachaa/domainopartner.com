@@ -49,27 +49,44 @@ export function usePassportOCR() {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 second timeout
 
-      const response = await fetch("/api/ocr/passport", {
-        method: "POST",
-        body: formData,
-        signal: controller.signal,
-      });
+      let response: Response;
+      try {
+        response = await fetch("/api/ocr/passport", {
+          method: "POST",
+          body: formData,
+          signal: controller.signal,
+        });
+      } catch (fetchError) {
+        clearTimeout(timeoutId);
+        setIsProcessing(false);
+        setProgress(0);
+
+        if (fetchError instanceof DOMException && fetchError.name === "AbortError") {
+          toast.error("Request timed out. The file may be too large or the service is slow. Try a clearer image or smaller file.");
+        } else if (fetchError instanceof Error && fetchError.message.includes("Failed to fetch")) {
+          toast.error("Network error. Please check your connection and try again.");
+        } else {
+          toast.error("Failed to connect to OCR service. Please try again.");
+        }
+        return null;
+      }
 
       clearTimeout(timeoutId);
       setProgress(80);
 
-      // Parse response body once
+      // Parse response body only once - critical to avoid stream errors
       let responseData: any;
       try {
         responseData = await response.json();
       } catch (parseError) {
-        console.error("Failed to parse response:", parseError);
-        toast.error("Server communication error. Please try again.");
         setIsProcessing(false);
         setProgress(0);
+        console.error("Failed to parse response:", parseError);
+        toast.error("Server returned invalid response. Please try again.");
         return null;
       }
 
+      // Now check response status after we've successfully parsed it
       if (!response.ok) {
         let errorMessage = responseData?.error || "Failed to process passport image";
 
@@ -97,15 +114,16 @@ export function usePassportOCR() {
         return null;
       }
 
-      const result = responseData;
-      setProgress(90);
-
-      if (!result.success || !result.data) {
+      // Validate response structure
+      if (!responseData?.success || !responseData?.data) {
         toast.error("Could not extract passport data from the image");
         setIsProcessing(false);
         setProgress(0);
         return null;
       }
+
+      setProgress(90);
+      const result = responseData.data as ExtractedPassportData;
 
       setProgress(100);
       setTimeout(() => {
@@ -114,33 +132,20 @@ export function usePassportOCR() {
       }, 500);
 
       // Show success toast if confidence is high
-      if (result.data.confidence >= 0.7) {
-        toast.success(`Extracted with ${Math.round(result.data.confidence * 100)}% confidence`);
-      } else if (result.data.confidence >= 0.4) {
-        toast.warning(`Low confidence (${Math.round(result.data.confidence * 100)}%). Please verify data.`);
+      if (result.confidence >= 0.7) {
+        toast.success(`Extracted with ${Math.round(result.confidence * 100)}% confidence`);
+      } else if (result.confidence >= 0.4) {
+        toast.warning(`Low confidence (${Math.round(result.confidence * 100)}%). Please verify data.`);
       } else {
         toast.info("Limited data extracted. Please review and correct manually.");
       }
 
-      return result.data;
+      return result;
     } catch (error) {
-      console.error("OCR Error:", error);
       setIsProcessing(false);
       setProgress(0);
-
-      // Provide helpful error message
-      if (error instanceof DOMException && error.name === "AbortError") {
-        toast.error("Request timed out. The file may be too large or the service is slow. Try a clearer image or smaller file.");
-      } else if (error instanceof Error) {
-        if (error.message.includes("fetch")) {
-          toast.error("Network error. Please check your connection and try again.");
-        } else {
-          toast.error("Failed to process image. Please try again.");
-        }
-      } else {
-        toast.error("Failed to process image. Please try again.");
-      }
-
+      console.error("OCR Processing Error:", error);
+      toast.error("Failed to process image. Please try again.");
       return null;
     }
   };

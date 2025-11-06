@@ -183,8 +183,8 @@ const App = () => (
             element={<AdminRoute element={<AdminCommissionPayroll />} />}
           />
           <Route
-            path="/staff/dashboard"
-            element={<ProtectedRoute element={<StaffFinancialDashboard />} />}
+            path="/staff/financial-dashboard"
+            element={<StaffFinancialDashboard />}
           />
 
           {/* Catch-all */}

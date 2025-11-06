@@ -64,7 +64,14 @@ export default function AdminOperations() {
       pending_operation: "bg-yellow-100 text-yellow-800",
       pending_operation_manager_review: "bg-orange-100 text-orange-800",
       awaiting_client_acceptance: "bg-purple-100 text-purple-800",
+      pending_apostille: "bg-indigo-100 text-indigo-800",
+      rejected_by_apostille: "bg-red-100 text-red-800",
+      pending_poa: "bg-indigo-100 text-indigo-800",
+      rejected_by_poa: "bg-red-100 text-red-800",
+      pending_financial_report: "bg-indigo-100 text-indigo-800",
+      rejected_by_financial_report: "bg-red-100 text-red-800",
       shipping_preparation: "bg-green-100 text-green-800",
+      rejected_by_shipping: "bg-red-100 text-red-800",
     };
     return colors[status] || "bg-slate-100 text-slate-800";
   };
@@ -76,7 +83,14 @@ export default function AdminOperations() {
       pending_operation: "In Operation",
       pending_operation_manager_review: "Manager Review",
       awaiting_client_acceptance: "Awaiting Client",
+      pending_apostille: "Apostille Processing",
+      rejected_by_apostille: "Rejected by Apostille",
+      pending_poa: "Power of Attorney",
+      rejected_by_poa: "Rejected by POA",
+      pending_financial_report: "Financial Report",
+      rejected_by_financial_report: "Rejected by Financial Report",
       shipping_preparation: "Shipping Prep",
+      rejected_by_shipping: "Rejected by Shipping",
     };
     return labels[status] || status;
   };

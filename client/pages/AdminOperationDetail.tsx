@@ -470,12 +470,15 @@ export default function AdminOperationDetail() {
     setSelectedFiles(selectedFiles.filter((_, i) => i !== index));
   };
 
-  const getFileStageFromStatus = (status: string): "sales" | "operation" | "manager" | "apostille" => {
-    const stageMap: { [key: string]: "sales" | "operation" | "manager" | "apostille" } = {
+  const getFileStageFromStatus = (status: string): "sales" | "operation" | "manager" | "apostille" | "poa" | "financial_report" | "shipping" => {
+    const stageMap: { [key: string]: "sales" | "operation" | "manager" | "apostille" | "poa" | "financial_report" | "shipping" } = {
       "pending_sales_review": "sales",
       "pending_operation": "operation",
       "pending_operation_manager_review": "manager",
-      "shipping_preparation": "apostille",
+      "pending_apostille": "apostille",
+      "pending_poa": "poa",
+      "pending_financial_report": "financial_report",
+      "shipping_preparation": "shipping",
       "awaiting_client_acceptance": "manager",
     };
     return stageMap[status] || "operation";

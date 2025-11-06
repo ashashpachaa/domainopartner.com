@@ -1672,6 +1672,79 @@ export default function AdminOperationDetail() {
               </div>
             )}
 
+            {/* Operation Review Form - Completed View */}
+            {order.operationReviewForm?.isCompleted && (
+              <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg p-8 border-2 border-green-200">
+                <h3 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+                  <CheckCircle2 className="w-6 h-6 text-green-600" />
+                  Operation Review Form (Completed)
+                </h3>
+
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Submitted By */}
+                    <div className="bg-white rounded-lg p-4 border border-green-200">
+                      <p className="text-xs font-semibold text-slate-600 uppercase mb-1">Submitted By</p>
+                      <p className="text-sm font-medium text-slate-900">
+                        {order.operationReviewForm.submittedByName || "Unknown"}
+                      </p>
+                    </div>
+
+                    {/* Submitted At */}
+                    <div className="bg-white rounded-lg p-4 border border-green-200">
+                      <p className="text-xs font-semibold text-slate-600 uppercase mb-1">Submitted At</p>
+                      <p className="text-sm font-medium text-slate-900">
+                        {order.operationReviewForm.submittedAt
+                          ? new Date(order.operationReviewForm.submittedAt).toLocaleDateString("en-US", {
+                              month: "short",
+                              day: "numeric",
+                              year: "numeric",
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })
+                          : "Unknown date"}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Checkboxes Status */}
+                  <div className="bg-white rounded-lg p-6 border border-green-200">
+                    <h4 className="text-base font-semibold text-slate-900 mb-4">Quality & Compliance Checks</h4>
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-3">
+                        <div className="w-6 h-6 rounded border-2 border-green-600 bg-green-600 flex items-center justify-center flex-shrink-0">
+                          <span className="text-white text-sm font-bold">✓</span>
+                        </div>
+                        <p className="text-sm text-slate-900">Quality Check Passed</p>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className="w-6 h-6 rounded border-2 border-green-600 bg-green-600 flex items-center justify-center flex-shrink-0">
+                          <span className="text-white text-sm font-bold">✓</span>
+                        </div>
+                        <p className="text-sm text-slate-900">Documents Verified</p>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className="w-6 h-6 rounded border-2 border-green-600 bg-green-600 flex items-center justify-center flex-shrink-0">
+                          <span className="text-white text-sm font-bold">✓</span>
+                        </div>
+                        <p className="text-sm text-slate-900">Compliance Review Completed</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Notes */}
+                  <div className="bg-white rounded-lg p-6 border border-green-200">
+                    <label className="block text-base font-semibold text-slate-900 mb-3">Operation Notes</label>
+                    <div className="bg-green-50 rounded-lg p-4 border border-green-200">
+                      <p className="text-sm text-slate-700 whitespace-pre-wrap">
+                        {order.operationReviewForm.operationNotes || "No notes provided"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Operation Review Form - Only visible in Operation Processing stage */}
             {order.status === "pending_operation" && (
               <div className="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-lg p-8 border-2 border-indigo-200">

@@ -19,6 +19,7 @@ export default function AdminProducts() {
   const [products, setProducts] = useState<Product[]>(mockProducts);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState<"all" | "active" | "inactive">("all");
+  const [serviceFilter, setServiceFilter] = useState<string>("");
 
   const filteredProducts = products.filter((product) => {
     const matchesSearch =

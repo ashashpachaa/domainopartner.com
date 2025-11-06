@@ -2629,8 +2629,8 @@ export const mockOrders: Order[] = [
     clientCanViewFiles: true,
     clientCanViewTracking: true,
     comments: [
-      { id: "C018-1", orderId: "O18", author: "S006", authorName: "Robert Wilson", authorRole: "sales", content: "Order is progressing well, all documentation is in order", isInternal: false, createdAt: "2025-01-12T14:00:00Z" },
-      { id: "C018-2", orderId: "O18", author: "S002", authorName: "David Anderson", authorRole: "manager", content: "Apostille and POA documents have been processed and are ready for shipment", isInternal: false, createdAt: "2025-01-17T15:30:00Z" },
+      { id: "C018-1", orderId: "O18", commentBy: "S006", commentByName: "Robert Wilson", commentByRole: "sales", content: "Order is progressing well, all documentation is in order", isInternal: false, createdAt: "2025-01-12T14:00:00Z" },
+      { id: "C018-2", orderId: "O18", commentBy: "S002", commentByName: "David Anderson", commentByRole: "operation_manager", content: "Apostille and POA documents have been processed and are ready for shipment", isInternal: false, createdAt: "2025-01-17T15:30:00Z" },
     ],
     requiredServices: { hasApostille: true, hasShipping: true, hasPOA: true, hasFinancialReport: false },
     completedServices: { apostilleComplete: true, shippingComplete: true, poaComplete: true, financialReportComplete: false },

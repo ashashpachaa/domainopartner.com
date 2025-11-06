@@ -537,7 +537,7 @@ export default function AdminOperationDetail() {
       isApproaching,
       daysAllowed,
     };
-  }, [order.status, order.createdAt, order.assignedToSalesId, order.assignedToOperationId, order.assignedToManagerId]);
+  }, [order.status, order.createdAt, order.assignedToSalesId, order.assignedToOperationId, order.assignedToManagerId, stageDeadlines]);
 
   // Get deadline info for all stages
   const getStageDealinesInfo = useMemo(() => {

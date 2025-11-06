@@ -1556,12 +1556,12 @@ export default function AdminOperationDetail() {
                 {/* File Description */}
                 <div>
                   <label className="block text-sm font-medium text-slate-900 mb-2">
-                    File Notes/Description *
+                    Files Notes/Description *
                   </label>
                   <textarea
                     value={fileNotes}
                     onChange={(e) => setFileNotes(e.target.value)}
-                    placeholder="Describe what you're uploading (e.g., 'Tax ID documentation', 'Company registration papers', etc.)"
+                    placeholder="Describe what you're uploading (applies to all selected files). E.g., 'Tax ID documentation', 'Company registration papers', etc."
                     rows={3}
                     className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500 resize-none"
                   />

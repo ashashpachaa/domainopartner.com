@@ -40,8 +40,11 @@ function parsePassportText(text: string): ExtractedPassportData {
 
   let confidenceScore = 0;
 
-  // Common label words to filter out
-  const labelWords = new Set(["Full", "Name", "Given", "Family", "Surname", "First", "Last", "Date", "Of", "Birth", "Sex", "M", "F", "Nationality", "Passport", "Number", "Valid", "Until"]);
+  // Common label words and document text to filter out
+  const labelWords = new Set(["Full", "Name", "Given", "Family", "Surname", "First", "Last", "Date", "Of", "Birth", "Sex", "M", "F", "Nationality", "Passport", "Number", "Valid", "Until", "ARAB", "REPUBLIC", "EGYPT", "UNITED", "STATES", "KINGDOM", "ISSUING", "OFFICE", "PLACE", "TYPE"]);
+
+  // Known country and region names that shouldn't be treated as person names
+  const bannedPhrases = ["ARAB REPUBLIC", "REPUBLIC OF", "UNITED STATES", "UNITED KINGDOM", "ISSUING OFFICE", "PLACE OF", "TYPE OF", "MINISTRY OF"];
 
   // === DATE OF BIRTH EXTRACTION ===
   const datePatterns = [

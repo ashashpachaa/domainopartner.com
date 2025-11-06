@@ -2190,6 +2190,69 @@ export const mockOrders: Order[] = [
   },
 ];
 
+export const mockStageDeadlines: StageDealineConfig[] = [
+  {
+    id: "SD001",
+    stageName: "Order Created",
+    stageId: "new",
+    daysAllowed: 3,
+    description: "Time allowed for admin/sales to review and assign new order to sales team",
+    notes: "3 business days from order creation",
+    lastUpdatedBy: "S001",
+    lastUpdatedAt: "2024-01-01T10:00:00Z",
+  },
+  {
+    id: "SD002",
+    stageName: "Sales Review",
+    stageId: "pending_sales_review",
+    daysAllowed: 0.25,
+    description: "Time allowed for sales team to review client details and documents (6 hours)",
+    notes: "Quick review stage - 6 hours maximum",
+    lastUpdatedBy: "S001",
+    lastUpdatedAt: "2024-01-01T10:00:00Z",
+  },
+  {
+    id: "SD003",
+    stageName: "Operation Processing",
+    stageId: "pending_operation",
+    daysAllowed: 3,
+    description: "Time allowed for operation team to process documents and prepare files",
+    notes: "3 business days for document processing",
+    lastUpdatedBy: "S001",
+    lastUpdatedAt: "2024-01-01T10:00:00Z",
+  },
+  {
+    id: "SD004",
+    stageName: "Manager Review",
+    stageId: "pending_operation_manager_review",
+    daysAllowed: 1,
+    description: "Time allowed for operation manager to review and approve documents",
+    notes: "1 business day for manager approval",
+    lastUpdatedBy: "S001",
+    lastUpdatedAt: "2024-01-01T10:00:00Z",
+  },
+  {
+    id: "SD005",
+    stageName: "Client Acceptance",
+    stageId: "awaiting_client_acceptance",
+    daysAllowed: 1,
+    description: "Time allowed for client to review and accept the order",
+    notes: "1 business day for client to accept",
+    lastUpdatedBy: "S001",
+    lastUpdatedAt: "2024-01-01T10:00:00Z",
+  },
+  {
+    id: "SD006",
+    stageName: "Shipping & Apostille",
+    stageId: "shipping_preparation",
+    daysAllowed: 2,
+    description: "Time allowed for apostille processing and shipping preparation",
+    notes: "2 business days for final processing",
+    lastUpdatedBy: "S001",
+    lastUpdatedAt: "2024-01-01T10:00:00Z",
+  },
+];
+
 export const mockInvoices: Invoice[] = [
   {
     id: "INV001",

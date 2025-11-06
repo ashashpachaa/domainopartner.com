@@ -57,6 +57,12 @@ const AdminRoute = ({ element }: { element: React.ReactNode }) => {
   return isAuthenticated ? element : <Navigate to="/admin/login" replace />;
 };
 
+// Protected route component for client pages
+const ProtectedRoute = ({ element }: { element: React.ReactNode }) => {
+  const currentUser = localStorage.getItem("currentUser");
+  return currentUser ? element : <Navigate to="/signin" replace />;
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>

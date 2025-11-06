@@ -128,7 +128,7 @@ export default function AdminOperationDetail() {
       { id: "pending_sales_review", label: "Sales Review", icon: "👤" },
       { id: "pending_operation", label: "Operation Process", icon: "⚙️" },
       { id: "pending_operation_manager_review", label: "Manager Review", icon: "✓" },
-      { id: "awaiting_client_acceptance", label: "Client Acceptance", icon: "🤝" },
+      { id: "awaiting_client_acceptance", label: "Client Acceptance", icon: "����" },
     ];
 
     // Add conditional stages based on product services
@@ -1744,7 +1744,7 @@ export default function AdminOperationDetail() {
 
         {/* Tabs */}
         <div className="flex gap-2 border-b border-slate-200 overflow-x-auto">
-          {["workflow", "poa", "financial_report", "shipping", "history"].map((tab) => (
+          {["workflow", "apostille", "poa", "financial_report", "shipping", "history"].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab as any)}
@@ -1756,6 +1756,8 @@ export default function AdminOperationDetail() {
             >
               {tab === "workflow"
                 ? "Workflow & Files"
+                : tab === "apostille"
+                ? "Apostille"
                 : tab === "poa"
                 ? "POA"
                 : tab === "financial_report"

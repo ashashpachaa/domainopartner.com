@@ -28,6 +28,8 @@ export default function AdminOperationDetail() {
   const [showRejectForm, setShowRejectForm] = useState(false);
   const [activeTab, setActiveTab] = useState<"workflow" | "apostille" | "history">("workflow");
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [impersonateStaffId, setImpersonateStaffId] = useState<string>("");
+  const [adminMode, setAdminMode] = useState(true);
 
   const order = mockOrders.find((o) => o.id === orderId);
   const user = order ? mockUsers.find((u) => u.id === order.userId) : null;

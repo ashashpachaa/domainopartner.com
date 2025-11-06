@@ -30,6 +30,9 @@ export default function AdminOperationDetail() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [impersonateStaffId, setImpersonateStaffId] = useState<string>("");
   const [adminMode, setAdminMode] = useState(true);
+  const [stageDeadlines, setStageDeadlines] = useState(mockStageDeadlines);
+  const [showDeadlineSettings, setShowDeadlineSettings] = useState(false);
+  const [editingDeadlineId, setEditingDeadlineId] = useState<string | null>(null);
 
   // Load order from localStorage or mockData
   const getOrder = () => {

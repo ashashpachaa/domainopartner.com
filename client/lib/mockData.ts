@@ -251,6 +251,7 @@ export interface Order {
     poaComplete: boolean;
     financialReportComplete: boolean;
   };
+  operationReviewForm?: OperationReviewForm; // Operation stage review form
 }
 
 export type InvoiceAction = "created" | "sent" | "viewed" | "payment_received" | "payment_failed" | "reminder_sent" | "status_changed" | "cancelled";

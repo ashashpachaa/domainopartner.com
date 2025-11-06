@@ -1568,7 +1568,7 @@ export default function AdminOperationDetail() {
 
                 <Button
                   onClick={handleFileUpload}
-                  disabled={!selectedFile || !fileNotes.trim()}
+                  disabled={selectedFiles.length === 0 || !fileNotes.trim()}
                   className="w-full bg-primary-600 hover:bg-primary-700 text-white disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Upload className="w-4 h-4 mr-2" />

@@ -124,6 +124,38 @@ export default function ClientCreateOrder() {
     }
   };
 
+  const handleExtractPassportData = async () => {
+    if (!shareholderPassportFile) {
+      toast.error("Please select a passport file first");
+      return;
+    }
+
+    const extractedData = await extractPassportData(shareholderPassportFile);
+    if (!extractedData) {
+      return;
+    }
+
+    setOcrConfidence(extractedData.confidence);
+    setShowOcrResult(true);
+
+    const confidencePercent = Math.round(extractedData.confidence * 100);
+    if (confidencePercent < 50) {
+      toast.warning(`Low confidence (${confidencePercent}%). Please review extracted data.`);
+    } else if (confidencePercent >= 80) {
+      toast.success(`Data extracted with ${confidencePercent}% confidence`);
+    } else {
+      toast.info(`Data extracted with ${confidencePercent}% confidence`);
+    }
+
+    setShareholderForm((prev) => ({
+      firstName: extractedData.firstName || prev.firstName,
+      lastName: extractedData.lastName || prev.lastName,
+      dateOfBirth: extractedData.dateOfBirth || prev.dateOfBirth,
+      nationality: extractedData.nationality || prev.nationality,
+      ownershipPercentage: prev.ownershipPercentage,
+    }));
+  };
+
   const validateShareholderForm = () => {
     if (!shareholderForm.firstName.trim()) {
       toast.error("First name is required");

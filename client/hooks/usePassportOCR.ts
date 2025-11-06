@@ -69,31 +69,25 @@ export function usePassportOCR() {
       clearTimeout(timeoutId);
       setProgress(80);
 
-      // Read response as text, then parse - avoids stream conflicts
-      let responseText: string;
-      try {
-        responseText = await response.text();
-      } catch (readError) {
-        setIsProcessing(false);
-        setProgress(0);
-        console.error("Failed to read response:", readError);
-        toast.error("Server communication error. Please try again.");
-        return null;
-      }
-
-      // Parse JSON from text
+      // Clone the response to create a separate readable stream
+      const responseClone = response.clone();
+      
+      // Parse response as JSON using the clone
       let responseData: any;
       try {
-        responseData = JSON.parse(responseText);
+        responseData = await responseClone.json();
       } catch (parseError) {
         setIsProcessing(false);
         setProgress(0);
-        console.error("Failed to parse JSON:", parseError, "Text:", responseText);
-        toast.error("Server returned invalid response. Please try again.");
+        console.error("Failed to parse response:", parseError);
+        
+        // Try to get status text as fallback
+        const statusText = response.statusText || `Server error ${response.status}`;
+        toast.error(`Error: ${statusText}. Please try again.`);
         return null;
       }
 
-      // Check status
+      // Check response status
       if (!response.ok) {
         let errorMessage = responseData?.error || "Failed to process image";
 
@@ -107,7 +101,7 @@ export function usePassportOCR() {
           errorMessage = "Extraction took too long. Try a smaller image.";
         }
 
-        console.error("OCR Error:", { status: response.status, code: responseData?.code, message: errorMessage });
+        console.error("OCR Error:", { status: response.status, code: responseData?.code });
         toast.error(errorMessage);
         setIsProcessing(false);
         setProgress(0);

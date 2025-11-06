@@ -317,7 +317,39 @@ export default function AdminCommissionPayroll() {
           </div>
         </div>
 
-        {/* Commission Tiers Explanation */}
+        {/* Tab Navigation */}
+        <div className="flex gap-2 mb-8 flex-wrap">
+          <Button
+            onClick={() => setActiveTab("overview")}
+            variant={activeTab === "overview" ? "default" : "outline"}
+          >
+            <Calculator className="w-4 h-4 mr-2" />
+            Overview
+          </Button>
+          <Button
+            onClick={() => setActiveTab("daily")}
+            variant={activeTab === "daily" ? "default" : "outline"}
+          >
+            Daily Report
+          </Button>
+          <Button
+            onClick={() => setActiveTab("monthly")}
+            variant={activeTab === "monthly" ? "default" : "outline"}
+          >
+            Monthly Report
+          </Button>
+          <Button
+            onClick={() => setActiveTab("yearly")}
+            variant={activeTab === "yearly" ? "default" : "outline"}
+          >
+            Yearly Report
+          </Button>
+        </div>
+
+        {/* OVERVIEW TAB */}
+        {activeTab === "overview" && (
+          <>
+            {/* Commission Tiers Explanation */}
         <div className="bg-white rounded-lg border border-slate-200 p-6 mb-8 shadow-sm">
           <h2 className="text-lg font-bold text-slate-900 mb-4">Commission Tier Structure</h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -558,6 +590,233 @@ export default function AdminCommissionPayroll() {
             Export Commission Report
           </Button>
         </div>
+          </>
+        )}
+
+        {/* DAILY REPORT TAB */}
+        {activeTab === "daily" && (
+          <div className="space-y-8">
+            <div className="bg-white rounded-lg p-6 border border-slate-200">
+              <label className="block text-sm font-medium text-slate-700 mb-3">Select Date</label>
+              <input
+                type="date"
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
+                className="px-4 py-2 border border-slate-300 rounded-lg"
+              />
+            </div>
+
+            {dailyMetrics.length > 0 && (
+              <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
+                <table className="w-full">
+                  <thead className="bg-slate-50 border-b border-slate-200">
+                    <tr>
+                      <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">Staff</th>
+                      <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">Paid Orders</th>
+                      <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">Rejections</th>
+                      <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">Performance</th>
+                      <th className="px-6 py-4 text-right text-xs font-bold text-slate-700 uppercase">Commission</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200">
+                    {dailyMetrics.map((metric) => (
+                      <tr key={metric.staffId} className="hover:bg-slate-50">
+                        <td className="px-6 py-4 font-medium text-slate-900">{metric.staffName}</td>
+                        <td className="px-6 py-4 text-center">{metric.paidOrderCount}</td>
+                        <td className="px-6 py-4 text-center text-red-600">{metric.rejectedOrderCount}</td>
+                        <td className="px-6 py-4 text-center">
+                          <div className="w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold" style={{
+                            backgroundColor: metric.performanceScore >= 80 ? "#dcfce7" : metric.performanceScore >= 60 ? "#fef3c7" : "#fee2e2"
+                          }}>
+                            {metric.performanceScore}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 text-right font-bold text-green-600">${(metric.totalCommission / 1000).toFixed(1)}K</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+            {dailyMetrics.length === 0 && (
+              <div className="bg-white rounded-lg p-12 border border-slate-200 text-center text-slate-500">
+                No commission earned on {new Date(selectedDate).toLocaleDateString()}
+              </div>
+            )}
+
+            {dailyMetrics.length > 0 && (
+              <div className="flex justify-end">
+                <Button className="bg-blue-600 hover:bg-blue-700 flex items-center gap-2" onClick={() => {
+                  const csv = [["Daily Commission Report", selectedDate], [""], ["Staff", "Paid Orders", "Rejections", "Performance Score", "Total Commission"], ...dailyMetrics.map(m => [m.staffName, m.paidOrderCount, m.rejectedOrderCount, m.performanceScore, `$${m.totalCommission}`])].map(r => r.join(",")).join("\n");
+                  const blob = new Blob([csv], {type: "text/csv"});
+                  const url = window.URL.createObjectURL(blob);
+                  const a = document.createElement("a");
+                  a.href = url;
+                  a.download = `daily_commission_${selectedDate}.csv`;
+                  a.click();
+                }}>
+                  <Download className="w-4 h-4" />
+                  Export Daily CSV
+                </Button>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* MONTHLY REPORT TAB */}
+        {activeTab === "monthly" && (
+          <div className="space-y-8">
+            <div className="bg-white rounded-lg p-6 border border-slate-200">
+              <label className="block text-sm font-medium text-slate-700 mb-3">Select Month</label>
+              <input
+                type="month"
+                value={selectedMonth}
+                onChange={(e) => setSelectedMonth(e.target.value)}
+                className="px-4 py-2 border border-slate-300 rounded-lg"
+              />
+            </div>
+
+            {monthlyMetrics.length > 0 && (
+              <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
+                <table className="w-full">
+                  <thead className="bg-slate-50 border-b border-slate-200">
+                    <tr>
+                      <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">Staff</th>
+                      <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">Paid Orders</th>
+                      <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">Rejections</th>
+                      <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">Tier</th>
+                      <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">Performance</th>
+                      <th className="px-6 py-4 text-right text-xs font-bold text-slate-700 uppercase">Base</th>
+                      <th className="px-6 py-4 text-right text-xs font-bold text-slate-700 uppercase">Bonus</th>
+                      <th className="px-6 py-4 text-right text-xs font-bold text-slate-700 uppercase">Total</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200">
+                    {monthlyMetrics.map((metric) => (
+                      <tr key={metric.staffId} className="hover:bg-slate-50">
+                        <td className="px-6 py-4 font-medium text-slate-900">{metric.staffName}</td>
+                        <td className="px-6 py-4 text-center">{metric.paidOrderCount}</td>
+                        <td className="px-6 py-4 text-center text-red-600">{metric.rejectedOrderCount}</td>
+                        <td className="px-6 py-4 text-sm text-slate-700">{metric.appliedTier}</td>
+                        <td className="px-6 py-4 text-center">
+                          <div className="w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold" style={{
+                            backgroundColor: metric.performanceScore >= 80 ? "#dcfce7" : metric.performanceScore >= 60 ? "#fef3c7" : "#fee2e2"
+                          }}>
+                            {metric.performanceScore}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 text-right font-semibold text-slate-900">${(metric.baseCommission / 1000).toFixed(1)}K</td>
+                        <td className="px-6 py-4 text-right font-semibold text-purple-600">${(metric.performanceBonus / 1000).toFixed(1)}K</td>
+                        <td className="px-6 py-4 text-right font-bold text-green-600">${(metric.totalCommission / 1000).toFixed(1)}K</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+            {monthlyMetrics.length === 0 && (
+              <div className="bg-white rounded-lg p-12 border border-slate-200 text-center text-slate-500">
+                No commission data for {new Date(selectedMonth + "-01").toLocaleString("default", {month: "long", year: "numeric"})}
+              </div>
+            )}
+
+            {monthlyMetrics.length > 0 && (
+              <div className="flex justify-end">
+                <Button className="bg-blue-600 hover:bg-blue-700 flex items-center gap-2" onClick={() => {
+                  const csv = [["Monthly Commission Report", selectedMonth], [""], ["Staff", "Paid Orders", "Rejections", "Tier", "Performance", "Base Commission", "Bonus", "Total"], ...monthlyMetrics.map(m => [m.staffName, m.paidOrderCount, m.rejectedOrderCount, m.appliedTier, m.performanceScore, `$${m.baseCommission}`, `$${m.performanceBonus}`, `$${m.totalCommission}`])].map(r => r.join(",")).join("\n");
+                  const blob = new Blob([csv], {type: "text/csv"});
+                  const url = window.URL.createObjectURL(blob);
+                  const a = document.createElement("a");
+                  a.href = url;
+                  a.download = `monthly_commission_${selectedMonth}.csv`;
+                  a.click();
+                }}>
+                  <Download className="w-4 h-4" />
+                  Export Monthly CSV
+                </Button>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* YEARLY REPORT TAB */}
+        {activeTab === "yearly" && (
+          <div className="space-y-8">
+            <div className="bg-white rounded-lg p-6 border border-slate-200">
+              <label className="block text-sm font-medium text-slate-700 mb-3">Select Year</label>
+              <select
+                value={selectedYear}
+                onChange={(e) => setSelectedYear(e.target.value)}
+                className="px-4 py-2 border border-slate-300 rounded-lg bg-white"
+              >
+                {[2023, 2024, 2025].map(year => (
+                  <option key={year} value={year.toString()}>{year}</option>
+                ))}
+              </select>
+            </div>
+
+            {yearlyMetrics.length > 0 && (
+              <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
+                <table className="w-full">
+                  <thead className="bg-slate-50 border-b border-slate-200">
+                    <tr>
+                      <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">Staff</th>
+                      <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">Paid Orders</th>
+                      <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">Rejections</th>
+                      <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">Tier</th>
+                      <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">Performance</th>
+                      <th className="px-6 py-4 text-right text-xs font-bold text-slate-700 uppercase">Base</th>
+                      <th className="px-6 py-4 text-right text-xs font-bold text-slate-700 uppercase">Bonus</th>
+                      <th className="px-6 py-4 text-right text-xs font-bold text-slate-700 uppercase">Total</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200">
+                    {yearlyMetrics.map((metric) => (
+                      <tr key={metric.staffId} className="hover:bg-slate-50">
+                        <td className="px-6 py-4 font-medium text-slate-900">{metric.staffName}</td>
+                        <td className="px-6 py-4 text-center">{metric.paidOrderCount}</td>
+                        <td className="px-6 py-4 text-center text-red-600">{metric.rejectedOrderCount}</td>
+                        <td className="px-6 py-4 text-sm text-slate-700">{metric.appliedTier}</td>
+                        <td className="px-6 py-4 text-center">
+                          <div className="w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold" style={{
+                            backgroundColor: metric.performanceScore >= 80 ? "#dcfce7" : metric.performanceScore >= 60 ? "#fef3c7" : "#fee2e2"
+                          }}>
+                            {metric.performanceScore}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 text-right font-semibold text-slate-900">${(metric.baseCommission / 1000).toFixed(1)}K</td>
+                        <td className="px-6 py-4 text-right font-semibold text-purple-600">${(metric.performanceBonus / 1000).toFixed(1)}K</td>
+                        <td className="px-6 py-4 text-right font-bold text-green-600">${(metric.totalCommission / 1000).toFixed(1)}K</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+            {yearlyMetrics.length === 0 && (
+              <div className="bg-white rounded-lg p-12 border border-slate-200 text-center text-slate-500">
+                No commission data for {selectedYear}
+              </div>
+            )}
+
+            {yearlyMetrics.length > 0 && (
+              <div className="flex justify-end">
+                <Button className="bg-blue-600 hover:bg-blue-700 flex items-center gap-2" onClick={() => {
+                  const csv = [["Yearly Commission Report", selectedYear], [""], ["Staff", "Paid Orders", "Rejections", "Tier", "Performance", "Base Commission", "Bonus", "Total"], ...yearlyMetrics.map(m => [m.staffName, m.paidOrderCount, m.rejectedOrderCount, m.appliedTier, m.performanceScore, `$${m.baseCommission}`, `$${m.performanceBonus}`, `$${m.totalCommission}`])].map(r => r.join(",")).join("\n");
+                  const blob = new Blob([csv], {type: "text/csv"});
+                  const url = window.URL.createObjectURL(blob);
+                  const a = document.createElement("a");
+                  a.href = url;
+                  a.download = `yearly_commission_${selectedYear}.csv`;
+                  a.click();
+                }}>
+                  <Download className="w-4 h-4" />
+                  Export Yearly CSV
+                </Button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </AdminLayout>
   );

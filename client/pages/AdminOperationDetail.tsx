@@ -213,12 +213,79 @@ export default function AdminOperationDetail() {
   const handleAddTracking = () => {
     if (trackingInput.trim()) {
       order.trackingNumber = trackingInput;
-      order.trackingNumberAddedBy = currentUserId;
+      order.trackingNumberAddedBy = effectiveUserId;
       order.trackingNumberAddedAt = new Date().toISOString();
+      order.completedServices.shippingComplete = true;
       setTrackingInput("");
       alert("Tracking number added successfully!");
       window.location.reload();
     }
+  };
+
+  const handleAutoCompleteAll = () => {
+    if (!window.confirm("Auto-complete all workflow stages? This will move the order through all remaining stages and mark all services as complete.")) {
+      return;
+    }
+
+    const stages: any[] = [
+      "pending_sales_review",
+      "pending_operation",
+      "pending_operation_manager_review",
+      "awaiting_client_acceptance",
+      "shipping_preparation",
+      "completed",
+    ];
+
+    // Move through all stages from current position
+    const currentIndex = stages.indexOf(order.status);
+
+    for (let i = currentIndex; i < stages.length; i++) {
+      const toStatus = stages[i];
+      const staff = mockStaff.find(
+        (s) =>
+          (toStatus === "pending_sales_review" && s.id === order.assignedToSalesId) ||
+          (toStatus === "pending_operation" && s.id === order.assignedToOperationId) ||
+          (toStatus === "pending_operation_manager_review" && s.id === order.assignedToManagerId) ||
+          (toStatus === "awaiting_client_acceptance" && s.role === "sales") ||
+          (toStatus === "shipping_preparation" && s.id === order.assignedToManagerId) ||
+          (toStatus === "completed" && s.id === order.assignedToManagerId)
+      );
+
+      const historyEntry = {
+        id: `H${order.id}-${order.history.length + 1}`,
+        orderId: order.id,
+        previousStatus: order.status as any,
+        newStatus: toStatus as any,
+        actionType: "accept" as any,
+        actionBy: staff?.id || "S002",
+        actionByName: `${staff?.firstName || "System"} ${staff?.lastName || ""}`,
+        description: `Order auto-progressed to ${getStatusLabel(toStatus)}`,
+        createdAt: new Date().toISOString(),
+      };
+
+      order.history.push(historyEntry);
+      order.status = toStatus as any;
+    }
+
+    // Mark all services as complete
+    order.completedServices.apostilleComplete = true;
+    order.completedServices.shippingComplete = true;
+    order.completedServices.poaComplete = true;
+    order.completedServices.financialReportComplete = true;
+    order.completedAt = new Date().toISOString().split("T")[0];
+    order.clientAccepted = true;
+    order.clientAcceptedAt = new Date().toISOString();
+    order.clientCanViewFiles = true;
+    order.clientCanViewTracking = true;
+
+    if (!order.trackingNumber) {
+      order.trackingNumber = `AUTO-${Math.random().toString(36).substring(7).toUpperCase()}`;
+      order.trackingNumberAddedBy = effectiveUserId;
+      order.trackingNumberAddedAt = new Date().toISOString();
+    }
+
+    alert("Order auto-completed! All stages progressed and services marked complete.");
+    window.location.reload();
   };
 
   const handleFileUpload = () => {

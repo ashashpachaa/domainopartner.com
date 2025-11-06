@@ -1961,67 +1961,398 @@ export default function AdminOperationDetail() {
           </div>
         )}
 
-        {/* Apostille Tab */}
-        {activeTab === "apostille" && (
+        {/* POA Tab */}
+        {activeTab === "poa" && (
           <div className="space-y-6">
-            {product?.services.hasApostille ? (
-              <div className="bg-blue-50 rounded-lg p-6 border border-blue-200">
-                <h3 className="text-lg font-bold text-blue-900 mb-3 flex items-center gap-2">
-                  <CheckCircle2 className="w-5 h-5" />
-                  Apostille Required
-                </h3>
-                <p className="text-sm text-blue-800">
-                  This product includes apostille service. After client accepts
-                  the order, documents will need to be apostilled by the
-                  operation manager before shipment.
-                </p>
+            {product?.services.hasPOA ? (
+              order.status === "pending_poa" ? (
+                <div className="bg-white rounded-lg p-6 border border-slate-200">
+                  <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <FileText className="w-5 h-5 text-primary-600" />
+                    Power of Attorney Upload
+                  </h3>
+                  <p className="text-sm text-slate-600 mb-6">
+                    Upload Power of Attorney documents for this order.
+                  </p>
 
-                {order.apostilleDocuments &&
-                order.apostilleDocuments.length > 0 ? (
-                  <div className="mt-6 space-y-3">
-                    {order.apostilleDocuments.map((doc) => (
-                      <div
-                        key={doc.id}
-                        className={`p-4 rounded-lg border-2 ${
-                          doc.isComplete
-                            ? "bg-green-50 border-green-200"
-                            : "bg-yellow-50 border-yellow-200"
-                        }`}
-                      >
-                        <div className="flex items-start justify-between">
-                          <div>
-                            <p className="font-medium text-slate-900">
-                              {doc.documentName}
-                            </p>
-                            <p className="text-sm text-slate-600 mt-1">
-                              Apostilled by: {doc.apostilledByName}
-                            </p>
-                            {doc.certificateNumber && (
-                              <p className="text-xs text-slate-600 mt-1">
-                                Certificate #: {doc.certificateNumber}
-                              </p>
-                            )}
+                  {/* File Upload */}
+                  <div className="mb-6">
+                    <input
+                      type="file"
+                      multiple
+                      className="hidden"
+                      id="poa-file-input"
+                      onChange={(e) => {
+                        if (e.target.files) {
+                          setPoaFiles(Array.from(e.target.files));
+                        }
+                      }}
+                    />
+                    <label
+                      htmlFor="poa-file-input"
+                      className="border-2 border-dashed border-slate-300 rounded-lg p-8 text-center hover:border-primary-500 cursor-pointer transition-colors flex flex-col items-center"
+                    >
+                      <FileText className="w-12 h-12 text-slate-400 mx-auto mb-3" />
+                      <p className="text-sm font-medium text-slate-900 mb-1">
+                        Click to upload file or drag and drop
+                      </p>
+                      <p className="text-xs text-slate-600">
+                        PDF, DOC, DOCX, JPG, PNG (Max 5GB per file)
+                      </p>
+                    </label>
+                    {poaFiles.length > 0 && (
+                      <div className="mt-3 space-y-2">
+                        <p className="text-sm font-medium text-slate-700">
+                          {poaFiles.length} file(s) selected
+                        </p>
+                        {poaFiles.map((file, idx) => (
+                          <div key={idx} className="p-3 bg-blue-50 rounded-lg border border-blue-200 flex items-center justify-between">
+                            <div className="flex items-center gap-2 flex-1 min-w-0">
+                              <FileText className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                              <div className="min-w-0">
+                                <p className="text-sm font-medium text-blue-900 truncate">
+                                  {file.name}
+                                </p>
+                                <p className="text-xs text-blue-700">
+                                  {(file.size / 1024 / 1024).toFixed(2)} MB
+                                </p>
+                              </div>
+                            </div>
+                            <button
+                              onClick={() => setPoaFiles(poaFiles.filter((_, i) => i !== idx))}
+                              className="text-blue-600 hover:text-blue-800 ml-2 flex-shrink-0"
+                            >
+                              <X className="w-4 h-4" />
+                            </button>
                           </div>
-                          {doc.isComplete && (
-                            <CheckCircle2 className="w-5 h-5 text-green-600" />
-                          )}
-                        </div>
+                        ))}
                       </div>
-                    ))}
+                    )}
                   </div>
-                ) : (
-                  <div className="mt-6 p-4 bg-yellow-50 rounded-lg border border-yellow-200">
-                    <p className="text-sm text-yellow-900">
-                      No apostille documents yet. They will be processed after
-                      client acceptance.
-                    </p>
+
+                  {/* File Notes */}
+                  <div className="mb-6">
+                    <label className="block text-sm font-medium text-slate-900 mb-2">
+                      Document Notes/Description *
+                    </label>
+                    <textarea
+                      value={poaNotes}
+                      onChange={(e) => setPoaNotes(e.target.value)}
+                      placeholder="Please describe the documents and any relevant details..."
+                      rows={3}
+                      className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500 resize-none"
+                    />
                   </div>
-                )}
-              </div>
+
+                  <Button
+                    onClick={() => {
+                      if (poaFiles.length > 0 && poaNotes.trim()) {
+                        const updatedOrder = { ...order };
+                        updatedOrder.operationFiles.push({
+                          id: `file_${Date.now()}`,
+                          orderId: order.id,
+                          fileName: poaFiles[0].name,
+                          fileSize: poaFiles[0].size,
+                          uploadedBy: effectiveUserId,
+                          uploadedByName: mockStaff.find(s => s.id === effectiveUserId)?.firstName || "Unknown",
+                          uploadedAt: new Date().toISOString(),
+                          stage: "poa",
+                          fileType: "poa",
+                          description: poaNotes,
+                          visibleToClient: false,
+                        });
+                        setOrder(updatedOrder);
+                        localStorage.setItem(`order_${orderId}`, JSON.stringify(updatedOrder));
+                        setPoaFiles([]);
+                        setPoaNotes("");
+                        alert("POA documents uploaded successfully!");
+                      } else {
+                        alert("Please select files and add a description");
+                      }
+                    }}
+                    className="w-full bg-primary-600 hover:bg-primary-700"
+                  >
+                    <Upload className="w-4 h-4 mr-2" />
+                    Upload POA Documents
+                  </Button>
+
+                  {/* Uploaded Files */}
+                  {order.operationFiles?.filter(f => f.stage === "poa").length > 0 && (
+                    <div className="mt-6 space-y-3">
+                      <h4 className="font-semibold text-slate-900">Uploaded Documents</h4>
+                      {order.operationFiles.filter(f => f.stage === "poa").map((file) => (
+                        <div key={file.id} className="p-4 bg-green-50 rounded-lg border border-green-200">
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <p className="font-medium text-slate-900">{file.fileName}</p>
+                              <p className="text-xs text-slate-600 mt-1">
+                                By {file.uploadedByName} on {new Date(file.uploadedAt).toLocaleDateString()}
+                              </p>
+                              {file.description && (
+                                <p className="text-sm text-slate-700 mt-2">{file.description}</p>
+                              )}
+                            </div>
+                            <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0" />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="bg-amber-50 rounded-lg p-6 border border-amber-200">
+                  <p className="text-amber-900">
+                    POA uploads are only available when the order is in the POA stage.
+                  </p>
+                </div>
+              )
             ) : (
               <div className="bg-slate-50 rounded-lg p-6 border border-slate-200">
                 <p className="text-slate-600">
-                  This product does not require apostille service.
+                  This product does not require Power of Attorney service.
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Financial Report Tab */}
+        {activeTab === "financial_report" && (
+          <div className="space-y-6">
+            {product?.services.hasFinancialReport ? (
+              order.status === "pending_financial_report" ? (
+                <div className="bg-white rounded-lg p-6 border border-slate-200">
+                  <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <FileText className="w-5 h-5 text-primary-600" />
+                    Financial Report Upload
+                  </h3>
+                  <p className="text-sm text-slate-600 mb-6">
+                    Upload Financial Report documents for this order.
+                  </p>
+
+                  {/* File Upload */}
+                  <div className="mb-6">
+                    <input
+                      type="file"
+                      multiple
+                      className="hidden"
+                      id="financial-file-input"
+                      onChange={(e) => {
+                        if (e.target.files) {
+                          setFinancialReportFiles(Array.from(e.target.files));
+                        }
+                      }}
+                    />
+                    <label
+                      htmlFor="financial-file-input"
+                      className="border-2 border-dashed border-slate-300 rounded-lg p-8 text-center hover:border-primary-500 cursor-pointer transition-colors flex flex-col items-center"
+                    >
+                      <FileText className="w-12 h-12 text-slate-400 mx-auto mb-3" />
+                      <p className="text-sm font-medium text-slate-900 mb-1">
+                        Click to upload file or drag and drop
+                      </p>
+                      <p className="text-xs text-slate-600">
+                        PDF, DOC, DOCX, JPG, PNG (Max 5GB per file)
+                      </p>
+                    </label>
+                    {financialReportFiles.length > 0 && (
+                      <div className="mt-3 space-y-2">
+                        <p className="text-sm font-medium text-slate-700">
+                          {financialReportFiles.length} file(s) selected
+                        </p>
+                        {financialReportFiles.map((file, idx) => (
+                          <div key={idx} className="p-3 bg-blue-50 rounded-lg border border-blue-200 flex items-center justify-between">
+                            <div className="flex items-center gap-2 flex-1 min-w-0">
+                              <FileText className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                              <div className="min-w-0">
+                                <p className="text-sm font-medium text-blue-900 truncate">
+                                  {file.name}
+                                </p>
+                                <p className="text-xs text-blue-700">
+                                  {(file.size / 1024 / 1024).toFixed(2)} MB
+                                </p>
+                              </div>
+                            </div>
+                            <button
+                              onClick={() => setFinancialReportFiles(financialReportFiles.filter((_, i) => i !== idx))}
+                              className="text-blue-600 hover:text-blue-800 ml-2 flex-shrink-0"
+                            >
+                              <X className="w-4 h-4" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* File Notes */}
+                  <div className="mb-6">
+                    <label className="block text-sm font-medium text-slate-900 mb-2">
+                      Document Notes/Description *
+                    </label>
+                    <textarea
+                      value={financialReportNotes}
+                      onChange={(e) => setFinancialReportNotes(e.target.value)}
+                      placeholder="Please describe the financial report and any relevant details..."
+                      rows={3}
+                      className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500 resize-none"
+                    />
+                  </div>
+
+                  <Button
+                    onClick={() => {
+                      if (financialReportFiles.length > 0 && financialReportNotes.trim()) {
+                        const updatedOrder = { ...order };
+                        updatedOrder.operationFiles.push({
+                          id: `file_${Date.now()}`,
+                          orderId: order.id,
+                          fileName: financialReportFiles[0].name,
+                          fileSize: financialReportFiles[0].size,
+                          uploadedBy: effectiveUserId,
+                          uploadedByName: mockStaff.find(s => s.id === effectiveUserId)?.firstName || "Unknown",
+                          uploadedAt: new Date().toISOString(),
+                          stage: "financial_report",
+                          fileType: "financial_report",
+                          description: financialReportNotes,
+                          visibleToClient: false,
+                        });
+                        setOrder(updatedOrder);
+                        localStorage.setItem(`order_${orderId}`, JSON.stringify(updatedOrder));
+                        setFinancialReportFiles([]);
+                        setFinancialReportNotes("");
+                        alert("Financial Report documents uploaded successfully!");
+                      } else {
+                        alert("Please select files and add a description");
+                      }
+                    }}
+                    className="w-full bg-primary-600 hover:bg-primary-700"
+                  >
+                    <Upload className="w-4 h-4 mr-2" />
+                    Upload Financial Report
+                  </Button>
+
+                  {/* Uploaded Files */}
+                  {order.operationFiles?.filter(f => f.stage === "financial_report").length > 0 && (
+                    <div className="mt-6 space-y-3">
+                      <h4 className="font-semibold text-slate-900">Uploaded Documents</h4>
+                      {order.operationFiles.filter(f => f.stage === "financial_report").map((file) => (
+                        <div key={file.id} className="p-4 bg-green-50 rounded-lg border border-green-200">
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <p className="font-medium text-slate-900">{file.fileName}</p>
+                              <p className="text-xs text-slate-600 mt-1">
+                                By {file.uploadedByName} on {new Date(file.uploadedAt).toLocaleDateString()}
+                              </p>
+                              {file.description && (
+                                <p className="text-sm text-slate-700 mt-2">{file.description}</p>
+                              )}
+                            </div>
+                            <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0" />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="bg-amber-50 rounded-lg p-6 border border-amber-200">
+                  <p className="text-amber-900">
+                    Financial Report uploads are only available when the order is in the Financial Report stage.
+                  </p>
+                </div>
+              )
+            ) : (
+              <div className="bg-slate-50 rounded-lg p-6 border border-slate-200">
+                <p className="text-slate-600">
+                  This product does not require Financial Report service.
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Shipping Tab */}
+        {activeTab === "shipping" && (
+          <div className="space-y-6">
+            {product?.services.hasShipping ? (
+              order.status === "shipping_preparation" ? (
+                <div className="bg-white rounded-lg p-6 border border-slate-200">
+                  <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <Package className="w-5 h-5 text-primary-600" />
+                    Shipping & Tracking
+                  </h3>
+                  <p className="text-sm text-slate-600 mb-6">
+                    Add tracking number for this shipment.
+                  </p>
+
+                  {/* Tracking Number Input */}
+                  <div className="mb-6">
+                    <label className="block text-sm font-medium text-slate-900 mb-2">
+                      Tracking Number *
+                    </label>
+                    <input
+                      type="text"
+                      value={trackingNumber}
+                      onChange={(e) => setTrackingNumber(e.target.value)}
+                      placeholder="Enter shipping tracking number (e.g., DHL123456789)"
+                      className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500"
+                    />
+                    <p className="text-xs text-slate-600 mt-1">
+                      Enter the courier tracking number for this shipment
+                    </p>
+                  </div>
+
+                  <Button
+                    onClick={() => {
+                      if (trackingNumber.trim()) {
+                        const updatedOrder = { ...order };
+                        updatedOrder.trackingNumber = trackingNumber;
+                        updatedOrder.trackingNumberAddedBy = effectiveUserId;
+                        updatedOrder.trackingNumberAddedAt = new Date().toISOString();
+                        setOrder(updatedOrder);
+                        localStorage.setItem(`order_${orderId}`, JSON.stringify(updatedOrder));
+                        setTrackingNumber("");
+                        alert("Tracking number added successfully!");
+                      } else {
+                        alert("Please enter a tracking number");
+                      }
+                    }}
+                    className="w-full bg-primary-600 hover:bg-primary-700"
+                  >
+                    <Save className="w-4 h-4 mr-2" />
+                    Add Tracking Number
+                  </Button>
+
+                  {/* Current Tracking Info */}
+                  {order.trackingNumber && (
+                    <div className="mt-6 p-4 bg-green-50 rounded-lg border border-green-200">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <p className="font-medium text-slate-900">Tracking Number</p>
+                          <p className="text-lg font-bold text-primary-600 mt-1">{order.trackingNumber}</p>
+                          <p className="text-xs text-slate-600 mt-2">
+                            Added by {mockStaff.find(s => s.id === order.trackingNumberAddedBy)?.firstName || "Unknown"} on{" "}
+                            {order.trackingNumberAddedAt
+                              ? new Date(order.trackingNumberAddedAt).toLocaleDateString()
+                              : "Unknown date"}
+                          </p>
+                        </div>
+                        <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0" />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="bg-amber-50 rounded-lg p-6 border border-amber-200">
+                  <p className="text-amber-900">
+                    Shipping tracking is only available when the order is in the Shipping stage.
+                  </p>
+                </div>
+              )
+            ) : (
+              <div className="bg-slate-50 rounded-lg p-6 border border-slate-200">
+                <p className="text-slate-600">
+                  This product does not require shipping service.
                 </p>
               </div>
             )}

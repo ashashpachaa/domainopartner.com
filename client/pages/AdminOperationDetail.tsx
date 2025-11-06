@@ -75,6 +75,10 @@ export default function AdminOperationDetail() {
   // Admin impersonation - use selected staff or current user
   const effectiveUserId = adminMode && impersonateStaffId ? impersonateStaffId : currentUserId;
 
+  // Get current staff to check their role
+  const currentStaff = mockStaff.find((s) => s.id === effectiveUserId);
+  const isSalesStaff = currentStaff?.role === "sales";
+
   // Live countdown timer
   useEffect(() => {
     const interval = setInterval(() => {

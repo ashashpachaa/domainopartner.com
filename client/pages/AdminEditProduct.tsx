@@ -23,6 +23,8 @@ export default function AdminEditProduct() {
       description: "",
       duration: "",
       requirements: "",
+      price: 0,
+      currency: "USD",
       services: {
         hasApostille: false,
         hasShipping: false,

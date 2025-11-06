@@ -38,16 +38,14 @@ function getVisionClient() {
 function parsePassportText(text: string): ExtractedPassportData {
   const result: ExtractedPassportData = { confidence: 0 };
 
-  let datePatternMatches = 0;
-  let nameMatchConfidence = 0;
+  let confidenceScore = 0;
 
-  const lines = text.split("\n").map((line) => line.trim());
-  const lines_lower = text.toLowerCase();
+  // Common label words to filter out
+  const labelWords = new Set(["Full", "Name", "Given", "Family", "Surname", "First", "Last", "Date", "Of", "Birth", "Sex", "M", "F", "Nationality", "Passport", "Number", "Valid", "Until"]);
 
-  // Extract date of birth (common patterns: DD/MM/YYYY, DD-MM-YYYY, DDMMMYYYY)
+  // === DATE OF BIRTH EXTRACTION ===
   const datePatterns = [
     /(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/,
-    /(\d{1,2})(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*(\d{1,2})?(\d{4})/i,
     /(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})/,
   ];
 
@@ -58,18 +56,22 @@ function parsePassportText(text: string): ExtractedPassportData {
         let day, month, year;
         if (pattern === datePatterns[0]) {
           [, day, month, year] = matches;
-        } else if (pattern === datePatterns[2]) {
-          [, year, month, day] = matches;
         } else {
-          continue;
+          [, year, month, day] = matches;
         }
 
         day = String(day).padStart(2, "0");
         month = String(month).padStart(2, "0");
 
-        if (parseInt(month) > 0 && parseInt(month) <= 12 && parseInt(day) > 0 && parseInt(day) <= 31) {
+        // Validate date ranges
+        const monthNum = parseInt(month);
+        const dayNum = parseInt(day);
+        const yearNum = parseInt(year);
+
+        if (monthNum > 0 && monthNum <= 12 && dayNum > 0 && dayNum <= 31 && yearNum > 1900 && yearNum < 2100) {
           result.dateOfBirth = `${year}-${month}-${day}`;
-          datePatternMatches++;
+          confidenceScore += 0.25;
+          break;
         }
       } catch (e) {
         // skip invalid date
@@ -77,101 +79,90 @@ function parsePassportText(text: string): ExtractedPassportData {
     }
   }
 
-  // Extract names - look for name fields after specific markers
-  // First, try to find explicit name patterns (e.g., "Name: JOHN DOE" or "Given Names: JOHN")
-  const explicitNamePatterns = [
-    /Surname[:\s]+([A-Z][A-Za-z\s]+?)(?:\n|$)/i,
-    /Given Names?[:\s]+([A-Z][A-Za-z\s]+?)(?:\n|$)/i,
-    /Family Name[:\s]+([A-Z][A-Za-z\s]+?)(?:\n|$)/i,
-    /First Name[:\s]+([A-Z][A-Za-z\s]+?)(?:\n|$)/i,
-  ];
-
-  const extractedNames: string[] = [];
-  for (const pattern of explicitNamePatterns) {
-    const match = text.match(pattern);
-    if (match && match[1]) {
-      const name = match[1].trim();
-      if (name.length > 0 && !name.includes("PASSPORT") && !name.includes("REPUBLIC") && !name.includes("UNITED")) {
-        extractedNames.push(name);
-        nameMatchConfidence += 0.25;
-      }
+  // === NATIONALITY EXTRACTION ===
+  // Look for words ending in "ian" or full nationality names
+  const nationalityMatches = text.match(/\b[A-Z][a-z]{2,}ian\b/g) || [];
+  if (nationalityMatches.length > 0) {
+    result.nationality = nationalityMatches[0]; // "Egyptian", "Indian", etc.
+    confidenceScore += 0.25;
+  } else {
+    // Try pattern-based extraction
+    const nationalityPattern = /(?:Nationality|National|Citizenship)[:\s]+([A-Z][a-z]+)/i;
+    const match = text.match(nationalityPattern);
+    if (match && match[1] && !labelWords.has(match[1])) {
+      result.nationality = match[1];
+      confidenceScore += 0.25;
     }
   }
 
-  // If we found explicit names, use them
-  if (extractedNames.length === 2) {
-    result.firstName = extractedNames[0];
-    result.lastName = extractedNames[1];
-  } else if (extractedNames.length === 1) {
-    const parts = extractedNames[0].split(/\s+/);
-    if (parts.length >= 2) {
-      result.firstName = parts[0];
-      result.lastName = parts.slice(1).join(" ");
-    } else {
-      result.firstName = extractedNames[0];
+  // === NAME EXTRACTION (MOST CRITICAL) ===
+  // Strategy: Look for sequences of words that look like names
+  // Names should be:
+  // 1. Capital letter words
+  // 2. NOT be common labels
+  // 3. Appear after passport headers or at the beginning
+  // 4. Be reasonably sized (typical names are 2-50 chars)
+
+  // Extract all capital letter word sequences
+  const allCapitalSequences = text.match(/\b[A-Z][A-Za-z]+(?:\s+[A-Z][A-Za-z]+)*\b/g) || [];
+
+  // Filter for likely names
+  const candidateNames = allCapitalSequences
+    .filter((seq) => {
+      // Skip if too short or too long
+      if (seq.length < 4 || seq.length > 60) return false;
+      
+      // Skip if contains label words
+      if (labelWords.has(seq)) return false;
+      
+      // Skip document headers
+      if (seq.includes("PASSPORT") || seq.includes("REPUBLIC") || seq.includes("UNITED") || seq.includes("KINGDOM")) return false;
+      
+      // Skip numbers
+      if (/\d/.test(seq)) return false;
+      
+      // Must have at least 2 words (first + last name) or be a known single name pattern
+      const words = seq.split(/\s+/);
+      if (words.length < 2) return false;
+      
+      // Each word should be reasonably long (not just initials)
+      if (words.some(w => w.length === 1)) return false;
+      
+      return true;
+    })
+    .slice(0, 5); // Limit to first 5 candidates to avoid too much processing
+
+  // Use the first good candidate as the name
+  if (candidateNames.length > 0) {
+    const fullName = candidateNames[0];
+    const nameParts = fullName.split(/\s+/);
+    
+    if (nameParts.length >= 2) {
+      result.firstName = nameParts[0];
+      result.lastName = nameParts.slice(1).join(" ");
+      confidenceScore += 0.25;
+    } else if (nameParts.length === 1) {
+      result.firstName = nameParts[0];
+      confidenceScore += 0.15; // Lower confidence if only first name
     }
   }
 
-  // Extract nationality (look for common patterns)
-  const nationalityPatterns = [
-    /nationality[:\s]+([A-Z][A-Za-z\s]+?)(?:\n|[A-Z]|$)/i,
-    /national[ity]*[:\s]+([A-Z][A-Za-z\s]+?)(?:\n|[A-Z]|$)/i,
-    /citizenship[:\s]+([A-Z][A-Za-z\s]+?)(?:\n|[A-Z]|$)/i,
-    /[A-Z][a-z]+ian$/im, // Match words ending in "ian" like "Egyptian", "Indian", etc.
-  ];
-
-  for (const pattern of nationalityPatterns) {
-    const match = text.match(pattern);
-    if (match && match[1]) {
-      const nationality = match[1].trim();
-      if (nationality.length > 0 && !nationality.includes("PASSPORT")) {
-        result.nationality = nationality.replace(/[^A-Za-z\s]/g, "").trim();
-        if (result.nationality.length > 0) break;
-      }
-    }
-  }
-
-  // If names still not found, look for name patterns in a safer way
-  if (!result.firstName || !result.lastName) {
-    const safeCapitalSequences = text.match(/(?:^|\n)([A-Z][a-z]+)\s+([A-Z][a-z\s]+?)(?=\n|<|$)/gm);
-    if (safeCapitalSequences && safeCapitalSequences.length > 0) {
-      for (const seq of safeCapitalSequences) {
-        const parts = seq.trim().split(/\s+/);
-        if (parts.length >= 2) {
-          const candidate = `${parts[0]} ${parts.slice(1).join(" ")}`;
-          if (!candidate.includes("PASSPORT") && !candidate.includes("REPUBLIC") && !candidate.includes("UNITED") && candidate.length < 50) {
-            result.firstName = parts[0];
-            result.lastName = parts.slice(1).join(" ");
-            nameMatchConfidence += 0.15;
-            break;
-          }
-        }
-      }
-    }
-  }
-
-  // Calculate confidence score
-  let confidenceScore = 0;
-
-  // Scoring for each field
-  if (result.firstName && result.firstName.length > 1 && result.firstName.length < 30) confidenceScore += 0.25;
-  if (result.lastName && result.lastName.length > 1 && result.lastName.length < 50) confidenceScore += 0.25;
-  if (result.dateOfBirth) confidenceScore += 0.25;
-  if (result.nationality && result.nationality.length > 1 && result.nationality.length < 30) confidenceScore += 0.25;
-
-  // Bonus for date pattern confidence
-  if (datePatternMatches > 0) confidenceScore += 0.05;
-
-  // Bonus for name field pattern matching
-  if (nameMatchConfidence > 0) confidenceScore += Math.min(0.05, nameMatchConfidence);
-
-  // Penalize if name looks suspicious (too long, contains numbers, or weird characters)
-  if (result.firstName && (result.firstName.includes("PASSPORT") || result.firstName.includes("REPUBLIC") || result.firstName.includes("UNITED"))) {
+  // === CONFIDENCE ADJUSTMENT ===
+  // Penalize if extracted data looks suspicious
+  const suspiciousPatterns = ["PASSPORT", "REPUBLIC", "UNITED", "KINGDOM", "AND", "THE", "DOCUMENT"];
+  
+  if (result.firstName && suspiciousPatterns.some(p => result.firstName!.includes(p))) {
     confidenceScore = Math.max(0, confidenceScore - 0.3);
   }
-  if (result.lastName && (result.lastName.includes("PASSPORT") || result.lastName.includes("REPUBLIC") || result.lastName.includes("UNITED"))) {
+  
+  if (result.lastName && suspiciousPatterns.some(p => result.lastName!.includes(p))) {
     confidenceScore = Math.max(0, confidenceScore - 0.3);
   }
+
+  // Validate extracted names
+  if (result.firstName && result.firstName.length > 30) result.firstName = undefined;
+  if (result.lastName && result.lastName.length > 50) result.lastName = undefined;
+  if (result.nationality && result.nationality.length > 30) result.nationality = undefined;
 
   result.confidence = Math.min(1, Math.max(0, confidenceScore));
 
@@ -182,14 +173,14 @@ export async function handleOCR(req: Request, res: Response) {
   try {
     // Check if file is provided
     if (!req.file) {
-      res.status(400).json({ error: "No image file provided" });
+      res.status(400).json({ success: false, error: "No image file provided" });
       return;
     }
 
     // Validate file type - images only
     const validTypes = ["image/jpeg", "image/png", "image/jpg"];
     if (!validTypes.includes(req.file.mimetype) && !req.file.mimetype.startsWith("image/")) {
-      res.status(400).json({
+      res.status(400).json({ 
         success: false,
         error: "Invalid file type. Please upload a JPG or PNG image file.",
         code: "INVALID_FORMAT"
@@ -199,7 +190,11 @@ export async function handleOCR(req: Request, res: Response) {
 
     // Check file size (max 20MB)
     if (req.file.size > 20 * 1024 * 1024) {
-      res.status(400).json({ error: "File size exceeds 20MB limit" });
+      res.status(400).json({ 
+        success: false,
+        error: "File size exceeds 20MB limit",
+        code: "SIZE_LIMIT"
+      });
       return;
     }
 
@@ -208,10 +203,9 @@ export async function handleOCR(req: Request, res: Response) {
 
     let processedBuffer = req.file.buffer;
 
-    // Optimize image if it's an image file (compress for faster processing)
+    // Optimize image - compress for faster processing
     if (req.file.mimetype.startsWith("image/")) {
       try {
-        // Compress image while maintaining quality for OCR
         processedBuffer = await sharp(req.file.buffer)
           .resize(2000, 2000, {
             fit: "inside",
@@ -221,14 +215,13 @@ export async function handleOCR(req: Request, res: Response) {
           .toBuffer();
       } catch (optimizeError) {
         console.warn("Image optimization failed, using original:", optimizeError);
-        // Continue with original buffer if optimization fails
       }
     }
 
-    // Prepare the image data
+    // Prepare image data
     const base64Image = processedBuffer.toString("base64");
 
-    // Call Google Vision API with DOCUMENT_TEXT_DETECTION for better OCR
+    // Call Google Vision API
     const request = {
       image: {
         content: base64Image,
@@ -245,37 +238,38 @@ export async function handleOCR(req: Request, res: Response) {
 
     if (!textAnnotations || textAnnotations.length === 0) {
       res.status(400).json({
+        success: false,
         error: "Could not extract text from the file. Ensure the image is clear and readable.",
+        code: "NO_TEXT_DETECTED"
       });
       return;
     }
 
-    // Get the full text from the first annotation (contains all text)
+    // Get full text from first annotation
     const fullText = textAnnotations[0]?.description || "";
 
     if (!fullText || fullText.trim().length < 5) {
       res.status(400).json({
-        error: "Could not find readable text. Try uploading a clearer image or different scan.",
+        success: false,
+        error: "Could not find readable text. Try uploading a clearer image.",
+        code: "INSUFFICIENT_TEXT"
       });
       return;
     }
 
-    // Parse the extracted text to get passport data
+    // Parse the extracted text
     const extractedData = parsePassportText(fullText);
 
     // Return the extracted data
     res.json({
       success: true,
       data: extractedData,
-      rawText: fullText,
     });
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    const errorType = error instanceof Error ? error.constructor.name : typeof error;
-
+    
     console.error("OCR Processing Error:", {
       message: errorMessage,
-      type: errorType,
       timestamp: new Date().toISOString(),
     });
 
@@ -287,11 +281,10 @@ export async function handleOCR(req: Request, res: Response) {
     };
 
     if (error instanceof Error) {
-      // Check for specific Google API errors
       if (errorMessage.includes("PERMISSION_DENIED") || errorMessage.includes("permission")) {
         errorResponse = {
           success: false,
-          error: "Google Vision API permission issue. Please ensure billing is enabled and wait 5-10 minutes for changes to propagate.",
+          error: "Google Vision API permission issue. Please ensure billing is enabled.",
           code: "BILLING_NOT_ENABLED",
         };
       } else if (errorMessage.includes("UNAUTHENTICATED") || errorMessage.includes("credentials")) {
@@ -306,13 +299,6 @@ export async function handleOCR(req: Request, res: Response) {
           success: false,
           error: "Request timed out. Please try with a smaller or clearer image.",
           code: "TIMEOUT",
-        };
-      } else if (errorMessage.includes("INVALID_ARGUMENT")) {
-        statusCode = 400;
-        errorResponse = {
-          success: false,
-          error: "Invalid image format. Please ensure the file is a clear JPG, PNG, or PDF.",
-          code: "INVALID_FORMAT",
         };
       }
     }

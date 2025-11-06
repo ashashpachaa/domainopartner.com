@@ -23,8 +23,39 @@ export default function AdminOperations() {
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
 
+  // Load all orders (from mockOrders + localStorage)
+  const allOrders = useMemo(() => {
+    const orders = [...mockOrders];
+
+    // Load orders from localStorage that might have been created by clients
+    try {
+      const keys = Object.keys(localStorage);
+      for (const key of keys) {
+        if (key.startsWith("order_")) {
+          const orderData = localStorage.getItem(key);
+          if (orderData) {
+            const order = JSON.parse(orderData);
+            // Check if this order is already in mockOrders
+            const exists = orders.some(o => o.id === order.id);
+            if (!exists) {
+              orders.push(order);
+            } else {
+              // Update with latest from localStorage
+              const index = orders.findIndex(o => o.id === order.id);
+              orders[index] = order;
+            }
+          }
+        }
+      }
+    } catch (e) {
+      console.warn("Failed to load orders from localStorage:", e);
+    }
+
+    return orders;
+  }, []);
+
   // Filter orders that are in active workflow (not completed or cancelled)
-  const activeOrders = mockOrders.filter(
+  const activeOrders = allOrders.filter(
     (order) =>
       order.status !== "completed" &&
       order.status !== "rejected_by_sales" &&

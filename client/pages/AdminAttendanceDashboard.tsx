@@ -47,7 +47,7 @@ export default function AdminAttendanceDashboard() {
     }
 
     return records.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-  }, [dateFilter, departmentFilter]);
+  }, [dateFilter, departmentFilter, customStartDate, customEndDate]);
 
   const stats = useMemo(() => {
     const totalHours = filteredRecords.reduce((sum, r) => sum + r.hoursWorked, 0);

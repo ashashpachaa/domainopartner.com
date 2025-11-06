@@ -328,7 +328,7 @@ export default function AdminCommissionPayroll() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200">
-                {staffMetrics.map((metric) => (
+                {filteredStaffMetrics.map((metric) => (
                   <tr key={metric.staffId} className="hover:bg-slate-50 transition">
                     <td className="px-6 py-4 font-medium text-slate-900">{metric.staffName}</td>
                     <td className="px-6 py-4 text-center">

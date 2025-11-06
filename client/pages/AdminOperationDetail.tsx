@@ -1125,6 +1125,56 @@ export default function AdminOperationDetail() {
           </div>
         )}
 
+        {/* Client Information Section */}
+        {user && (
+          <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg p-8 border border-purple-200">
+            <h2 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+              <User className="w-5 h-5 text-purple-600" />
+              Client Information
+            </h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {/* Name */}
+              <div className="bg-white rounded-lg p-4 border border-purple-100">
+                <p className="text-xs font-semibold text-slate-600 uppercase mb-2">Client Name</p>
+                <p className="text-base font-medium text-slate-900">{user.firstName} {user.lastName}</p>
+              </div>
+
+              {/* Email */}
+              <div className="bg-white rounded-lg p-4 border border-purple-100">
+                <p className="text-xs font-semibold text-slate-600 uppercase mb-2">Email</p>
+                <p className="text-sm text-slate-900 break-all">{user.email || "N/A"}</p>
+              </div>
+
+              {/* Phone */}
+              <div className="bg-white rounded-lg p-4 border border-purple-100">
+                <p className="text-xs font-semibold text-slate-600 uppercase mb-2">Phone</p>
+                <p className="text-sm text-slate-900">{user.phone || "N/A"}</p>
+              </div>
+
+              {/* Company */}
+              <div className="bg-white rounded-lg p-4 border border-purple-100">
+                <p className="text-xs font-semibold text-slate-600 uppercase mb-2">Company</p>
+                <p className="text-sm text-slate-900">{user.company || "N/A"}</p>
+              </div>
+
+              {/* Country */}
+              {user.country && (
+                <div className="bg-white rounded-lg p-4 border border-purple-100">
+                  <p className="text-xs font-semibold text-slate-600 uppercase mb-2">Country</p>
+                  <p className="text-sm text-slate-900">{user.country}</p>
+                </div>
+              )}
+
+              {/* Account Created */}
+              <div className="bg-white rounded-lg p-4 border border-purple-100">
+                <p className="text-xs font-semibold text-slate-600 uppercase mb-2">Account Created</p>
+                <p className="text-sm text-slate-900">{new Date(user.createdAt).toLocaleDateString()}</p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Product & Services Section */}
         {product && (
           <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-8 border border-blue-200">

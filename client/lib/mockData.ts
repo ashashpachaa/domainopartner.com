@@ -127,7 +127,14 @@ export type OrderStatus =
   | "rejected_by_operation_manager"
   | "awaiting_client_acceptance"
   | "rejected_by_client"
+  | "pending_apostille"
+  | "rejected_by_apostille"
+  | "pending_poa"
+  | "rejected_by_poa"
+  | "pending_financial_report"
+  | "rejected_by_financial_report"
   | "shipping_preparation"
+  | "rejected_by_shipping"
   | "completed";
 
 export type OrderActionType = "accept" | "reject" | "edit" | "resubmit" | "system_transition";

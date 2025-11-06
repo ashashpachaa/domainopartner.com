@@ -324,6 +324,105 @@ export default function ClientCreateOrder() {
               </div>
             </div>
 
+            {/* File Upload */}
+            <div>
+              <label className="block text-sm font-medium text-slate-900 mb-2">
+                Attach Files (Optional)
+              </label>
+              <div
+                onDrop={handleFileDrop}
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  setIsDragging(true);
+                }}
+                onDragLeave={() => setIsDragging(false)}
+                className={`border-2 border-dashed rounded-lg p-8 text-center transition ${
+                  isDragging
+                    ? "border-primary-500 bg-primary-50"
+                    : "border-slate-300 bg-slate-50 hover:border-primary-400"
+                }`}
+              >
+                <input
+                  type="file"
+                  id="file-upload"
+                  multiple
+                  onChange={handleFileSelect}
+                  className="hidden"
+                  accept="*"
+                />
+                <label htmlFor="file-upload" className="cursor-pointer">
+                  <div className="flex flex-col items-center gap-2">
+                    <svg
+                      className="w-8 h-8 text-slate-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 4v16m8-8H4"
+                      />
+                    </svg>
+                    <div>
+                      <p className="font-medium text-slate-900">
+                        Drag and drop your files here
+                      </p>
+                      <p className="text-sm text-slate-600">or click to select</p>
+                    </div>
+                    <p className="text-xs text-slate-500 mt-2">
+                      Max 5 files, 5GB total
+                    </p>
+                  </div>
+                </label>
+              </div>
+
+              {/* File List */}
+              {uploadedFiles.length > 0 && (
+                <div className="mt-4 space-y-2">
+                  <div className="flex items-center justify-between mb-3">
+                    <p className="text-sm font-medium text-slate-900">
+                      {uploadedFiles.length} file{uploadedFiles.length !== 1 ? "s" : ""} uploaded
+                    </p>
+                    <p className="text-xs text-slate-600">
+                      {getFileSize(getTotalUploadSize())} / 5GB
+                    </p>
+                  </div>
+                  {uploadedFiles.map((file, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-200"
+                    >
+                      <div className="flex items-center gap-2 flex-1">
+                        <svg
+                          className="w-4 h-4 text-slate-400"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path d="M4 4a2 2 0 012-2h6a1 1 0 00-.707-1.707A2 2 0 0012 0h-2C6.477 0 4 2.686 4 6v6h2V6c0-1.1.9-2 2-2V4z" />
+                          <path d="M8 8a1 1 0 011-1h2a1 1 0 011 1v8a1 1 0 01-1 1H9a1 1 0 01-1-1V8zM4 10a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM12 10a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
+                        </svg>
+                        <div className="flex-1">
+                          <p className="text-sm font-medium text-slate-900 truncate">
+                            {file.name}
+                          </p>
+                          <p className="text-xs text-slate-500">{getFileSize(file.size)}</p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => removeFile(index)}
+                        className="text-red-600 hover:text-red-700 font-medium text-sm ml-2"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
             {/* Notes */}
             <div>
               <label className="block text-sm font-medium text-slate-900 mb-2">

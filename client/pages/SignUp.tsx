@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock, User, ArrowRight, CheckCircle } from "lucide-react";
 import { FormEvent, useState } from "react";
 import { toast } from "sonner";
-import { mockUsers } from "@/lib/mockData";
+import { mockUsers, mockClientRequests } from "@/lib/mockData";
 
 export default function SignUp() {
   const navigate = useNavigate();

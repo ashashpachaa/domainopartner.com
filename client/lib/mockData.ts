@@ -970,10 +970,8 @@ export const mockOrders: Order[] = [
     },
     operationReviewForm: {
       isCompleted: false,
-      operationNotes: "",
-      qualityCheck: false,
-      documentsVerified: false,
-      complianceReview: false,
+      companyName: "",
+      companyNumber: "",
     },
   },
   {
@@ -1033,10 +1031,8 @@ export const mockOrders: Order[] = [
     },
     operationReviewForm: {
       isCompleted: false,
-      operationNotes: "",
-      qualityCheck: false,
-      documentsVerified: false,
-      complianceReview: false,
+      companyName: "",
+      companyNumber: "",
     },
   },
   {
@@ -1292,10 +1288,8 @@ export const mockOrders: Order[] = [
     },
     operationReviewForm: {
       isCompleted: false,
-      operationNotes: "",
-      qualityCheck: false,
-      documentsVerified: false,
-      complianceReview: false,
+      companyName: "",
+      companyNumber: "",
     },
   },
   {
@@ -1380,10 +1374,8 @@ export const mockOrders: Order[] = [
     },
     operationReviewForm: {
       isCompleted: false,
-      operationNotes: "",
-      qualityCheck: false,
-      documentsVerified: false,
-      complianceReview: false,
+      companyName: "",
+      companyNumber: "",
     },
   },
   {
@@ -1465,10 +1457,8 @@ export const mockOrders: Order[] = [
     },
     operationReviewForm: {
       isCompleted: false,
-      operationNotes: "",
-      qualityCheck: false,
-      documentsVerified: false,
-      complianceReview: false,
+      companyName: "",
+      companyNumber: "",
     },
   },
   {
@@ -1636,10 +1626,8 @@ export const mockOrders: Order[] = [
     },
     operationReviewForm: {
       isCompleted: false,
-      operationNotes: "",
-      qualityCheck: false,
-      documentsVerified: false,
-      complianceReview: false,
+      companyName: "",
+      companyNumber: "",
     },
   },
   {
@@ -1794,10 +1782,8 @@ export const mockOrders: Order[] = [
     },
     operationReviewForm: {
       isCompleted: false,
-      operationNotes: "",
-      qualityCheck: false,
-      documentsVerified: false,
-      complianceReview: false,
+      companyName: "",
+      companyNumber: "",
     },
   },
   {
@@ -1996,10 +1982,8 @@ export const mockOrders: Order[] = [
     },
     operationReviewForm: {
       isCompleted: false,
-      operationNotes: "",
-      qualityCheck: false,
-      documentsVerified: false,
-      complianceReview: false,
+      companyName: "",
+      companyNumber: "",
     },
   },
   {
@@ -2204,10 +2188,8 @@ export const mockOrders: Order[] = [
     },
     operationReviewForm: {
       isCompleted: false,
-      operationNotes: "",
-      qualityCheck: false,
-      documentsVerified: false,
-      complianceReview: false,
+      companyName: "",
+      companyNumber: "",
     },
   },
   {
@@ -2284,10 +2266,8 @@ export const mockOrders: Order[] = [
     },
     operationReviewForm: {
       isCompleted: false,
-      operationNotes: "",
-      qualityCheck: false,
-      documentsVerified: false,
-      complianceReview: false,
+      companyName: "",
+      companyNumber: "",
     },
   },
   {
@@ -2347,6 +2327,8 @@ export const mockOrders: Order[] = [
     },
     operationReviewForm: {
       isCompleted: true,
+      companyName: "Tech Solutions Ltd",
+      companyNumber: "12345678",
       submittedBy: "S004",
       submittedByName: "Michael Brown",
       submittedAt: "2024-01-13T14:20:00Z",
@@ -2404,6 +2386,8 @@ export const mockOrders: Order[] = [
     },
     operationReviewForm: {
       isCompleted: true,
+      companyName: "Tech Solutions Ltd",
+      companyNumber: "12345678",
       submittedBy: "S005",
       submittedByName: "Sarah Wilson",
       submittedAt: "2024-01-14T15:45:00Z",
@@ -2461,6 +2445,8 @@ export const mockOrders: Order[] = [
     },
     operationReviewForm: {
       isCompleted: true,
+      companyName: "Tech Solutions Ltd",
+      companyNumber: "12345678",
       submittedBy: "S004",
       submittedByName: "Michael Brown",
       submittedAt: "2024-01-15T13:00:00Z",
@@ -2518,6 +2504,8 @@ export const mockOrders: Order[] = [
     },
     operationReviewForm: {
       isCompleted: true,
+      companyName: "Tech Solutions Ltd",
+      companyNumber: "12345678",
       submittedBy: "S005",
       submittedByName: "Sarah Wilson",
       submittedAt: "2024-01-16T14:30:00Z",

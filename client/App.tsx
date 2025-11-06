@@ -31,6 +31,7 @@ import AdminOperations from "./pages/AdminOperations";
 import AdminOperationDetail from "./pages/AdminOperationDetail";
 import AdminWorkflowSettings from "./pages/AdminWorkflowSettings";
 import AdminAttendanceReport from "./pages/AdminAttendanceReport";
+import AdminSalesReport from "./pages/AdminSalesReport";
 import AdminClientRequests from "./pages/AdminClientRequests";
 import AdminClientRequestDetail from "./pages/AdminClientRequestDetail";
 import StaffDashboard from "./pages/StaffDashboard";

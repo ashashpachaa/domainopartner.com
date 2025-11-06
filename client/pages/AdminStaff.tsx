@@ -48,10 +48,16 @@ export default function AdminStaff() {
         member.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
         member.department.toLowerCase().includes(searchTerm.toLowerCase());
 
-      const matchesFilter =
+      const matchesRoleFilter =
         filterRole === "all" || member.role === filterRole;
 
-      return matchesSearch && matchesFilter;
+      const matchesDepartmentFilter =
+        !filterDepartment || member.department === filterDepartment;
+
+      const matchesStatusFilter =
+        filterStatus === "all" || member.status === filterStatus;
+
+      return matchesSearch && matchesRoleFilter && matchesDepartmentFilter && matchesStatusFilter;
     })
     .sort(
       (a, b) =>

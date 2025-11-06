@@ -2623,8 +2623,8 @@ export const mockOrders: Order[] = [
     ],
     rejectionReasons: [],
     operationFiles: [
-      { id: "F018-1", orderId: "O18", fileName: "apostille_certificate.pdf", fileSize: 512000, uploadedBy: "S002", uploadedByName: "David Anderson", uploadedAt: "2025-01-16T10:45:00Z", stage: "apostille", fileType: "apostille", description: "Official apostille certificate for company acquisition documents", visibleToClient: false },
-      { id: "F018-2", orderId: "O18", fileName: "power_of_attorney.pdf", fileSize: 623000, uploadedBy: "S002", uploadedByName: "David Anderson", uploadedAt: "2025-01-16T14:20:00Z", stage: "poa", fileType: "poa", description: "Signed power of attorney for acquisition process", visibleToClient: false },
+      { id: "F018-1", orderId: "O18", fileName: "apostille_certificate.pdf", fileSize: 512000, fileUrl: "https://example.com/files/apostille_certificate.pdf", uploadedBy: "S002", uploadedByName: "David Anderson", uploadedAt: "2025-01-16T10:45:00Z", stage: "apostille", fileType: "apostille", description: "Official apostille certificate for company acquisition documents", visibleToClient: false },
+      { id: "F018-2", orderId: "O18", fileName: "power_of_attorney.pdf", fileSize: 623000, fileUrl: "https://example.com/files/power_of_attorney.pdf", uploadedBy: "S002", uploadedByName: "David Anderson", uploadedAt: "2025-01-16T14:20:00Z", stage: "poa", fileType: "poa", description: "Signed power of attorney for acquisition process", visibleToClient: false },
     ],
     clientCanViewFiles: true,
     clientCanViewTracking: true,

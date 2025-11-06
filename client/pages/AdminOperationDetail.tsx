@@ -23,7 +23,7 @@ export default function AdminOperationDetail() {
   const navigate = useNavigate();
   const [trackingInput, setTrackingInput] = useState("");
   const [fileNotes, setFileNotes] = useState("");
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [rejectReason, setRejectReason] = useState("");
   const [showRejectForm, setShowRejectForm] = useState(false);
   const [activeTab, setActiveTab] = useState<"workflow" | "apostille" | "history">("workflow");

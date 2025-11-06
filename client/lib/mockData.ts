@@ -2450,10 +2450,6 @@ export const mockOrders: Order[] = [
       submittedBy: "S004",
       submittedByName: "Michael Brown",
       submittedAt: "2024-01-15T13:00:00Z",
-      qualityCheck: true,
-      documentsVerified: true,
-      complianceReview: true,
-      operationNotes: "Apostille completed. Awaiting financial report submission.",
     },
   },
   {

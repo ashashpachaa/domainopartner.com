@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import AdminLogin from "./pages/AdminLogin";
+import Login from "./pages/Login";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminUserDetail from "./pages/AdminUserDetail";
 import AdminEditUser from "./pages/AdminEditUser";

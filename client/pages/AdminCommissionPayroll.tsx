@@ -260,6 +260,51 @@ export default function AdminCommissionPayroll() {
           </div>
         </div>
 
+        {/* Filters */}
+        <div className="bg-white rounded-lg border border-slate-200 p-6 mb-8 shadow-sm">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">Search Staff</label>
+              <input
+                type="text"
+                value={staffSearch}
+                onChange={(e) => setStaffSearch(e.target.value)}
+                placeholder="Search by staff name..."
+                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:border-blue-500 focus:ring-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">Commission Tier</label>
+              <select
+                value={tierFilter}
+                onChange={(e) => setTierFilter(e.target.value)}
+                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:border-blue-500 focus:ring-blue-500 bg-white"
+              >
+                <option value="">All Tiers</option>
+                <option value="Tier 1 (1-10)">Tier 1 (1-10)</option>
+                <option value="Tier 2 (11-20)">Tier 2 (11-20)</option>
+                <option value="Tier 3 (21-50)">Tier 3 (21-50)</option>
+                <option value="Tier 4 (51+)">Tier 4 (51+)</option>
+              </select>
+            </div>
+
+            {(staffSearch || tierFilter) && (
+              <div className="flex items-end">
+                <button
+                  onClick={() => {
+                    setStaffSearch("");
+                    setTierFilter("");
+                  }}
+                  className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+                >
+                  Clear filters
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+
         {/* Per-Staff Commission Details */}
         <div className="bg-white rounded-lg border border-slate-200 overflow-hidden shadow-sm">
           <div className="p-6 border-b border-slate-200">

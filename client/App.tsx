@@ -30,6 +30,7 @@ import AdminEditProduct from "./pages/AdminEditProduct";
 import AdminOperations from "./pages/AdminOperations";
 import AdminOperationDetail from "./pages/AdminOperationDetail";
 import AdminWorkflowSettings from "./pages/AdminWorkflowSettings";
+import AdminAttendanceReport from "./pages/AdminAttendanceReport";
 import AdminClientRequests from "./pages/AdminClientRequests";
 import AdminClientRequestDetail from "./pages/AdminClientRequestDetail";
 import StaffDashboard from "./pages/StaffDashboard";
@@ -161,6 +162,10 @@ const App = () => (
           <Route
             path="/admin/attendance"
             element={<AdminRoute element={<AdminAttendanceDashboard />} />}
+          />
+          <Route
+            path="/admin/attendance/report"
+            element={<AdminRoute element={<AdminAttendanceReport />} />}
           />
           <Route
             path="/staff/attendance"

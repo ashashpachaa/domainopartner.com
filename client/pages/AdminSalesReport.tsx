@@ -5,8 +5,12 @@ import AdminLayout from "@/components/AdminLayout";
 import { mockOrders, mockInvoices, mockStaff, mockUsers } from "@/lib/mockData";
 
 export default function AdminSalesReport() {
-  const [dateRange, setDateRange] = useState<"month" | "quarter" | "year">("month");
+  const [dateRange, setDateRange] = useState<"month" | "quarter" | "year" | "custom">("month");
   const [selectedMonth, setSelectedMonth] = useState<string>(new Date().toISOString().substring(0, 7));
+  const [customStartDate, setCustomStartDate] = useState<string>("");
+  const [customEndDate, setCustomEndDate] = useState<string>("");
+  const [staffSearch, setStaffSearch] = useState<string>("");
+  const [departmentFilter, setDepartmentFilter] = useState<string>("");
 
   // Calculate monthly sales
   const monthlySales = useMemo(() => {

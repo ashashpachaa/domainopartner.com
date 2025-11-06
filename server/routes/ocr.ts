@@ -152,14 +152,28 @@ function parsePassportText(text: string): ExtractedPassportData {
 
   // Calculate confidence score
   let confidenceScore = 0;
-  if (result.firstName) confidenceScore += 0.25;
-  if (result.lastName) confidenceScore += 0.25;
-  if (result.dateOfBirth) confidenceScore += 0.25;
-  if (result.nationality) confidenceScore += 0.25;
-  if (datePatternMatches > 0) confidenceScore += 0.1;
-  if (nameMatchConfidence > 0) confidenceScore += Math.min(0.1, nameMatchConfidence);
 
-  result.confidence = Math.min(1, confidenceScore);
+  // Scoring for each field
+  if (result.firstName && result.firstName.length > 1 && result.firstName.length < 30) confidenceScore += 0.25;
+  if (result.lastName && result.lastName.length > 1 && result.lastName.length < 50) confidenceScore += 0.25;
+  if (result.dateOfBirth) confidenceScore += 0.25;
+  if (result.nationality && result.nationality.length > 1 && result.nationality.length < 30) confidenceScore += 0.25;
+
+  // Bonus for date pattern confidence
+  if (datePatternMatches > 0) confidenceScore += 0.05;
+
+  // Bonus for name field pattern matching
+  if (nameMatchConfidence > 0) confidenceScore += Math.min(0.05, nameMatchConfidence);
+
+  // Penalize if name looks suspicious (too long, contains numbers, or weird characters)
+  if (result.firstName && (result.firstName.includes("PASSPORT") || result.firstName.includes("REPUBLIC") || result.firstName.includes("UNITED"))) {
+    confidenceScore = Math.max(0, confidenceScore - 0.3);
+  }
+  if (result.lastName && (result.lastName.includes("PASSPORT") || result.lastName.includes("REPUBLIC") || result.lastName.includes("UNITED"))) {
+    confidenceScore = Math.max(0, confidenceScore - 0.3);
+  }
+
+  result.confidence = Math.min(1, Math.max(0, confidenceScore));
 
   return result;
 }

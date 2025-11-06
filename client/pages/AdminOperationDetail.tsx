@@ -139,7 +139,7 @@ export default function AdminOperationDetail() {
       stages.push({ id: "pending_poa", label: "Power of Attorney", icon: "📄", requiresUpload: true });
     }
     if (product?.services.hasFinancialReport) {
-      stages.push({ id: "pending_financial_report", label: "Financial Report", icon: "📊", requiresUpload: true });
+      stages.push({ id: "pending_financial_report", label: "Financial Report", icon: "����", requiresUpload: true });
     }
     if (product?.services.hasShipping) {
       stages.push({ id: "shipping_preparation", label: "Shipping & Tracking", icon: "📦", requiresUpload: false });
@@ -2213,121 +2213,133 @@ export default function AdminOperationDetail() {
         {activeTab === "poa" && (
           <div className="space-y-6">
             {product?.services.hasPOA ? (
-              order.status === "pending_poa" ? (
-                <div className="bg-white rounded-lg p-6 border border-slate-200">
-                  <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-                    <FileText className="w-5 h-5 text-primary-600" />
-                    Power of Attorney Upload
-                  </h3>
-                  <p className="text-sm text-slate-600 mb-6">
-                    Upload Power of Attorney documents for this order.
-                  </p>
+              <>
+                {order.status === "pending_poa" && (
+                  <div className="bg-white rounded-lg p-6 border border-slate-200">
+                    <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                      <FileText className="w-5 h-5 text-primary-600" />
+                      Power of Attorney Upload
+                    </h3>
+                    <p className="text-sm text-slate-600 mb-6">
+                      Upload Power of Attorney documents for this order.
+                    </p>
 
-                  {/* File Upload */}
-                  <div className="mb-6">
-                    <input
-                      type="file"
-                      multiple
-                      className="hidden"
-                      id="poa-file-input"
-                      onChange={(e) => {
-                        if (e.target.files) {
-                          setPoaFiles(Array.from(e.target.files));
+                    {/* File Upload */}
+                    <div className="mb-6">
+                      <input
+                        type="file"
+                        multiple
+                        className="hidden"
+                        id="poa-file-input"
+                        onChange={(e) => {
+                          if (e.target.files) {
+                            setPoaFiles(Array.from(e.target.files));
+                          }
+                        }}
+                      />
+                      <label
+                        htmlFor="poa-file-input"
+                        className="border-2 border-dashed border-slate-300 rounded-lg p-8 text-center hover:border-primary-500 cursor-pointer transition-colors flex flex-col items-center"
+                      >
+                        <FileText className="w-12 h-12 text-slate-400 mx-auto mb-3" />
+                        <p className="text-sm font-medium text-slate-900 mb-1">
+                          Click to upload file or drag and drop
+                        </p>
+                        <p className="text-xs text-slate-600">
+                          PDF, DOC, DOCX, JPG, PNG (Max 5GB per file)
+                        </p>
+                      </label>
+                      {poaFiles.length > 0 && (
+                        <div className="mt-3 space-y-2">
+                          <p className="text-sm font-medium text-slate-700">
+                            {poaFiles.length} file(s) selected
+                          </p>
+                          {poaFiles.map((file, idx) => (
+                            <div key={idx} className="p-3 bg-blue-50 rounded-lg border border-blue-200 flex items-center justify-between">
+                              <div className="flex items-center gap-2 flex-1 min-w-0">
+                                <FileText className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                                <div className="min-w-0">
+                                  <p className="text-sm font-medium text-blue-900 truncate">
+                                    {file.name}
+                                  </p>
+                                  <p className="text-xs text-blue-700">
+                                    {(file.size / 1024 / 1024).toFixed(2)} MB
+                                  </p>
+                                </div>
+                              </div>
+                              <button
+                                onClick={() => setPoaFiles(poaFiles.filter((_, i) => i !== idx))}
+                                className="text-blue-600 hover:text-blue-800 ml-2 flex-shrink-0"
+                              >
+                                <X className="w-4 h-4" />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* File Notes */}
+                    <div className="mb-6">
+                      <label className="block text-sm font-medium text-slate-900 mb-2">
+                        Document Notes/Description *
+                      </label>
+                      <textarea
+                        value={poaNotes}
+                        onChange={(e) => setPoaNotes(e.target.value)}
+                        placeholder="Please describe the documents and any relevant details..."
+                        rows={3}
+                        className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500 resize-none"
+                      />
+                    </div>
+
+                    <Button
+                      onClick={() => {
+                        if (poaFiles.length > 0 && poaNotes.trim()) {
+                          const updatedOrder = { ...order };
+                          updatedOrder.operationFiles.push({
+                            id: `file_${Date.now()}`,
+                            orderId: order.id,
+                            fileName: poaFiles[0].name,
+                            fileSize: poaFiles[0].size,
+                            uploadedBy: effectiveUserId,
+                            uploadedByName: mockStaff.find(s => s.id === effectiveUserId)?.firstName || "Unknown",
+                            uploadedAt: new Date().toISOString(),
+                            stage: "poa",
+                            fileType: "poa",
+                            description: poaNotes,
+                            visibleToClient: false,
+                          });
+                          setOrder(updatedOrder);
+                          localStorage.setItem(`order_${orderId}`, JSON.stringify(updatedOrder));
+                          setPoaFiles([]);
+                          setPoaNotes("");
+                          alert("POA documents uploaded successfully!");
+                        } else {
+                          alert("Please select files and add a description");
                         }
                       }}
-                    />
-                    <label
-                      htmlFor="poa-file-input"
-                      className="border-2 border-dashed border-slate-300 rounded-lg p-8 text-center hover:border-primary-500 cursor-pointer transition-colors flex flex-col items-center"
+                      className="w-full bg-primary-600 hover:bg-primary-700"
                     >
-                      <FileText className="w-12 h-12 text-slate-400 mx-auto mb-3" />
-                      <p className="text-sm font-medium text-slate-900 mb-1">
-                        Click to upload file or drag and drop
-                      </p>
-                      <p className="text-xs text-slate-600">
-                        PDF, DOC, DOCX, JPG, PNG (Max 5GB per file)
-                      </p>
-                    </label>
-                    {poaFiles.length > 0 && (
-                      <div className="mt-3 space-y-2">
-                        <p className="text-sm font-medium text-slate-700">
-                          {poaFiles.length} file(s) selected
-                        </p>
-                        {poaFiles.map((file, idx) => (
-                          <div key={idx} className="p-3 bg-blue-50 rounded-lg border border-blue-200 flex items-center justify-between">
-                            <div className="flex items-center gap-2 flex-1 min-w-0">
-                              <FileText className="w-4 h-4 text-blue-600 flex-shrink-0" />
-                              <div className="min-w-0">
-                                <p className="text-sm font-medium text-blue-900 truncate">
-                                  {file.name}
-                                </p>
-                                <p className="text-xs text-blue-700">
-                                  {(file.size / 1024 / 1024).toFixed(2)} MB
-                                </p>
-                              </div>
-                            </div>
-                            <button
-                              onClick={() => setPoaFiles(poaFiles.filter((_, i) => i !== idx))}
-                              className="text-blue-600 hover:text-blue-800 ml-2 flex-shrink-0"
-                            >
-                              <X className="w-4 h-4" />
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    )}
+                      <Upload className="w-4 h-4 mr-2" />
+                      Upload POA Documents
+                    </Button>
                   </div>
+                )}
 
-                  {/* File Notes */}
-                  <div className="mb-6">
-                    <label className="block text-sm font-medium text-slate-900 mb-2">
-                      Document Notes/Description *
-                    </label>
-                    <textarea
-                      value={poaNotes}
-                      onChange={(e) => setPoaNotes(e.target.value)}
-                      placeholder="Please describe the documents and any relevant details..."
-                      rows={3}
-                      className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500 resize-none"
-                    />
+                {order.status !== "pending_poa" && order.operationFiles?.filter(f => f.stage === "poa").length === 0 && (
+                  <div className="bg-amber-50 rounded-lg p-6 border border-amber-200">
+                    <p className="text-amber-900">
+                      No POA documents uploaded yet. New uploads are only available during the POA stage.
+                    </p>
                   </div>
+                )}
 
-                  <Button
-                    onClick={() => {
-                      if (poaFiles.length > 0 && poaNotes.trim()) {
-                        const updatedOrder = { ...order };
-                        updatedOrder.operationFiles.push({
-                          id: `file_${Date.now()}`,
-                          orderId: order.id,
-                          fileName: poaFiles[0].name,
-                          fileSize: poaFiles[0].size,
-                          uploadedBy: effectiveUserId,
-                          uploadedByName: mockStaff.find(s => s.id === effectiveUserId)?.firstName || "Unknown",
-                          uploadedAt: new Date().toISOString(),
-                          stage: "poa",
-                          fileType: "poa",
-                          description: poaNotes,
-                          visibleToClient: false,
-                        });
-                        setOrder(updatedOrder);
-                        localStorage.setItem(`order_${orderId}`, JSON.stringify(updatedOrder));
-                        setPoaFiles([]);
-                        setPoaNotes("");
-                        alert("POA documents uploaded successfully!");
-                      } else {
-                        alert("Please select files and add a description");
-                      }
-                    }}
-                    className="w-full bg-primary-600 hover:bg-primary-700"
-                  >
-                    <Upload className="w-4 h-4 mr-2" />
-                    Upload POA Documents
-                  </Button>
-
-                  {/* Uploaded Files */}
-                  {order.operationFiles?.filter(f => f.stage === "poa").length > 0 && (
-                    <div className="mt-6 space-y-3">
-                      <h4 className="font-semibold text-slate-900">Uploaded Documents</h4>
+                {/* Uploaded Files - Always visible */}
+                {order.operationFiles?.filter(f => f.stage === "poa").length > 0 && (
+                  <div className="bg-white rounded-lg p-6 border border-slate-200">
+                    <h4 className="font-semibold text-slate-900 mb-4">POA Documents</h4>
+                    <div className="space-y-3">
                       {order.operationFiles.filter(f => f.stage === "poa").map((file) => (
                         <div key={file.id} className="p-4 bg-green-50 rounded-lg border border-green-200">
                           <div className="flex items-start justify-between">
@@ -2340,20 +2352,16 @@ export default function AdminOperationDetail() {
                                 <p className="text-sm text-slate-700 mt-2">{file.description}</p>
                               )}
                             </div>
-                            <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0" />
+                            <button className="ml-4 px-3 py-1 rounded bg-green-600 text-white text-sm font-semibold hover:bg-green-700">
+                              Download
+                            </button>
                           </div>
                         </div>
                       ))}
                     </div>
-                  )}
-                </div>
-              ) : (
-                <div className="bg-amber-50 rounded-lg p-6 border border-amber-200">
-                  <p className="text-amber-900">
-                    POA uploads are only available when the order is in the POA stage.
-                  </p>
-                </div>
-              )
+                  </div>
+                )}
+              </>
             ) : (
               <div className="bg-slate-50 rounded-lg p-6 border border-slate-200">
                 <p className="text-slate-600">

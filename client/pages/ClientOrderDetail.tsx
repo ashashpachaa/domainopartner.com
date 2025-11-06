@@ -346,22 +346,49 @@ export default function ClientOrderDetail() {
               </div>
             )}
 
-            {/* Timeline */}
+            {/* Activity Timeline */}
             {order.history && order.history.length > 0 && (
               <div className="bg-white rounded-lg border border-slate-200 p-6">
-                <h3 className="font-semibold text-slate-900 mb-3">Recent Activity</h3>
-                <div className="space-y-3 max-h-64 overflow-y-auto">
+                <h3 className="font-semibold text-slate-900 mb-4">Activity Timeline</h3>
+                <div className="space-y-4">
                   {order.history
-                    .slice(0, 5)
+                    .slice()
                     .reverse()
                     .map((entry, index) => (
-                      <div key={index} className="text-xs border-l border-slate-200 pl-3">
-                        <p className="font-medium text-slate-900">
-                          {entry.newStatus?.replace(/_/g, " ").toUpperCase()}
-                        </p>
-                        <p className="text-slate-600">
-                          {new Date(entry.createdAt).toLocaleDateString()}
-                        </p>
+                      <div key={entry.id} className="flex gap-4">
+                        <div className="flex flex-col items-center">
+                          <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-semibold flex-shrink-0">
+                            {index + 1}
+                          </div>
+                          {index < order.history.length - 1 && (
+                            <div className="w-0.5 h-12 bg-slate-200 my-1" />
+                          )}
+                        </div>
+                        <div className="flex-1 pt-1">
+                          <p className="font-medium text-slate-900">
+                            {entry.newStatus?.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())}
+                          </p>
+                          <p className="text-xs text-slate-600 mt-1">
+                            {new Date(entry.createdAt).toLocaleDateString()} at{" "}
+                            {new Date(entry.createdAt).toLocaleTimeString([], {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}
+                          </p>
+                          <p className="text-xs text-slate-600 mt-1">
+                            by <span className="font-medium">{entry.actionByName}</span>
+                          </p>
+                          {entry.description && (
+                            <p className="text-xs text-slate-700 mt-2 bg-slate-50 p-2 rounded">
+                              {entry.description}
+                            </p>
+                          )}
+                          {entry.reason && (
+                            <p className="text-xs text-red-600 mt-2 bg-red-50 p-2 rounded">
+                              <span className="font-medium">Reason:</span> {entry.reason}
+                            </p>
+                          )}
+                        </div>
                       </div>
                     ))}
                 </div>

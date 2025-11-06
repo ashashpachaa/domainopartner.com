@@ -116,6 +116,12 @@ export default function AdminOperationDetail() {
     );
   }
 
+  const getStaffName = (staffId?: string) => {
+    if (!staffId) return "Unassigned";
+    const staff = mockStaff.find((s) => s.id === staffId);
+    return staff ? `${staff.firstName} ${staff.lastName}` : "Unknown";
+  };
+
   // Build dynamic workflow stages based on product services
   const getWorkflowStages = () => {
     const stages: Array<{ id: string; label: string; icon: string; requiresUpload?: boolean }> = [

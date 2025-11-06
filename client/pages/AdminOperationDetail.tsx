@@ -389,6 +389,68 @@ export default function AdminOperationDetail() {
     };
   }, [order.status, order.createdAt, order.assignedToSalesId, order.assignedToOperationId, order.assignedToManagerId]);
 
+  // Get deadline info for all stages
+  const getStageDealinesInfo = useMemo(() => {
+    const createdDate = new Date(order.createdAt);
+    const now = currentTime; // Use currentTime for live updates
+
+    const stageDeadlines = [
+      {
+        id: "new",
+        label: "Order Created",
+        daysAllowed: 0,
+        deadlineDate: createdDate,
+      },
+      {
+        id: "pending_sales_review",
+        label: "Sales Review",
+        daysAllowed: 0.25, // 6 hours
+        deadlineDate: new Date(createdDate.getTime() + 6 * 60 * 60 * 1000),
+      },
+      {
+        id: "pending_operation",
+        label: "Operation Process",
+        daysAllowed: 3,
+        deadlineDate: addBusinessDays(createdDate, 3),
+      },
+      {
+        id: "pending_operation_manager_review",
+        label: "Manager Review",
+        daysAllowed: 1,
+        deadlineDate: addBusinessDays(createdDate, 4),
+      },
+      {
+        id: "awaiting_client_acceptance",
+        label: "Client Acceptance",
+        daysAllowed: 1,
+        deadlineDate: addBusinessDays(createdDate, 5),
+      },
+      {
+        id: "shipping_preparation",
+        label: "Shipping & Complete",
+        daysAllowed: product?.services.hasApostille ? 1 : 2,
+        deadlineDate: addBusinessDays(createdDate, product?.services.hasApostille ? 7 : 8),
+      },
+    ];
+
+    return stageDeadlines.map((stage) => {
+      const timeRemaining = stage.deadlineDate.getTime() - now.getTime();
+      const daysRemaining = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+      const hoursRemaining = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutesRemaining = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+
+      return {
+        ...stage,
+        timeRemaining,
+        daysRemaining,
+        hoursRemaining,
+        minutesRemaining,
+        isOverdue: now > stage.deadlineDate,
+        isApproaching: timeRemaining < 6 * 60 * 60 * 1000 && !( now > stage.deadlineDate),
+      };
+    });
+  }, [order.createdAt, currentTime, product?.services.hasApostille]);
+
   const getDeadlineColor = () => {
     if (["completed", "rejected_by_sales", "rejected_by_operation", "rejected_by_operation_manager", "rejected_by_client"].includes(order.status)) {
       return "bg-slate-50 border-slate-200";

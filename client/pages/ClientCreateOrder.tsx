@@ -696,12 +696,75 @@ export default function ClientCreateOrder() {
                   <label className="block text-sm font-medium text-slate-900 mb-2">
                     Company Name *
                   </label>
-                  <Input
-                    type="text"
-                    value={companyInfo.companyName}
-                    onChange={(e) => setCompanyInfo({ ...companyInfo, companyName: e.target.value })}
-                    placeholder="e.g., Acme Corporation Ltd"
-                  />
+                  <div className="relative">
+                    <Input
+                      type="text"
+                      value={companyInfo.companyName}
+                      onChange={(e) => {
+                        setCompanyInfo({ ...companyInfo, companyName: e.target.value });
+                        companyValidation.validateWithDebounce(e.target.value);
+                      }}
+                      placeholder="e.g., Acme Corporation Ltd"
+                      className={`${
+                        companyValidation.isAvailable === false
+                          ? "border-red-500 focus:border-red-500"
+                          : companyValidation.isAvailable === true
+                          ? "border-green-500 focus:border-green-500"
+                          : ""
+                      }`}
+                    />
+                    <div className="absolute right-3 top-2.5">
+                      {companyValidation.isChecking && (
+                        <Loader className="w-5 h-5 text-blue-600 animate-spin" />
+                      )}
+                      {!companyValidation.isChecking &&
+                        companyValidation.isAvailable === true && (
+                          <Check className="w-5 h-5 text-green-600" />
+                        )}
+                      {!companyValidation.isChecking &&
+                        companyValidation.isAvailable === false && (
+                          <AlertCircle className="w-5 h-5 text-red-600" />
+                        )}
+                    </div>
+                  </div>
+
+                  {companyValidation.isAvailable === false && (
+                    <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-lg">
+                      <p className="text-sm font-medium text-red-700 mb-1">
+                        Company name already registered
+                      </p>
+                      {companyValidation.exactMatch && (
+                        <p className="text-xs text-red-600">
+                          Registered as: {companyValidation.exactMatch.title}
+                          {companyValidation.exactMatch.company_number && (
+                            <span> (Company No: {companyValidation.exactMatch.company_number})</span>
+                          )}
+                        </p>
+                      )}
+                      <p className="text-xs text-red-600 mt-1">
+                        Please choose a different company name.
+                      </p>
+                    </div>
+                  )}
+
+                  {companyValidation.isAvailable === true && (
+                    <p className="text-xs text-green-600 mt-1">
+                      ✓ Company name is available for registration
+                    </p>
+                  )}
+
+                  {companyValidation.error && (
+                    <p className="text-xs text-orange-600 mt-1">
+                      Could not verify availability: {companyValidation.error}
+                    </p>
+                  )}
+
+                  {companyValidation.isAvailable === null &&
+                    companyInfo.companyName.length >= 2 && (
+                      <p className="text-xs text-slate-500 mt-1">
+                        Start typing to check availability...
+                      </p>
+                    )}
                 </div>
 
                 <div>

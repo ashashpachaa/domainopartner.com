@@ -69,7 +69,16 @@ export default function AdminEditProduct() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.name || !formData.description || !formData.duration || !formData.price || !formData.currency) {
+    // Validate required fields - check for empty strings, null, or undefined
+    if (
+      !formData.name?.trim() ||
+      !formData.description?.trim() ||
+      !formData.duration?.trim() ||
+      formData.price === null ||
+      formData.price === undefined ||
+      formData.price === "" ||
+      !formData.currency?.trim()
+    ) {
       toast.error("Please fill in all required fields");
       return;
     }

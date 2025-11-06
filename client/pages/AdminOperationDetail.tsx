@@ -195,13 +195,11 @@ export default function AdminOperationDetail() {
     if (canAccept()) {
       // Check if operation review form is required and completed
       if (order.status === "pending_operation") {
-        const isFormCompleted = operationFormData.qualityCheck &&
-                               operationFormData.documentsVerified &&
-                               operationFormData.complianceReview &&
-                               operationFormData.operationNotes.trim();
+        const isFormCompleted = operationFormData.companyName.trim() &&
+                               operationFormData.companyNumber.trim();
 
         if (!isFormCompleted) {
-          alert("Please complete the Operation Review Form before proceeding.\n\nAll checkboxes must be checked and notes must be provided.");
+          alert("Please complete the Operation Review Form before proceeding.\n\nBoth company name and company number must be provided.");
           return;
         }
       }
@@ -240,10 +238,8 @@ export default function AdminOperationDetail() {
           submittedBy: effectiveUserId,
           submittedByName: currentStaff?.firstName + " " + currentStaff?.lastName || "Unknown",
           submittedAt: new Date().toISOString(),
-          qualityCheck: operationFormData.qualityCheck,
-          documentsVerified: operationFormData.documentsVerified,
-          complianceReview: operationFormData.complianceReview,
-          operationNotes: operationFormData.operationNotes,
+          companyName: operationFormData.companyName,
+          companyNumber: operationFormData.companyNumber,
         };
       }
 
@@ -1921,62 +1917,19 @@ export default function AdminOperationDetail() {
 
                 <div className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {/* Submitted By */}
+                    {/* Company Name */}
                     <div className="bg-white rounded-lg p-4 border border-green-200">
-                      <p className="text-xs font-semibold text-slate-600 uppercase mb-1">Submitted By</p>
+                      <p className="text-xs font-semibold text-slate-600 uppercase mb-1">Company Name</p>
                       <p className="text-sm font-medium text-slate-900">
-                        {order.operationReviewForm.submittedByName || "Unknown"}
+                        {order.operationReviewForm.companyName || "Not provided"}
                       </p>
                     </div>
 
-                    {/* Submitted At */}
+                    {/* Company Number */}
                     <div className="bg-white rounded-lg p-4 border border-green-200">
-                      <p className="text-xs font-semibold text-slate-600 uppercase mb-1">Submitted At</p>
+                      <p className="text-xs font-semibold text-slate-600 uppercase mb-1">Company Number</p>
                       <p className="text-sm font-medium text-slate-900">
-                        {order.operationReviewForm.submittedAt
-                          ? new Date(order.operationReviewForm.submittedAt).toLocaleDateString("en-US", {
-                              month: "short",
-                              day: "numeric",
-                              year: "numeric",
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })
-                          : "Unknown date"}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Checkboxes Status */}
-                  <div className="bg-white rounded-lg p-6 border border-green-200">
-                    <h4 className="text-base font-semibold text-slate-900 mb-4">Quality & Compliance Checks</h4>
-                    <div className="space-y-3">
-                      <div className="flex items-center gap-3">
-                        <div className="w-6 h-6 rounded border-2 border-green-600 bg-green-600 flex items-center justify-center flex-shrink-0">
-                          <span className="text-white text-sm font-bold">✓</span>
-                        </div>
-                        <p className="text-sm text-slate-900">Quality Check Passed</p>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <div className="w-6 h-6 rounded border-2 border-green-600 bg-green-600 flex items-center justify-center flex-shrink-0">
-                          <span className="text-white text-sm font-bold">✓</span>
-                        </div>
-                        <p className="text-sm text-slate-900">Documents Verified</p>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <div className="w-6 h-6 rounded border-2 border-green-600 bg-green-600 flex items-center justify-center flex-shrink-0">
-                          <span className="text-white text-sm font-bold">✓</span>
-                        </div>
-                        <p className="text-sm text-slate-900">Compliance Review Completed</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Notes */}
-                  <div className="bg-white rounded-lg p-6 border border-green-200">
-                    <label className="block text-base font-semibold text-slate-900 mb-3">Operation Notes</label>
-                    <div className="bg-green-50 rounded-lg p-4 border border-green-200">
-                      <p className="text-sm text-slate-700 whitespace-pre-wrap">
-                        {order.operationReviewForm.operationNotes || "No notes provided"}
+                        {order.operationReviewForm.companyNumber || "Not provided"}
                       </p>
                     </div>
                   </div>
@@ -1996,115 +1949,59 @@ export default function AdminOperationDetail() {
                 </p>
 
                 <div className="space-y-6">
-                  {/* Checkboxes Section */}
-                  <div className="bg-white rounded-lg p-6 border border-indigo-200">
-                    <h4 className="text-base font-semibold text-slate-900 mb-4">Quality & Compliance Checks</h4>
-                    <div className="space-y-4">
-                      <label className="flex items-start gap-3 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={operationFormData.qualityCheck}
-                          onChange={(e) =>
-                            setOperationFormData({
-                              ...operationFormData,
-                              qualityCheck: e.target.checked,
-                            })
-                          }
-                          className="w-5 h-5 mt-1 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
-                        />
-                        <div>
-                          <p className="font-medium text-slate-900">Quality Check Passed</p>
-                          <p className="text-sm text-slate-600 mt-1">
-                            Documents have been reviewed for quality, completeness, and accuracy
-                          </p>
-                        </div>
-                      </label>
-
-                      <label className="flex items-start gap-3 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={operationFormData.documentsVerified}
-                          onChange={(e) =>
-                            setOperationFormData({
-                              ...operationFormData,
-                              documentsVerified: e.target.checked,
-                            })
-                          }
-                          className="w-5 h-5 mt-1 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
-                        />
-                        <div>
-                          <p className="font-medium text-slate-900">Documents Verified</p>
-                          <p className="text-sm text-slate-600 mt-1">
-                            All required documents have been verified against the product requirements
-                          </p>
-                        </div>
-                      </label>
-
-                      <label className="flex items-start gap-3 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={operationFormData.complianceReview}
-                          onChange={(e) =>
-                            setOperationFormData({
-                              ...operationFormData,
-                              complianceReview: e.target.checked,
-                            })
-                          }
-                          className="w-5 h-5 mt-1 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
-                        />
-                        <div>
-                          <p className="font-medium text-slate-900">Compliance Review Completed</p>
-                          <p className="text-sm text-slate-600 mt-1">
-                            All documents comply with legal and regulatory requirements for the country/region
-                          </p>
-                        </div>
-                      </label>
-                    </div>
-                  </div>
-
-                  {/* Notes Section */}
+                  {/* Company Name Section */}
                   <div className="bg-white rounded-lg p-6 border border-indigo-200">
                     <label className="block text-base font-semibold text-slate-900 mb-3">
-                      Operation Notes *
+                      Company Name *
                     </label>
-                    <textarea
-                      value={operationFormData.operationNotes}
+                    <input
+                      type="text"
+                      value={operationFormData.companyName}
                       onChange={(e) =>
                         setOperationFormData({
                           ...operationFormData,
-                          operationNotes: e.target.value,
+                          companyName: e.target.value,
                         })
                       }
-                      placeholder="Please provide a summary of the operation review. Include any issues found, corrections made, or special considerations for the manager review..."
-                      rows={4}
-                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:border-indigo-500 focus:ring-indigo-500 resize-none"
+                      placeholder="Enter the company name"
+                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:border-indigo-500 focus:ring-indigo-500"
                     />
-                    <p className="text-xs text-slate-600 mt-2">
-                      {operationFormData.operationNotes.length} characters entered
-                    </p>
+                  </div>
+
+                  {/* Company Number Section */}
+                  <div className="bg-white rounded-lg p-6 border border-indigo-200">
+                    <label className="block text-base font-semibold text-slate-900 mb-3">
+                      Company Number *
+                    </label>
+                    <input
+                      type="text"
+                      value={operationFormData.companyNumber}
+                      onChange={(e) =>
+                        setOperationFormData({
+                          ...operationFormData,
+                          companyNumber: e.target.value,
+                        })
+                      }
+                      placeholder="Enter the company number"
+                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:border-indigo-500 focus:ring-indigo-500"
+                    />
                   </div>
 
                   {/* Completion Status */}
                   <div className={`rounded-lg p-4 border-2 ${
-                    operationFormData.qualityCheck &&
-                    operationFormData.documentsVerified &&
-                    operationFormData.complianceReview &&
-                    operationFormData.operationNotes.trim()
+                    operationFormData.companyName.trim() &&
+                    operationFormData.companyNumber.trim()
                       ? "bg-green-50 border-green-200"
                       : "bg-amber-50 border-amber-200"
                   }`}>
                     <p className={`text-sm font-semibold ${
-                      operationFormData.qualityCheck &&
-                      operationFormData.documentsVerified &&
-                      operationFormData.complianceReview &&
-                      operationFormData.operationNotes.trim()
+                      operationFormData.companyName.trim() &&
+                      operationFormData.companyNumber.trim()
                         ? "text-green-800"
                         : "text-amber-800"
                     }`}>
-                      {operationFormData.qualityCheck &&
-                      operationFormData.documentsVerified &&
-                      operationFormData.complianceReview &&
-                      operationFormData.operationNotes.trim()
+                      {operationFormData.companyName.trim() &&
+                      operationFormData.companyNumber.trim()
                         ? "✓ Form Complete - Ready to proceed to Manager Review"
                         : "⚠ Form Incomplete - Complete all fields to proceed"}
                     </p>

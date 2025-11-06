@@ -49,16 +49,7 @@ export default function AdminDashboard() {
 
   // Show notification for pending client requests
   useEffect(() => {
-    const allRequests = [...mockClientRequests];
-    const storedRequests = JSON.parse(localStorage.getItem("mockClientRequests") || "[]");
-    const merged = [...allRequests];
-    for (const request of storedRequests) {
-      if (!merged.find(r => r.id === request.id)) {
-        merged.push(request);
-      }
-    }
-
-    const pendingCount = merged.filter(
+    const pendingCount = clientRequests.filter(
       (r) => r.status === "pending_approval"
     ).length;
     if (pendingCount > 0 && !notificationDismissed && !showNotificationToast) {

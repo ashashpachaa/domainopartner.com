@@ -103,6 +103,7 @@ export default function AdminOperationDetail() {
     // Admin override - always allow in admin mode
     if (adminMode && impersonateStaffId) return true;
 
+    if (order.status === "new") return true; // Anyone can accept a new order to assign it
     if (order.status === "pending_sales_review" && order.assignedToSalesId === effectiveUserId) return true;
     if (order.status === "pending_operation" && order.assignedToOperationId === effectiveUserId) return true;
     if (order.status === "pending_operation_manager_review" && order.assignedToManagerId === effectiveUserId) return true;

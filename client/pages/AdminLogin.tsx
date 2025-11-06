@@ -112,9 +112,13 @@ export default function AdminLogin() {
             </div>
 
             {/* Submit Button */}
-            <Button className="w-full bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white h-12 font-semibold flex items-center justify-center gap-2">
-              Access Dashboard
-              <ArrowRight className="w-4 h-4" />
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="w-full bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white h-12 font-semibold flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isLoading ? "Verifying..." : "Access Dashboard"}
+              {!isLoading && <ArrowRight className="w-4 h-4" />}
             </Button>
           </form>
 

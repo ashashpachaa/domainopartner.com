@@ -31,7 +31,23 @@ export default function AdminOperationDetail() {
   const [impersonateStaffId, setImpersonateStaffId] = useState<string>("");
   const [adminMode, setAdminMode] = useState(true);
 
-  const order = mockOrders.find((o) => o.id === orderId);
+  // Load order from localStorage or mockData
+  const getOrder = () => {
+    const stored = localStorage.getItem(`order_${orderId}`);
+    if (stored) {
+      return JSON.parse(stored);
+    }
+    return mockOrders.find((o) => o.id === orderId);
+  };
+
+  const [order, setOrder] = useState(() => getOrder());
+
+  // Save order to localStorage whenever it changes
+  const saveOrder = (updatedOrder: any) => {
+    setOrder(updatedOrder);
+    localStorage.setItem(`order_${orderId}`, JSON.stringify(updatedOrder));
+  };
+
   const user = order ? mockUsers.find((u) => u.id === order.userId) : null;
   const product = order?.productId
     ? mockProducts.find((p) => p.id === order.productId)

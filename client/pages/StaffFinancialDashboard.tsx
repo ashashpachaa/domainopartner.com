@@ -1,12 +1,11 @@
 import { useMemo } from "react";
 import { DollarSign, TrendingUp, Award, AlertCircle, CheckCircle2, Clock, FileText } from "lucide-react";
 import AdminLayout from "@/components/AdminLayout";
-import { mockOrders, mockInvoices, mockStaff } from "@/lib/mockData";
-import { useAuth } from "@/lib/auth"; // Assuming auth context exists
+import { mockOrders, mockInvoices, mockStaff, mockUsers } from "@/lib/mockData";
 
 export default function StaffFinancialDashboard() {
-  const { user } = useAuth();
-  const staffId = user?.id || "S001"; // Get current staff ID from auth
+  // Get staff ID from localStorage (set during admin login)
+  const staffId = localStorage.getItem("staffId") || "S001";
 
   // Commission tier structure
   const commissionTiers = {

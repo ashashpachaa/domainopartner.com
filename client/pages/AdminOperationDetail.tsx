@@ -26,7 +26,7 @@ export default function AdminOperationDetail() {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [rejectReason, setRejectReason] = useState("");
   const [showRejectForm, setShowRejectForm] = useState(false);
-  const [activeTab, setActiveTab] = useState<"workflow" | "apostille" | "history">("workflow");
+  const [activeTab, setActiveTab] = useState<"workflow" | "poa" | "financial_report" | "shipping" | "history">("workflow");
   const [currentTime, setCurrentTime] = useState(new Date());
   const [impersonateStaffId, setImpersonateStaffId] = useState<string>("");
   const [adminMode, setAdminMode] = useState(true);

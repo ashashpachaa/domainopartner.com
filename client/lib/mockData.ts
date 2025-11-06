@@ -2156,8 +2156,8 @@ export const mockOrders: Order[] = [
       {
         id: "C011-1",
         orderId: "O011",
-        commentBy: "9",
-        commentByName: "Client",
+        commentBy: "8",
+        commentByName: "Lucas Silva",
         commentByRole: "client",
         content: "Hello, I would like to place an order for your Premium Global Business Package. Please proceed with the sales review.",
         isInternal: false,

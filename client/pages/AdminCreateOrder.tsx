@@ -47,6 +47,7 @@ export default function AdminCreateOrder() {
   const [countryInput, setCountryInput] = useState("");
   const [uploadedFiles, setUploadedFiles] = useState<Array<{ name: string; size: number; type: string }>>([]);
   const [fileDescription, setFileDescription] = useState("");
+  const [companyName, setCompanyName] = useState("");
 
   const selectedProduct = mockProducts.find(p => p.id === formData.productId);
   const salesStaff = mockStaff.filter(s => s.role === "sales");

@@ -33,6 +33,7 @@ import AdminWorkflowSettings from "./pages/AdminWorkflowSettings";
 import AdminAttendanceReport from "./pages/AdminAttendanceReport";
 import AdminSalesReport from "./pages/AdminSalesReport";
 import AdminCommissionPayroll from "./pages/AdminCommissionPayroll";
+import StaffFinancialDashboard from "./pages/StaffFinancialDashboard";
 import AdminClientRequests from "./pages/AdminClientRequests";
 import AdminClientRequestDetail from "./pages/AdminClientRequestDetail";
 import StaffDashboard from "./pages/StaffDashboard";
@@ -180,6 +181,10 @@ const App = () => (
           <Route
             path="/admin/commission-payroll"
             element={<AdminRoute element={<AdminCommissionPayroll />} />}
+          />
+          <Route
+            path="/staff/dashboard"
+            element={<ProtectedRoute element={<StaffFinancialDashboard />} />}
           />
 
           {/* Catch-all */}

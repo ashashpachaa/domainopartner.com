@@ -2663,6 +2663,13 @@ export const mockStaff: Staff[] = [
     joinDate: "2024-01-01",
     lastLogin: "2024-01-08T14:30:00Z",
     phone: "+1-555-0001",
+    workflowPermissions: [
+      { stage: "sales", label: "Sales Review", description: "Review and approve sales orders", canAccess: true },
+      { stage: "operation", label: "Operation Process", description: "Handle order operations", canAccess: true },
+      { stage: "manager", label: "Manager Review", description: "Review and approve operations", canAccess: true },
+      { stage: "client", label: "Client Acceptance", description: "Handle client communications", canAccess: true },
+      { stage: "shipping", label: "Shipping & Complete", description: "Manage shipping and completion", canAccess: true },
+    ],
   },
   {
     id: "S002",
@@ -2675,6 +2682,13 @@ export const mockStaff: Staff[] = [
     joinDate: "2023-12-15",
     lastLogin: "2024-01-08T13:15:00Z",
     phone: "+1-555-0002",
+    workflowPermissions: [
+      { stage: "sales", label: "Sales Review", description: "Review and approve sales orders", canAccess: false },
+      { stage: "operation", label: "Operation Process", description: "Handle order operations", canAccess: true },
+      { stage: "manager", label: "Manager Review", description: "Review and approve operations", canAccess: true },
+      { stage: "client", label: "Client Acceptance", description: "Handle client communications", canAccess: true },
+      { stage: "shipping", label: "Shipping & Complete", description: "Manage shipping and completion", canAccess: true },
+    ],
   },
   {
     id: "S003",
@@ -2687,6 +2701,13 @@ export const mockStaff: Staff[] = [
     joinDate: "2023-11-01",
     lastLogin: "2024-01-08T11:45:00Z",
     phone: "+1-555-0003",
+    workflowPermissions: [
+      { stage: "sales", label: "Sales Review", description: "Review and approve sales orders", canAccess: true },
+      { stage: "operation", label: "Operation Process", description: "Handle order operations", canAccess: false },
+      { stage: "manager", label: "Manager Review", description: "Review and approve operations", canAccess: false },
+      { stage: "client", label: "Client Acceptance", description: "Handle client communications", canAccess: false },
+      { stage: "shipping", label: "Shipping & Complete", description: "Manage shipping and completion", canAccess: false },
+    ],
   },
   {
     id: "S004",
@@ -2699,6 +2720,13 @@ export const mockStaff: Staff[] = [
     joinDate: "2023-10-20",
     lastLogin: "2024-01-08T16:20:00Z",
     phone: "+1-555-0004",
+    workflowPermissions: [
+      { stage: "sales", label: "Sales Review", description: "Review and approve sales orders", canAccess: false },
+      { stage: "operation", label: "Operation Process", description: "Handle order operations", canAccess: true },
+      { stage: "manager", label: "Manager Review", description: "Review and approve operations", canAccess: false },
+      { stage: "client", label: "Client Acceptance", description: "Handle client communications", canAccess: false },
+      { stage: "shipping", label: "Shipping & Complete", description: "Manage shipping and completion", canAccess: false },
+    ],
   },
   {
     id: "S005",
@@ -2711,6 +2739,13 @@ export const mockStaff: Staff[] = [
     joinDate: "2023-10-15",
     lastLogin: "2024-01-07T09:30:00Z",
     phone: "+1-555-0005",
+    workflowPermissions: [
+      { stage: "sales", label: "Sales Review", description: "Review and approve sales orders", canAccess: false },
+      { stage: "operation", label: "Operation Process", description: "Handle order operations", canAccess: true },
+      { stage: "manager", label: "Manager Review", description: "Review and approve operations", canAccess: false },
+      { stage: "client", label: "Client Acceptance", description: "Handle client communications", canAccess: false },
+      { stage: "shipping", label: "Shipping & Complete", description: "Manage shipping and completion", canAccess: false },
+    ],
   },
   {
     id: "S006",
@@ -2723,6 +2758,13 @@ export const mockStaff: Staff[] = [
     joinDate: "2023-12-01",
     lastLogin: "2024-01-08T10:00:00Z",
     phone: "+1-555-0006",
+    workflowPermissions: [
+      { stage: "sales", label: "Sales Review", description: "Review and approve sales orders", canAccess: true },
+      { stage: "operation", label: "Operation Process", description: "Handle order operations", canAccess: false },
+      { stage: "manager", label: "Manager Review", description: "Review and approve operations", canAccess: false },
+      { stage: "client", label: "Client Acceptance", description: "Handle client communications", canAccess: false },
+      { stage: "shipping", label: "Shipping & Complete", description: "Manage shipping and completion", canAccess: false },
+    ],
   },
   {
     id: "S007",
@@ -2735,6 +2777,13 @@ export const mockStaff: Staff[] = [
     joinDate: "2023-09-10",
     lastLogin: "2024-01-08T08:45:00Z",
     phone: "+1-555-0007",
+    workflowPermissions: [
+      { stage: "sales", label: "Sales Review", description: "Review and approve sales orders", canAccess: false },
+      { stage: "operation", label: "Operation Process", description: "Handle order operations", canAccess: false },
+      { stage: "manager", label: "Manager Review", description: "Review and approve operations", canAccess: false },
+      { stage: "client", label: "Client Acceptance", description: "Handle client communications", canAccess: false },
+      { stage: "shipping", label: "Shipping & Complete", description: "Manage shipping and completion", canAccess: false },
+    ],
   },
   {
     id: "S008",
@@ -2747,6 +2796,13 @@ export const mockStaff: Staff[] = [
     joinDate: "2024-01-05",
     lastLogin: "2024-01-08T15:30:00Z",
     phone: "+1-555-0008",
+    workflowPermissions: [
+      { stage: "sales", label: "Sales Review", description: "Review and approve sales orders", canAccess: true },
+      { stage: "operation", label: "Operation Process", description: "Handle order operations", canAccess: true },
+      { stage: "manager", label: "Manager Review", description: "Review and approve operations", canAccess: true },
+      { stage: "client", label: "Client Acceptance", description: "Handle client communications", canAccess: true },
+      { stage: "shipping", label: "Shipping & Complete", description: "Manage shipping and completion", canAccess: true },
+    ],
   },
 ];
 

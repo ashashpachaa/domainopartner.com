@@ -187,6 +187,14 @@ export default function ClientOrders() {
                           <p className="text-xs text-slate-500">Documents</p>
                         </div>
                       )}
+                      {order.history && order.history.length > 0 && (
+                        <div>
+                          <p className="font-medium text-slate-900">
+                            {new Date(order.history[order.history.length - 1].createdAt).toLocaleDateString()}
+                          </p>
+                          <p className="text-xs text-slate-500">Last Update</p>
+                        </div>
+                      )}
                     </div>
                   </div>
                   <Button

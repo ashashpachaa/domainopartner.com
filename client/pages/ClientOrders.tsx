@@ -68,9 +68,20 @@ export default function ClientOrders() {
     <ClientLayout>
       <div className="space-y-6">
         {/* Header */}
-        <div>
-          <h1 className="text-3xl font-bold text-slate-900">My Orders</h1>
-          <p className="text-slate-600 mt-2">Track the status of all your orders</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-slate-900">My Orders</h1>
+            <p className="text-slate-600 mt-2">Track the status of all your orders</p>
+          </div>
+          <Button
+            onClick={() => navigate("/client/orders/new")}
+            className="bg-primary-600 hover:bg-primary-700"
+          >
+            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+            Add Order
+          </Button>
         </div>
 
         {/* Filters */}

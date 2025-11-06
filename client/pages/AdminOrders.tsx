@@ -90,6 +90,48 @@ const statusConfig: Record<
     bgColor: "bg-orange-50",
     icon: <Clock className="w-4 h-4" />,
   },
+  pending_apostille: {
+    label: "Pending Apostille",
+    color: "text-indigo-700",
+    bgColor: "bg-indigo-50",
+    icon: <Clock className="w-4 h-4" />,
+  },
+  rejected_by_apostille: {
+    label: "Rejected by Apostille",
+    color: "text-red-700",
+    bgColor: "bg-red-50",
+    icon: <XCircle className="w-4 h-4" />,
+  },
+  pending_poa: {
+    label: "Pending POA",
+    color: "text-indigo-700",
+    bgColor: "bg-indigo-50",
+    icon: <Clock className="w-4 h-4" />,
+  },
+  rejected_by_poa: {
+    label: "Rejected by POA",
+    color: "text-red-700",
+    bgColor: "bg-red-50",
+    icon: <XCircle className="w-4 h-4" />,
+  },
+  pending_financial_report: {
+    label: "Pending Financial Report",
+    color: "text-indigo-700",
+    bgColor: "bg-indigo-50",
+    icon: <Clock className="w-4 h-4" />,
+  },
+  rejected_by_financial_report: {
+    label: "Rejected by Financial Report",
+    color: "text-red-700",
+    bgColor: "bg-red-50",
+    icon: <XCircle className="w-4 h-4" />,
+  },
+  rejected_by_shipping: {
+    label: "Rejected by Shipping",
+    color: "text-red-700",
+    bgColor: "bg-red-50",
+    icon: <XCircle className="w-4 h-4" />,
+  },
   completed: {
     label: "Completed",
     color: "text-green-700",

@@ -153,20 +153,21 @@ export default function AdminOperationDetail() {
         createdAt: new Date().toISOString(),
       };
 
-      order.history.push(newHistoryEntry);
-      order.status = nextStatus as any;
+      const updatedOrder = { ...order };
+      updatedOrder.history = [...(order.history || []), newHistoryEntry];
+      updatedOrder.status = nextStatus as any;
 
       // Mark as completed if final stage
       if (nextStatus === "completed") {
-        order.completedAt = new Date().toISOString().split("T")[0];
-        order.completedServices.apostilleComplete = true;
-        order.completedServices.shippingComplete = true;
-        order.completedServices.poaComplete = true;
-        order.completedServices.financialReportComplete = true;
+        updatedOrder.completedAt = new Date().toISOString().split("T")[0];
+        updatedOrder.completedServices.apostilleComplete = true;
+        updatedOrder.completedServices.shippingComplete = true;
+        updatedOrder.completedServices.poaComplete = true;
+        updatedOrder.completedServices.financialReportComplete = true;
       }
 
+      saveOrder(updatedOrder);
       alert(`Order accepted and moved to ${getStatusLabel(nextStatus)}`);
-      window.location.reload(); // Reload to see the changes
     } else {
       alert("You don't have permission to accept this order at this stage");
     }

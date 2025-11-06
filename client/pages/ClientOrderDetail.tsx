@@ -123,6 +123,15 @@ export default function ClientOrderDetail() {
                   <p className="text-sm text-slate-600">Countries</p>
                   <p className="font-semibold text-slate-900">{order.countries?.join(", ") || "N/A"}</p>
                 </div>
+                {order.history && order.history.length > 0 && (
+                  <div>
+                    <p className="text-sm text-slate-600">Last Updated</p>
+                    <p className="font-semibold text-slate-900 flex items-center gap-2">
+                      <Clock className="w-4 h-4 text-slate-500" />
+                      {new Date(order.history[order.history.length - 1].createdAt).toLocaleDateString()}
+                    </p>
+                  </div>
+                )}
               </div>
               {order.description && (
                 <div className="mt-4 pt-4 border-t border-slate-200">

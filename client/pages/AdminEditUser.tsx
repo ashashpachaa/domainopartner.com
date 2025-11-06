@@ -42,8 +42,72 @@ export default function AdminEditUser() {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    // In a real app, this would save to a database
-    navigate("/admin/dashboard");
+
+    // Validation
+    if (!formData.firstName || !formData.lastName || !formData.email) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+
+    // Check if email already exists (for new users only)
+    if (isNew && mockUsers.some((u) => u.email === formData.email)) {
+      toast.error("Email already exists");
+      return;
+    }
+
+    try {
+      if (isNew) {
+        // Create new user
+        const newUser: User = {
+          id: `U${mockUsers.length + 1}`,
+          firstName: formData.firstName || "",
+          lastName: formData.lastName || "",
+          email: formData.email || "",
+          companyName: formData.companyName || "",
+          country: formData.country || "",
+          city: formData.city || "",
+          whatsappNumber: formData.whatsappNumber || "",
+          website: formData.website || "",
+          status: formData.status || "active",
+          subscriptionPlan: formData.subscriptionPlan || "free",
+          subscriptionStatus: formData.subscriptionStatus || "active",
+          createdAt: new Date().toISOString().split("T")[0],
+          lastLogin: new Date().toISOString(),
+        };
+
+        mockUsers.push(newUser);
+        localStorage.setItem(`user_${newUser.id}`, JSON.stringify(newUser));
+        localStorage.setItem("mockUsers", JSON.stringify(mockUsers));
+
+        toast.success(`User ${newUser.firstName} ${newUser.lastName} created successfully!`);
+        navigate("/admin/users");
+      } else {
+        // Update existing user
+        const updatedUser: User = {
+          ...existingUser,
+          ...formData,
+        } as User;
+
+        const userIndex = mockUsers.findIndex((u) => u.id === userId);
+        if (userIndex >= 0) {
+          mockUsers[userIndex] = updatedUser;
+          localStorage.setItem(`user_${updatedUser.id}`, JSON.stringify(updatedUser));
+          localStorage.setItem("mockUsers", JSON.stringify(mockUsers));
+        }
+
+        toast.success("User updated successfully!");
+        navigate(`/admin/users/${userId}`);
+      }
+    } catch (error: any) {
+      toast.error("Error saving user: " + error.message);
+    }
   };
 
   return (

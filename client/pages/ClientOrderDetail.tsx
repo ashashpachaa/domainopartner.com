@@ -331,20 +331,33 @@ export default function ClientOrderDetail() {
                       </div>
                       {shareholder.passportFile && (
                         <div className="mt-3 pt-3 border-t border-slate-200">
-                          <p className="text-sm text-slate-600 mb-2">Passport Document</p>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => {
-                              const link = document.createElement("a");
-                              link.href = shareholder.passportFile?.fileUrl || "#";
-                              link.download = shareholder.passportFile?.fileName || "passport";
-                              link.click();
-                            }}
-                          >
-                            <Download className="w-4 h-4 mr-2" />
-                            {shareholder.passportFile.fileName}
-                          </Button>
+                          <p className="text-sm text-slate-600 mb-2 font-medium">Passport Document</p>
+                          <div className="flex items-start gap-3">
+                            <div className="flex-1">
+                              <p className="text-sm font-medium text-slate-900">{shareholder.passportFile.fileName}</p>
+                              {shareholder.passportFile.fileSize && (
+                                <p className="text-xs text-slate-500 mt-1">
+                                  {(shareholder.passportFile.fileSize / 1024).toFixed(1)} KB
+                                </p>
+                              )}
+                            </div>
+                            {shareholder.passportFile.fileUrl && (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => {
+                                  const link = document.createElement("a");
+                                  link.href = shareholder.passportFile?.fileUrl || "#";
+                                  link.download = shareholder.passportFile?.fileName || "passport";
+                                  link.click();
+                                }}
+                                className="flex items-center gap-1 whitespace-nowrap"
+                              >
+                                <Download className="w-3 h-3" />
+                                Download
+                              </Button>
+                            )}
+                          </div>
                         </div>
                       )}
                     </div>

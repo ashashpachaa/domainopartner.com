@@ -10,9 +10,23 @@ import { toast } from "sonner";
 export default function AdminCreateOrder() {
   const navigate = useNavigate();
 
+  // Calculate the next order number based on max existing order ID
+  const getNextOrderNum = () => {
+    const maxOrderNum = Math.max(
+      0,
+      ...mockOrders.map(o => {
+        const match = o.id.match(/O(\d+)/);
+        return match ? parseInt(match[1]) : 0;
+      })
+    );
+    return maxOrderNum + 1;
+  };
+
+  const nextOrderNum = getNextOrderNum();
+
   const [formData, setFormData] = useState<Partial<Order>>({
-    id: `O${String(mockOrders.length + 1).padStart(3, "0")}`,
-    orderNumber: `ORD-${new Date().getFullYear()}-${String(mockOrders.length + 1).padStart(3, "0")}`,
+    id: `O${String(nextOrderNum).padStart(3, "0")}`,
+    orderNumber: `ORD-${new Date().getFullYear()}-${String(nextOrderNum).padStart(3, "0")}`,
     description: "",
     amount: 0,
     currency: "USD",

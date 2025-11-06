@@ -240,6 +240,20 @@ export default function AdminOperationDetail() {
         };
       }
 
+      // Mark services as complete when moving past their stage
+      if (order.status === "pending_apostille") {
+        updatedOrder.completedServices.apostilleComplete = true;
+      }
+      if (order.status === "pending_poa") {
+        updatedOrder.completedServices.poaComplete = true;
+      }
+      if (order.status === "pending_financial_report") {
+        updatedOrder.completedServices.financialReportComplete = true;
+      }
+      if (order.status === "shipping_preparation") {
+        updatedOrder.completedServices.shippingComplete = true;
+      }
+
       // Mark as completed if final stage
       if (nextStatus === "completed") {
         updatedOrder.completedAt = new Date().toISOString().split("T")[0];

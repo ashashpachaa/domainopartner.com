@@ -250,13 +250,14 @@ export default function AdminOperationDetail() {
 
   const handleAddTracking = () => {
     if (trackingInput.trim()) {
-      order.trackingNumber = trackingInput;
-      order.trackingNumberAddedBy = effectiveUserId;
-      order.trackingNumberAddedAt = new Date().toISOString();
-      order.completedServices.shippingComplete = true;
+      const updatedOrder = { ...order };
+      updatedOrder.trackingNumber = trackingInput;
+      updatedOrder.trackingNumberAddedBy = effectiveUserId;
+      updatedOrder.trackingNumberAddedAt = new Date().toISOString();
+      updatedOrder.completedServices.shippingComplete = true;
+      saveOrder(updatedOrder);
       setTrackingInput("");
       alert("Tracking number added successfully!");
-      window.location.reload();
     }
   };
 
@@ -276,6 +277,8 @@ export default function AdminOperationDetail() {
 
     // Move through all stages from current position
     const currentIndex = stages.indexOf(order.status);
+    const updatedOrder = { ...order };
+    updatedOrder.history = [...(order.history || [])];
 
     for (let i = currentIndex; i < stages.length; i++) {
       const toStatus = stages[i];
@@ -290,9 +293,9 @@ export default function AdminOperationDetail() {
       );
 
       const historyEntry = {
-        id: `H${order.id}-${order.history.length + 1}`,
+        id: `H${order.id}-${updatedOrder.history.length + 1}`,
         orderId: order.id,
-        previousStatus: order.status as any,
+        previousStatus: updatedOrder.status as any,
         newStatus: toStatus as any,
         actionType: "accept" as any,
         actionBy: staff?.id || "S002",
@@ -301,29 +304,29 @@ export default function AdminOperationDetail() {
         createdAt: new Date().toISOString(),
       };
 
-      order.history.push(historyEntry);
-      order.status = toStatus as any;
+      updatedOrder.history.push(historyEntry);
+      updatedOrder.status = toStatus as any;
     }
 
     // Mark all services as complete
-    order.completedServices.apostilleComplete = true;
-    order.completedServices.shippingComplete = true;
-    order.completedServices.poaComplete = true;
-    order.completedServices.financialReportComplete = true;
-    order.completedAt = new Date().toISOString().split("T")[0];
-    order.clientAccepted = true;
-    order.clientAcceptedAt = new Date().toISOString();
-    order.clientCanViewFiles = true;
-    order.clientCanViewTracking = true;
+    updatedOrder.completedServices.apostilleComplete = true;
+    updatedOrder.completedServices.shippingComplete = true;
+    updatedOrder.completedServices.poaComplete = true;
+    updatedOrder.completedServices.financialReportComplete = true;
+    updatedOrder.completedAt = new Date().toISOString().split("T")[0];
+    updatedOrder.clientAccepted = true;
+    updatedOrder.clientAcceptedAt = new Date().toISOString();
+    updatedOrder.clientCanViewFiles = true;
+    updatedOrder.clientCanViewTracking = true;
 
-    if (!order.trackingNumber) {
-      order.trackingNumber = `AUTO-${Math.random().toString(36).substring(7).toUpperCase()}`;
-      order.trackingNumberAddedBy = effectiveUserId;
-      order.trackingNumberAddedAt = new Date().toISOString();
+    if (!updatedOrder.trackingNumber) {
+      updatedOrder.trackingNumber = `AUTO-${Math.random().toString(36).substring(7).toUpperCase()}`;
+      updatedOrder.trackingNumberAddedBy = effectiveUserId;
+      updatedOrder.trackingNumberAddedAt = new Date().toISOString();
     }
 
+    saveOrder(updatedOrder);
     alert("Order auto-completed! All stages progressed and services marked complete.");
-    window.location.reload();
   };
 
   const handleFileUpload = () => {

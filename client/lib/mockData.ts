@@ -273,6 +273,7 @@ export interface Order {
     financialReportComplete: boolean;
   };
   operationReviewForm?: OperationReviewForm; // Operation stage review form
+  shareholders?: Shareholder[]; // Company shareholders and ownership structure
 }
 
 export type InvoiceAction = "created" | "sent" | "viewed" | "payment_received" | "payment_failed" | "reminder_sent" | "status_changed" | "cancelled";

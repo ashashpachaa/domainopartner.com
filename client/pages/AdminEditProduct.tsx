@@ -97,6 +97,7 @@ export default function AdminEditProduct() {
         requirements: formData.requirements || "",
         price: formData.price,
         currency: formData.currency,
+        country: formData.country,
         services: formData.services || {
           hasApostille: false,
           hasShipping: false,

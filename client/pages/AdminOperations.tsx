@@ -43,7 +43,17 @@ export default function AdminOperations() {
 
     const matchesStage = filterStage === "all" || order.status === filterStage;
 
-    return matchesSearch && matchesStage;
+    let matchesDateRange = true;
+    if (startDate) {
+      matchesDateRange = new Date(order.createdAt) >= new Date(startDate);
+    }
+    if (endDate && matchesDateRange) {
+      const endDateTime = new Date(endDate);
+      endDateTime.setHours(23, 59, 59, 999);
+      matchesDateRange = new Date(order.createdAt) <= endDateTime;
+    }
+
+    return matchesSearch && matchesStage && matchesDateRange;
   });
 
   const sortedOrders = [...filteredOrders].sort((a, b) => {

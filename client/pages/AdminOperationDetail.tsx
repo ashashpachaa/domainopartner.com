@@ -77,6 +77,18 @@ export default function AdminOperationDetail() {
     return () => clearInterval(interval);
   }, []);
 
+  // Initialize operation form data from order
+  useEffect(() => {
+    if (order?.operationReviewForm) {
+      setOperationFormData({
+        qualityCheck: order.operationReviewForm.qualityCheck || false,
+        documentsVerified: order.operationReviewForm.documentsVerified || false,
+        complianceReview: order.operationReviewForm.complianceReview || false,
+        operationNotes: order.operationReviewForm.operationNotes || "",
+      });
+    }
+  }, [order?.id]);
+
   if (!order || !user) {
     return (
       <AdminLayout>

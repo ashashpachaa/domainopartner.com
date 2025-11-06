@@ -110,6 +110,10 @@ const App = () => (
             element={<AdminRoute element={<AdminOperations />} />}
           />
           <Route
+            path="/admin/operations/new"
+            element={<AdminRoute element={<AdminCreateOrder />} />}
+          />
+          <Route
             path="/admin/operations/:orderId"
             element={<AdminRoute element={<AdminOperationDetail />} />}
           />

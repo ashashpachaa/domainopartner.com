@@ -681,6 +681,14 @@ export default function ClientCreateOrder() {
                               </>
                             )}
                           </button>
+                          {isOcrProcessing && (
+                            <div className="w-full bg-slate-200 rounded-full h-2">
+                              <div
+                                className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                                style={{ width: `${ocrProgress}%` }}
+                              />
+                            </div>
+                          )}
                           {showOcrResult && (
                             <div className={`p-3 rounded-lg border text-sm ${
                               ocrConfidence >= 0.8

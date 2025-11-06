@@ -2,7 +2,7 @@ import AdminLayout from "@/components/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Save, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, Save, CheckCircle2, Clock } from "lucide-react";
 import { FormEvent, useState } from "react";
 import { mockStaff, Staff, StaffRole, WorkflowStage } from "@/lib/mockData";
 
@@ -50,6 +50,11 @@ export default function AdminEditStaff() {
       status: "active",
       joinDate: new Date().toISOString().split("T")[0],
       lastLogin: new Date().toISOString(),
+      workingHours: {
+        startTime: "09:00",
+        endTime: "18:00",
+        daysPerWeek: 5,
+      },
       workflowPermissions: workflowStages.map((stage) => ({
         stage: stage.value,
         label: stage.label,
@@ -63,7 +68,18 @@ export default function AdminEditStaff() {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (name.startsWith("workingHours.")) {
+      const field = name.split(".")[1] as keyof typeof formData.workingHours;
+      setFormData((prev) => ({
+        ...prev,
+        workingHours: {
+          ...prev.workingHours!,
+          [field]: field === "daysPerWeek" ? parseInt(value) : value,
+        },
+      }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleWorkflowPermissionChange = (stage: WorkflowStage, canAccess: boolean) => {

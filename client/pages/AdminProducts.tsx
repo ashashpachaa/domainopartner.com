@@ -111,7 +111,30 @@ export default function AdminProducts() {
               <option value="active">Active</option>
               <option value="inactive">Inactive</option>
             </select>
+            <select
+              value={serviceFilter}
+              onChange={(e) => setServiceFilter(e.target.value)}
+              className="px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500 bg-white"
+            >
+              <option value="">All Services</option>
+              <option value="apostille">Apostille</option>
+              <option value="poa">Power of Attorney</option>
+              <option value="shipping">Shipping</option>
+              <option value="no-services">No Additional Services</option>
+            </select>
           </div>
+          {(serviceFilter || searchTerm || filterStatus !== "all") && (
+            <button
+              onClick={() => {
+                setSearchTerm("");
+                setFilterStatus("all");
+                setServiceFilter("");
+              }}
+              className="text-primary-600 hover:text-primary-700 text-sm font-medium"
+            >
+              Clear filters
+            </button>
+          )}
           <p className="text-sm text-slate-600 mt-3">
             Showing {filteredProducts.length} of {products.length} products
           </p>

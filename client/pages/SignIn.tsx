@@ -1,45 +1,85 @@
 import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock, ArrowRight, AlertCircle } from "lucide-react";
 import { FormEvent, useState } from "react";
 import { mockClientRequests, mockUsers } from "@/lib/mockData";
+import { toast } from "sonner";
 
 export default function SignIn() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [rejectionReason, setRejectionReason] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     setError("");
     setRejectionReason("");
+    setIsLoading(true);
 
-    // Check if the email exists in client requests with pending approval
-    const clientRequest = mockClientRequests.find((r) => r.email === email);
+    setTimeout(() => {
+      try {
+        // Check if the email exists in client requests with pending approval
+        const clientRequest = mockClientRequests.find((r) => r.email === email);
 
-    if (clientRequest && clientRequest.status === "pending_approval") {
-      setError("Your account is pending admin approval");
-      return;
-    }
+        if (clientRequest && clientRequest.status === "pending_approval") {
+          setError("⏳ Your account is pending admin approval. You will be notified once approved.");
+          toast.info("Your signup is awaiting admin approval");
+          setIsLoading(false);
+          return;
+        }
 
-    if (clientRequest && clientRequest.status === "rejected") {
-      setError("Your signup request was rejected.");
-      setRejectionReason(clientRequest.rejectionReason || "No reason provided");
-      return;
-    }
+        if (clientRequest && clientRequest.status === "rejected") {
+          setError("❌ Your signup request was rejected.");
+          setRejectionReason(clientRequest.rejectionReason || "No reason provided");
+          toast.error("Your signup was rejected");
+          setIsLoading(false);
+          return;
+        }
 
-    // Check if user exists and is approved
-    const user = mockUsers.find((u) => u.email === email);
-    if (!user) {
-      setError("Invalid email or password");
-      return;
-    }
+        // Check if user exists and is approved
+        const user = mockUsers.find((u) => u.email === email);
+        if (!user) {
+          setError("No account found. Please sign up first.");
+          setIsLoading(false);
+          return;
+        }
 
-    // Handle sign in logic here
-    console.log("Sign in attempted with:", { email, password });
+        // Check user status
+        if (user.status === "suspended") {
+          setError("Your account has been suspended. Please contact support.");
+          setIsLoading(false);
+          return;
+        }
+
+        if (user.status === "inactive") {
+          setError("Your account is inactive. Please contact support.");
+          setIsLoading(false);
+          return;
+        }
+
+        // Verify password length
+        if (password.length < 6) {
+          setError("Invalid credentials");
+          setIsLoading(false);
+          return;
+        }
+
+        // Login successful
+        localStorage.setItem("currentUser", JSON.stringify(user));
+        toast.success(`Welcome back, ${user.firstName}!`);
+        navigate("/client/dashboard");
+      } catch (error: any) {
+        setError("Login failed. Please try again.");
+        console.error("Login error:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }, 500);
   };
 
   return (

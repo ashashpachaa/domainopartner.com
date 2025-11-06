@@ -188,10 +188,15 @@ export default function ClientCreateOrder() {
       return;
     }
 
+    // Split full name into first and last name
+    const nameParts = shareholderForm.fullName.trim().split(/\s+/);
+    const firstName = nameParts[0] || "";
+    const lastName = nameParts.slice(1).join(" ") || "";
+
     const newShareholder: Shareholder = {
       id: editingShareholderId || `SH-${Date.now()}`,
-      firstName: shareholderForm.firstName,
-      lastName: shareholderForm.lastName,
+      firstName: firstName,
+      lastName: lastName,
       dateOfBirth: shareholderForm.dateOfBirth,
       nationality: shareholderForm.nationality,
       ownershipPercentage: parseFloat(shareholderForm.ownershipPercentage),

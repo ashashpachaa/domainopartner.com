@@ -103,14 +103,23 @@ export default function AdminCommissionPayroll() {
     ? staffMetrics.find((m) => m.staffId === selectedStaffId)
     : null;
 
+  const filteredStaffMetrics = staffMetrics.filter((metric) => {
+    const matchesSearch = !staffSearch ||
+      metric.staffName.toLowerCase().includes(staffSearch.toLowerCase());
+
+    const matchesTier = !tierFilter || metric.appliedTier === tierFilter;
+
+    return matchesSearch && matchesTier;
+  });
+
   const globalMetrics = {
-    totalStaff: staffMetrics.length,
-    totalCommission: staffMetrics.reduce((sum, m) => sum + m.totalCommission, 0),
+    totalStaff: filteredStaffMetrics.length,
+    totalCommission: filteredStaffMetrics.reduce((sum, m) => sum + m.totalCommission, 0),
     avgCommission:
-      staffMetrics.length > 0
-        ? Math.round(staffMetrics.reduce((sum, m) => sum + m.totalCommission, 0) / staffMetrics.length)
+      filteredStaffMetrics.length > 0
+        ? Math.round(filteredStaffMetrics.reduce((sum, m) => sum + m.totalCommission, 0) / filteredStaffMetrics.length)
         : 0,
-    totalPerformanceBonus: staffMetrics.reduce((sum, m) => sum + m.performanceBonus, 0),
+    totalPerformanceBonus: filteredStaffMetrics.reduce((sum, m) => sum + m.performanceBonus, 0),
   };
 
   return (

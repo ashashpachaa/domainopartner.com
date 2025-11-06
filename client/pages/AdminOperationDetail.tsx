@@ -880,6 +880,206 @@ export default function AdminOperationDetail() {
           </div>
         )}
 
+        {/* Product & Services Section */}
+        {product && (
+          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-8 border border-blue-200">
+            <h2 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+              <FileText className="w-5 h-5 text-blue-600" />
+              Product & Services Required
+            </h2>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Product Details */}
+              <div className="bg-white rounded-lg p-6 border border-blue-100">
+                <h3 className="text-lg font-bold text-slate-900 mb-3">Product Details</h3>
+                <div className="space-y-3">
+                  <div>
+                    <p className="text-xs font-semibold text-slate-600 uppercase mb-1">Product Name</p>
+                    <p className="text-base font-medium text-slate-900">{product.name}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold text-slate-600 uppercase mb-1">Description</p>
+                    <p className="text-sm text-slate-700">{product.description}</p>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4 pt-3 border-t border-slate-200">
+                    <div>
+                      <p className="text-xs font-semibold text-slate-600 uppercase mb-1">Price</p>
+                      <p className="text-lg font-bold text-blue-600">
+                        {product.currency} {product.price.toLocaleString()}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold text-slate-600 uppercase mb-1">Duration</p>
+                      <p className="text-sm text-slate-900">{product.duration}</p>
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold text-slate-600 uppercase mb-2">Requirements</p>
+                    <p className="text-sm text-slate-700">{product.requirements}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Services Status */}
+              <div className="bg-white rounded-lg p-6 border border-blue-100">
+                <h3 className="text-lg font-bold text-slate-900 mb-4">Services Status</h3>
+                <div className="space-y-3">
+                  {/* Apostille */}
+                  <div className="flex items-center justify-between p-3 rounded-lg border border-slate-200">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
+                        order.completedServices.apostilleComplete
+                          ? "bg-green-600 border-green-600"
+                          : product.services.hasApostille
+                          ? "border-orange-400"
+                          : "border-slate-300"
+                      }`}>
+                        {order.completedServices.apostilleComplete && (
+                          <span className="text-white text-xs font-bold">✓</span>
+                        )}
+                      </div>
+                      <div>
+                        <p className="font-medium text-slate-900">Apostille Certification</p>
+                        <p className="text-xs text-slate-600">
+                          {product.services.hasApostille ? "Required" : "Not included"}
+                        </p>
+                      </div>
+                    </div>
+                    <span className={`text-xs font-semibold px-2 py-1 rounded ${
+                      order.completedServices.apostilleComplete
+                        ? "bg-green-100 text-green-700"
+                        : product.services.hasApostille
+                        ? "bg-orange-100 text-orange-700"
+                        : "bg-slate-100 text-slate-600"
+                    }`}>
+                      {order.completedServices.apostilleComplete ? "Done" : product.services.hasApostille ? "Pending" : "N/A"}
+                    </span>
+                  </div>
+
+                  {/* POA */}
+                  <div className="flex items-center justify-between p-3 rounded-lg border border-slate-200">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
+                        order.completedServices.poaComplete
+                          ? "bg-green-600 border-green-600"
+                          : product.services.hasPOA
+                          ? "border-orange-400"
+                          : "border-slate-300"
+                      }`}>
+                        {order.completedServices.poaComplete && (
+                          <span className="text-white text-xs font-bold">✓</span>
+                        )}
+                      </div>
+                      <div>
+                        <p className="font-medium text-slate-900">Power of Attorney (POA)</p>
+                        <p className="text-xs text-slate-600">
+                          {product.services.hasPOA ? "Required" : "Not included"}
+                        </p>
+                      </div>
+                    </div>
+                    <span className={`text-xs font-semibold px-2 py-1 rounded ${
+                      order.completedServices.poaComplete
+                        ? "bg-green-100 text-green-700"
+                        : product.services.hasPOA
+                        ? "bg-orange-100 text-orange-700"
+                        : "bg-slate-100 text-slate-600"
+                    }`}>
+                      {order.completedServices.poaComplete ? "Done" : product.services.hasPOA ? "Pending" : "N/A"}
+                    </span>
+                  </div>
+
+                  {/* Financial Report */}
+                  <div className="flex items-center justify-between p-3 rounded-lg border border-slate-200">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
+                        order.completedServices.financialReportComplete
+                          ? "bg-green-600 border-green-600"
+                          : product.services.hasFinancialReport
+                          ? "border-orange-400"
+                          : "border-slate-300"
+                      }`}>
+                        {order.completedServices.financialReportComplete && (
+                          <span className="text-white text-xs font-bold">✓</span>
+                        )}
+                      </div>
+                      <div>
+                        <p className="font-medium text-slate-900">Financial Report</p>
+                        <p className="text-xs text-slate-600">
+                          {product.services.hasFinancialReport ? "Required" : "Not included"}
+                        </p>
+                      </div>
+                    </div>
+                    <span className={`text-xs font-semibold px-2 py-1 rounded ${
+                      order.completedServices.financialReportComplete
+                        ? "bg-green-100 text-green-700"
+                        : product.services.hasFinancialReport
+                        ? "bg-orange-100 text-orange-700"
+                        : "bg-slate-100 text-slate-600"
+                    }`}>
+                      {order.completedServices.financialReportComplete ? "Done" : product.services.hasFinancialReport ? "Pending" : "N/A"}
+                    </span>
+                  </div>
+
+                  {/* Shipping */}
+                  <div className="flex items-center justify-between p-3 rounded-lg border border-slate-200">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
+                        order.completedServices.shippingComplete
+                          ? "bg-green-600 border-green-600"
+                          : product.services.hasShipping
+                          ? "border-orange-400"
+                          : "border-slate-300"
+                      }`}>
+                        {order.completedServices.shippingComplete && (
+                          <span className="text-white text-xs font-bold">✓</span>
+                        )}
+                      </div>
+                      <div>
+                        <p className="font-medium text-slate-900">International Shipping</p>
+                        <p className="text-xs text-slate-600">
+                          {product.services.hasShipping ? "Required" : "Not included"}
+                        </p>
+                      </div>
+                    </div>
+                    <span className={`text-xs font-semibold px-2 py-1 rounded ${
+                      order.completedServices.shippingComplete
+                        ? "bg-green-100 text-green-700"
+                        : product.services.hasShipping
+                        ? "bg-orange-100 text-orange-700"
+                        : "bg-slate-100 text-slate-600"
+                    }`}>
+                      {order.completedServices.shippingComplete ? "Done" : product.services.hasShipping ? "Pending" : "N/A"}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Completion Summary */}
+                <div className="mt-6 pt-6 border-t border-slate-200">
+                  <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-4">
+                    <p className="text-sm font-medium text-slate-900 mb-2">Overall Completion</p>
+                    <div className="w-full bg-slate-200 rounded-full h-2">
+                      <div
+                        className="bg-green-600 h-2 rounded-full transition-all"
+                        style={{
+                          width: `${
+                            (Object.values(order.completedServices).filter(Boolean).length /
+                              Object.values(order.completedServices).length) *
+                            100
+                          }%`,
+                        }}
+                      />
+                    </div>
+                    <p className="text-xs text-slate-600 mt-2">
+                      {Object.values(order.completedServices).filter(Boolean).length} of{" "}
+                      {Object.values(order.completedServices).length} services completed
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Workflow Progress */}
         <div className="bg-white rounded-lg p-8 border border-slate-200">
           <h2 className="text-xl font-bold text-slate-900 mb-6">

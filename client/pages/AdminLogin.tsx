@@ -9,18 +9,34 @@ export default function AdminLogin() {
   const [email, setEmail] = useState("admin@domaino.com");
   const [password, setPassword] = useState("admin123");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     setError("");
+    setIsLoading(true);
 
-    // Simple admin authentication
-    if (email === "admin@domaino.com" && password === "admin123") {
-      localStorage.setItem("adminToken", "admin-token-123");
-      navigate("/admin/dashboard");
-    } else {
-      setError("Invalid admin credentials");
-    }
+    setTimeout(() => {
+      // Simple admin authentication
+      if (email === "admin@domaino.com" && password === "admin123") {
+        // Store admin user in currentUser (consistent with client login)
+        const adminUser = {
+          id: "A001",
+          firstName: "Admin",
+          lastName: "User",
+          email: "admin@domaino.com",
+          role: "admin",
+          status: "active",
+          createdAt: "2024-01-01",
+        };
+        localStorage.setItem("currentUser", JSON.stringify(adminUser));
+        localStorage.setItem("adminToken", "admin-token-123");
+        navigate("/admin/dashboard");
+      } else {
+        setError("Invalid admin credentials");
+      }
+      setIsLoading(false);
+    }, 500);
   };
 
   return (

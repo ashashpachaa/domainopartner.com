@@ -531,22 +531,16 @@ export default function AdminOperationDetail() {
       return;
     }
 
-    const stages: any[] = [
-      "pending_sales_review",
-      "pending_operation",
-      "pending_operation_manager_review",
-      "awaiting_client_acceptance",
-      "shipping_preparation",
-      "completed",
-    ];
+    // Use dynamic workflow stages
+    const dynamicStages = workflowStages.map(s => s.id);
 
     // Move through all stages from current position
-    const currentIndex = stages.indexOf(order.status);
+    const currentIndex = dynamicStages.indexOf(order.status);
     const updatedOrder = { ...order };
     updatedOrder.history = [...(order.history || [])];
 
-    for (let i = currentIndex; i < stages.length; i++) {
-      const toStatus = stages[i];
+    for (let i = currentIndex; i < dynamicStages.length; i++) {
+      const toStatus = dynamicStages[i];
       const staff = mockStaff.find(
         (s) =>
           (toStatus === "pending_sales_review" &&
@@ -556,7 +550,12 @@ export default function AdminOperationDetail() {
           (toStatus === "pending_operation_manager_review" &&
             s.id === order.assignedToManagerId) ||
           (toStatus === "awaiting_client_acceptance" && s.role === "sales") ||
-          (toStatus === "shipping_preparation" &&
+          ([
+            "pending_apostille",
+            "pending_poa",
+            "pending_financial_report",
+            "shipping_preparation",
+          ].includes(toStatus) &&
             s.id === order.assignedToManagerId) ||
           (toStatus === "completed" && s.id === order.assignedToManagerId),
       );

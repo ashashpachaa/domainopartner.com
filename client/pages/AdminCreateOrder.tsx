@@ -90,7 +90,7 @@ export default function AdminCreateOrder() {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    if (!formData.description || !formData.serviceType || !formData.userId) {
+    if (!formData.description || !formData.serviceType || !formData.userId || !formData.assignedToSalesId) {
       toast.error("Please fill in all required fields");
       return;
     }
@@ -113,6 +113,7 @@ export default function AdminCreateOrder() {
       createdAt: formData.createdAt || new Date().toISOString().split("T")[0],
       userId: formData.userId,
       productId: formData.productId,
+      assignedToSalesId: formData.assignedToSalesId,
       history: [
         {
           id: `H-${Date.now()}`,

@@ -134,10 +134,10 @@ export default function AdminCreateOrder() {
       <div className="flex-1 overflow-auto bg-slate-100">
         <div className="p-8">
           {/* Back Button */}
-          <Link to="/admin/orders">
+          <Link to="/admin/operations">
             <Button variant="ghost" className="gap-2 text-slate-600 hover:text-slate-900 mb-8">
               <ArrowLeft className="w-4 h-4" />
-              Back to Orders
+              Back to Operations
             </Button>
           </Link>
 

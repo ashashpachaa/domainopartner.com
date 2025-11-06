@@ -77,55 +77,74 @@ function parsePassportText(text: string): ExtractedPassportData {
     }
   }
 
-  // Extract names (first name and last name, typically after specific passport markers)
-  const nameKeywords = ["name", "given name", "surname", "family name"];
-  for (const keyword of nameKeywords) {
-    const index = lines_lower.indexOf(keyword);
-    if (index !== -1 && index < lines.length - 1) {
-      const nextLine = lines[index + 1]?.trim() || "";
-      if (nextLine && nextLine.length > 0 && /^[A-Z\s]+$/.test(nextLine)) {
-        const parts = nextLine.split(/\s+/);
-        if (parts.length >= 2) {
-          result.firstName = parts[0];
-          result.lastName = parts.slice(1).join(" ");
-          nameMatchConfidence += 0.3;
-        } else if (parts.length === 1 && keyword === "given name") {
-          result.firstName = parts[0];
-          nameMatchConfidence += 0.2;
-        }
+  // Extract names - look for name fields after specific markers
+  // First, try to find explicit name patterns (e.g., "Name: JOHN DOE" or "Given Names: JOHN")
+  const explicitNamePatterns = [
+    /Surname[:\s]+([A-Z][A-Za-z\s]+?)(?:\n|$)/i,
+    /Given Names?[:\s]+([A-Z][A-Za-z\s]+?)(?:\n|$)/i,
+    /Family Name[:\s]+([A-Z][A-Za-z\s]+?)(?:\n|$)/i,
+    /First Name[:\s]+([A-Z][A-Za-z\s]+?)(?:\n|$)/i,
+  ];
+
+  const extractedNames: string[] = [];
+  for (const pattern of explicitNamePatterns) {
+    const match = text.match(pattern);
+    if (match && match[1]) {
+      const name = match[1].trim();
+      if (name.length > 0 && !name.includes("PASSPORT") && !name.includes("REPUBLIC") && !name.includes("UNITED")) {
+        extractedNames.push(name);
+        nameMatchConfidence += 0.25;
       }
+    }
+  }
+
+  // If we found explicit names, use them
+  if (extractedNames.length === 2) {
+    result.firstName = extractedNames[0];
+    result.lastName = extractedNames[1];
+  } else if (extractedNames.length === 1) {
+    const parts = extractedNames[0].split(/\s+/);
+    if (parts.length >= 2) {
+      result.firstName = parts[0];
+      result.lastName = parts.slice(1).join(" ");
+    } else {
+      result.firstName = extractedNames[0];
     }
   }
 
   // Extract nationality (look for common patterns)
   const nationalityPatterns = [
-    /nationality[:\s]+([A-Z][a-z]+)/i,
-    /national[ity]*[:\s]+([A-Z][a-z]+)/i,
-    /citizenship[:\s]+([A-Z][a-z]+)/i,
+    /nationality[:\s]+([A-Z][A-Za-z\s]+?)(?:\n|[A-Z]|$)/i,
+    /national[ity]*[:\s]+([A-Z][A-Za-z\s]+?)(?:\n|[A-Z]|$)/i,
+    /citizenship[:\s]+([A-Z][A-Za-z\s]+?)(?:\n|[A-Z]|$)/i,
+    /[A-Z][a-z]+ian$/im, // Match words ending in "ian" like "Egyptian", "Indian", etc.
   ];
 
   for (const pattern of nationalityPatterns) {
     const match = text.match(pattern);
-    if (match) {
-      result.nationality = match[1];
-      break;
+    if (match && match[1]) {
+      const nationality = match[1].trim();
+      if (nationality.length > 0 && !nationality.includes("PASSPORT")) {
+        result.nationality = nationality.replace(/[^A-Za-z\s]/g, "").trim();
+        if (result.nationality.length > 0) break;
+      }
     }
   }
 
-  // If names not found through keywords, try to extract from capital letter sequences
+  // If names still not found, look for name patterns in a safer way
   if (!result.firstName || !result.lastName) {
-    const capitalSequences = text.match(/\b[A-Z]{2,}(?:\s+[A-Z]{2,})*\b/g) || [];
-    for (const seq of capitalSequences) {
-      if (seq.length > 3 && !seq.includes("PASSPORT")) {
-        const parts = seq.split(/\s+/);
-        if (parts.length >= 2 && !result.firstName) {
-          result.firstName = parts[0];
-          result.lastName = parts.slice(1).join(" ");
-          nameMatchConfidence += 0.2;
-          break;
-        } else if (parts.length === 1 && !result.firstName) {
-          result.firstName = seq;
-          nameMatchConfidence += 0.1;
+    const safeCapitalSequences = text.match(/(?:^|\n)([A-Z][a-z]+)\s+([A-Z][a-z\s]+?)(?=\n|<|$)/gm);
+    if (safeCapitalSequences && safeCapitalSequences.length > 0) {
+      for (const seq of safeCapitalSequences) {
+        const parts = seq.trim().split(/\s+/);
+        if (parts.length >= 2) {
+          const candidate = `${parts[0]} ${parts.slice(1).join(" ")}`;
+          if (!candidate.includes("PASSPORT") && !candidate.includes("REPUBLIC") && !candidate.includes("UNITED") && candidate.length < 50) {
+            result.firstName = parts[0];
+            result.lastName = parts.slice(1).join(" ");
+            nameMatchConfidence += 0.15;
+            break;
+          }
         }
       }
     }

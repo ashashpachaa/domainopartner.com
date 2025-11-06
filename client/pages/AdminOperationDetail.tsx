@@ -620,45 +620,39 @@ export default function AdminOperationDetail() {
   const getStageDealinesInfo = useMemo(() => {
     const createdDate = new Date(order.createdAt);
     const now = currentTime; // Use currentTime for live updates
+    let cumulativeDays = 0;
 
-    const stageDeadlines = [
-      {
-        id: "new",
-        label: "Order Created",
-        daysAllowed: 0,
-        deadlineDate: createdDate,
-      },
-      {
-        id: "pending_sales_review",
-        label: "Sales Review",
-        daysAllowed: 0.25, // 6 hours
-        deadlineDate: new Date(createdDate.getTime() + 6 * 60 * 60 * 1000),
-      },
-      {
-        id: "pending_operation",
-        label: "Operation Process",
-        daysAllowed: 3,
-        deadlineDate: addBusinessDays(createdDate, 3),
-      },
-      {
-        id: "pending_operation_manager_review",
-        label: "Manager Review",
-        daysAllowed: 1,
-        deadlineDate: addBusinessDays(createdDate, 4),
-      },
-      {
-        id: "awaiting_client_acceptance",
-        label: "Client Acceptance",
-        daysAllowed: 1,
-        deadlineDate: addBusinessDays(createdDate, 5),
-      },
-      {
-        id: "shipping_preparation",
-        label: "Shipping & Complete",
-        daysAllowed: product?.services.hasApostille ? 1 : 2,
-        deadlineDate: addBusinessDays(createdDate, product?.services.hasApostille ? 7 : 8),
-      },
-    ];
+    const stageDeadlines = workflowStages.map((stage) => {
+      let daysAllowed = 0;
+
+      // Calculate days allowed for each stage
+      if (stage.id === "new") daysAllowed = 3;
+      else if (stage.id === "pending_sales_review") daysAllowed = 0.25; // 6 hours
+      else if (stage.id === "pending_operation") daysAllowed = 3;
+      else if (stage.id === "pending_operation_manager_review") daysAllowed = 1;
+      else if (stage.id === "awaiting_client_acceptance") daysAllowed = 1;
+      else if (stage.id === "pending_apostille") daysAllowed = 1;
+      else if (stage.id === "pending_poa") daysAllowed = 1;
+      else if (stage.id === "pending_financial_report") daysAllowed = 1;
+      else if (stage.id === "shipping_preparation") daysAllowed = 1;
+      else if (stage.id === "completed") daysAllowed = 0;
+
+      cumulativeDays += daysAllowed;
+      let deadlineDate: Date;
+
+      if (daysAllowed < 1) {
+        deadlineDate = new Date(createdDate.getTime() + daysAllowed * 24 * 60 * 60 * 1000);
+      } else {
+        deadlineDate = addBusinessDays(createdDate, Math.floor(cumulativeDays));
+      }
+
+      return {
+        id: stage.id,
+        label: stage.label,
+        daysAllowed,
+        deadlineDate,
+      };
+    });
 
     return stageDeadlines.map((stage) => {
       const timeRemaining = stage.deadlineDate.getTime() - now.getTime();
@@ -673,10 +667,10 @@ export default function AdminOperationDetail() {
         hoursRemaining,
         minutesRemaining,
         isOverdue: now > stage.deadlineDate,
-        isApproaching: timeRemaining < 6 * 60 * 60 * 1000 && !( now > stage.deadlineDate),
+        isApproaching: timeRemaining < 6 * 60 * 60 * 1000 && !(now > stage.deadlineDate),
       };
     });
-  }, [order.createdAt, currentTime, product?.services.hasApostille]);
+  }, [order.createdAt, currentTime, workflowStages]);
 
   const getDeadlineColor = () => {
     if (["completed", "rejected_by_sales", "rejected_by_operation", "rejected_by_operation_manager", "rejected_by_client"].includes(order.status)) {

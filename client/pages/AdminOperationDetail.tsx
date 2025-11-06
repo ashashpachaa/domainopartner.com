@@ -315,6 +315,20 @@ export default function AdminOperationDetail() {
       updatedOrder.status = rejectionStatus as any;
       updatedOrder.rejectionReasons = [...(order.rejectionReasons || []), rejectReason];
 
+      // Uncheck services when rejecting FROM those stages (going back for rework)
+      if (order.status === "pending_apostille") {
+        updatedOrder.completedServices.apostilleComplete = false;
+      }
+      if (order.status === "pending_poa") {
+        updatedOrder.completedServices.poaComplete = false;
+      }
+      if (order.status === "pending_financial_report") {
+        updatedOrder.completedServices.financialReportComplete = false;
+      }
+      if (order.status === "shipping_preparation") {
+        updatedOrder.completedServices.shippingComplete = false;
+      }
+
       saveOrder(updatedOrder);
       setRejectReason("");
       setShowRejectForm(false);

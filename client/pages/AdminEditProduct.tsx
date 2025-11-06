@@ -25,6 +25,7 @@ export default function AdminEditProduct() {
       requirements: "",
       price: 0,
       currency: "USD",
+      country: "",
       services: {
         hasApostille: false,
         hasShipping: false,

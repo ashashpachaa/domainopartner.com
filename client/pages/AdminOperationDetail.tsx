@@ -1148,14 +1148,14 @@ export default function AdminOperationDetail() {
 
               {/* Phone */}
               <div className="bg-white rounded-lg p-4 border border-purple-100">
-                <p className="text-xs font-semibold text-slate-600 uppercase mb-2">Phone</p>
-                <p className="text-sm text-slate-900">{user.phone || "N/A"}</p>
+                <p className="text-xs font-semibold text-slate-600 uppercase mb-2">WhatsApp</p>
+                <p className="text-sm text-slate-900">{user.whatsappNumber || "N/A"}</p>
               </div>
 
               {/* Company */}
               <div className="bg-white rounded-lg p-4 border border-purple-100">
                 <p className="text-xs font-semibold text-slate-600 uppercase mb-2">Company</p>
-                <p className="text-sm text-slate-900">{user.company || "N/A"}</p>
+                <p className="text-sm text-slate-900">{user.companyName || "N/A"}</p>
               </div>
 
               {/* Country */}

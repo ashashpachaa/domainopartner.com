@@ -1250,6 +1250,7 @@ export const mockOrders: Order[] = [
         stage: "sales",
         fileType: "document",
         description: "Spanish company registration documents",
+        visibleToClient: false,
       },
       {
         id: "F005-2",
@@ -1262,10 +1263,24 @@ export const mockOrders: Order[] = [
         stage: "operation",
         fileType: "document",
         description: "Spanish registration form in process",
+        visibleToClient: false,
       },
     ],
     clientCanViewFiles: false,
     clientCanViewTracking: false,
+    comments: [],
+    requiredServices: {
+      hasApostille: true,
+      hasShipping: true,
+      hasPOA: false,
+      hasFinancialReport: true,
+    },
+    completedServices: {
+      apostilleComplete: false,
+      shippingComplete: false,
+      poaComplete: false,
+      financialReportComplete: false,
+    },
   },
   {
     id: "O006",

@@ -25,6 +25,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { mockOrders, Order, OrderStatus, mockUsers, mockStaff, mockProducts } from "@/lib/mockData";
+import { fetchCompanyDetails, storeRegisteredCompany } from "@/hooks/useCompanyDetails";
+import { toast } from "sonner";
 
 const statusConfig: Record<
   OrderStatus,

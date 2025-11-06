@@ -581,6 +581,7 @@ export default function AdminOrderDetail() {
                           <th className="text-left px-4 py-3 font-semibold text-slate-700">Date of Birth</th>
                           <th className="text-left px-4 py-3 font-semibold text-slate-700">Nationality</th>
                           <th className="text-center px-4 py-3 font-semibold text-slate-700">Ownership %</th>
+                          <th className="text-center px-4 py-3 font-semibold text-slate-700">Passport</th>
                         </tr>
                       </thead>
                       <tbody>

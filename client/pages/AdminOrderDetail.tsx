@@ -132,6 +132,32 @@ export default function AdminOrderDetail() {
     return staff ? `${staff.firstName} ${staff.lastName}` : "Unknown";
   };
 
+  const handleDownloadFile = (file: any) => {
+    // Create a mock download by triggering a download with file metadata
+    const fileData = {
+      fileName: file.fileName,
+      fileSize: file.fileSize,
+      uploadedAt: file.uploadedAt,
+      uploadedBy: file.uploadedByName,
+      description: file.description,
+      stage: file.stage,
+    };
+
+    // Create a blob with file information
+    const dataStr = JSON.stringify(fileData, null, 2);
+    const dataBlob = new Blob([dataStr], { type: "application/json" });
+
+    // Create download link
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${file.fileName}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   const handleAction = (type: "accept" | "reject") => {
     setActionType(type);
     if (type === "accept") {

@@ -232,6 +232,33 @@ export default function ClientOrderDetail() {
               </div>
             )}
 
+            {/* Company Information */}
+            {order.companyInfo && (
+              <div className="bg-white rounded-lg border border-slate-200 p-6">
+                <h2 className="text-lg font-semibold text-slate-900 mb-4">Company Information</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <p className="text-sm text-slate-600">Company Name</p>
+                    <p className="font-semibold text-slate-900">{order.companyInfo.companyName}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-slate-600">Price Per Share</p>
+                    <p className="font-semibold text-slate-900">{order.currency} {order.companyInfo.pricePerShare}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-slate-600">Total Capital</p>
+                    <p className="font-semibold text-slate-900">{order.currency} {order.companyInfo.totalCapital}</p>
+                  </div>
+                </div>
+                {order.companyInfo.companyActivities && (
+                  <div className="mt-4 pt-4 border-t border-slate-200">
+                    <p className="text-sm text-slate-600">Business Activities</p>
+                    <p className="text-slate-900 mt-2">{order.companyInfo.companyActivities}</p>
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* Shareholders */}
             {order.shareholders && order.shareholders.length > 0 && (
               <div className="bg-white rounded-lg border border-slate-200 p-6">

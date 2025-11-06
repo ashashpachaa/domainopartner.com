@@ -659,6 +659,72 @@ export default function ClientCreateOrder() {
               </div>
             )}
 
+            {/* Company Information Section - Only for Company Formation */}
+            {formData.serviceType === "Company Formation" && (
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 space-y-4">
+                <div>
+                  <h3 className="font-semibold text-slate-900 mb-2">Company Information *</h3>
+                  <p className="text-sm text-slate-600 mb-4">
+                    Provide details about the company being formed.
+                  </p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-900 mb-2">
+                    Company Name *
+                  </label>
+                  <Input
+                    type="text"
+                    value={companyInfo.companyName}
+                    onChange={(e) => setCompanyInfo({ ...companyInfo, companyName: e.target.value })}
+                    placeholder="e.g., Acme Corporation Ltd"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-900 mb-2">
+                    Company Activities *
+                  </label>
+                  <textarea
+                    value={companyInfo.companyActivities}
+                    onChange={(e) => setCompanyInfo({ ...companyInfo, companyActivities: e.target.value })}
+                    placeholder="Describe the company's main business activities..."
+                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500"
+                    rows={3}
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-900 mb-2">
+                      Total Capital *
+                    </label>
+                    <Input
+                      type="number"
+                      value={companyInfo.totalCapital}
+                      onChange={(e) => setCompanyInfo({ ...companyInfo, totalCapital: e.target.value })}
+                      placeholder="e.g., 100000"
+                      step="0.01"
+                    />
+                    <p className="text-xs text-slate-500 mt-1">Enter amount in {formData.currency}</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-900 mb-2">
+                      Price Per Share *
+                    </label>
+                    <Input
+                      type="number"
+                      value={companyInfo.pricePerShare}
+                      onChange={(e) => setCompanyInfo({ ...companyInfo, pricePerShare: e.target.value })}
+                      placeholder="e.g., 100"
+                      step="0.01"
+                    />
+                    <p className="text-xs text-slate-500 mt-1">Price per share in {formData.currency}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* File Upload */}
             <div>
               <label className="block text-sm font-medium text-slate-900 mb-2">

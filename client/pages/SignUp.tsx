@@ -1,11 +1,15 @@
 import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock, User, ArrowRight, CheckCircle } from "lucide-react";
 import { FormEvent, useState } from "react";
+import { toast } from "sonner";
+import { mockUsers } from "@/lib/mockData";
 
 export default function SignUp() {
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -20,10 +24,102 @@ export default function SignUp() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const validateForm = (): boolean => {
+    if (!formData.firstName.trim()) {
+      toast.error("First name is required");
+      return false;
+    }
+
+    if (!formData.lastName.trim()) {
+      toast.error("Last name is required");
+      return false;
+    }
+
+    if (!formData.email.trim()) {
+      toast.error("Email is required");
+      return false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      toast.error("Please enter a valid email address");
+      return false;
+    }
+
+    if (formData.password.length < 8) {
+      toast.error("Password must be at least 8 characters");
+      return false;
+    }
+
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/;
+    if (!passwordRegex.test(formData.password)) {
+      toast.error("Password must contain uppercase, lowercase, and numbers");
+      return false;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      toast.error("Passwords do not match");
+      return false;
+    }
+
+    const emailExists = mockUsers.some(
+      (u) => u.email.toLowerCase() === formData.email.toLowerCase()
+    );
+    if (emailExists) {
+      toast.error("An account with this email already exists");
+      return false;
+    }
+
+    if (!agreeTerms) {
+      toast.error("You must agree to the Terms of Service and Privacy Policy");
+      return false;
+    }
+
+    return true;
+  };
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    // Handle sign up logic here
-    console.log("Sign up attempted with:", formData);
+
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsLoading(true);
+
+    setTimeout(() => {
+      try {
+        const newUserId = `U${mockUsers.length + 1}`;
+        const newUser = {
+          id: newUserId,
+          firstName: formData.firstName.trim(),
+          lastName: formData.lastName.trim(),
+          companyName: "",
+          country: "",
+          city: "",
+          whatsappNumber: "",
+          email: formData.email.trim(),
+          website: "",
+          status: "active" as const,
+          subscriptionPlan: "starter" as const,
+          subscriptionStatus: "active" as const,
+          createdAt: new Date().toISOString(),
+          lastLogin: new Date().toISOString(),
+        };
+
+        mockUsers.push(newUser);
+        localStorage.setItem("currentUser", JSON.stringify(newUser));
+
+        toast.success("Account created successfully!");
+
+        navigate("/client/dashboard");
+      } catch (error) {
+        toast.error("Failed to create account. Please try again.");
+        console.error("Signup error:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }, 1000);
   };
 
   return (

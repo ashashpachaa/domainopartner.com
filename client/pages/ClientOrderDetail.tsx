@@ -201,8 +201,8 @@ export default function ClientOrderDetail() {
                           <p className="text-xs text-slate-600 mt-1">
                             Uploaded: {new Date(file.uploadedAt).toLocaleDateString()}
                           </p>
-                          {file.notes && (
-                            <p className="text-xs text-slate-600 mt-1">{file.notes}</p>
+                          {file.description && (
+                            <p className="text-xs text-slate-600 mt-1">{file.description}</p>
                           )}
                         </div>
                         <Button

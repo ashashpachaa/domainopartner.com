@@ -491,6 +491,88 @@ export default function AdminOrderDetail() {
                 )}
               </div>
 
+              {/* Company Information */}
+              {order.companyInfo && (
+                <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-lg p-6 border border-blue-200">
+                  <h3 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <Building2 className="w-5 h-5 text-blue-600" />
+                    Company Information
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-sm text-slate-600 font-medium">Company Name</label>
+                      <p className="text-slate-900 font-semibold mt-1">{order.companyInfo.companyName}</p>
+                    </div>
+                    <div>
+                      <label className="text-sm text-slate-600 font-medium">Total Capital</label>
+                      <p className="text-slate-900 font-semibold mt-1">
+                        {order.currency} {order.companyInfo.totalCapital}
+                      </p>
+                    </div>
+                    <div>
+                      <label className="text-sm text-slate-600 font-medium">Price Per Share</label>
+                      <p className="text-slate-900 font-semibold mt-1">
+                        {order.currency} {order.companyInfo.pricePerShare}
+                      </p>
+                    </div>
+                  </div>
+                  {order.companyInfo.companyActivities && (
+                    <div className="mt-4 pt-4 border-t border-blue-200">
+                      <label className="text-sm text-slate-600 font-medium">Business Activities</label>
+                      <p className="text-slate-900 mt-2 whitespace-pre-wrap">{order.companyInfo.companyActivities}</p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Shareholders */}
+              {order.shareholders && order.shareholders.length > 0 && (
+                <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-lg p-6 border border-amber-200">
+                  <h3 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <User className="w-5 h-5 text-amber-600" />
+                    Shareholders ({order.shareholders.length})
+                  </h3>
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="border-b-2 border-amber-200">
+                          <th className="text-left px-4 py-3 font-semibold text-slate-700">Name</th>
+                          <th className="text-left px-4 py-3 font-semibold text-slate-700">Date of Birth</th>
+                          <th className="text-left px-4 py-3 font-semibold text-slate-700">Nationality</th>
+                          <th className="text-center px-4 py-3 font-semibold text-slate-700">Ownership %</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {order.shareholders.map((shareholder, index) => (
+                          <tr key={shareholder.id} className={index % 2 === 0 ? "bg-white" : "bg-amber-50"}>
+                            <td className="px-4 py-4 border-b border-amber-100">
+                              <p className="font-medium text-slate-900">
+                                {shareholder.firstName} {shareholder.lastName}
+                              </p>
+                            </td>
+                            <td className="px-4 py-4 border-b border-amber-100 text-slate-700">
+                              {new Date(shareholder.dateOfBirth).toLocaleDateString("en-US", {
+                                year: "numeric",
+                                month: "short",
+                                day: "numeric",
+                              })}
+                            </td>
+                            <td className="px-4 py-4 border-b border-amber-100 text-slate-700">
+                              {shareholder.nationality}
+                            </td>
+                            <td className="px-4 py-4 border-b border-amber-100 text-center">
+                              <span className="inline-block px-3 py-1 bg-amber-100 text-amber-900 rounded-full text-sm font-semibold">
+                                {shareholder.ownershipPercentage}%
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+
               {/* Payment History */}
               {order.paymentHistory && order.paymentHistory.length > 0 && (
                 <div className="bg-white rounded-lg border border-slate-200 p-6">

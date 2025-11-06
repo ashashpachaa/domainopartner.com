@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Tesseract from "tesseract.js";
 import { toast } from "sonner";
 
 export interface ExtractedPassportData {
@@ -19,6 +18,9 @@ export function usePassportOCR() {
     setProgress(0);
 
     try {
+      // Dynamically import Tesseract to avoid bundle issues
+      const Tesseract = (await import("tesseract.js")).default;
+
       const reader = new FileReader();
       const imageData = await new Promise<string>((resolve, reject) => {
         reader.onload = () => resolve(reader.result as string);
@@ -165,5 +167,5 @@ export function usePassportOCR() {
     return result;
   };
 
-  return { extractPassportData, isProcessing, progress };
+  return { extractPassportData, isProcessing: isProcessing || progress > 0, progress };
 }

@@ -28,6 +28,8 @@ export default function AdminOperationDetail() {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [rejectReason, setRejectReason] = useState("");
   const [showRejectForm, setShowRejectForm] = useState(false);
+  const [apostilleFiles, setApostilleFiles] = useState<File[]>([]);
+  const [apostilleNotes, setApostilleNotes] = useState("");
   const [poaFiles, setPoaFiles] = useState<File[]>([]);
   const [poaNotes, setPoaNotes] = useState("");
   const [financialReportFiles, setFinancialReportFiles] = useState<File[]>([]);

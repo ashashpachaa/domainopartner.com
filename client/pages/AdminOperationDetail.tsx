@@ -1200,6 +1200,88 @@ export default function AdminOperationDetail() {
           </div>
         )}
 
+        {/* Order Details Section */}
+        <div className="bg-white rounded-lg p-8 border border-slate-200">
+          <h2 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+            <FileText className="w-5 h-5 text-slate-600" />
+            Order Details
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+            {/* Order Number */}
+            <div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
+              <p className="text-xs font-semibold text-slate-600 uppercase mb-2">Order Number</p>
+              <p className="text-base font-mono font-bold text-slate-900">{order.orderNumber}</p>
+            </div>
+
+            {/* Created Date */}
+            <div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
+              <p className="text-xs font-semibold text-slate-600 uppercase mb-2">Created Date</p>
+              <p className="text-base font-medium text-slate-900">
+                {new Date(order.createdAt).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })}
+              </p>
+            </div>
+
+            {/* Amount & Currency */}
+            <div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
+              <p className="text-xs font-semibold text-slate-600 uppercase mb-2">Amount</p>
+              <p className="text-lg font-bold text-slate-900">
+                {order.currency} {order.amount.toLocaleString()}
+              </p>
+            </div>
+          </div>
+
+          {/* Description */}
+          <div className="mb-6">
+            <label className="text-xs font-semibold text-slate-600 uppercase mb-2 block">Description</label>
+            <p className="text-sm text-slate-700 bg-slate-50 p-4 rounded-lg border border-slate-200">
+              {order.description || "N/A"}
+            </p>
+          </div>
+
+          {/* Service Type & Countries */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div>
+              <label className="text-xs font-semibold text-slate-600 uppercase mb-2 block">Service Type</label>
+              <p className="text-sm font-medium text-slate-900 bg-slate-50 p-3 rounded-lg border border-slate-200">
+                {order.serviceType || "N/A"}
+              </p>
+            </div>
+
+            <div>
+              <label className="text-xs font-semibold text-slate-600 uppercase mb-2 block">Countries</label>
+              <div className="flex flex-wrap gap-2">
+                {order.countries && order.countries.length > 0 ? (
+                  order.countries.map((country, index) => (
+                    <span
+                      key={index}
+                      className="px-3 py-1 bg-blue-100 text-blue-700 text-sm font-medium rounded-full border border-blue-200"
+                    >
+                      {country}
+                    </span>
+                  ))
+                ) : (
+                  <span className="text-sm text-slate-500">N/A</span>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Sales Representative */}
+          {order.assignedToSalesId && (
+            <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-lg border border-green-200">
+              <label className="text-xs font-semibold text-slate-600 uppercase mb-2 block">Assigned Sales Representative</label>
+              <p className="text-base font-medium text-slate-900">
+                {getStaffName(order.assignedToSalesId)}
+              </p>
+            </div>
+          )}
+        </div>
+
         {/* Product & Services Section */}
         {product && (
           <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-8 border border-blue-200">

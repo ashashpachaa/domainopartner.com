@@ -455,6 +455,40 @@ export default function AdminEditProduct() {
                   </select>
                 </div>
 
+                {/* Country */}
+                <div>
+                  <label className="block text-sm font-medium text-slate-900 mb-2">
+                    Country *
+                  </label>
+                  <select
+                    name="country"
+                    value={formData.country || ""}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500 bg-white"
+                  >
+                    <option value="">Select a country...</option>
+                    <option value="United Kingdom">United Kingdom</option>
+                    <option value="United States">United States</option>
+                    <option value="Canada">Canada</option>
+                    <option value="Sweden">Sweden</option>
+                    <option value="Australia">Australia</option>
+                    <option value="Germany">Germany</option>
+                    <option value="France">France</option>
+                    <option value="Netherlands">Netherlands</option>
+                    <option value="Belgium">Belgium</option>
+                    <option value="Spain">Spain</option>
+                    <option value="Italy">Italy</option>
+                    <option value="Japan">Japan</option>
+                    <option value="Singapore">Singapore</option>
+                    <option value="Hong Kong">Hong Kong</option>
+                    <option value="Dubai">Dubai</option>
+                    <option value="India">India</option>
+                    <option value="Mexico">Mexico</option>
+                    <option value="Brazil">Brazil</option>
+                  </select>
+                </div>
+
                 {/* Status */}
                 <div>
                   <label className="block text-sm font-medium text-slate-900 mb-2">

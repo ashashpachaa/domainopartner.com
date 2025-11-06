@@ -9,6 +9,17 @@ export interface Permission {
 
 export type WorkflowStage = "sales" | "operation" | "manager" | "client" | "shipping";
 
+export interface StageDealineConfig {
+  id: string;
+  stageName: string;
+  stageId: string;
+  daysAllowed: number;
+  description: string;
+  notes?: string;
+  lastUpdatedBy?: string;
+  lastUpdatedAt?: string;
+}
+
 export interface WorkflowPermission {
   stage: WorkflowStage;
   label: string;

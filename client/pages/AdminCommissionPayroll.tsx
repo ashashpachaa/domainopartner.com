@@ -6,6 +6,8 @@ import { mockOrders, mockInvoices, mockStaff, mockUsers } from "@/lib/mockData";
 
 export default function AdminCommissionPayroll() {
   const [selectedStaffId, setSelectedStaffId] = useState<string>("");
+  const [staffSearch, setStaffSearch] = useState<string>("");
+  const [tierFilter, setTierFilter] = useState<string>("");
 
   // Commission tier structure
   const commissionTiers = {

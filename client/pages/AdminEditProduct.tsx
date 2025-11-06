@@ -16,9 +16,23 @@ export default function AdminEditProduct() {
     ? mockProducts.find((p) => p.id === productId)
     : null;
 
+  // Calculate the next product number based on max existing product ID
+  const getNextProductNum = () => {
+    const maxProductNum = Math.max(
+      0,
+      ...mockProducts.map(p => {
+        const match = p.id.match(/P(\d+)/);
+        return match ? parseInt(match[1]) : 0;
+      })
+    );
+    return maxProductNum + 1;
+  };
+
+  const nextProductNum = getNextProductNum();
+
   const [formData, setFormData] = useState<Partial<Product>>(
     existingProduct || {
-      id: `P${(mockProducts.length + 1).toString().padStart(3, "0")}`,
+      id: `P${nextProductNum.toString().padStart(3, "0")}`,
       name: "",
       description: "",
       duration: "",

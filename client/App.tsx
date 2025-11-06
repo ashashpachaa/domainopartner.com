@@ -193,7 +193,7 @@ const App = () => (
           />
           <Route
             path="/staff/attendance"
-            element={<AdminRoute element={<StaffAttendanceDashboard />} />}
+            element={<ProtectedRoute element={<StaffAttendanceDashboard />} />}
           />
           <Route
             path="/admin/sales/report"
@@ -205,7 +205,7 @@ const App = () => (
           />
           <Route
             path="/staff/financial-dashboard"
-            element={<StaffFinancialDashboard />}
+            element={<ProtectedRoute element={<StaffFinancialDashboard />} />}
           />
           <Route
             path="/admin/companies"

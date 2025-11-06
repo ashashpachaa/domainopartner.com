@@ -108,12 +108,13 @@ export default function AdminOperationDetail() {
   };
 
   // Get rejection status based on current status
+  // Orders go back to previous stage for rework instead of terminal rejection
   const getRejectionStatus = (): string => {
     const statusMap: { [key: string]: string } = {
-      "pending_sales_review": "rejected_by_sales",
-      "pending_operation": "rejected_by_operation",
-      "pending_operation_manager_review": "rejected_by_operation_manager",
-      "awaiting_client_acceptance": "rejected_by_client",
+      "pending_sales_review": "rejected_by_sales", // Terminal - back to client to fix
+      "pending_operation": "rejected_by_operation", // Terminal - back to client to fix
+      "pending_operation_manager_review": "pending_operation", // REWORK: Send back to Operation for fixes
+      "awaiting_client_acceptance": "pending_operation_manager_review", // REWORK: Send back to Manager for fixes
     };
     return statusMap[order.status] || order.status;
   };

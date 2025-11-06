@@ -1531,12 +1531,12 @@ export default function AdminOperationDetail() {
         )}
 
         {/* Tabs */}
-        <div className="flex gap-2 border-b border-slate-200">
-          {["workflow", "apostille", "history"].map((tab) => (
+        <div className="flex gap-2 border-b border-slate-200 overflow-x-auto">
+          {["workflow", "poa", "financial_report", "shipping", "history"].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab as any)}
-              className={`px-4 py-2 font-medium text-sm border-b-2 transition-colors ${
+              className={`px-4 py-2 font-medium text-sm border-b-2 transition-colors whitespace-nowrap ${
                 activeTab === tab
                   ? "border-primary-600 text-primary-600"
                   : "border-transparent text-slate-600 hover:text-slate-900"
@@ -1544,8 +1544,12 @@ export default function AdminOperationDetail() {
             >
               {tab === "workflow"
                 ? "Workflow & Files"
-                : tab === "apostille"
-                ? "Apostille"
+                : tab === "poa"
+                ? "POA"
+                : tab === "financial_report"
+                ? "Financial Report"
+                : tab === "shipping"
+                ? "Shipping"
                 : "Activity Log"}
             </button>
           ))}

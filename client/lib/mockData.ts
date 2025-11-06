@@ -213,6 +213,21 @@ export interface OperationReviewForm {
   companyNumber: string;
 }
 
+export interface Shareholder {
+  id: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string; // YYYY-MM-DD format
+  nationality: string;
+  ownershipPercentage: number;
+  passportFile?: {
+    fileName: string;
+    fileSize: number;
+    fileUrl?: string;
+    uploadedAt: string;
+  };
+}
+
 export interface Order {
   id: string;
   userId: string;

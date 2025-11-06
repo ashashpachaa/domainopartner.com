@@ -312,7 +312,7 @@ export default function AdminCreateOrder() {
                   <Save className="w-4 h-4" />
                   Create Order
                 </Button>
-                <Link to="/admin/orders">
+                <Link to="/admin/operations">
                   <Button variant="outline" className="gap-2">
                     Cancel
                   </Button>

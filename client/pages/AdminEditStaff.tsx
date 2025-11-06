@@ -236,6 +236,47 @@ export default function AdminEditStaff() {
               </div>
             </div>
 
+            {/* Workflow Permissions */}
+            <div className="pt-6 border-t border-slate-200">
+              <h2 className="text-lg font-semibold text-slate-900 mb-4">
+                Workflow Permissions
+              </h2>
+              <p className="text-sm text-slate-600 mb-4">
+                Select which workflow stages this staff member is responsible for:
+              </p>
+              <div className="space-y-3">
+                {workflowStages.map((stage) => {
+                  const permission = formData.workflowPermissions?.find(
+                    (p) => p.stage === stage.value
+                  );
+                  return (
+                    <label
+                      key={stage.value}
+                      className="flex items-start gap-4 p-4 border border-slate-200 rounded-lg hover:bg-slate-50 cursor-pointer transition-colors"
+                    >
+                      <div className="flex items-center h-6">
+                        <input
+                          type="checkbox"
+                          checked={permission?.canAccess || false}
+                          onChange={(e) =>
+                            handleWorkflowPermissionChange(stage.value, e.target.checked)
+                          }
+                          className="w-5 h-5 rounded border-slate-300 text-primary-600 focus:ring-primary-500 cursor-pointer"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-medium text-slate-900">{stage.label}</p>
+                        <p className="text-sm text-slate-600">{stage.description}</p>
+                      </div>
+                      {permission?.canAccess && (
+                        <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
+                      )}
+                    </label>
+                  );
+                })}
+              </div>
+            </div>
+
             {/* Role Description */}
             <div className="pt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
               <p className="text-sm text-blue-900">

@@ -343,47 +343,64 @@ export default function AdminOperationDetail() {
   };
 
   const handleFileUpload = () => {
-    if (!selectedFile) {
-      alert("Please select a file first");
+    if (selectedFiles.length === 0) {
+      alert("Please select at least one file");
       return;
     }
 
     if (!fileNotes.trim()) {
-      alert("Please add a description for the file");
+      alert("Please add a description for the files");
       return;
     }
 
     const currentStaff = mockStaff.find((s) => s.id === currentUserId);
-    const newFile = {
-      id: `F${order.operationFiles.length + 1}`,
-      orderId: order.id,
-      fileName: selectedFile.name,
-      fileSize: selectedFile.size,
-      uploadedBy: currentUserId,
-      uploadedByName: currentStaff?.firstName + " " + currentStaff?.lastName || "Unknown",
-      uploadedAt: new Date().toISOString(),
-      stage: getFileStageFromStatus(order.status),
-      fileType: "document" as any,
-      description: fileNotes,
-    };
+    const updatedOrder = { ...order };
+    updatedOrder.operationFiles = [...(order.operationFiles || [])];
 
-    order.operationFiles.push(newFile);
+    selectedFiles.forEach((file) => {
+      const newFile = {
+        id: `F${updatedOrder.operationFiles.length + 1}`,
+        orderId: order.id,
+        fileName: file.name,
+        fileSize: file.size,
+        uploadedBy: currentUserId,
+        uploadedByName: currentStaff?.firstName + " " + currentStaff?.lastName || "Unknown",
+        uploadedAt: new Date().toISOString(),
+        stage: getFileStageFromStatus(order.status),
+        fileType: "document" as any,
+        description: fileNotes,
+        visibleToClient: false,
+      };
+      updatedOrder.operationFiles.push(newFile);
+    });
+
+    saveOrder(updatedOrder);
     setFileNotes("");
-    setSelectedFile(null);
-    alert("File uploaded successfully!");
-    window.location.reload();
+    setSelectedFiles([]);
+    alert(`${selectedFiles.length} file(s) uploaded successfully!`);
   };
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const maxSize = 10 * 1024 * 1024; // 10MB
-      if (file.size > maxSize) {
-        alert("File size exceeds 10MB limit");
-        return;
+    const files = e.target.files;
+    if (files) {
+      const maxSize = 5 * 1024 * 1024 * 1024; // 5GB per file
+      const newFiles: File[] = [];
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (file.size > maxSize) {
+          alert(`File "${file.name}" exceeds 5GB limit`);
+          continue;
+        }
+        newFiles.push(file);
       }
-      setSelectedFile(file);
+
+      setSelectedFiles([...selectedFiles, ...newFiles]);
     }
+  };
+
+  const removeSelectedFile = (index: number) => {
+    setSelectedFiles(selectedFiles.filter((_, i) => i !== index));
   };
 
   const getFileStageFromStatus = (status: string): "sales" | "operation" | "manager" | "apostille" => {

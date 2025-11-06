@@ -159,6 +159,13 @@ export default function AdminOperationDetail() {
       updatedOrder.history = [...(order.history || []), newHistoryEntry];
       updatedOrder.status = nextStatus as any;
 
+      // Auto-assign staff when accepting a new order
+      if (order.status === "new") {
+        updatedOrder.assignedToSalesId = effectiveUserId;
+        updatedOrder.createdByStaffId = effectiveUserId;
+        newHistoryEntry.description = `${currentStaff?.firstName} assigned this order to Sales Review`;
+      }
+
       // Mark as completed if final stage
       if (nextStatus === "completed") {
         updatedOrder.completedAt = new Date().toISOString().split("T")[0];

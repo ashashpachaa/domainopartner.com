@@ -2642,8 +2642,8 @@ export const mockOrders: Order[] = [
       pricePerShare: "£10",
     },
     shareholders: [
-      { id: "SH001", firstName: "Ahmed", lastName: "Sameh", dateOfBirth: "1984-07-21", nationality: "Egyptian", ownershipPercentage: 60, passportFile: "ahmed_passport.pdf" },
-      { id: "SH002", firstName: "Fatima", lastName: "Hassan", dateOfBirth: "1986-03-15", nationality: "Egyptian", ownershipPercentage: 40, passportFile: "fatima_passport.pdf" },
+      { id: "SH001", firstName: "Ahmed", lastName: "Sameh", dateOfBirth: "1984-07-21", nationality: "Egyptian", ownershipPercentage: 60, passportFile: { fileName: "ahmed_passport.pdf", fileSize: 234567, fileUrl: "https://example.com/files/ahmed_passport.pdf" } },
+      { id: "SH002", firstName: "Fatima", lastName: "Hassan", dateOfBirth: "1986-03-15", nationality: "Egyptian", ownershipPercentage: 40, passportFile: { fileName: "fatima_passport.pdf", fileSize: 189234, fileUrl: "https://example.com/files/fatima_passport.pdf" } },
     ],
   },
 ];

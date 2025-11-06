@@ -39,6 +39,7 @@ import AdminClientRequestDetail from "./pages/AdminClientRequestDetail";
 import StaffDashboard from "./pages/StaffDashboard";
 import ClientDashboard from "./pages/ClientDashboard";
 import ClientOrders from "./pages/ClientOrders";
+import ClientCreateOrder from "./pages/ClientCreateOrder";
 import ClientOrderDetail from "./pages/ClientOrderDetail";
 import ClientInvoices from "./pages/ClientInvoices";
 import ClientDocuments from "./pages/ClientDocuments";

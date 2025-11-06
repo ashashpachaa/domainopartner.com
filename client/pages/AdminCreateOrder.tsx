@@ -132,7 +132,15 @@ export default function AdminCreateOrder() {
       return;
     }
 
-    const orderId = formData.id || `O${String(mockOrders.length + 1).padStart(3, "0")}`;
+    // Generate order ID by finding the highest existing order number
+    const maxOrderNum = Math.max(
+      0,
+      ...mockOrders.map(o => {
+        const match = o.id.match(/O(\d+)/);
+        return match ? parseInt(match[1]) : 0;
+      })
+    );
+    const orderId = formData.id || `O${String(maxOrderNum + 1).padStart(3, "0")}`;
 
     // Get selected product to set requiredServices
     const product = mockProducts.find(p => p.id === formData.productId);

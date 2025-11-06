@@ -26,6 +26,11 @@ export default function AdminOperationDetail() {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [rejectReason, setRejectReason] = useState("");
   const [showRejectForm, setShowRejectForm] = useState(false);
+  const [poaFiles, setPoaFiles] = useState<File[]>([]);
+  const [poaNotes, setPoaNotes] = useState("");
+  const [financialReportFiles, setFinancialReportFiles] = useState<File[]>([]);
+  const [financialReportNotes, setFinancialReportNotes] = useState("");
+  const [trackingNumber, setTrackingNumber] = useState("");
   const [activeTab, setActiveTab] = useState<"workflow" | "poa" | "financial_report" | "shipping" | "history">("workflow");
   const [currentTime, setCurrentTime] = useState(new Date());
   const [impersonateStaffId, setImpersonateStaffId] = useState<string>("");

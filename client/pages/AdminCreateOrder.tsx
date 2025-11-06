@@ -172,43 +172,55 @@ export default function AdminCreateOrder() {
           </Link>
 
           {/* Form Card */}
-          <div className="bg-white rounded-lg border border-slate-200 p-8 max-w-4xl">
-            <h1 className="text-3xl font-bold text-slate-900 mb-6">Create New Order</h1>
+          <div className="bg-white rounded-lg border border-slate-200 p-8 max-w-5xl">
+            <h1 className="text-3xl font-bold text-slate-900 mb-2">Create New Order</h1>
+            <p className="text-slate-600 mb-8">Fill in the order details and select a sales representative to manage client interaction</p>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Basic Information */}
-              <div>
-                <h2 className="text-lg font-semibold text-slate-900 mb-4">Basic Information</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <form onSubmit={handleSubmit} className="space-y-8">
+              {/* Step 1: Client Selection */}
+              <div className="pb-8 border-b border-slate-200">
+                <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-100 text-primary-700 text-sm font-semibold">1</span>
+                  Select Client
+                </h2>
+                <div>
+                  <label className="block text-sm font-medium text-slate-900 mb-2">
+                    Client *
+                  </label>
+                  <select
+                    name="userId"
+                    value={formData.userId || ""}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-1 focus:ring-primary-500 bg-white"
+                    required
+                  >
+                    <option value="">Select a client</option>
+                    {mockUsers.map((user) => (
+                      <option key={user.id} value={user.id}>
+                        {user.firstName} {user.lastName} ({user.companyName})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* Step 2: Product Selection & Service Summary */}
+              <div className="pb-8 border-b border-slate-200">
+                <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-100 text-primary-700 text-sm font-semibold">2</span>
+                  Select Product & Services
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-slate-900 mb-2">
-                      Client *
-                    </label>
-                    <select
-                      name="userId"
-                      value={formData.userId || ""}
-                      onChange={handleChange}
-                      className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500 bg-white"
-                      required
-                    >
-                      <option value="">Select a client</option>
-                      {mockUsers.map((user) => (
-                        <option key={user.id} value={user.id}>
-                          {user.firstName} {user.lastName} ({user.companyName})
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-slate-900 mb-2">
-                      Product (Optional)
+                      Product *
                     </label>
                     <select
                       name="productId"
                       value={formData.productId || ""}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500 bg-white"
+                      className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-1 focus:ring-primary-500 bg-white"
+                      required
                     >
                       <option value="">Select a product</option>
                       {mockProducts.map((product) => (
@@ -217,28 +229,124 @@ export default function AdminCreateOrder() {
                         </option>
                       ))}
                     </select>
+                    {selectedProduct && (
+                      <p className="text-xs text-slate-500 mt-2">{selectedProduct.description}</p>
+                    )}
                   </div>
 
-                  <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-slate-900 mb-2">
-                      Description *
-                    </label>
-                    <textarea
-                      name="description"
-                      value={formData.description || ""}
-                      onChange={handleChange}
-                      className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500"
-                      rows={3}
-                      required
-                    />
-                  </div>
+                  {/* Service Summary */}
+                  {selectedProduct && (
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                      <h3 className="font-semibold text-slate-900 mb-3">Included Services</h3>
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          {selectedProduct.services.hasApostille ? (
+                            <CheckCircle2 className="w-4 h-4 text-green-600" />
+                          ) : (
+                            <XCircle className="w-4 h-4 text-slate-400" />
+                          )}
+                          <span className={selectedProduct.services.hasApostille ? "text-slate-900" : "text-slate-500"}>
+                            Apostille Processing
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          {selectedProduct.services.hasPOA ? (
+                            <CheckCircle2 className="w-4 h-4 text-green-600" />
+                          ) : (
+                            <XCircle className="w-4 h-4 text-slate-400" />
+                          )}
+                          <span className={selectedProduct.services.hasPOA ? "text-slate-900" : "text-slate-500"}>
+                            Power of Attorney (POA)
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          {selectedProduct.services.hasFinancialReport ? (
+                            <CheckCircle2 className="w-4 h-4 text-green-600" />
+                          ) : (
+                            <XCircle className="w-4 h-4 text-slate-400" />
+                          )}
+                          <span className={selectedProduct.services.hasFinancialReport ? "text-slate-900" : "text-slate-500"}>
+                            Financial Report
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          {selectedProduct.services.hasShipping ? (
+                            <CheckCircle2 className="w-4 h-4 text-green-600" />
+                          ) : (
+                            <XCircle className="w-4 h-4 text-slate-400" />
+                          )}
+                          <span className={selectedProduct.services.hasShipping ? "text-slate-900" : "text-slate-500"}>
+                            Shipping & Tracking
+                          </span>
+                        </div>
+                      </div>
+                      {selectedProduct && (
+                        <div className="mt-4 pt-4 border-t border-blue-200">
+                          <p className="text-xs text-slate-600 mb-2">
+                            <span className="font-semibold">Duration:</span> {selectedProduct.duration}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
 
-              {/* Order Details */}
-              <div>
-                <h2 className="text-lg font-semibold text-slate-900 mb-4">Order Details</h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* Step 3: Sales Assignment */}
+              <div className="pb-8 border-b border-slate-200">
+                <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-100 text-primary-700 text-sm font-semibold">3</span>
+                  Assign Sales Representative
+                </h2>
+                <div>
+                  <label className="block text-sm font-medium text-slate-900 mb-2">
+                    Sales Staff *
+                  </label>
+                  <select
+                    name="assignedToSalesId"
+                    value={formData.assignedToSalesId || ""}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-1 focus:ring-primary-500 bg-white"
+                    required
+                  >
+                    <option value="">Select a sales representative</option>
+                    {salesStaff.map((staff) => (
+                      <option key={staff.id} value={staff.id}>
+                        {staff.firstName} {staff.lastName} ({staff.email})
+                      </option>
+                    ))}
+                  </select>
+                  <p className="text-xs text-slate-500 mt-2">
+                    The assigned sales representative will interact with the client and make the order visible in their dashboard
+                  </p>
+                </div>
+              </div>
+
+              {/* Step 4: Order Details */}
+              <div className="pb-8 border-b border-slate-200">
+                <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-100 text-primary-700 text-sm font-semibold">4</span>
+                  Order Details
+                </h2>
+
+                {/* Description */}
+                <div className="mb-6">
+                  <label className="block text-sm font-medium text-slate-900 mb-2">
+                    Description *
+                  </label>
+                  <textarea
+                    name="description"
+                    value={formData.description || ""}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
+                    rows={3}
+                    placeholder="Provide details about this order"
+                    required
+                  />
+                </div>
+
+                {/* Service Type, Amount, Currency */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                   <div>
                     <label className="block text-sm font-medium text-slate-900 mb-2">
                       Service Type *
@@ -249,23 +357,35 @@ export default function AdminCreateOrder() {
                       value={formData.serviceType || ""}
                       onChange={handleChange}
                       placeholder="e.g., Company Registration"
+                      disabled={!!selectedProduct}
+                      className={selectedProduct ? "bg-slate-100" : ""}
                       required
                     />
+                    {selectedProduct && (
+                      <p className="text-xs text-slate-500 mt-1">Auto-filled from product</p>
+                    )}
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-slate-900 mb-2">
                       Amount *
                     </label>
-                    <Input
-                      type="number"
-                      name="amount"
-                      value={formData.amount || ""}
-                      onChange={handleChange}
-                      placeholder="0.00"
-                      step="0.01"
-                      required
-                    />
+                    <div className="flex items-center gap-2">
+                      <Input
+                        type="number"
+                        name="amount"
+                        value={formData.amount || ""}
+                        onChange={handleChange}
+                        placeholder="0.00"
+                        step="0.01"
+                        disabled={!!selectedProduct}
+                        className={selectedProduct ? "bg-slate-100" : ""}
+                        required
+                      />
+                    </div>
+                    {selectedProduct && (
+                      <p className="text-xs text-slate-500 mt-1">Auto-filled from product</p>
+                    )}
                   </div>
 
                   <div>
@@ -276,7 +396,8 @@ export default function AdminCreateOrder() {
                       name="currency"
                       value={formData.currency || "USD"}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500 bg-white"
+                      disabled={!!selectedProduct}
+                      className={`w-full px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-1 focus:ring-primary-500 bg-white ${selectedProduct ? "bg-slate-100" : ""}`}
                     >
                       <option value="USD">USD</option>
                       <option value="GBP">GBP</option>
@@ -284,57 +405,65 @@ export default function AdminCreateOrder() {
                       <option value="CAD">CAD</option>
                       <option value="SEK">SEK</option>
                     </select>
+                    {selectedProduct && (
+                      <p className="text-xs text-slate-500 mt-1">Auto-filled from product</p>
+                    )}
                   </div>
                 </div>
-              </div>
 
-              {/* Countries */}
-              <div>
-                <h2 className="text-lg font-semibold text-slate-900 mb-4">Countries</h2>
-                <div className="flex gap-2 mb-4">
-                  <Input
-                    type="text"
-                    value={countryInput}
-                    onChange={(e) => setCountryInput(e.target.value)}
-                    onKeyPress={(e) => {
-                      if (e.key === "Enter") {
-                        e.preventDefault();
-                        addCountry();
-                      }
-                    }}
-                    placeholder="Enter country name and press Enter"
-                  />
-                  <Button
-                    type="button"
-                    onClick={addCountry}
-                    className="bg-slate-200 text-slate-900 hover:bg-slate-300"
-                  >
-                    Add
-                  </Button>
-                </div>
-                {selectedCountries.length > 0 && (
-                  <div className="flex flex-wrap gap-2">
-                    {selectedCountries.map((country) => (
-                      <div
-                        key={country}
-                        className="inline-flex items-center gap-2 bg-primary-100 text-primary-700 px-3 py-1 rounded-full text-sm"
-                      >
-                        {country}
-                        <button
-                          type="button"
-                          onClick={() => removeCountry(country)}
-                          className="hover:text-primary-900"
-                        >
-                          ✕
-                        </button>
-                      </div>
-                    ))}
+                {/* Countries */}
+                <div>
+                  <label className="block text-sm font-medium text-slate-900 mb-2">
+                    Countries
+                  </label>
+                  <div className="flex gap-2 mb-4">
+                    <Input
+                      type="text"
+                      value={countryInput}
+                      onChange={(e) => setCountryInput(e.target.value)}
+                      onKeyPress={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          addCountry();
+                        }
+                      }}
+                      placeholder="Enter country name and press Enter"
+                    />
+                    <Button
+                      type="button"
+                      onClick={addCountry}
+                      className="bg-slate-200 text-slate-900 hover:bg-slate-300"
+                    >
+                      Add
+                    </Button>
                   </div>
-                )}
+                  {selectedCountries.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      {selectedCountries.map((country) => (
+                        <div
+                          key={country}
+                          className="inline-flex items-center gap-2 bg-primary-100 text-primary-700 px-3 py-1 rounded-full text-sm"
+                        >
+                          {country}
+                          <button
+                            type="button"
+                            onClick={() => removeCountry(country)}
+                            className="hover:text-primary-900"
+                          >
+                            ✕
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {selectedProduct && selectedCountries.length > 0 && (
+                    <p className="text-xs text-slate-500 mt-2">Auto-filled from product</p>
+                  )}
+                </div>
               </div>
 
               {/* Submit Button */}
-              <div className="flex gap-4 pt-6 border-t border-slate-200">
+              <div className="flex gap-4 pt-4">
                 <Button
                   type="submit"
                   className="bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white flex items-center gap-2"

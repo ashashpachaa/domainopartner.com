@@ -1,7 +1,11 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
+import multer from "multer";
 import { handleDemo } from "./routes/demo";
+import { handleOCR } from "./routes/ocr";
+
+const upload = multer({ storage: multer.memoryStorage() });
 
 export function createServer() {
   const app = express();
@@ -18,6 +22,9 @@ export function createServer() {
   });
 
   app.get("/api/demo", handleDemo);
+
+  // OCR endpoint
+  app.post("/api/ocr/passport", upload.single("image"), handleOCR);
 
   return app;
 }

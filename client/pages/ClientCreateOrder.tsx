@@ -413,7 +413,7 @@ export default function ClientCreateOrder() {
                   {selectedProduct.services.hasApostille && <p>✓ Apostille Processing</p>}
                   {selectedProduct.services.hasPOA && <p>✓ Power of Attorney</p>}
                   {selectedProduct.services.hasFinancialReport && <p>✓ Financial Report</p>}
-                  {selectedProduct.services.hasShipping && <p>��� Shipping</p>}
+                  {selectedProduct.services.hasShipping && <p>✓ Shipping</p>}
                   {!selectedProduct.services.hasApostille &&
                     !selectedProduct.services.hasPOA &&
                     !selectedProduct.services.hasFinancialReport &&
@@ -739,17 +739,38 @@ export default function ClientCreateOrder() {
                   {companyValidation.isAvailable === false && (
                     <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-lg">
                       <p className="text-sm font-medium text-red-700 mb-1">
-                        Company name already registered
+                        Company name is not available
                       </p>
                       {companyValidation.exactMatch && (
-                        <p className="text-xs text-red-600">
-                          Registered as: {companyValidation.exactMatch.title}
+                        <div className="text-xs text-red-600 space-y-1 mt-2">
+                          <p>
+                            <strong>Registered as:</strong> {companyValidation.exactMatch.title}
+                          </p>
                           {companyValidation.exactMatch.company_number && (
-                            <span> (Company No: {companyValidation.exactMatch.company_number})</span>
+                            <p>
+                              <strong>Company Number:</strong> {companyValidation.exactMatch.company_number}
+                            </p>
                           )}
-                        </p>
+                          {companyValidation.exactMatch.address_snippet && (
+                            <p>
+                              <strong>Address:</strong> {companyValidation.exactMatch.address_snippet}
+                            </p>
+                          )}
+                        </div>
                       )}
-                      <p className="text-xs text-red-600 mt-1">
+                      {(companyValidation.results as any[])?.length > 0 && (
+                        <div className="text-xs text-red-600 mt-2">
+                          <p className="font-medium mb-1">Similar registered companies:</p>
+                          <ul className="list-disc list-inside space-y-0.5">
+                            {(companyValidation.results as any[]).slice(0, 3).map((company: any) => (
+                              <li key={company.company_number}>
+                                {company.title} ({company.company_number})
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                      <p className="text-xs text-red-700 font-medium mt-2">
                         Please choose a different company name.
                       </p>
                     </div>

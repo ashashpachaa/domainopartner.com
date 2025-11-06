@@ -129,6 +129,7 @@ export default function AdminOperationDetail() {
   // Orders go back to previous stage for rework instead of terminal rejection
   const getRejectionStatus = (): string => {
     const statusMap: { [key: string]: string } = {
+      "new": "new", // Can't reject a new order, keep it new
       "pending_sales_review": "rejected_by_sales", // Terminal - back to client to fix
       "pending_operation": "rejected_by_operation", // Terminal - back to client to fix
       "pending_operation_manager_review": "pending_operation", // REWORK: Send back to Operation for fixes

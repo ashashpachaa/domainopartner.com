@@ -2,9 +2,9 @@ import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import AdminLayout from "@/components/AdminLayout";
 import { Button } from "@/components/ui/button";
-import { Building2, Search, Download, AlertCircle, CheckCircle2 } from "lucide-react";
+import { Building2, Search, Download, AlertCircle, CheckCircle2, FileText } from "lucide-react";
 import { getRegisteredCompanies, RegisteredCompany } from "@/hooks/useCompanyDetails";
-import { mockUsers } from "@/lib/mockData";
+import { mockUsers, mockOrders } from "@/lib/mockData";
 
 export default function AdminCompanies() {
   const [searchTerm, setSearchTerm] = useState("");

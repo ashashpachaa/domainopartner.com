@@ -1197,12 +1197,20 @@ export default function AdminOperationDetail() {
                     <p className="text-sm text-slate-700">{product.description}</p>
                   </div>
                   <div className="grid grid-cols-2 gap-4 pt-3 border-t border-slate-200">
-                    <div>
-                      <p className="text-xs font-semibold text-slate-600 uppercase mb-1">Price</p>
-                      <p className="text-lg font-bold text-blue-600">
-                        {product.currency} {product.price.toLocaleString()}
-                      </p>
-                    </div>
+                    {/* Price - Only show to Sales staff */}
+                    {isSalesStaff ? (
+                      <div>
+                        <p className="text-xs font-semibold text-slate-600 uppercase mb-1">Price</p>
+                        <p className="text-lg font-bold text-blue-600">
+                          {product.currency} {product.price.toLocaleString()}
+                        </p>
+                      </div>
+                    ) : (
+                      <div>
+                        <p className="text-xs font-semibold text-slate-600 uppercase mb-1">Price</p>
+                        <p className="text-sm text-slate-500 italic">Restricted - Sales Only</p>
+                      </div>
+                    )}
                     <div>
                       <p className="text-xs font-semibold text-slate-600 uppercase mb-1">Duration</p>
                       <p className="text-sm text-slate-900">{product.duration}</p>

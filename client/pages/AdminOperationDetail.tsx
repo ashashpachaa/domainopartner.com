@@ -61,6 +61,11 @@ export default function AdminOperationDetail() {
 
   const [order, setOrder] = useState(() => getOrder());
 
+  // Reload order when orderId changes
+  useEffect(() => {
+    setOrder(getOrder());
+  }, [orderId]);
+
   // Save order to localStorage whenever it changes
   const saveOrder = (updatedOrder: any) => {
     setOrder(updatedOrder);
@@ -164,7 +169,7 @@ export default function AdminOperationDetail() {
       { id: "pending_sales_review", label: "Sales Review", icon: "👤" },
       { id: "pending_operation", label: "Operation Process", icon: "⚙️" },
       { id: "pending_operation_manager_review", label: "Manager Review", icon: "✓" },
-      { id: "awaiting_client_acceptance", label: "Client Acceptance", icon: "����" },
+      { id: "awaiting_client_acceptance", label: "Client Acceptance", icon: "������" },
     ];
 
     // Add conditional stages based on product services

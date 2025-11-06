@@ -1393,33 +1393,62 @@ export default function AdminOperationDetail() {
               Activity Log
             </h3>
 
-            {order.history && order.history.length > 0 ? (
+            {(order.history && order.history.length > 0) || (order.comments && order.comments.length > 0) ? (
               <div className="space-y-4">
-                {[...order.history]
-                  .reverse()
+                {[
+                  ...(order.history || []).map((e: any) => ({ ...e, type: "history" })),
+                  ...(order.comments || []).map((c: any) => ({ ...c, type: "comment", createdAt: c.createdAt }))
+                ]
+                  .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
                   .map((event, index) => {
-                    // Generate description if not present
-                    const description = event.description || generateHistoryDescription(event);
+                    const isHistory = event.type === "history";
+                    const isComment = event.type === "comment";
+                    const description = isHistory
+                      ? (event.description || generateHistoryDescription(event))
+                      : `Comment by ${event.commentByName}`;
+                    const isInternal = isComment && event.isInternal;
+
                     return (
                       <div
                         key={index}
-                        className="flex gap-4 pb-4 border-b border-slate-200 last:border-b-0"
+                        className={`flex gap-4 pb-4 border-b border-slate-200 last:border-b-0 ${
+                          isInternal ? "bg-slate-50 p-3 rounded-lg" : ""
+                        }`}
                       >
-                        <div className="flex-shrink-0 w-2 h-2 rounded-full bg-primary-600 mt-2" />
+                        <div className={`flex-shrink-0 w-2 h-2 rounded-full mt-2 ${
+                          isComment
+                            ? isInternal ? "bg-yellow-500" : "bg-blue-600"
+                            : "bg-primary-600"
+                        }`} />
                         <div className="flex-1">
-                          <p className="text-sm font-medium text-slate-900">
-                            {description}
-                          </p>
-                          {event.reason && (
+                          <div className="flex items-center gap-2 mb-1">
+                            <p className="text-sm font-medium text-slate-900">
+                              {description}
+                            </p>
+                            {isComment && isInternal && (
+                              <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
+                                Internal
+                              </span>
+                            )}
+                          </div>
+
+                          {isComment && (
+                            <p className="text-sm text-slate-700 mt-2 bg-white p-2 rounded border border-slate-200">
+                              {event.content}
+                            </p>
+                          )}
+
+                          {isHistory && event.reason && (
                             <p className="text-xs text-red-600 mt-1">
                               Reason: {event.reason}
                             </p>
                           )}
-                          {event.notes && (
+                          {isHistory && event.notes && (
                             <p className="text-xs text-blue-600 mt-1">
                               Notes: {event.notes}
                             </p>
                           )}
+
                           <p className="text-xs text-slate-600 mt-1">
                             {new Date(event.createdAt).toLocaleDateString(
                               "en-US",

@@ -2073,6 +2073,142 @@ export default function AdminOperationDetail() {
           </div>
         )}
 
+        {/* Apostille Tab */}
+        {activeTab === "apostille" && (
+          <div className="space-y-6">
+            {product?.services.hasApostille ? (
+              order.status === "pending_apostille" ? (
+                <div className="bg-white rounded-lg p-6 border border-slate-200">
+                  <h3 className="text-lg font-semibold text-slate-900 mb-2 flex items-center gap-2">
+                    <FileText className="w-5 h-5 text-primary-600" />
+                    Apostille Documents Upload
+                  </h3>
+                  <p className="text-sm text-slate-600 mb-6">
+                    Upload apostille documents for this order. Apostille is a certificate authenticating the origin of a document.
+                  </p>
+                  <div className="space-y-4">
+                    <div>
+                      <input
+                        type="file"
+                        multiple
+                        className="hidden"
+                        id="apostille-file-input"
+                        onChange={(e) => {
+                          if (e.target.files) {
+                            setApostilleFiles(Array.from(e.target.files));
+                          }
+                        }}
+                      />
+                      <label
+                        htmlFor="apostille-file-input"
+                        className="flex items-center justify-center w-full px-4 py-3 border-2 border-dashed border-slate-300 rounded-lg cursor-pointer hover:border-primary-400 transition"
+                      >
+                        <span className="text-slate-600">Click to select apostille documents or drag and drop</span>
+                      </label>
+                      {apostilleFiles.length > 0 && (
+                        <div className="mt-3 space-y-2">
+                          <p className="text-sm font-medium text-slate-700">
+                            {apostilleFiles.length} file(s) selected
+                          </p>
+                          {apostilleFiles.map((file, idx) => (
+                            <div key={idx} className="flex items-center justify-between p-2 bg-slate-50 rounded border border-slate-200">
+                              <span className="text-sm text-slate-700">{file.name}</span>
+                              <button
+                                onClick={() => {
+                                  setApostilleFiles(apostilleFiles.filter((_, i) => i !== idx));
+                                }}
+                                className="text-blue-600 hover:text-blue-800 ml-2 flex-shrink-0"
+                              >
+                                Remove
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-slate-900 mb-2">Document Description (Optional)</label>
+                      <textarea
+                        value={apostilleNotes}
+                        onChange={(e) => setApostilleNotes(e.target.value)}
+                        placeholder="Please describe the documents and any relevant details..."
+                        rows={3}
+                        className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500 resize-none"
+                      />
+                    </div>
+
+                    <Button
+                      onClick={() => {
+                        if (apostilleFiles.length > 0) {
+                          const updatedOrder = { ...order };
+                          updatedOrder.operationFiles.push({
+                            id: `F-${Date.now()}`,
+                            orderId: order.id,
+                            fileName: apostilleFiles[0].name,
+                            fileSize: apostilleFiles[0].size,
+                            uploadedBy: effectiveUserId,
+                            uploadedByName: currentStaff?.firstName + " " + currentStaff?.lastName || "Unknown",
+                            uploadedAt: new Date().toISOString(),
+                            stage: "apostille",
+                            fileType: "apostille",
+                            description: apostilleNotes,
+                            visibleToClient: false,
+                          });
+                          updatedOrder.completedServices.apostilleComplete = true;
+                          localStorage.setItem(`order_${orderId}`, JSON.stringify(updatedOrder));
+                          setApostilleFiles([]);
+                          setApostilleNotes("");
+                          setOrder(updatedOrder);
+                          alert("Apostille documents uploaded successfully!");
+                        } else {
+                          alert("Please select at least one file");
+                        }
+                      }}
+                      className="w-full bg-primary-600 hover:bg-primary-700"
+                    >
+                      <Upload className="w-4 h-4 mr-2" />
+                      Upload Apostille Documents
+                    </Button>
+
+                    {/* Uploaded Files */}
+                    {order.operationFiles?.filter(f => f.stage === "apostille").length > 0 && (
+                      <div className="mt-6 space-y-3">
+                        <h4 className="font-semibold text-slate-900">Uploaded Documents</h4>
+                        {order.operationFiles.filter(f => f.stage === "apostille").map((file) => (
+                          <div key={file.id} className="p-4 bg-green-50 rounded-lg border border-green-200">
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <p className="font-medium text-slate-900">{file.fileName}</p>
+                                <p className="text-xs text-slate-600 mt-1">
+                                  Uploaded by {file.uploadedByName} on {new Date(file.uploadedAt).toLocaleDateString()}
+                                </p>
+                                {file.description && <p className="text-sm text-slate-700 mt-2">{file.description}</p>}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <p className="text-blue-900">
+                    Apostille documents can only be uploaded when the order is in the Apostille Processing stage.
+                  </p>
+                </div>
+              )
+            ) : (
+              <div className="bg-slate-50 border border-slate-200 rounded-lg p-4">
+                <p className="text-slate-600">
+                  This product does not require Apostille service.
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+
         {/* POA Tab */}
         {activeTab === "poa" && (
           <div className="space-y-6">

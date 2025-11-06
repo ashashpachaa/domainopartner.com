@@ -275,6 +275,12 @@ export interface Order {
   };
   operationReviewForm?: OperationReviewForm; // Operation stage review form
   shareholders?: Shareholder[]; // Company shareholders and ownership structure
+  companyInfo?: {
+    companyName: string;
+    companyActivities: string;
+    totalCapital: string;
+    pricePerShare: string;
+  };
 }
 
 export type InvoiceAction = "created" | "sent" | "viewed" | "payment_received" | "payment_failed" | "reminder_sent" | "status_changed" | "cancelled";

@@ -22,6 +22,69 @@ export default function ClientCreateOrder() {
   });
 
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const MAX_FILE_SIZE = 5 * 1024 * 1024 * 1024; // 5GB in bytes
+  const MAX_FILES = 5;
+
+  const handleFileDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+
+    const files = Array.from(e.dataTransfer.files);
+    addFiles(files);
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const files = Array.from(e.target.files);
+      addFiles(files);
+    }
+  };
+
+  const addFiles = (files: File[]) => {
+    const totalSize = uploadedFiles.reduce((sum, f) => sum + f.size, 0);
+    let newTotalSize = totalSize;
+    const filesToAdd: File[] = [];
+
+    for (const file of files) {
+      if (uploadedFiles.length + filesToAdd.length >= MAX_FILES) {
+        toast.error(`Maximum ${MAX_FILES} files allowed`);
+        break;
+      }
+
+      if (newTotalSize + file.size > MAX_FILE_SIZE) {
+        toast.error("Total file size exceeds 5GB limit");
+        break;
+      }
+
+      newTotalSize += file.size;
+      filesToAdd.push(file);
+    }
+
+    if (filesToAdd.length > 0) {
+      setUploadedFiles([...uploadedFiles, ...filesToAdd]);
+      toast.success(`${filesToAdd.length} file(s) added`);
+    }
+  };
+
+  const removeFile = (index: number) => {
+    setUploadedFiles(uploadedFiles.filter((_, i) => i !== index));
+    toast.success("File removed");
+  };
+
+  const getFileSize = (bytes: number) => {
+    if (bytes === 0) return "0 Bytes";
+    const k = 1024;
+    const sizes = ["Bytes", "KB", "MB", "GB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + " " + sizes[i];
+  };
+
+  const getTotalUploadSize = () => {
+    return uploadedFiles.reduce((sum, f) => sum + f.size, 0);
+  };
 
   const handleProductChange = (productId: string) => {
     const product = mockProducts.find((p) => p.id === productId);

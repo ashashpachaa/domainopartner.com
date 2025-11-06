@@ -1476,6 +1476,7 @@ export const mockOrders: Order[] = [
         stage: "sales",
         fileType: "document",
         description: "Japan corporate registration documents",
+        visibleToClient: true,
       },
       {
         id: "F007-2",
@@ -1488,6 +1489,7 @@ export const mockOrders: Order[] = [
         stage: "operation",
         fileType: "document",
         description: "Japan tax ID proof",
+        visibleToClient: true,
       },
       {
         id: "F007-3",
@@ -1500,6 +1502,7 @@ export const mockOrders: Order[] = [
         stage: "manager",
         fileType: "document",
         description: "Final registration certificate",
+        visibleToClient: true,
       },
     ],
     trackingNumber: "FedEx-794628316794",

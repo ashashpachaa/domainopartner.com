@@ -167,19 +167,7 @@ export default function AdminEditProduct() {
                       type="text"
                       name="duration"
                       value={formData.duration?.replace(/ business days$/, "") || ""}
-                      onChange={(e) => {
-                        let value = e.target.value;
-                        // Remove " business days" if it was already added
-                        value = value.replace(/ business days$/, "");
-                        // Auto-add " business days" for display purposes
-                        handleChange({
-                          ...e,
-                          target: {
-                            ...e.target,
-                            value: value + " business days"
-                          }
-                        } as any);
-                      }}
+                      onChange={handleChange}
                       placeholder="e.g., 3-5"
                       required
                       className="border-slate-300 focus:border-primary-500 focus:ring-primary-500 flex-1"

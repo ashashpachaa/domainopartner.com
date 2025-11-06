@@ -2,9 +2,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link, useNavigate } from "react-router-dom";
 import AdminLayout from "@/components/AdminLayout";
-import { ArrowLeft, Save, CheckCircle2, XCircle } from "lucide-react";
+import { ArrowLeft, Save, CheckCircle2, XCircle, Upload, Trash2, FileText } from "lucide-react";
 import { FormEvent, useState } from "react";
-import { mockOrders, mockUsers, mockProducts, mockStaff, Order } from "@/lib/mockData";
+import { mockOrders, mockUsers, mockProducts, mockStaff, Order, OperationFile } from "@/lib/mockData";
 import { toast } from "sonner";
 
 export default function AdminCreateOrder() {

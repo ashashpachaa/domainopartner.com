@@ -196,6 +196,17 @@ export interface ApostilleDocument {
   description?: string;
 }
 
+export interface OperationReviewForm {
+  isCompleted: boolean;
+  submittedBy?: string; // staffId
+  submittedByName?: string;
+  submittedAt?: string;
+  qualityCheck: boolean;
+  documentsVerified: boolean;
+  complianceReview: boolean;
+  operationNotes: string;
+}
+
 export interface Order {
   id: string;
   userId: string;

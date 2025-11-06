@@ -58,34 +58,38 @@ export function usePassportOCR() {
       clearTimeout(timeoutId);
       setProgress(80);
 
+      // Parse response body once
+      let responseData: any;
+      try {
+        responseData = await response.json();
+      } catch (parseError) {
+        console.error("Failed to parse response:", parseError);
+        toast.error("Server communication error. Please try again.");
+        setIsProcessing(false);
+        setProgress(0);
+        return null;
+      }
+
       if (!response.ok) {
-        let errorMessage = "Failed to process passport image";
+        let errorMessage = responseData?.error || "Failed to process passport image";
 
-        try {
-          const errorData = await response.json();
-          errorMessage = errorData.error || errorMessage;
-
-          // Map error codes to user-friendly messages
-          if (errorData.code === "BILLING_NOT_ENABLED") {
-            errorMessage =
-              "Google API not ready yet. Please wait 5-10 minutes after enabling billing and try again.";
-          } else if (errorData.code === "CREDENTIAL_ERROR") {
-            errorMessage = "Server configuration error. Please contact support.";
-          } else if (errorData.code === "INVALID_FORMAT") {
-            errorMessage = "Invalid image format. Please upload a clear JPG, PNG, or PDF of the passport.";
-          } else if (errorData.code === "TIMEOUT") {
-            errorMessage = "Extraction took too long. Please try with a clearer or smaller image.";
-          }
-
-          console.error("OCR Error Details:", {
-            status: response.status,
-            code: errorData.code,
-            message: errorData.error,
-          });
-        } catch (parseError) {
-          console.error("Failed to parse OCR error response:", parseError);
-          errorMessage = `Server error (${response.status}): Failed to process image`;
+        // Map error codes to user-friendly messages
+        if (responseData?.code === "BILLING_NOT_ENABLED") {
+          errorMessage =
+            "Google API not ready yet. Please wait 5-10 minutes after enabling billing and try again.";
+        } else if (responseData?.code === "CREDENTIAL_ERROR") {
+          errorMessage = "Server configuration error. Please contact support.";
+        } else if (responseData?.code === "INVALID_FORMAT") {
+          errorMessage = "Invalid image format. Please upload a clear JPG, PNG, or PDF of the passport.";
+        } else if (responseData?.code === "TIMEOUT") {
+          errorMessage = "Extraction took too long. Please try with a clearer or smaller image.";
         }
+
+        console.error("OCR Error Details:", {
+          status: response.status,
+          code: responseData?.code,
+          message: responseData?.error,
+        });
 
         toast.error(errorMessage);
         setIsProcessing(false);
@@ -93,7 +97,7 @@ export function usePassportOCR() {
         return null;
       }
 
-      const result = await response.json();
+      const result = responseData;
       setProgress(90);
 
       if (!result.success || !result.data) {

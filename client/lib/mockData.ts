@@ -1510,6 +1510,19 @@ export const mockOrders: Order[] = [
     trackingNumberAddedAt: "2023-12-10T15:00:00Z",
     clientCanViewFiles: true,
     clientCanViewTracking: true,
+    comments: [],
+    requiredServices: {
+      hasApostille: false,
+      hasShipping: false,
+      hasPOA: false,
+      hasFinancialReport: false,
+    },
+    completedServices: {
+      apostilleComplete: false,
+      shippingComplete: false,
+      poaComplete: false,
+      financialReportComplete: false,
+    },
   },
   {
     id: "O008",

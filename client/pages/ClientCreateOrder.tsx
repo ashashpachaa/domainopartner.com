@@ -453,15 +453,18 @@ export default function ClientCreateOrder() {
             {/* Countries */}
             <div>
               <label className="block text-sm font-medium text-slate-900 mb-2">
-                Countries (comma-separated) *
+                Countries *
               </label>
               <Input
                 type="text"
                 value={formData.countries}
-                onChange={(e) => setFormData({ ...formData, countries: e.target.value })}
-                placeholder="e.g., USA, UK, Germany"
+                disabled={!selectedProduct}
+                placeholder={selectedProduct ? "Auto-populated from product" : "Select a product first"}
+                className="bg-slate-50 cursor-not-allowed"
               />
-              <p className="text-xs text-slate-500 mt-1">Separate multiple countries with commas</p>
+              <p className="text-xs text-slate-500 mt-1">
+                {selectedProduct ? "Auto-populated from product details (non-editable)" : "Select a product to auto-populate"}
+              </p>
             </div>
 
             {/* Amount */}

@@ -22,6 +22,134 @@ export default function AdminCommissionPayroll() {
     tier4: { min: 51, max: Infinity, fixedAmount: 7500 },
   };
 
+  // Helper function to calculate commission metrics for a specific period
+  const calculateCommissionForPeriod = (startDate: Date, endDate: Date, staffMember: typeof mockStaff[0]) => {
+    const paidOrders = mockOrders.filter((order) => {
+      const orderDate = new Date(order.createdAt);
+      const invoice = mockInvoices.find((inv) => inv.userId === order.userId);
+      return (
+        order.assignedToSalesId === staffMember.id &&
+        invoice?.status === "paid" &&
+        orderDate >= startDate &&
+        orderDate <= endDate
+      );
+    });
+
+    const paidOrderCount = paidOrders.length;
+    let commissionAmount = 0;
+    let appliedTier = "Tier 4 (51+)";
+
+    if (paidOrderCount <= 10) {
+      commissionAmount = paidOrderCount * commissionTiers.tier1.fixedAmount;
+      appliedTier = "Tier 1 (1-10)";
+    } else if (paidOrderCount <= 20) {
+      commissionAmount = paidOrderCount * commissionTiers.tier2.fixedAmount;
+      appliedTier = "Tier 2 (11-20)";
+    } else if (paidOrderCount <= 50) {
+      commissionAmount = paidOrderCount * commissionTiers.tier3.fixedAmount;
+      appliedTier = "Tier 3 (21-50)";
+    } else {
+      commissionAmount = paidOrderCount * commissionTiers.tier4.fixedAmount;
+      appliedTier = "Tier 4 (51+)";
+    }
+
+    const rejectedOrders = mockOrders.filter(
+      (o) =>
+        o.assignedToSalesId === staffMember.id &&
+        (o.status.includes("rejected") || o.rejectionReasons.length > 0) &&
+        new Date(o.createdAt) >= startDate &&
+        new Date(o.createdAt) <= endDate
+    );
+
+    let performanceScore = 100;
+    performanceScore -= rejectedOrders.length * 10;
+
+    const earlyCompletions = mockOrders.filter((o) => {
+      const orderDate = new Date(o.createdAt);
+      return (
+        o.assignedToSalesId === staffMember.id &&
+        o.status === "completed" &&
+        orderDate >= startDate &&
+        orderDate <= endDate
+      );
+    });
+    performanceScore += Math.min(earlyCompletions.length * 10, 100 - performanceScore);
+    performanceScore = Math.max(0, Math.min(100, performanceScore));
+
+    const performanceBonus = (commissionAmount * (performanceScore / 100)) * 0.1;
+    const totalCommission = commissionAmount + performanceBonus;
+
+    return {
+      paidOrderCount,
+      rejectedOrderCount: rejectedOrders.length,
+      earlyCompletions: earlyCompletions.length,
+      appliedTier,
+      baseCommission: commissionAmount,
+      performanceScore,
+      performanceBonus: Math.round(performanceBonus),
+      totalCommission: Math.round(totalCommission),
+      paidOrders,
+    };
+  };
+
+  // Daily metrics
+  const dailyMetrics = useMemo(() => {
+    const [year, month, day] = selectedDate.split("-");
+    const dateObj = new Date(`${year}-${month}-${day}`);
+    dateObj.setHours(0, 0, 0, 0);
+    const endDate = new Date(dateObj);
+    endDate.setHours(23, 59, 59, 999);
+
+    const metrics = mockStaff
+      .filter((staff) => staff.role === "sales")
+      .map((staff) => ({
+        ...calculateCommissionForPeriod(dateObj, endDate, staff),
+        staffId: staff.id,
+        staffName: `${staff.firstName} ${staff.lastName}`,
+      }))
+      .filter((m) => m.paidOrderCount > 0 || m.rejectedOrderCount > 0)
+      .sort((a, b) => b.totalCommission - a.totalCommission);
+
+    return metrics;
+  }, [selectedDate]);
+
+  // Monthly metrics
+  const monthlyMetrics = useMemo(() => {
+    const [year, month] = selectedMonth.split("-");
+    const startDate = new Date(`${year}-${month}-01`);
+    startDate.setHours(0, 0, 0, 0);
+    const endDate = new Date(startDate);
+    endDate.setMonth(endDate.getMonth() + 1);
+    endDate.setDate(0);
+    endDate.setHours(23, 59, 59, 999);
+
+    return mockStaff
+      .filter((staff) => staff.role === "sales")
+      .map((staff) => ({
+        ...calculateCommissionForPeriod(startDate, endDate, staff),
+        staffId: staff.id,
+        staffName: `${staff.firstName} ${staff.lastName}`,
+      }))
+      .sort((a, b) => b.totalCommission - a.totalCommission);
+  }, [selectedMonth]);
+
+  // Yearly metrics
+  const yearlyMetrics = useMemo(() => {
+    const startDate = new Date(`${selectedYear}-01-01`);
+    startDate.setHours(0, 0, 0, 0);
+    const endDate = new Date(`${selectedYear}-12-31`);
+    endDate.setHours(23, 59, 59, 999);
+
+    return mockStaff
+      .filter((staff) => staff.role === "sales")
+      .map((staff) => ({
+        ...calculateCommissionForPeriod(startDate, endDate, staff),
+        staffId: staff.id,
+        staffName: `${staff.firstName} ${staff.lastName}`,
+      }))
+      .sort((a, b) => b.totalCommission - a.totalCommission);
+  }, [selectedYear]);
+
   // Calculate staff metrics including commission and performance bonus
   const staffMetrics = useMemo(() => {
     return mockStaff

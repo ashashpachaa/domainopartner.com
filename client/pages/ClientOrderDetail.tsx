@@ -24,6 +24,45 @@ export default function ClientOrderDetail() {
     return order ? mockStaff.find((s) => s.id === order.assignedToSalesId) : null;
   }, [order]);
 
+  const [isRegisteringCompany, setIsRegisteringCompany] = useState(false);
+
+  // Auto-fetch and register company when order is completed
+  useEffect(() => {
+    const registerCompany = async () => {
+      if (
+        order &&
+        order.status === "completed" &&
+        order.companyInfo &&
+        !order.registeredCompany &&
+        !isRegisteringCompany
+      ) {
+        setIsRegisteringCompany(true);
+        try {
+          const result = await fetchCompanyDetails(order.companyInfo.companyName);
+          if (result.data) {
+            result.data.orderId = order.id;
+            result.data.userId = order.userId;
+            storeRegisteredCompany(result.data);
+
+            // Update order with registered company data
+            order.registeredCompany = result.data;
+            localStorage.setItem(`order_${order.id}`, JSON.stringify(order));
+
+            toast.success("Company registered and added to your companies list!");
+          } else if (result.error) {
+            toast.warning(`Could not auto-register company: ${result.error}`);
+          }
+        } catch (error: any) {
+          toast.error("Failed to register company details");
+        } finally {
+          setIsRegisteringCompany(false);
+        }
+      }
+    };
+
+    registerCompany();
+  }, [order]);
+
   if (!order) {
     return (
       <ClientLayout>

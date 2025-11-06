@@ -60,6 +60,20 @@ export default function AdminClientRequests() {
     filteredRequests = filteredRequests.filter((request) => request.status === statusFilter);
   }
 
+  if (startDate) {
+    filteredRequests = filteredRequests.filter(
+      (request) => new Date(request.createdAt) >= new Date(startDate)
+    );
+  }
+
+  if (endDate) {
+    const endDateTime = new Date(endDate);
+    endDateTime.setHours(23, 59, 59, 999);
+    filteredRequests = filteredRequests.filter(
+      (request) => new Date(request.createdAt) <= endDateTime
+    );
+  }
+
   if (sortBy === "recent") {
     filteredRequests.sort(
       (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()

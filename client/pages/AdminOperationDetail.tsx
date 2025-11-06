@@ -1201,6 +1201,80 @@ export default function AdminOperationDetail() {
           </div>
         )}
 
+        {/* Shareholders Section */}
+        {order.shareholders && order.shareholders.length > 0 && (
+          <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-lg p-8 border border-amber-200">
+            <h2 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+              <User className="w-5 h-5 text-amber-600" />
+              Shareholders ({order.shareholders.length})
+            </h2>
+
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b-2 border-amber-200">
+                    <th className="text-left px-4 py-3 font-semibold text-slate-700">Name</th>
+                    <th className="text-left px-4 py-3 font-semibold text-slate-700">Date of Birth</th>
+                    <th className="text-left px-4 py-3 font-semibold text-slate-700">Nationality</th>
+                    <th className="text-center px-4 py-3 font-semibold text-slate-700">Ownership %</th>
+                    <th className="text-center px-4 py-3 font-semibold text-slate-700">Passport</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {order.shareholders.map((shareholder, index) => (
+                    <tr key={shareholder.id} className={index % 2 === 0 ? "bg-white" : "bg-amber-50"}>
+                      <td className="px-4 py-4 border-b border-amber-100">
+                        <div>
+                          <p className="font-medium text-slate-900">{shareholder.firstName} {shareholder.lastName}</p>
+                        </div>
+                      </td>
+                      <td className="px-4 py-4 border-b border-amber-100 text-slate-700">
+                        {new Date(shareholder.dateOfBirth).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        })}
+                      </td>
+                      <td className="px-4 py-4 border-b border-amber-100 text-slate-700">
+                        {shareholder.nationality}
+                      </td>
+                      <td className="px-4 py-4 border-b border-amber-100 text-center">
+                        <span className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-amber-100 text-amber-800 font-semibold">
+                          {shareholder.ownershipPercentage.toFixed(2)}%
+                        </span>
+                      </td>
+                      <td className="px-4 py-4 border-b border-amber-100 text-center">
+                        {shareholder.passportFile ? (
+                          <a
+                            href={shareholder.passportFile.fileUrl}
+                            download={shareholder.passportFile.fileName}
+                            className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-lg text-sm font-medium transition"
+                          >
+                            <Download className="w-4 h-4" />
+                            Download
+                          </a>
+                        ) : (
+                          <span className="text-slate-500 text-sm">-</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Total Ownership Summary */}
+            <div className="mt-6 pt-6 border-t-2 border-amber-200">
+              <div className="flex items-center justify-between">
+                <span className="font-semibold text-slate-700">Total Ownership:</span>
+                <span className="text-lg font-bold text-amber-700">
+                  {order.shareholders.reduce((sum, sh) => sum + sh.ownershipPercentage, 0).toFixed(2)}%
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Order Details Section */}
         <div className="bg-white rounded-lg p-8 border border-slate-200">
           <h2 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">

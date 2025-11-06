@@ -89,32 +89,34 @@ export default function SignUp() {
 
     setTimeout(() => {
       try {
-        const newUserId = `U${mockUsers.length + 1}`;
-        const newUser = {
-          id: newUserId,
+        // Create a client request instead of directly creating a user
+        const newRequestId = `CR${Date.now()}`;
+        const newClientRequest = {
+          id: newRequestId,
           firstName: formData.firstName.trim(),
           lastName: formData.lastName.trim(),
+          email: formData.email.trim(),
           companyName: "",
           country: "",
           city: "",
           whatsappNumber: "",
-          email: formData.email.trim(),
           website: "",
-          status: "active" as const,
+          status: "pending_approval" as const,
           subscriptionPlan: "starter" as const,
-          subscriptionStatus: "active" as const,
           createdAt: new Date().toISOString(),
-          lastLogin: new Date().toISOString(),
         };
 
-        mockUsers.push(newUser);
-        localStorage.setItem("currentUser", JSON.stringify(newUser));
+        mockClientRequests.push(newClientRequest);
+        localStorage.setItem(`clientRequest_${newRequestId}`, JSON.stringify(newClientRequest));
+        localStorage.setItem("mockClientRequests", JSON.stringify(mockClientRequests));
 
-        toast.success("Account created successfully!");
+        toast.success("Account request submitted! An admin will review your application shortly.");
+        toast.info("You will be notified via email once approved.");
 
-        navigate("/client/dashboard");
+        // Redirect to a pending status page or login
+        navigate("/login");
       } catch (error) {
-        toast.error("Failed to create account. Please try again.");
+        toast.error("Failed to submit account request. Please try again.");
         console.error("Signup error:", error);
       } finally {
         setIsLoading(false);

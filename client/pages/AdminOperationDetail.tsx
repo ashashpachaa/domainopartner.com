@@ -84,11 +84,14 @@ export default function AdminOperationDetail() {
 
   // Determine if current user can take actions on this order
   const canAccept = () => {
-    if (order.status === "pending_sales_review" && order.assignedToSalesId === currentUserId) return true;
-    if (order.status === "pending_operation" && order.assignedToOperationId === currentUserId) return true;
-    if (order.status === "pending_operation_manager_review" && order.assignedToManagerId === currentUserId) return true;
-    if (order.status === "awaiting_client_acceptance" && currentUserId === "client") return true;
-    if (order.status === "shipping_preparation" && order.assignedToManagerId === currentUserId) return true;
+    // Admin override - always allow in admin mode
+    if (adminMode && impersonateStaffId) return true;
+
+    if (order.status === "pending_sales_review" && order.assignedToSalesId === effectiveUserId) return true;
+    if (order.status === "pending_operation" && order.assignedToOperationId === effectiveUserId) return true;
+    if (order.status === "pending_operation_manager_review" && order.assignedToManagerId === effectiveUserId) return true;
+    if (order.status === "awaiting_client_acceptance" && effectiveUserId === "client") return true;
+    if (order.status === "shipping_preparation" && order.assignedToManagerId === effectiveUserId) return true;
     return false;
   };
 

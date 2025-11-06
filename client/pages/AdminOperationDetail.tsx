@@ -1522,25 +1522,32 @@ export default function AdminOperationDetail() {
                       PDF, DOC, DOCX, JPG, PNG (Max 10MB)
                     </p>
                   </label>
-                  {selectedFile && (
-                    <div className="mt-3 p-3 bg-blue-50 rounded-lg border border-blue-200 flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <FileText className="w-4 h-4 text-blue-600" />
-                        <div>
-                          <p className="text-sm font-medium text-blue-900">
-                            {selectedFile.name}
-                          </p>
-                          <p className="text-xs text-blue-700">
-                            {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
-                          </p>
+                  {selectedFiles.length > 0 && (
+                    <div className="mt-3 space-y-2">
+                      <p className="text-sm font-medium text-slate-700">
+                        {selectedFiles.length} file(s) selected
+                      </p>
+                      {selectedFiles.map((file, idx) => (
+                        <div key={idx} className="p-3 bg-blue-50 rounded-lg border border-blue-200 flex items-center justify-between">
+                          <div className="flex items-center gap-2 flex-1 min-w-0">
+                            <FileText className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                            <div className="min-w-0">
+                              <p className="text-sm font-medium text-blue-900 truncate">
+                                {file.name}
+                              </p>
+                              <p className="text-xs text-blue-700">
+                                {(file.size / 1024 / 1024).toFixed(2)} MB
+                              </p>
+                            </div>
+                          </div>
+                          <button
+                            onClick={() => removeSelectedFile(idx)}
+                            className="text-blue-600 hover:text-blue-800 ml-2 flex-shrink-0"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
                         </div>
-                      </div>
-                      <button
-                        onClick={() => setSelectedFile(null)}
-                        className="text-blue-600 hover:text-blue-800"
-                      >
-                        <X className="w-4 h-4" />
-                      </button>
+                      ))}
                     </div>
                   )}
                 </div>

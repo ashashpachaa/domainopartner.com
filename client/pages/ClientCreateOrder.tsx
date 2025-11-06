@@ -256,6 +256,14 @@ export default function ClientCreateOrder() {
         toast.error("Company name is required");
         return;
       }
+      if (companyValidation.isAvailable === false) {
+        toast.error("This company name is already registered. Please choose a different name.");
+        return;
+      }
+      if (companyValidation.isAvailable === null) {
+        toast.error("Please wait for company name availability check to complete");
+        return;
+      }
       if (!companyInfo.companyActivities.trim()) {
         toast.error("Company activities description is required");
         return;
@@ -405,7 +413,7 @@ export default function ClientCreateOrder() {
                   {selectedProduct.services.hasApostille && <p>✓ Apostille Processing</p>}
                   {selectedProduct.services.hasPOA && <p>✓ Power of Attorney</p>}
                   {selectedProduct.services.hasFinancialReport && <p>✓ Financial Report</p>}
-                  {selectedProduct.services.hasShipping && <p>✓ Shipping</p>}
+                  {selectedProduct.services.hasShipping && <p>��� Shipping</p>}
                   {!selectedProduct.services.hasApostille &&
                     !selectedProduct.services.hasPOA &&
                     !selectedProduct.services.hasFinancialReport &&

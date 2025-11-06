@@ -1573,7 +1573,7 @@ export default function AdminOperationDetail() {
                   className="w-full bg-primary-600 hover:bg-primary-700 text-white disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Upload className="w-4 h-4 mr-2" />
-                  Upload File
+                  Upload {selectedFiles.length > 1 ? `${selectedFiles.length} Files` : "Files"}
                 </Button>
               </div>
             </div>

@@ -2849,6 +2849,7 @@ export const mockStaff: Staff[] = [
     joinDate: "2024-01-01",
     lastLogin: "2024-01-08T14:30:00Z",
     phone: "+1-555-0001",
+    workingHours: { startTime: "08:30", endTime: "17:30", daysPerWeek: 5 },
     workflowPermissions: [
       { stage: "sales", label: "Sales Review", description: "Review and approve sales orders", canAccess: true },
       { stage: "operation", label: "Operation Process", description: "Handle order operations", canAccess: true },
@@ -2868,6 +2869,7 @@ export const mockStaff: Staff[] = [
     joinDate: "2023-12-15",
     lastLogin: "2024-01-08T13:15:00Z",
     phone: "+1-555-0002",
+    workingHours: { startTime: "09:00", endTime: "18:00", daysPerWeek: 5 },
     workflowPermissions: [
       { stage: "sales", label: "Sales Review", description: "Review and approve sales orders", canAccess: false },
       { stage: "operation", label: "Operation Process", description: "Handle order operations", canAccess: true },
@@ -2887,6 +2889,7 @@ export const mockStaff: Staff[] = [
     joinDate: "2023-11-01",
     lastLogin: "2024-01-08T11:45:00Z",
     phone: "+1-555-0003",
+    workingHours: { startTime: "09:30", endTime: "18:30", daysPerWeek: 5 },
     workflowPermissions: [
       { stage: "sales", label: "Sales Review", description: "Review and approve sales orders", canAccess: true },
       { stage: "operation", label: "Operation Process", description: "Handle order operations", canAccess: false },
@@ -2906,6 +2909,7 @@ export const mockStaff: Staff[] = [
     joinDate: "2023-10-20",
     lastLogin: "2024-01-08T16:20:00Z",
     phone: "+1-555-0004",
+    workingHours: { startTime: "08:00", endTime: "17:00", daysPerWeek: 5 },
     workflowPermissions: [
       { stage: "sales", label: "Sales Review", description: "Review and approve sales orders", canAccess: false },
       { stage: "operation", label: "Operation Process", description: "Handle order operations", canAccess: true },
@@ -2925,6 +2929,7 @@ export const mockStaff: Staff[] = [
     joinDate: "2023-10-15",
     lastLogin: "2024-01-07T09:30:00Z",
     phone: "+1-555-0005",
+    workingHours: { startTime: "09:00", endTime: "18:00", daysPerWeek: 5 },
     workflowPermissions: [
       { stage: "sales", label: "Sales Review", description: "Review and approve sales orders", canAccess: false },
       { stage: "operation", label: "Operation Process", description: "Handle order operations", canAccess: true },
@@ -2944,6 +2949,7 @@ export const mockStaff: Staff[] = [
     joinDate: "2023-12-01",
     lastLogin: "2024-01-08T10:00:00Z",
     phone: "+1-555-0006",
+    workingHours: { startTime: "10:00", endTime: "19:00", daysPerWeek: 5 },
     workflowPermissions: [
       { stage: "sales", label: "Sales Review", description: "Review and approve sales orders", canAccess: true },
       { stage: "operation", label: "Operation Process", description: "Handle order operations", canAccess: false },
@@ -2963,6 +2969,7 @@ export const mockStaff: Staff[] = [
     joinDate: "2023-09-10",
     lastLogin: "2024-01-08T08:45:00Z",
     phone: "+1-555-0007",
+    workingHours: { startTime: "09:00", endTime: "18:00", daysPerWeek: 5 },
     workflowPermissions: [
       { stage: "sales", label: "Sales Review", description: "Review and approve sales orders", canAccess: false },
       { stage: "operation", label: "Operation Process", description: "Handle order operations", canAccess: false },
@@ -2982,6 +2989,7 @@ export const mockStaff: Staff[] = [
     joinDate: "2024-01-05",
     lastLogin: "2024-01-08T15:30:00Z",
     phone: "+1-555-0008",
+    workingHours: { startTime: "08:30", endTime: "17:30", daysPerWeek: 5 },
     workflowPermissions: [
       { stage: "sales", label: "Sales Review", description: "Review and approve sales orders", canAccess: true },
       { stage: "operation", label: "Operation Process", description: "Handle order operations", canAccess: true },

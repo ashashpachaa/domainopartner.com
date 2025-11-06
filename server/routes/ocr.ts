@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import vision from "@google-cloud/vision";
 import * as fs from "fs";
 import * as path from "path";
+import sharp from "sharp";
 
 interface ExtractedPassportData {
   firstName?: string;

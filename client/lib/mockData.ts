@@ -2505,10 +2505,6 @@ export const mockOrders: Order[] = [
       submittedBy: "S005",
       submittedByName: "Sarah Wilson",
       submittedAt: "2024-01-16T14:30:00Z",
-      qualityCheck: true,
-      documentsVerified: true,
-      complianceReview: true,
-      operationNotes: "All services completed. Ready for shipping.",
     },
   },
 ];

@@ -2,9 +2,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link, useNavigate } from "react-router-dom";
 import AdminLayout from "@/components/AdminLayout";
-import { ArrowLeft, Save } from "lucide-react";
+import { ArrowLeft, Save, CheckCircle2, XCircle } from "lucide-react";
 import { FormEvent, useState } from "react";
-import { mockOrders, mockUsers, mockProducts, Order } from "@/lib/mockData";
+import { mockOrders, mockUsers, mockProducts, mockStaff, Order } from "@/lib/mockData";
 import { toast } from "sonner";
 
 export default function AdminCreateOrder() {
@@ -22,6 +22,7 @@ export default function AdminCreateOrder() {
     createdAt: new Date().toISOString().split("T")[0],
     userId: "",
     productId: "",
+    assignedToSalesId: "",
     history: [],
     rejectionReasons: [],
   });
@@ -29,14 +30,42 @@ export default function AdminCreateOrder() {
   const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
   const [countryInput, setCountryInput] = useState("");
 
+  const selectedProduct = mockProducts.find(p => p.id === formData.productId);
+  const salesStaff = mockStaff.filter(s => s.role === "sales");
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: name === "amount" ? parseFloat(value) : value,
-    }));
+    if (name === "productId") {
+      const product = mockProducts.find(p => p.id === value);
+      if (product) {
+        // Auto-fill amount and currency from product
+        const countryFromName = extractCountryFromProduct(product.name);
+        setFormData((prev) => ({
+          ...prev,
+          productId: value,
+          amount: product.price,
+          currency: product.currency,
+          serviceType: product.name,
+          countries: countryFromName ? [countryFromName] : [],
+        }));
+        setSelectedCountries(countryFromName ? [countryFromName] : []);
+      }
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: name === "amount" ? parseFloat(value) : value,
+      }));
+    }
+  };
+
+  const extractCountryFromProduct = (productName: string): string => {
+    if (productName.includes("UK")) return "United Kingdom";
+    if (productName.includes("USA")) return "United States";
+    if (productName.includes("Canada")) return "Canada";
+    if (productName.includes("Sweden")) return "Sweden";
+    return "";
   };
 
   const addCountry = () => {

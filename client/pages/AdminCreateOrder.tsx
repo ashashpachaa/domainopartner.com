@@ -10,6 +10,7 @@ import { useCompanyNameValidation } from "@/hooks/useCompanyNameValidation";
 
 export default function AdminCreateOrder() {
   const navigate = useNavigate();
+  const companyValidation = useCompanyNameValidation();
 
   // Calculate the next order number based on max existing order ID
   const getNextOrderNum = () => {

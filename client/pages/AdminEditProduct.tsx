@@ -80,7 +80,8 @@ export default function AdminEditProduct() {
       formData.price === null ||
       formData.price === undefined ||
       formData.price === "" ||
-      !formData.currency?.trim()
+      !formData.currency?.trim() ||
+      !formData.country?.trim()
     ) {
       toast.error("Please fill in all required fields");
       return;

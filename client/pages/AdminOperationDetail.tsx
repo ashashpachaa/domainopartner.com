@@ -114,6 +114,7 @@ export default function AdminOperationDetail() {
   // Get the next status based on current status
   const getNextStatus = (): string => {
     const statusMap: { [key: string]: string } = {
+      "new": "pending_sales_review",
       "pending_sales_review": "pending_operation",
       "pending_operation": "pending_operation_manager_review",
       "pending_operation_manager_review": "awaiting_client_acceptance",

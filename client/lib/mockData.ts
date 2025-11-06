@@ -722,6 +722,18 @@ export const mockProducts: Product[] = [
     createdAt: "2024-01-01",
     status: "active",
   },
+  {
+    id: "P014",
+    name: "Premium Global Business Package",
+    description: "Complete international business package with apostille, POA, financial report audit, and international shipping",
+    duration: "12-16 business days",
+    requirements: "Company registration documents, Financial statements, POA authorization forms, Shipping address",
+    price: 2500,
+    currency: "USD",
+    services: { hasApostille: true, hasShipping: true, hasPOA: true, hasFinancialReport: true },
+    createdAt: "2024-01-01",
+    status: "active",
+  },
 ];
 
 export const mockOrders: Order[] = [

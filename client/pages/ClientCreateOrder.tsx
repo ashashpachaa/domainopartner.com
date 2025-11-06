@@ -597,29 +597,17 @@ export default function ClientCreateOrder() {
                       </button>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-slate-900 mb-2">
-                          First Name *
-                        </label>
-                        <Input
-                          type="text"
-                          value={shareholderForm.firstName}
-                          onChange={(e) => setShareholderForm({ ...shareholderForm, firstName: e.target.value })}
-                          placeholder="John"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-slate-900 mb-2">
-                          Last Name *
-                        </label>
-                        <Input
-                          type="text"
-                          value={shareholderForm.lastName}
-                          onChange={(e) => setShareholderForm({ ...shareholderForm, lastName: e.target.value })}
-                          placeholder="Doe"
-                        />
-                      </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-900 mb-2">
+                        Full Name *
+                      </label>
+                      <Input
+                        type="text"
+                        value={shareholderForm.fullName || ""}
+                        onChange={(e) => setShareholderForm({ ...shareholderForm, fullName: e.target.value })}
+                        placeholder="e.g., Ahmed Sameh Elmorsy"
+                      />
+                      <p className="text-xs text-slate-500 mt-1">First and last name, or use auto-extract below</p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

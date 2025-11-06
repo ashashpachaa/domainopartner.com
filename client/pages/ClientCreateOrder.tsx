@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { mockOrders, mockProducts } from "@/lib/mockData";
+import { mockOrders, mockProducts, Shareholder } from "@/lib/mockData";
 import ClientLayout from "@/components/ClientLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, AlertCircle } from "lucide-react";
+import { ArrowLeft, AlertCircle, Plus, Trash2, Edit2, X } from "lucide-react";
 import { toast } from "sonner";
 
 export default function ClientCreateOrder() {
@@ -24,6 +24,17 @@ export default function ClientCreateOrder() {
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [isDragging, setIsDragging] = useState(false);
+  const [shareholders, setShareholders] = useState<Shareholder[]>([]);
+  const [editingShareholderId, setEditingShareholderId] = useState<string | null>(null);
+  const [shareholderForm, setShareholderForm] = useState({
+    firstName: "",
+    lastName: "",
+    dateOfBirth: "",
+    nationality: "",
+    ownershipPercentage: "",
+  });
+  const [shareholderPassportFile, setShareholderPassportFile] = useState<File | null>(null);
+  const [showShareholderForm, setShowShareholderForm] = useState(false);
 
   const MAX_FILE_SIZE = 5 * 1024 * 1024 * 1024; // 5GB in bytes
   const MAX_FILES = 5;
@@ -95,6 +106,122 @@ export default function ClientCreateOrder() {
     });
   };
 
+  const handleShareholderPassportSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      if (file.size > 50 * 1024 * 1024) {
+        toast.error("Passport file must be less than 50MB");
+        return;
+      }
+      setShareholderPassportFile(file);
+      toast.success("Passport file selected");
+    }
+  };
+
+  const validateShareholderForm = () => {
+    if (!shareholderForm.firstName.trim()) {
+      toast.error("First name is required");
+      return false;
+    }
+    if (!shareholderForm.lastName.trim()) {
+      toast.error("Last name is required");
+      return false;
+    }
+    if (!shareholderForm.dateOfBirth) {
+      toast.error("Date of birth is required");
+      return false;
+    }
+    if (!shareholderForm.nationality.trim()) {
+      toast.error("Nationality is required");
+      return false;
+    }
+    const percentage = parseFloat(shareholderForm.ownershipPercentage);
+    if (!shareholderForm.ownershipPercentage || isNaN(percentage) || percentage <= 0 || percentage > 100) {
+      toast.error("Ownership percentage must be between 0 and 100");
+      return false;
+    }
+    return true;
+  };
+
+  const addShareholder = () => {
+    if (!validateShareholderForm()) {
+      return;
+    }
+
+    const newShareholder: Shareholder = {
+      id: editingShareholderId || `SH-${Date.now()}`,
+      firstName: shareholderForm.firstName,
+      lastName: shareholderForm.lastName,
+      dateOfBirth: shareholderForm.dateOfBirth,
+      nationality: shareholderForm.nationality,
+      ownershipPercentage: parseFloat(shareholderForm.ownershipPercentage),
+      passportFile: shareholderPassportFile ? {
+        fileName: shareholderPassportFile.name,
+        fileSize: shareholderPassportFile.size,
+        fileUrl: URL.createObjectURL(shareholderPassportFile),
+        uploadedAt: new Date().toISOString(),
+      } : undefined,
+    };
+
+    if (editingShareholderId) {
+      setShareholders(shareholders.map((sh) => (sh.id === editingShareholderId ? newShareholder : sh)));
+      toast.success("Shareholder updated");
+      setEditingShareholderId(null);
+    } else {
+      setShareholders([...shareholders, newShareholder]);
+      toast.success("Shareholder added");
+    }
+
+    resetShareholderForm();
+  };
+
+  const resetShareholderForm = () => {
+    setShareholderForm({
+      firstName: "",
+      lastName: "",
+      dateOfBirth: "",
+      nationality: "",
+      ownershipPercentage: "",
+    });
+    setShareholderPassportFile(null);
+    setShowShareholderForm(false);
+    setEditingShareholderId(null);
+  };
+
+  const editShareholder = (shareholder: Shareholder) => {
+    setShareholderForm({
+      firstName: shareholder.firstName,
+      lastName: shareholder.lastName,
+      dateOfBirth: shareholder.dateOfBirth,
+      nationality: shareholder.nationality,
+      ownershipPercentage: shareholder.ownershipPercentage.toString(),
+    });
+    setEditingShareholderId(shareholder.id);
+    setShowShareholderForm(true);
+  };
+
+  const removeShareholder = (id: string) => {
+    setShareholders(shareholders.filter((sh) => sh.id !== id));
+    toast.success("Shareholder removed");
+  };
+
+  const getTotalOwnershipPercentage = () => {
+    return shareholders.reduce((sum, sh) => sum + sh.ownershipPercentage, 0);
+  };
+
+  const validateShareholders = () => {
+    if (shareholders.length === 0) {
+      toast.error("At least one shareholder is required");
+      return false;
+    }
+    const totalPercentage = getTotalOwnershipPercentage();
+    if (Math.abs(totalPercentage - 100) > 0.01) {
+      toast.error(`Ownership percentages must add up to 100% (currently ${totalPercentage.toFixed(2)}%)`);
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -103,8 +230,11 @@ export default function ClientCreateOrder() {
       return;
     }
 
+    if (formData.serviceType === "Company Formation" && !validateShareholders()) {
+      return;
+    }
+
     try {
-      // Find max existing order number
       const maxOrderNum = mockOrders
         .filter((o) => o.orderNumber.startsWith("ORD-"))
         .map((o) => {
@@ -123,7 +253,7 @@ export default function ClientCreateOrder() {
         description: formData.description,
         amount: parseFloat(formData.amount),
         currency: formData.currency,
-        status: "pending_sales_review",
+        status: "pending_sales_review" as const,
         serviceType: formData.serviceType,
         countries: formData.countries.split(",").map((c) => c.trim()),
         createdAt: new Date().toISOString().split("T")[0],
@@ -134,9 +264,9 @@ export default function ClientCreateOrder() {
           {
             id: `H-${Date.now()}`,
             orderId: newOrderId,
-            previousStatus: "new",
-            newStatus: "pending_sales_review",
-            actionType: "system_transition",
+            previousStatus: "new" as const,
+            newStatus: "pending_sales_review" as const,
+            actionType: "system_transition" as const,
             actionBy: "system",
             actionByName: "System",
             createdAt: new Date().toISOString(),
@@ -152,7 +282,8 @@ export default function ClientCreateOrder() {
           uploadedBy: currentUser.id,
           uploadedByName: `${currentUser.firstName} ${currentUser.lastName}`,
           uploadedAt: new Date().toISOString(),
-          stage: "sales",
+          stage: "sales" as const,
+          fileType: "document" as const,
           notes: `Client-uploaded file: ${file.name}`,
           visibleToClient: true,
         })),
@@ -178,6 +309,7 @@ export default function ClientCreateOrder() {
           hasPOA: false,
           hasFinancialReport: false,
         },
+        shareholders: formData.serviceType === "Company Formation" ? shareholders : undefined,
       };
 
       mockOrders.push(newOrder);
@@ -324,6 +456,199 @@ export default function ClientCreateOrder() {
               </div>
             </div>
 
+            {/* Shareholders Section - Only for Company Formation */}
+            {formData.serviceType === "Company Formation" && (
+              <div className="bg-purple-50 border border-purple-200 rounded-lg p-6 space-y-4">
+                <div>
+                  <h3 className="font-semibold text-slate-900 mb-2">Shareholders & Ownership Structure *</h3>
+                  <p className="text-sm text-slate-600 mb-4">
+                    Add all company shareholders. Ownership percentages must add up to 100%.
+                  </p>
+                </div>
+
+                {/* Shareholders List */}
+                {shareholders.length > 0 && (
+                  <div className="space-y-3">
+                    {shareholders.map((shareholder) => (
+                      <div
+                        key={shareholder.id}
+                        className="bg-white rounded-lg border border-slate-200 p-4"
+                      >
+                        <div className="flex items-start justify-between mb-3">
+                          <div className="flex-1">
+                            <p className="font-semibold text-slate-900">
+                              {shareholder.firstName} {shareholder.lastName}
+                            </p>
+                            <div className="grid grid-cols-2 gap-2 mt-2 text-sm text-slate-600">
+                              <p>DOB: {new Date(shareholder.dateOfBirth).toLocaleDateString()}</p>
+                              <p>Nationality: {shareholder.nationality}</p>
+                              <p className="font-medium text-slate-900">
+                                Ownership: {shareholder.ownershipPercentage}%
+                              </p>
+                              {shareholder.passportFile && (
+                                <p className="text-green-600">✓ Passport uploaded</p>
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex gap-2">
+                            <button
+                              type="button"
+                              onClick={() => editShareholder(shareholder)}
+                              className="p-2 hover:bg-slate-100 rounded-lg transition"
+                              title="Edit shareholder"
+                            >
+                              <Edit2 className="w-4 h-4 text-blue-600" />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => removeShareholder(shareholder.id)}
+                              className="p-2 hover:bg-slate-100 rounded-lg transition"
+                              title="Remove shareholder"
+                            >
+                              <Trash2 className="w-4 h-4 text-red-600" />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Ownership Total */}
+                {shareholders.length > 0 && (
+                  <div className={`p-3 rounded-lg ${Math.abs(getTotalOwnershipPercentage() - 100) < 0.01 ? 'bg-green-50 border border-green-200' : 'bg-yellow-50 border border-yellow-200'}`}>
+                    <p className={`text-sm font-medium ${Math.abs(getTotalOwnershipPercentage() - 100) < 0.01 ? 'text-green-700' : 'text-yellow-700'}`}>
+                      Total Ownership: {getTotalOwnershipPercentage().toFixed(2)}%
+                    </p>
+                  </div>
+                )}
+
+                {/* Add Shareholder Form */}
+                {!showShareholderForm ? (
+                  <button
+                    type="button"
+                    onClick={() => setShowShareholderForm(true)}
+                    className="w-full px-4 py-2 border border-purple-300 rounded-lg text-purple-700 font-medium hover:bg-purple-50 transition flex items-center justify-center gap-2"
+                  >
+                    <Plus className="w-4 h-4" />
+                    Add Shareholder
+                  </button>
+                ) : (
+                  <div className="bg-white rounded-lg border border-slate-200 p-4 space-y-4">
+                    <div className="flex items-center justify-between mb-4">
+                      <h4 className="font-semibold text-slate-900">
+                        {editingShareholderId ? "Edit Shareholder" : "Add Shareholder"}
+                      </h4>
+                      <button
+                        type="button"
+                        onClick={resetShareholderForm}
+                        className="p-1 hover:bg-slate-100 rounded-lg transition"
+                      >
+                        <X className="w-4 h-4 text-slate-600" />
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-slate-900 mb-2">
+                          First Name *
+                        </label>
+                        <Input
+                          type="text"
+                          value={shareholderForm.firstName}
+                          onChange={(e) => setShareholderForm({ ...shareholderForm, firstName: e.target.value })}
+                          placeholder="John"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-slate-900 mb-2">
+                          Last Name *
+                        </label>
+                        <Input
+                          type="text"
+                          value={shareholderForm.lastName}
+                          onChange={(e) => setShareholderForm({ ...shareholderForm, lastName: e.target.value })}
+                          placeholder="Doe"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-slate-900 mb-2">
+                          Date of Birth *
+                        </label>
+                        <Input
+                          type="date"
+                          value={shareholderForm.dateOfBirth}
+                          onChange={(e) => setShareholderForm({ ...shareholderForm, dateOfBirth: e.target.value })}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-slate-900 mb-2">
+                          Nationality *
+                        </label>
+                        <Input
+                          type="text"
+                          value={shareholderForm.nationality}
+                          onChange={(e) => setShareholderForm({ ...shareholderForm, nationality: e.target.value })}
+                          placeholder="e.g., American, British"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-slate-900 mb-2">
+                        Ownership Percentage (%) *
+                      </label>
+                      <Input
+                        type="number"
+                        value={shareholderForm.ownershipPercentage}
+                        onChange={(e) => setShareholderForm({ ...shareholderForm, ownershipPercentage: e.target.value })}
+                        placeholder="0.00"
+                        min="0"
+                        max="100"
+                        step="0.01"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-slate-900 mb-2">
+                        Upload Passport (Optional)
+                      </label>
+                      <input
+                        type="file"
+                        onChange={handleShareholderPassportSelect}
+                        accept=".pdf,.jpg,.jpeg,.png"
+                        className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500"
+                      />
+                      <p className="text-xs text-slate-500 mt-1">Max 50MB. Supported formats: PDF, JPG, PNG</p>
+                      {shareholderPassportFile && (
+                        <p className="text-sm text-green-600 mt-2">✓ {shareholderPassportFile.name} selected</p>
+                      )}
+                    </div>
+
+                    <div className="flex gap-2 pt-2">
+                      <button
+                        type="button"
+                        onClick={addShareholder}
+                        className="flex-1 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition"
+                      >
+                        {editingShareholderId ? "Update Shareholder" : "Add Shareholder"}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={resetShareholderForm}
+                        className="flex-1 px-4 py-2 border border-slate-300 text-slate-700 font-medium rounded-lg hover:bg-slate-50 transition"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* File Upload */}
             <div>
               <label className="block text-sm font-medium text-slate-900 mb-2">
@@ -450,15 +775,14 @@ export default function ClientCreateOrder() {
             <div className="flex gap-3 pt-4">
               <Button
                 type="button"
-                variant="outline"
                 onClick={() => navigate("/client/orders")}
+                variant="outline"
+                className="flex-1"
               >
-                Cancel
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back to Orders
               </Button>
-              <Button
-                type="submit"
-                className="bg-primary-600 hover:bg-primary-700"
-              >
+              <Button type="submit" className="flex-1 bg-primary-600 hover:bg-primary-700">
                 Create Order
               </Button>
             </div>

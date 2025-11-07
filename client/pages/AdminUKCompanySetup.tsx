@@ -991,6 +991,18 @@ export default function AdminUKCompanySetup() {
                             Submit & Pay
                           </Button>
                         )}
+                        {inc.status === "payment_pending" && (
+                          <div className="space-y-2">
+                            <p className="text-xs text-slate-600 font-medium">Payment Window Open:</p>
+                            <Button
+                              onClick={() => handleCompleteIncorporation(inc)}
+                              className="bg-green-600 hover:bg-green-700 flex items-center gap-2 w-full"
+                            >
+                              <CheckCircle className="w-4 h-4" />
+                              Mark as Paid
+                            </Button>
+                          </div>
+                        )}
                         {inc.status === "completed" && (
                           <Button
                             variant="outline"

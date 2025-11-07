@@ -6296,7 +6296,7 @@ export const mockRegisteredCompanies: RegisteredCompany[] = [
   {
     id: "REG002",
     orderId: "O002",
-    userId: "C002",
+    userId: "2",
     companyNumber: "15678901",
     companyName: "Tech Solutions Ltd",
     country: "United Kingdom",
@@ -6312,7 +6312,7 @@ export const mockRegisteredCompanies: RegisteredCompany[] = [
   {
     id: "REG003",
     orderId: "O003",
-    userId: "C003",
+    userId: "3",
     companyNumber: "16789012",
     companyName: "Global Trade Partners LLC",
     country: "United States",
@@ -6328,7 +6328,7 @@ export const mockRegisteredCompanies: RegisteredCompany[] = [
   {
     id: "REG004",
     orderId: "O004",
-    userId: "C004",
+    userId: "4",
     companyNumber: "17890123",
     companyName: "Nordic Innovation AB",
     country: "Sweden",
@@ -6344,7 +6344,7 @@ export const mockRegisteredCompanies: RegisteredCompany[] = [
   {
     id: "REG005",
     orderId: "O005",
-    userId: "C005",
+    userId: "1",
     companyNumber: "18901234",
     companyName: "Prime Consulting Ltd",
     country: "United Kingdom",
@@ -6360,7 +6360,7 @@ export const mockRegisteredCompanies: RegisteredCompany[] = [
   {
     id: "REG006",
     orderId: "O006",
-    userId: "C006",
+    userId: "2",
     companyNumber: "19012345",
     companyName: "Digital Ventures Inc",
     country: "United States",
@@ -6376,7 +6376,7 @@ export const mockRegisteredCompanies: RegisteredCompany[] = [
   {
     id: "REG007",
     orderId: "O007",
-    userId: "C007",
+    userId: "3",
     companyNumber: "1234567890",
     companyName: "Maple Technologies Ltd",
     country: "Canada",
@@ -6392,7 +6392,7 @@ export const mockRegisteredCompanies: RegisteredCompany[] = [
   {
     id: "REG008",
     orderId: "O008",
-    userId: "C008",
+    userId: "4",
     companyNumber: "0987654321",
     companyName: "Northern Resources Inc",
     country: "Canada",

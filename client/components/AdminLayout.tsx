@@ -34,6 +34,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const [expandedMenu, setExpandedMenu] = useState<string | null>(
     location.pathname.startsWith("/admin/companies") ? "companies" : null,
   );
+  const [showDashboardDropdown, setShowDashboardDropdown] = useState(false);
+  const [dashboardTab, setDashboardTab] = useState<"users" | "staff">("users");
 
   const handleLogout = () => {
     localStorage.removeItem("adminToken");

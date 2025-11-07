@@ -78,6 +78,12 @@ export default function AdminUKCompanySetup() {
     registeredOfficeCountry: "United Kingdom",
     shareCapital: "1000",
     shareType: "Ordinary Shares",
+    sicCode: "",
+    memorandumOfAssociationAccepted: false,
+    articlesOfAssociationAccepted: false,
+    complianceStatementAccepted: false,
+    directorConsentAccepted: false,
+    shareholderConsentAccepted: false,
   });
 
   // Directors

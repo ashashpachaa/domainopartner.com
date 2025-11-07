@@ -376,7 +376,17 @@ export default function AdminCompaniesForSale() {
 
         {/* Companies Table - UK View */}
         {selectedCountry === "UK" && (
-          <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
+          <div className="space-y-4">
+            <div className="flex justify-end">
+              <Button
+                onClick={() => setShowListModal(true)}
+                className="bg-primary-600 hover:bg-primary-700 flex items-center gap-2"
+              >
+                <Plus className="w-4 h-4" />
+                List Company
+              </Button>
+            </div>
+            <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
             <table className="w-full">
               <thead className="bg-slate-50 border-b border-slate-200">
                 <tr>
@@ -469,6 +479,7 @@ export default function AdminCompaniesForSale() {
                 </p>
               </div>
             )}
+            </div>
           </div>
         )}
 

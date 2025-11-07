@@ -6280,7 +6280,7 @@ export const mockRegisteredCompanies: RegisteredCompany[] = [
   {
     id: "REG001",
     orderId: "O001",
-    userId: "C001",
+    userId: "1",
     companyNumber: "14567890",
     companyName: "Acme Corporation UK Ltd",
     country: "United Kingdom",

@@ -122,6 +122,16 @@ function SalesDashboard({ staff }: { staff: any }) {
     return orders.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   }, [staff.id, filterStatus, searchClient]);
 
+  const currentMonthBonus = useMemo(() => {
+    const today = new Date();
+    return mockStaffBonuses.find(
+      (b) =>
+        b.staffId === staff.id &&
+        b.month === today.getMonth() + 1 &&
+        b.year === today.getFullYear()
+    );
+  }, [staff.id]);
+
   const stats = useMemo(() => {
     return {
       total: assignedOrders.length,

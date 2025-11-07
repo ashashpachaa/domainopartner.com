@@ -921,7 +921,7 @@ export interface CompanyShareholder {
 export interface CompanyIncorporation {
   id: string;
   companyName: string;
-  companyType: "private_limited" | "public_limited" | "limited_by_guarantee";
+  companyType: "private_limited" | "public_limited" | "limited_by_guarantee" | "private_guarantee" | "unlimited";
   registeredOfficeAddress: string;
   registeredOfficePostcode: string;
   registeredOfficeCity: string;
@@ -930,9 +930,15 @@ export interface CompanyIncorporation {
   shareholders: CompanyShareholder[];
   shareCapital: number;
   shareType: string; // "Ordinary Shares", "Preference Shares", etc.
+  sicCode?: string; // Standard Industrial Classification code
   memorandumOfAssociation?: string; // Base64 encoded PDF
+  memorandumOfAssociationAccepted?: boolean;
   articlesOfAssociation?: string; // Base64 encoded PDF
+  articlesOfAssociationAccepted?: boolean;
   statementOfCompliance?: string; // Declaration text
+  complianceStatementAccepted?: boolean;
+  directorConsentAccepted?: boolean;
+  shareholderConsentAccepted?: boolean;
   status:
     | "draft"
     | "submitted"

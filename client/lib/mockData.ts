@@ -330,6 +330,26 @@ export interface RegisteredCompany {
   fetchedAt: string; // ISO timestamp when data was fetched from Companies House
 }
 
+export interface CompanyForSale {
+  id: string;
+  companyName: string;
+  companyNumber: string;
+  country: string;
+  incorporationDate: string;
+  registrationStatus: "active" | "dormant" | "liquidation";
+  businessType: string;
+  askingPrice: number;
+  currency: string;
+  contact: string;
+  contactEmail: string;
+  contactPhone: string;
+  description: string;
+  listedAt: string;
+  documents?: string[];
+  views: number;
+  inquiries: number;
+}
+
 export type InvoiceAction =
   | "created"
   | "sent"

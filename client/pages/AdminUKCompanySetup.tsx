@@ -429,6 +429,44 @@ export default function AdminUKCompanySetup() {
   const [currentStep, setCurrentStep] = useState(0);
   const { validationResult, isValidating, checkCompanyName } = useCompanyNameValidation();
 
+  // Load saved incorporations from localStorage on mount
+  useEffect(() => {
+    const savedIncorporations: CompanyIncorporation[] = [];
+
+    // Check all localStorage keys for saved incorporations
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key?.startsWith("incorporation_")) {
+        try {
+          const data = localStorage.getItem(key);
+          if (data) {
+            const incorporation = JSON.parse(data);
+            savedIncorporations.push(incorporation);
+          }
+        } catch (error) {
+          console.error(`Failed to parse ${key}:`, error);
+        }
+      }
+    }
+
+    // Merge saved incorporations with mock data (saved ones take precedence)
+    const allIncorporations = [...savedIncorporations];
+
+    // Add mock incorporations that aren't already saved
+    mockCompanyIncorporations.forEach(mock => {
+      if (!allIncorporations.find(i => i.id === mock.id)) {
+        allIncorporations.push(mock);
+      }
+    });
+
+    // Sort by creation date (newest first)
+    allIncorporations.sort((a, b) =>
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+
+    setIncorporations(allIncorporations);
+  }, []);
+
   const [formData, setFormData] = useState<IncorporationFormData>({
     companyName: "",
     companyType: "private_limited",

@@ -222,7 +222,7 @@ export default function AdminCompaniesForSale() {
               <div>
                 <p className="text-slate-600 text-sm font-medium">Avg Price</p>
                 <p className="text-2xl font-bold text-slate-900 mt-2">
-                  £{stats.avgPrice.toLocaleString()}
+                  ��{stats.avgPrice.toLocaleString()}
                 </p>
               </div>
               <div className="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center">
@@ -324,127 +324,227 @@ export default function AdminCompaniesForSale() {
           </div>
         </div>
 
-        {/* Companies Table */}
-        <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
-          <table className="w-full">
-            <thead className="bg-slate-50 border-b border-slate-200">
-              <tr>
-                <th className="px-6 py-4 text-left">
-                  <input
-                    type="checkbox"
-                    checked={
-                      selectedCompanies.length === companies.length &&
-                      companies.length > 0
-                    }
-                    onChange={(e) => handleSelectAll(e.target.checked)}
-                    className="rounded border-slate-300"
-                  />
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
-                  Company
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
-                  Business Type
-                </th>
-                <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">
-                  Asking Price
-                </th>
-                <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">
-                  Status
-                </th>
-                <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">
-                  Interest
-                </th>
-                <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">
-                  Views
-                </th>
-                <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">
-                  Listed
-                </th>
-                <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-200">
-              {sorted.map((company) => (
-                <tr
-                  key={company.id}
-                  className={`hover:bg-slate-50 transition ${selectedCompanies.includes(company.id) ? "bg-blue-50" : ""}`}
-                >
-                  <td className="px-6 py-4">
-                    <input
-                      type="checkbox"
-                      checked={selectedCompanies.includes(company.id)}
-                      onChange={(e) =>
-                        handleSelectCompany(company.id, e.target.checked)
-                      }
-                      className="rounded border-slate-300"
-                    />
-                  </td>
-                  <td className="px-6 py-4">
-                    <div>
+        {/* Companies Table - UK View */}
+        {selectedCountry === "UK" && (
+          <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
+            <table className="w-full">
+              <thead className="bg-slate-50 border-b border-slate-200">
+                <tr>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
+                    Company Name
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
+                    Company Number
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
+                    Incorporation Date
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
+                    Next Confirmation Date
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
+                    First Accounts Made Up To
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
+                    Auth Code
+                  </th>
+                  <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200">
+                {sorted.map((company) => (
+                  <tr
+                    key={company.id}
+                    className="hover:bg-slate-50 transition"
+                  >
+                    <td className="px-6 py-4">
                       <p className="font-medium text-slate-900">
                         {company.companyName}
                       </p>
-                      <p className="text-sm text-slate-600">
-                        {company.companyNumber}
-                      </p>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 text-slate-700">
-                    {company.businessType}
-                  </td>
-                  <td className="px-6 py-4 text-center font-bold text-slate-900">
-                    {company.currency} {company.askingPrice.toLocaleString()}
-                  </td>
-                  <td className="px-6 py-4 text-center">
-                    <span
-                      className={`inline-block px-3 py-1 rounded-full text-xs font-semibold border ${getStatusColor(company.registrationStatus)}`}
-                    >
-                      {company.registrationStatus.charAt(0).toUpperCase() +
-                        company.registrationStatus.slice(1)}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-center">
-                    <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-orange-100 text-orange-700 font-semibold text-sm">
-                      {company.inquiries}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-center text-slate-700 flex items-center justify-center gap-1">
-                    <Eye className="w-4 h-4 text-slate-400" />
-                    {company.views}
-                  </td>
-                  <td className="px-6 py-4 text-center text-sm text-slate-600">
-                    {new Date(company.listedAt).toLocaleDateString()}
-                  </td>
-                  <td className="px-6 py-4 text-center">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() =>
-                        toast.info(`Viewing details for ${company.companyName}`)
-                      }
-                      className="text-primary-600 hover:text-primary-700"
-                    >
-                      View
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                    </td>
+                    <td className="px-6 py-4 text-slate-700">
+                      {company.companyNumber}
+                    </td>
+                    <td className="px-6 py-4 text-slate-700">
+                      {new Date(company.incorporationDate).toLocaleDateString("en-GB")}
+                    </td>
+                    <td className="px-6 py-4 text-slate-700">
+                      {new Date(company.nextConfirmationDate).toLocaleDateString("en-GB")}
+                    </td>
+                    <td className="px-6 py-4 text-slate-700">
+                      {new Date(company.firstAccountsMadeUpTo).toLocaleDateString("en-GB")}
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className="inline-block px-3 py-1 rounded-full text-sm font-semibold bg-slate-100 text-slate-700">
+                        {company.authCode}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      <div className="flex items-center justify-center gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() =>
+                            toast.info(`Viewing ${company.companyName}`)
+                          }
+                          className="text-primary-600 hover:text-primary-700"
+                        >
+                          View
+                        </Button>
+                        <Button
+                          variant="default"
+                          size="sm"
+                          onClick={() =>
+                            toast.success(`Initiated sale process for ${company.companyName}`)
+                          }
+                          className="bg-green-600 hover:bg-green-700"
+                        >
+                          Sell
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
 
-          {sorted.length === 0 && (
-            <div className="text-center py-12">
-              <Building2 className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-              <p className="text-slate-600 font-medium">No companies found</p>
-              <p className="text-slate-500 text-sm mt-1">
-                Try adjusting your search or filters
-              </p>
-            </div>
-          )}
-        </div>
+            {sorted.length === 0 && (
+              <div className="text-center py-12">
+                <Building2 className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+                <p className="text-slate-600 font-medium">No companies found</p>
+                <p className="text-slate-500 text-sm mt-1">
+                  Try adjusting your search or filters
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Companies Table - Other Countries View */}
+        {selectedCountry !== "UK" && (
+          <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
+            <table className="w-full">
+              <thead className="bg-slate-50 border-b border-slate-200">
+                <tr>
+                  <th className="px-6 py-4 text-left">
+                    <input
+                      type="checkbox"
+                      checked={
+                        selectedCompanies.length === filtered.length &&
+                        filtered.length > 0
+                      }
+                      onChange={(e) => handleSelectAll(e.target.checked)}
+                      className="rounded border-slate-300"
+                    />
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
+                    Company
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
+                    Business Type
+                  </th>
+                  <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">
+                    Asking Price
+                  </th>
+                  <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">
+                    Status
+                  </th>
+                  <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">
+                    Interest
+                  </th>
+                  <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">
+                    Views
+                  </th>
+                  <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">
+                    Listed
+                  </th>
+                  <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200">
+                {sorted.map((company) => (
+                  <tr
+                    key={company.id}
+                    className={`hover:bg-slate-50 transition ${selectedCompanies.includes(company.id) ? "bg-blue-50" : ""}`}
+                  >
+                    <td className="px-6 py-4">
+                      <input
+                        type="checkbox"
+                        checked={selectedCompanies.includes(company.id)}
+                        onChange={(e) =>
+                          handleSelectCompany(company.id, e.target.checked)
+                        }
+                        className="rounded border-slate-300"
+                      />
+                    </td>
+                    <td className="px-6 py-4">
+                      <div>
+                        <p className="font-medium text-slate-900">
+                          {company.companyName}
+                        </p>
+                        <p className="text-sm text-slate-600">
+                          {company.companyNumber}
+                        </p>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-slate-700">
+                      {company.businessType}
+                    </td>
+                    <td className="px-6 py-4 text-center font-bold text-slate-900">
+                      {company.currency} {company.askingPrice.toLocaleString()}
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      <span
+                        className={`inline-block px-3 py-1 rounded-full text-xs font-semibold border ${getStatusColor(company.registrationStatus)}`}
+                      >
+                        {company.registrationStatus.charAt(0).toUpperCase() +
+                          company.registrationStatus.slice(1)}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-orange-100 text-orange-700 font-semibold text-sm">
+                        {company.inquiries}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-center text-slate-700 flex items-center justify-center gap-1">
+                      <Eye className="w-4 h-4 text-slate-400" />
+                      {company.views}
+                    </td>
+                    <td className="px-6 py-4 text-center text-sm text-slate-600">
+                      {new Date(company.listedAt).toLocaleDateString()}
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() =>
+                          toast.info(`Viewing details for ${company.companyName}`)
+                        }
+                        className="text-primary-600 hover:text-primary-700"
+                      >
+                        View
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            {sorted.length === 0 && (
+              <div className="text-center py-12">
+                <Building2 className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+                <p className="text-slate-600 font-medium">No companies found</p>
+                <p className="text-slate-500 text-sm mt-1">
+                  Try adjusting your search or filters
+                </p>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Summary */}
         <div className="bg-slate-50 rounded-lg border border-slate-200 p-4">

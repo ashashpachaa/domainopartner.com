@@ -554,6 +554,174 @@ export default function AdminUKCompanySetup() {
               </div>
             </div>
 
+            {/* SIC Code Section */}
+            <div className="space-y-4 p-6 bg-slate-50 rounded-lg">
+              <h3 className="text-lg font-bold text-slate-900">Business Classification (Optional)</h3>
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  SIC Code (Standard Industrial Classification)
+                </label>
+                <select
+                  value={formData.sicCode}
+                  onChange={(e) =>
+                    setFormData({ ...formData, sicCode: e.target.value })
+                  }
+                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                >
+                  <option value="">-- Select SIC Code (Optional) --</option>
+                  <option value="01110">Growing of cereals</option>
+                  <option value="47110">Retail sale in non-specialised stores</option>
+                  <option value="62010">Computer programming activities</option>
+                  <option value="62020">IT consultancy and computer facilities management</option>
+                  <option value="62090">Other information technology service activities</option>
+                  <option value="69101">Activities of lawyers</option>
+                  <option value="69201">Accounting and bookkeeping activities</option>
+                  <option value="70229">Other management consultancy activities</option>
+                </select>
+                <p className="text-xs text-slate-500 mt-2">
+                  Optional: Select the main business activity. Leave blank if unsure.
+                </p>
+              </div>
+            </div>
+
+            {/* Legal Declarations Section */}
+            <div className="space-y-4 p-6 bg-blue-50 rounded-lg border border-blue-200">
+              <h3 className="text-lg font-bold text-slate-900">Legal Declarations *</h3>
+              <p className="text-sm text-slate-600 mb-4">
+                You must accept all of the following to proceed with company incorporation:
+              </p>
+
+              <div className="space-y-3">
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.memorandumOfAssociationAccepted}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        memorandumOfAssociationAccepted: e.target.checked,
+                      })
+                    }
+                    className="mt-1 w-4 h-4 rounded border-slate-300 focus:ring-2 focus:ring-primary-500"
+                  />
+                  <div>
+                    <p className="text-sm font-medium text-slate-900">
+                      ✓ Memorandum of Association
+                    </p>
+                    <p className="text-xs text-slate-600">
+                      I confirm that the subscribers intend to form the company and will be bound by the Memorandum of Association
+                    </p>
+                  </div>
+                </label>
+
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.articlesOfAssociationAccepted}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        articlesOfAssociationAccepted: e.target.checked,
+                      })
+                    }
+                    className="mt-1 w-4 h-4 rounded border-slate-300 focus:ring-2 focus:ring-primary-500"
+                  />
+                  <div>
+                    <p className="text-sm font-medium text-slate-900">
+                      ✓ Articles of Association
+                    </p>
+                    <p className="text-xs text-slate-600">
+                      I accept and adopt the standard Articles of Association for this company
+                    </p>
+                  </div>
+                </label>
+
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.complianceStatementAccepted}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        complianceStatementAccepted: e.target.checked,
+                      })
+                    }
+                    className="mt-1 w-4 h-4 rounded border-slate-300 focus:ring-2 focus:ring-primary-500"
+                  />
+                  <div>
+                    <p className="text-sm font-medium text-slate-900">
+                      ✓ Statement of Compliance
+                    </p>
+                    <p className="text-xs text-slate-600">
+                      I confirm that all requirements of the Companies Act 2006 have been complied with in respect of the formation of this company
+                    </p>
+                  </div>
+                </label>
+
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.directorConsentAccepted}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        directorConsentAccepted: e.target.checked,
+                      })
+                    }
+                    className="mt-1 w-4 h-4 rounded border-slate-300 focus:ring-2 focus:ring-primary-500"
+                  />
+                  <div>
+                    <p className="text-sm font-medium text-slate-900">
+                      ✓ Director Consent
+                    </p>
+                    <p className="text-xs text-slate-600">
+                      Each director named above has consented to act as a director of the company
+                    </p>
+                  </div>
+                </label>
+
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.shareholderConsentAccepted}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        shareholderConsentAccepted: e.target.checked,
+                      })
+                    }
+                    className="mt-1 w-4 h-4 rounded border-slate-300 focus:ring-2 focus:ring-primary-500"
+                  />
+                  <div>
+                    <p className="text-sm font-medium text-slate-900">
+                      ✓ Shareholder Agreement
+                    </p>
+                    <p className="text-xs text-slate-600">
+                      Each shareholder agrees to subscribe for the shares allocated to them at the price stated
+                    </p>
+                  </div>
+                </label>
+              </div>
+
+              {!formData.memorandumOfAssociationAccepted ||
+              !formData.articlesOfAssociationAccepted ||
+              !formData.complianceStatementAccepted ||
+              !formData.directorConsentAccepted ||
+              !formData.shareholderConsentAccepted ? (
+                <div className="mt-4 p-3 bg-red-100 border border-red-300 rounded-lg">
+                  <p className="text-xs text-red-700 font-medium">
+                    ⚠️ All declarations must be accepted before proceeding
+                  </p>
+                </div>
+              ) : (
+                <div className="mt-4 p-3 bg-green-100 border border-green-300 rounded-lg">
+                  <p className="text-xs text-green-700 font-medium">
+                    ✓ All declarations accepted
+                  </p>
+                </div>
+              )}
+            </div>
+
             {/* Directors Section */}
             <div className="space-y-4 p-6 bg-slate-50 rounded-lg">
               <div className="flex items-center justify-between">

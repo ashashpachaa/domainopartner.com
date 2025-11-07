@@ -217,6 +217,10 @@ const App = () => (
             element={<AdminRoute element={<AdminCompanies />} />}
           />
           <Route
+            path="/admin/companies/need-renewal"
+            element={<AdminRoute element={<AdminCompaniesNeedRenewal />} />}
+          />
+          <Route
             path="/admin/companies/for-sale"
             element={<AdminRoute element={<AdminCompaniesForSale />} />}
           />

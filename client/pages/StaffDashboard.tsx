@@ -307,10 +307,25 @@ function OperationDashboard({ staff }: { staff: any }) {
         </div>
 
         {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 my-8">
           <StatCard icon={ListTodo} label="In Queue" value={operationQueue.length} color="blue" />
           <StatCard icon={Zap} label="Completed Today" value={completedToday} color="green" />
           <StatCard icon={AlertCircle} label="Your Role" value="Operation" color="purple" />
+          {currentMonthBonus && currentMonthBonus.bonusAmount > 0 ? (
+            <StatCard
+              icon={TrendingUp}
+              label={`💰 Bonus (${currentMonthBonus.bonusTier.charAt(0).toUpperCase() + currentMonthBonus.bonusTier.slice(1)})`}
+              value={`${currentMonthBonus.currency} ${currentMonthBonus.bonusAmount.toLocaleString()}`}
+              color="green"
+            />
+          ) : (
+            <StatCard
+              icon={AlertCircle}
+              label="💰 Current Bonus"
+              value="No bonus yet"
+              color="slate"
+            />
+          )}
         </div>
 
         {/* Processing Queue */}

@@ -822,6 +822,7 @@ export default function AdminUKCompanySetup() {
   };
 
   const handleEditIncorporation = (inc: CompanyIncorporation) => {
+    setEditingIncorporationId(inc.id);
     setFormData({
       companyName: inc.companyName,
       companyType: inc.companyType as any,

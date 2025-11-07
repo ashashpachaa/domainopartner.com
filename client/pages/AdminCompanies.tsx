@@ -362,9 +362,16 @@ export default function AdminCompanies() {
                     <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
                       Status
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
-                      Incorporated
-                    </th>
+                    {selectedCountry === "UK" && (
+                      <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
+                        Action
+                      </th>
+                    )}
+                    {selectedCountry !== "UK" && (
+                      <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
+                        Incorporated
+                      </th>
+                    )}
                     {selectedCountry !== "UK" && (
                       <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
                         Next Renewal

@@ -729,15 +729,21 @@ export default function AdminUKCompanySetup() {
 
     localStorage.setItem(
       `incorporation_${incorporation.id}`,
-      JSON.stringify(newIncorporation),
+      JSON.stringify(incorporation),
     );
 
-    setIncorporations([newIncorporation, ...incorporations]);
+    if (editingIncorporationId) {
+      setIncorporations(incorporations.map(i => i.id === editingIncorporationId ? incorporation : i));
+      setEditingIncorporationId(null);
+      toast.success("Company incorporation updated");
+    } else {
+      setIncorporations([incorporation, ...incorporations]);
+      toast.success("Company incorporation saved as draft");
+    }
+
     setActiveTab("list");
     setCurrentStep(0);
     resetForm();
-
-    toast.success("Company incorporation saved as draft");
   };
 
   const resetForm = () => {

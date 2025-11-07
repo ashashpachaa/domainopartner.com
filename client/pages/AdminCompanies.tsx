@@ -37,9 +37,14 @@ export default function AdminCompanies() {
         company.companyNumber.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesStatus =
         filterStatus === "all" || company.status === filterStatus;
-      return matchesSearch && matchesStatus;
+      const matchesCountry =
+        selectedCountry === "all" ||
+        (selectedCountry === "UK" && company.country === "United Kingdom") ||
+        (selectedCountry === "USA" && company.country === "United States") ||
+        (selectedCountry === "Sweden" && company.country === "Sweden");
+      return matchesSearch && matchesStatus && matchesCountry;
     });
-  }, [companies, searchTerm, filterStatus]);
+  }, [companies, searchTerm, filterStatus, selectedCountry]);
 
   const sorted = useMemo(() => {
     const list = [...filtered];

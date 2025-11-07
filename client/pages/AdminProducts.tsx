@@ -185,6 +185,49 @@ export default function AdminProducts() {
           </p>
         </div>
 
+        {/* Bulk Actions Bar */}
+        {selectedProducts.size > 0 && (
+          <div className="bg-blue-50 border-2 border-blue-300 rounded-lg p-4 flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <input
+                type="checkbox"
+                checked={selectedProducts.size === filteredProducts.length}
+                onChange={toggleSelectAll}
+                className="w-5 h-5 rounded"
+              />
+              <span className="font-semibold text-slate-900">
+                {selectedProducts.size} product(s) selected
+              </span>
+            </div>
+            <div className="flex gap-3">
+              <Button
+                onClick={() => bulkToggleStatus("active")}
+                className="bg-green-600 hover:bg-green-700 text-white text-sm"
+              >
+                Mark Active
+              </Button>
+              <Button
+                onClick={() => bulkToggleStatus("inactive")}
+                className="bg-yellow-600 hover:bg-yellow-700 text-white text-sm"
+              >
+                Mark Inactive
+              </Button>
+              <Button
+                onClick={bulkDeleteProducts}
+                className="bg-red-600 hover:bg-red-700 text-white text-sm"
+              >
+                Delete Selected
+              </Button>
+              <Button
+                onClick={() => setSelectedProducts(new Set())}
+                className="bg-slate-300 hover:bg-slate-400 text-slate-900 text-sm"
+              >
+                Clear Selection
+              </Button>
+            </div>
+          </div>
+        )}
+
         {/* Products Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredProducts.length === 0 ? (

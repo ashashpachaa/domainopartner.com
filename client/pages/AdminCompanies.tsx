@@ -487,7 +487,8 @@ export default function AdminCompanies() {
                             <div className="flex items-center gap-2">
                               <Button
                                 onClick={() => {
-                                  // TODO: Navigate to company detail view
+                                  setSelectedCompany(company);
+                                  setShowDetailModal(true);
                                 }}
                                 className="bg-blue-600 hover:bg-blue-700 text-white text-xs h-8 px-3"
                               >

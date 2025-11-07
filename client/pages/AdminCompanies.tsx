@@ -66,10 +66,19 @@ export default function AdminCompanies() {
   }, [filtered, sortBy]);
 
   const stats = useMemo(() => {
+    const filteredByCountry = companies.filter((company) => {
+      return (
+        selectedCountry === "all" ||
+        (selectedCountry === "UK" && company.country === "United Kingdom") ||
+        (selectedCountry === "USA" && company.country === "United States") ||
+        (selectedCountry === "Sweden" && company.country === "Sweden")
+      );
+    });
+
     return {
-      total: companies.length,
-      active: companies.filter((c) => c.status === "active").length,
-      upcomingRenewal: companies.filter((c) => {
+      total: filteredByCountry.length,
+      active: filteredByCountry.filter((c) => c.status === "active").length,
+      upcomingRenewal: filteredByCountry.filter((c) => {
         const renewalDate = new Date(c.nextRenewalDate);
         const today = new Date();
         const daysUntilRenewal = Math.floor(
@@ -78,7 +87,7 @@ export default function AdminCompanies() {
         return daysUntilRenewal <= 90 && daysUntilRenewal > 0;
       }).length,
     };
-  }, [companies]);
+  }, [companies, selectedCountry]);
 
   const getUserName = (userId: string) => {
     const user = mockUsers.find((u) => u.id === userId);

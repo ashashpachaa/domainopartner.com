@@ -957,6 +957,9 @@ export interface CompanyIncorporation {
   notes?: string;
   currency: string;
   filingFee: number;
+  paymentStatus?: "pending" | "paid" | "failed";
+  paymentReference?: string;
+  paymentDate?: string;
 }
 
 export const mockCompanyIncorporations: CompanyIncorporation[] = [

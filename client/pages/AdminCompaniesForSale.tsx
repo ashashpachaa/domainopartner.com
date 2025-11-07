@@ -162,6 +162,29 @@ export default function AdminCompaniesForSale() {
           </Button>
         </div>
 
+        {/* Country Tabs */}
+        <div className="flex gap-2 border-b border-slate-200">
+          {(["all", "UK", "USA", "Sweden"] as CountryTab[]).map((country) => (
+            <button
+              key={country}
+              onClick={() => setSelectedCountry(country)}
+              className={`px-6 py-3 font-medium text-sm transition-colors border-b-2 ${
+                selectedCountry === country
+                  ? "border-primary-600 text-primary-600"
+                  : "border-transparent text-slate-600 hover:text-slate-900"
+              }`}
+            >
+              {country === "all"
+                ? "All Countries"
+                : country === "UK"
+                  ? "🇬🇧 United Kingdom"
+                  : country === "USA"
+                    ? "🇺🇸 United States"
+                    : "🇸🇪 Sweden"}
+            </button>
+          ))}
+        </div>
+
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
           <div className="bg-white rounded-lg border border-slate-200 p-6">

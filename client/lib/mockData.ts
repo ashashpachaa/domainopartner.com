@@ -488,6 +488,21 @@ export interface MonthlyPerformanceReport {
   deductionAmount: number;
 }
 
+export interface StaffBonus {
+  id: string;
+  staffId: string;
+  month: number;
+  year: number;
+  performanceScore: number;
+  bonusAmount: number;
+  bonusTier: "bronze" | "silver" | "gold" | "none"; // 85-89: bronze, 90-94: silver, 95-100: gold
+  currency: string;
+  status: "earned" | "paid"; // earned = current/pending, paid = distributed
+  awardedAt: string; // ISO timestamp
+  paidAt?: string; // ISO timestamp when bonus was paid
+  notes?: string;
+}
+
 export const mockUsers: User[] = [
   {
     id: "1",

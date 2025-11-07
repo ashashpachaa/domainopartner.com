@@ -1092,58 +1092,72 @@ export default function AdminUKCompanySetup() {
     toast.success("Company registration completed! Company number and AUTH CODE saved.");
   };
 
-  const handleProcessPayment = async (inc: CompanyIncorporation) => {
-    try {
-      toast.loading("Processing payment with Companies House...");
+  const handleProcessPayment = (inc: CompanyIncorporation) => {
+    // Prepare payment instructions for Companies House
+    const paymentInstructions = `
+📋 PAYMENT INSTRUCTIONS - Pay Companies House Directly
 
-      // Call the payment endpoint
-      const response = await fetch("/api/companies-house/process-payment", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          incorporationId: inc.id,
-          amount: inc.filingFee,
-          currency: "GBP",
-          companyName: inc.companyName,
-        }),
-      });
+Company Name: ${inc.companyName}
+Filing Reference: ${inc.filingReference}
+Filing Fee: £${inc.filingFee}
+Currency: GBP
 
-      let result;
-      try {
-        result = await response.json();
-      } catch (parseError) {
-        console.error("Failed to parse response:", parseError);
-        throw new Error("Invalid response from server");
+How to pay:
+
+1️⃣ ONLINE (Fastest)
+   Visit: https://beta.companieshouse.gov.uk/pay
+   Enter your Filing Reference: ${inc.filingReference}
+   Pay £${inc.filingFee} by debit/credit card
+
+2️⃣ BY CHEQUE
+   Make cheque payable to: Companies House
+   Write filing reference on cheque: ${inc.filingReference}
+   Send to:
+   Companies House
+   Crown Way
+   Cardiff
+   CF14 3UZ
+   United Kingdom
+
+3️⃣ BY BANK TRANSFER
+   Bank Details: Contact Companies House for current bank details
+   Reference: ${inc.filingReference}
+
+⏱️  Payment must be received within 14 days of submission.
+    Your company will be rejected if payment is not received.
+
+After payment:
+✓ Companies House will process your application
+✓ You'll receive your Company Number within 3-5 working days
+✓ We'll automatically update your company status when approved
+    `;
+
+    // Update incorporation to mark that payment is pending
+    const updated = {
+      ...inc,
+      paymentStatus: "pending" as const,
+      paymentDueDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split("T")[0], // 14 days from now
+    };
+
+    localStorage.setItem(`incorporation_${inc.id}`, JSON.stringify(updated));
+    setIncorporations(incorporations.map(i => i.id === inc.id ? updated : i));
+    setSelectedIncorporation(updated);
+
+    // Show payment instructions in a modal/alert
+    toast.info(
+      "Redirecting to Companies House payment portal...\n\nYou will pay Companies House directly for the filing fee.",
+      {
+        duration: 5000,
       }
+    );
 
-      if (!response.ok) {
-        throw new Error(result.error || result.details || "Failed to process payment");
-      }
+    // Copy filing reference to clipboard for convenience
+    navigator.clipboard.writeText(inc.filingReference).catch(() => {
+      console.log("Filing reference:", inc.filingReference);
+    });
 
-      const paymentRef = result.paymentReference;
-
-      const updated = {
-        ...inc,
-        paymentStatus: "paid" as const,
-        paymentReference: paymentRef,
-        paymentDate: new Date().toISOString().split("T")[0],
-      };
-
-      localStorage.setItem(`incorporation_${inc.id}`, JSON.stringify(updated));
-      setIncorporations(incorporations.map(i => i.id === inc.id ? updated : i));
-      setSelectedIncorporation(updated);
-
-      toast.dismiss();
-      toast.success(
-        `✓ Payment Confirmed!\nReference: ${paymentRef}`
-      );
-    } catch (error: any) {
-      console.error("Payment error:", error);
-      toast.dismiss();
-      toast.error(error.message || "Failed to process payment");
-    }
+    // Redirect to Companies House payment portal
+    window.open("https://beta.companieshouse.gov.uk/pay", "_blank");
   };
 
   return (

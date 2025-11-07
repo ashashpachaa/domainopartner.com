@@ -140,17 +140,53 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             <Activity className="w-5 h-5" />
             {sidebarOpen && <span className="font-medium">Attendance</span>}
           </Link>
-          <Link
-            to="/admin/companies"
-            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition ${
-              isActive("/admin/companies")
-                ? "bg-primary-600 text-white"
-                : "text-slate-400 hover:bg-slate-800"
-            }`}
-          >
-            <Building2 className="w-5 h-5" />
-            {sidebarOpen && <span className="font-medium">Companies</span>}
-          </Link>
+          <div className="space-y-1">
+            <button
+              onClick={() => setExpandedMenu(expandedMenu === "companies" ? null : "companies")}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition ${
+                isActive("/admin/companies") || isActive("/admin/companies/for-sale") || location.pathname.startsWith("/admin/companies/")
+                  ? "bg-primary-600 text-white"
+                  : "text-slate-400 hover:bg-slate-800"
+              }`}
+            >
+              <Building2 className="w-5 h-5" />
+              {sidebarOpen && (
+                <>
+                  <span className="font-medium flex-1 text-left">Companies</span>
+                  <ChevronDown
+                    className={`w-4 h-4 transition-transform ${expandedMenu === "companies" ? "rotate-180" : ""}`}
+                  />
+                </>
+              )}
+            </button>
+
+            {sidebarOpen && expandedMenu === "companies" && (
+              <div className="space-y-1 ml-4">
+                <Link
+                  to="/admin/companies"
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition ${
+                    isActive("/admin/companies")
+                      ? "bg-primary-600 text-white"
+                      : "text-slate-400 hover:bg-slate-800"
+                  }`}
+                >
+                  <div className="w-2 h-2 rounded-full bg-current"></div>
+                  Registered Companies
+                </Link>
+                <Link
+                  to="/admin/companies/for-sale"
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition ${
+                    isActive("/admin/companies/for-sale")
+                      ? "bg-primary-600 text-white"
+                      : "text-slate-400 hover:bg-slate-800"
+                  }`}
+                >
+                  <div className="w-2 h-2 rounded-full bg-current"></div>
+                  Companies for Sale
+                </Link>
+              </div>
+            )}
+          </div>
           <Link
             to="/admin/sales/report"
             className={`flex items-center gap-3 px-4 py-3 rounded-lg transition ${

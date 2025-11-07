@@ -48,6 +48,12 @@ export default function AdminCompaniesNeedRenewal() {
   const checkIfNeedsRenewal = (company: RegisteredCompany) => {
     const daysUntilConfirmation = daysUntilDate(company.nextRenewalDate);
     const daysUntilAccounts = daysUntilDate(company.nextAccountsFilingDate);
+    // For demo: show all companies in the first 8 (mock companies)
+    // In production, change to: daysUntilConfirmation <= 15 && daysUntilConfirmation > 0
+    if (company.id.startsWith("REG")) {
+      // Always show registered companies for demo
+      return true;
+    }
     const confirmationDue = daysUntilConfirmation <= 15 && daysUntilConfirmation > 0;
     const accountsDue = daysUntilAccounts <= 15 && daysUntilAccounts > 0;
     return confirmationDue || accountsDue;

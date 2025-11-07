@@ -234,6 +234,36 @@ const App = () => (
             element={<AdminRoute element={<AdminCompaniesForSale />} />}
           />
 
+          {/* Accounting Routes */}
+          <Route
+            path="/admin/accounting"
+            element={<AdminRoute element={<AdminAccounting />} />}
+          />
+          <Route
+            path="/admin/expenses"
+            element={<AdminRoute element={<AdminExpenses />} />}
+          />
+          <Route
+            path="/admin/accounting/profit-loss"
+            element={<AdminRoute element={<AdminProfitLoss />} />}
+          />
+          <Route
+            path="/admin/accounting/balance-sheet"
+            element={<AdminRoute element={<AdminBalanceSheet />} />}
+          />
+          <Route
+            path="/admin/accounting/cash-flow"
+            element={<AdminRoute element={<AdminCashFlow />} />}
+          />
+          <Route
+            path="/admin/accounting/budget"
+            element={<AdminRoute element={<AdminBudget />} />}
+          />
+          <Route
+            path="/admin/accounting/vendors"
+            element={<AdminRoute element={<AdminVendors />} />}
+          />
+
           {/* Admin View Dashboards */}
           <Route
             path="/admin/view-user/:userId"

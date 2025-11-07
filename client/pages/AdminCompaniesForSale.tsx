@@ -13,6 +13,15 @@ import {
 } from "lucide-react";
 import { mockCompaniesForSale, CompanyForSale } from "@/lib/mockData";
 import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { X } from "lucide-react";
 
 type CountryTab = "all" | "UK" | "USA" | "Sweden";
 
@@ -26,6 +35,10 @@ export default function AdminCompaniesForSale() {
   );
   const [selectedCompanies, setSelectedCompanies] = useState<string[]>([]);
   const [selectedCountry, setSelectedCountry] = useState<CountryTab>("all");
+  const [showListModal, setShowListModal] = useState(false);
+  const [searchCompanyNumber, setSearchCompanyNumber] = useState("");
+  const [searchAuthCode, setSearchAuthCode] = useState("");
+  const [searchResults, setSearchResults] = useState<CompanyForSale[]>([]);
 
   const companies = useMemo(() => {
     return mockCompaniesForSale;

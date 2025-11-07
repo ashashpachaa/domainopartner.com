@@ -24,6 +24,8 @@ export default function AdminCompanies() {
   >("all");
   const [sortBy, setSortBy] = useState<"date" | "name" | "renewal">("date");
   const [selectedCountry, setSelectedCountry] = useState<CountryTab>("all");
+  const [selectedCompany, setSelectedCompany] = useState<RegisteredCompany | null>(null);
+  const [showDetailModal, setShowDetailModal] = useState(false);
 
   // Helper functions
   const formatDate = (dateStr: string) => {

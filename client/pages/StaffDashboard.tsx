@@ -288,6 +288,16 @@ function OperationDashboard({ staff }: { staff: any }) {
       .length;
   }, [staff.id]);
 
+  const currentMonthBonus = useMemo(() => {
+    const today = new Date();
+    return mockStaffBonuses.find(
+      (b) =>
+        b.staffId === staff.id &&
+        b.month === today.getMonth() + 1 &&
+        b.year === today.getFullYear()
+    );
+  }, [staff.id]);
+
   return (
     <AdminLayout>
       <div className="p-8">

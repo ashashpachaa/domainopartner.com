@@ -172,6 +172,7 @@ export default function AdminUKCompanySetup() {
   );
   const [activeTab, setActiveTab] = useState<"list" | "create">("list");
   const [currentStep, setCurrentStep] = useState(0);
+  const { validationResult, isValidating, checkCompanyName } = useCompanyNameValidation();
 
   const [formData, setFormData] = useState<IncorporationFormData>({
     companyName: "",

@@ -283,8 +283,8 @@ export default function AdminCreateOrder() {
       },
       operationReviewForm: {
         isCompleted: false,
-        companyName: "",
-        companyNumber: "",
+        companyName: companyName || "",
+        companyNumber: companyNumber || "",
       },
       requiredServices: product?.services || {
         hasApostille: false,

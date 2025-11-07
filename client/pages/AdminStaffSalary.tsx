@@ -487,6 +487,129 @@ export default function AdminStaffSalary() {
           </div>
         </div>
 
+        {/* Bonus Section */}
+        <div className="bg-white rounded-lg border border-slate-200 p-8 space-y-6">
+          <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+            💰 Performance Bonuses
+          </h2>
+
+          {/* Current Month Bonus */}
+          {currentMonthBonus ? (
+            <div className="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-lg p-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                  <p className="text-sm text-amber-700 uppercase font-semibold">
+                    This Month's Bonus
+                  </p>
+                  <p className="text-3xl font-bold text-amber-900 mt-2">
+                    {currencySymbols[currentMonthBonus.currency] || currentMonthBonus.currency}
+                    {currentMonthBonus.bonusAmount.toLocaleString()}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-amber-700 uppercase font-semibold">
+                    Performance Score
+                  </p>
+                  <p className="text-3xl font-bold text-amber-900 mt-2">
+                    {currentMonthBonus.performanceScore}/100
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-amber-700 uppercase font-semibold">
+                    Tier
+                  </p>
+                  <p className="text-xl font-bold mt-2">
+                    {currentMonthBonus.bonusTier === "gold" && "🥇 Gold"}
+                    {currentMonthBonus.bonusTier === "silver" && "🥈 Silver"}
+                    {currentMonthBonus.bonusTier === "bronze" && "🥉 Bronze"}
+                    {currentMonthBonus.bonusTier === "none" && "—"}
+                  </p>
+                </div>
+              </div>
+              <div className="mt-4 pt-4 border-t border-amber-200">
+                <p className="text-sm text-amber-800">
+                  <span className="font-semibold">Status:</span>{" "}
+                  {currentMonthBonus.status === "earned" ? (
+                    <span className="text-amber-700">Earned (Pending Payment)</span>
+                  ) : (
+                    <span className="text-green-700">✓ Paid</span>
+                  )}
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div className="bg-slate-50 border border-slate-200 rounded-lg p-6 text-center">
+              <p className="text-slate-600">
+                No bonus earned this month. Maintain a performance score of 85+ to qualify for bonuses.
+              </p>
+            </div>
+          )}
+
+          {/* Bonus History */}
+          {staffBonuses.length > 0 && (
+            <div>
+              <h3 className="text-lg font-bold text-slate-900 mb-4">Bonus History</h3>
+              <div className="space-y-3">
+                {staffBonuses.slice(0, 5).map((bonus) => (
+                  <div
+                    key={bonus.id}
+                    className="flex items-center justify-between p-4 bg-slate-50 border border-slate-200 rounded-lg hover:bg-slate-100 transition"
+                  >
+                    <div>
+                      <p className="font-semibold text-slate-900">
+                        {new Date(bonus.year, bonus.month - 1).toLocaleString(
+                          "default",
+                          { month: "long", year: "numeric" }
+                        )}
+                      </p>
+                      <p className="text-sm text-slate-600">
+                        Score: {bonus.performanceScore}/100 • Tier:{" "}
+                        {bonus.bonusTier === "gold" && "🥇 Gold"}
+                        {bonus.bonusTier === "silver" && "🥈 Silver"}
+                        {bonus.bonusTier === "bronze" && "🥉 Bronze"}
+                        {bonus.bonusTier === "none" && "None"}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-bold text-green-600">
+                        {currencySymbols[bonus.currency] || bonus.currency}
+                        {bonus.bonusAmount.toLocaleString()}
+                      </p>
+                      <p className="text-xs text-slate-600">
+                        {bonus.status === "paid" ? "✓ Paid" : "Earned"}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Bonus Stats Summary */}
+          {staffBonuses.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-slate-200">
+              <div className="p-4 bg-blue-50 rounded-lg">
+                <p className="text-sm text-blue-700 uppercase font-semibold">
+                  Total Earned (Pending)
+                </p>
+                <p className="text-2xl font-bold text-blue-900 mt-1">
+                  {currencySymbol}
+                  {totalBonusesEarned.toLocaleString()}
+                </p>
+              </div>
+              <div className="p-4 bg-green-50 rounded-lg">
+                <p className="text-sm text-green-700 uppercase font-semibold">
+                  Total Paid
+                </p>
+                <p className="text-2xl font-bold text-green-900 mt-1">
+                  {currencySymbol}
+                  {totalBonusesPaid.toLocaleString()}
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+
         {/* Summary Card */}
         <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-6">
           <h3 className="text-sm font-semibold text-green-900 mb-4">

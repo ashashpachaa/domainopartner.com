@@ -487,6 +487,8 @@ export default function AdminUKCompanySetup() {
 
   const [selectedIncorporation, setSelectedIncorporation] = useState<CompanyIncorporation | null>(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
+  const [editingCompanyNumber, setEditingCompanyNumber] = useState("");
+  const [editingAuthCode, setEditingAuthCode] = useState("");
 
   const [defaultOfficer, setDefaultOfficer] = useState<OfficerDetail>({
     id: `OFF${Date.now()}`,

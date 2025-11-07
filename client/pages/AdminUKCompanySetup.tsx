@@ -16,8 +16,10 @@ import {
   FileText,
   Download,
   CheckCircle,
+  Copy,
 } from "lucide-react";
 import { toast } from "sonner";
+import { storeRegisteredCompany } from "@/hooks/useCompanyDetails";
 
 interface IncorporationFormData {
   companyName: string;

@@ -23,6 +23,72 @@ import { toast } from "sonner";
 import { storeRegisteredCompany } from "@/hooks/useCompanyDetails";
 import { useCompanyNameValidation } from "@/hooks/useCompanyNameValidation";
 
+const NATIONALITIES = [
+  "Afghan", "Albanian", "Algerian", "Andorran", "Angolan", "Argentine", "Armenian",
+  "Australian", "Austrian", "Azerbaijani", "Bahamian", "Bahraini", "Bangladeshi",
+  "Barbadian", "Belarusian", "Belgian", "Belizean", "Beninese", "Bhutanese", "Bolivian",
+  "Bosnian", "Botswanan", "Brazilian", "British", "Bruneian", "Bulgarian", "Burkinabe",
+  "Burmese", "Burundian", "Cambodian", "Cameroonian", "Canadian", "Cape Verdean", "Central African",
+  "Chadian", "Chilean", "Chinese", "Colombian", "Comoran", "Congolese", "Costa Rican",
+  "Croatian", "Cuban", "Cypriot", "Czech", "Danish", "Djiboutian", "Dominican", "Dutch",
+  "East Timorese", "Ecuadorean", "Egyptian", "Salvadoran", "Equatorial Guinean",
+  "Eritrean", "Estonian", "Eswatini", "Ethiopian", "Fijian", "Finnish", "French", "Gabonese",
+  "Gambian", "Georgian", "German", "Ghanaian", "Gibraltarian", "Greek", "Grenadian",
+  "Guatemalan", "Guernsey", "Guinean", "Guinea-Bissauan", "Guyanese", "Haitian",
+  "Honduran", "Hong Kong", "Hungarian", "Icelander", "Indian", "Indonesian", "Iranian",
+  "Iraqi", "Irish", "Israeli", "Italian", "Jamaican", "Japanese", "Jerseian", "Jordanian",
+  "Kazakhstani", "Kenyan", "Kiribati", "North Korean", "South Korean", "Kosovan", "Kuwaiti",
+  "Kyrgyzstani", "Laotian", "Latvian", "Lebanese", "Basotho", "Liberian", "Libyan",
+  "Liechtensteiner", "Lithuanian", "Luxembourger", "Macanese", "Macedonian", "Malagasy",
+  "Malawian", "Malaysian", "Maldivian", "Malian", "Maltese", "Manx", "Marshallese",
+  "Mauritian", "Mauritanian", "Mexican", "Micronesian", "Moldovan", "Monégasque",
+  "Mongolian", "Montenegrin", "Moroccan", "Mozambican", "Namibian", "Nauruan", "Nepali",
+  "Dutch", "New Zealand", "Nicaraguan", "Nigerian", "Niuean", "Norwegian", "Omani",
+  "Pakistani", "Palauan", "Palestinian", "Panamanian", "Papua New Guinean", "Paraguayan",
+  "Peruvian", "Filipino", "Polish", "Portuguese", "Puerto Rican", "Qatari", "Romanian",
+  "Russian", "Rwandan", "Saint Kitts and Nevis", "Saint Lucian", "Saint Vincentian",
+  "Samoan", "Sammarinese", "São Toméan", "Saudi Arabian", "Scottish", "Senegalese",
+  "Serbian", "Seychellois", "Sierra Leonean", "Singaporean", "Slovak", "Slovenian",
+  "Solomon Islander", "Somali", "South African", "South Sudanese", "Spanish", "Sri Lankan",
+  "Sudanese", "Surinamese", "Swazi", "Swedish", "Swiss", "Syrian", "Taiwanese", "Tajikistani",
+  "Tanzanian", "Thai", "Togolese", "Tongan", "Trinidadian", "Tobagonian", "Tunisian",
+  "Turkish", "Turkmen", "Tuvaluan", "Ugandan", "Ukrainian", "Emirati", "British",
+  "American", "Uruguayan", "Uzbekistani", "Ni-Vanuatu", "Vatican", "Venezuelan", "Vietnamese",
+  "Virgin Islander", "Welsh", "Yemeni", "Zambian", "Zimbabwean"
+].sort();
+
+const SIC_CODES = [
+  { code: "01110", description: "Growing of cereals (except rice), leguminous crops and oil seeds" },
+  { code: "01120", description: "Growing of rice" },
+  { code: "01130", description: "Growing of vegetables and melons, roots and tubers" },
+  { code: "47110", description: "Retail sale in non-specialised stores with food, beverages or tobacco predominating" },
+  { code: "47190", description: "Retail sale in non-specialised stores" },
+  { code: "46710", description: "Wholesale of petroleum and petroleum gases" },
+  { code: "46720", description: "Wholesale of metals and metal ores" },
+  { code: "49410", description: "Freight transport by road" },
+  { code: "49500", description: "Transport via pipelines" },
+  { code: "51101", description: "Wharves and docks activities" },
+  { code: "62011", description: "Business and management consultancy activities" },
+  { code: "62012", description: "Business and management consultancy activities related to management of facilities" },
+  { code: "62090", description: "Other information technology and computer service activities" },
+  { code: "68100", description: "Buying and selling of own real estate" },
+  { code: "69101", description: "Activities of lawyers" },
+  { code: "69102", description: "Notaries activities" },
+  { code: "70229", description: "Other professional, scientific and technical activities not elsewhere classified" },
+  { code: "84110", description: "General public administration activities" },
+  { code: "85101", description: "Education at pre-primary level" },
+  { code: "85110", description: "Primary education" },
+  { code: "85120", description: "Lower secondary education" },
+  { code: "86101", description: "Hospital activities" },
+  { code: "86900", description: "Other professional, scientific and technical activities" },
+];
+
+const JURISDICTIONS = [
+  { code: "england-wales", label: "England and Wales" },
+  { code: "scotland", label: "Scotland" },
+  { code: "northern-ireland", label: "Northern Ireland" },
+];
+
 interface IncorporationStep {
   id: string;
   name: string;

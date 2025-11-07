@@ -157,12 +157,27 @@ function SalesDashboard({ staff }: { staff: any }) {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-6 gap-4 mb-8">
           <StatCard icon={Briefcase} label="Total Orders" value={stats.total} color="blue" />
           <StatCard icon={Clock} label="Pending" value={stats.pending} color="yellow" />
           <StatCard icon={Eye} label="Awaiting Review" value={stats.awaitingReview} color="purple" />
           <StatCard icon={CheckCircle} label="Completed" value={stats.completed} color="green" />
           <StatCard icon={DollarSign} label="Revenue" value={`$${(stats.revenue / 1000).toFixed(1)}K`} color="emerald" />
+          {currentMonthBonus && currentMonthBonus.bonusAmount > 0 ? (
+            <StatCard
+              icon={TrendingUp}
+              label={`💰 Bonus (${currentMonthBonus.bonusTier.charAt(0).toUpperCase() + currentMonthBonus.bonusTier.slice(1)})`}
+              value={`${currentMonthBonus.currency} ${currentMonthBonus.bonusAmount.toLocaleString()}`}
+              color="green"
+            />
+          ) : (
+            <StatCard
+              icon={AlertCircle}
+              label="💰 Current Bonus"
+              value="No bonus yet"
+              color="slate"
+            />
+          )}
         </div>
 
         {/* Orders Table */}

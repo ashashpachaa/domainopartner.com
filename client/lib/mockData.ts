@@ -876,6 +876,111 @@ export const mockBudgets: BudgetEntry[] = [
   },
 ];
 
+// ========== COMPANY INCORPORATION SYSTEM ==========
+
+export interface CompanyDirector {
+  id: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+  nationality: string;
+  address: string;
+  postcode: string;
+  city: string;
+  country: string;
+}
+
+export interface CompanyShareholder {
+  id: string;
+  firstName: string;
+  lastName: string;
+  address: string;
+  postcode: string;
+  city: string;
+  country: string;
+  shareAllocation: number; // number of shares
+  ownershipPercentage: number;
+}
+
+export interface CompanyIncorporation {
+  id: string;
+  companyName: string;
+  companyType: "private_limited" | "public_limited" | "limited_by_guarantee";
+  registeredOfficeAddress: string;
+  registeredOfficePostcode: string;
+  registeredOfficeCity: string;
+  registeredOfficeCountry: string;
+  directors: CompanyDirector[];
+  shareholders: CompanyShareholder[];
+  shareCapital: number;
+  shareType: string; // "Ordinary Shares", "Preference Shares", etc.
+  memorandumOfAssociation?: string; // Base64 encoded PDF
+  articlesOfAssociation?: string; // Base64 encoded PDF
+  statementOfCompliance?: string; // Declaration text
+  status: "draft" | "submitted" | "payment_pending" | "filing" | "completed" | "rejected";
+  filingReference?: string;
+  companyRegistrationNumber?: string;
+  companyAuthenticationCode?: string;
+  certificateOfIncorporation?: string; // Base64 encoded PDF
+  createdBy: string; // Staff ID
+  createdAt: string;
+  submittedAt?: string;
+  completedAt?: string;
+  notes?: string;
+  currency: string;
+  filingFee: number;
+}
+
+export const mockCompanyIncorporations: CompanyIncorporation[] = [
+  {
+    id: "INC001",
+    companyName: "Tech Innovations Ltd",
+    companyType: "private_limited",
+    registeredOfficeAddress: "123 Tech Street",
+    registeredOfficePostcode: "SW1A 1AA",
+    registeredOfficeCity: "London",
+    registeredOfficeCountry: "United Kingdom",
+    directors: [
+      {
+        id: "DIR001",
+        firstName: "Ahmed",
+        lastName: "Hassan",
+        dateOfBirth: "1990-05-15",
+        nationality: "Egyptian",
+        address: "10 Director Lane",
+        postcode: "W1B 1AE",
+        city: "London",
+        country: "United Kingdom",
+      },
+    ],
+    shareholders: [
+      {
+        id: "SHA001",
+        firstName: "Ahmed",
+        lastName: "Hassan",
+        address: "10 Director Lane",
+        postcode: "W1B 1AE",
+        city: "London",
+        country: "United Kingdom",
+        shareAllocation: 1000,
+        ownershipPercentage: 100,
+      },
+    ],
+    shareCapital: 1000,
+    shareType: "Ordinary Shares",
+    status: "completed",
+    filingReference: "YYYY-MM-DD-12345",
+    companyRegistrationNumber: "15432890",
+    companyAuthenticationCode: "ABCD1234EF56GH",
+    createdBy: "S001",
+    createdAt: "2024-01-15",
+    submittedAt: "2024-01-15",
+    completedAt: "2024-01-16",
+    currency: "GBP",
+    filingFee: 12,
+  },
+];
+
 export const mockUsers: User[] = [
   {
     id: "1",

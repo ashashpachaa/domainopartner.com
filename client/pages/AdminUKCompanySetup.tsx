@@ -2985,6 +2985,42 @@ export default function AdminUKCompanySetup() {
                   </div>
                 </div>
 
+                {(selectedIncorporation.status === "submitted" || selectedIncorporation.status === "completed") && (
+                  <div className="border-t border-slate-200 pt-6">
+                    <h3 className="font-bold text-slate-900 mb-4">Companies House Details</h3>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-slate-700 mb-2">Company Registration Number</label>
+                        <input
+                          type="text"
+                          value={editingCompanyNumber}
+                          onChange={(e) => setEditingCompanyNumber(e.target.value)}
+                          placeholder="e.g., 12345678"
+                          className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                          disabled={selectedIncorporation.status === "completed"}
+                        />
+                        {selectedIncorporation.companyRegistrationNumber && (
+                          <p className="text-xs text-green-600 mt-1">✓ Company number assigned</p>
+                        )}
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-slate-700 mb-2">Authentication Code (AUTH CODE)</label>
+                        <input
+                          type="text"
+                          value={editingAuthCode}
+                          onChange={(e) => setEditingAuthCode(e.target.value)}
+                          placeholder="e.g., xxxxx"
+                          className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                          disabled={selectedIncorporation.status === "completed"}
+                        />
+                        {selectedIncorporation.companyAuthenticationCode && (
+                          <p className="text-xs text-green-600 mt-1">✓ AUTH CODE assigned</p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 <div className="border-t border-slate-200 pt-6">
                   <h3 className="font-bold text-slate-900 mb-4">Directors ({selectedIncorporation.directors.length})</h3>
                   <div className="space-y-2">

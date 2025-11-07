@@ -177,6 +177,12 @@ export default function AdminCreateOrder() {
     return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + " " + sizes[i];
   };
 
+  const selectCompanyForAcquisition = (company: typeof mockCompaniesForSale[0]) => {
+    setCompanyName(company.companyName);
+    setCompanyNumber(company.companyNumber);
+    setShowCompanySelector(false);
+  };
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 

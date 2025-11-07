@@ -325,6 +325,7 @@ export interface RegisteredCompany {
   incorporationDate: string; // YYYY-MM-DD
   nextRenewalDate: string; // YYYY-MM-DD
   nextAccountsFilingDate: string; // YYYY-MM-DD
+  authCode: string; // e.g., "AUTH001-UK-2025"
   registeredOffice?: string;
   sicCodes?: string[];
   status: "active" | "dissolved" | "liquidation" | "administration";

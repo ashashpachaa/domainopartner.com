@@ -806,6 +806,271 @@ Final Score: ${report.totalScore}/100
             </div>
           </div>
         )}
+
+        {/* Bonus History Tab */}
+        {activeTab === "bonus" && (
+          <div className="space-y-6">
+            {/* Bonus Statistics */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              {/* Total Bonuses Earned */}
+              <div className="bg-white rounded-lg border border-slate-200 p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-slate-600 text-sm font-medium">Total Earned</p>
+                    <p className="text-3xl font-bold text-green-600 mt-2">
+                      {bonusStats.earned}
+                    </p>
+                  </div>
+                  <div className="w-12 h-12 rounded-lg bg-green-100 flex items-center justify-center">
+                    <TrendingUp className="w-6 h-6 text-green-600" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Total Bonuses Paid */}
+              <div className="bg-white rounded-lg border border-slate-200 p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-slate-600 text-sm font-medium">Total Paid</p>
+                    <p className="text-3xl font-bold text-blue-600 mt-2">
+                      {bonusStats.paid}
+                    </p>
+                  </div>
+                  <div className="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center">
+                    <CheckCircle className="w-6 h-6 text-blue-600" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Amount Earned */}
+              <div className="bg-white rounded-lg border border-slate-200 p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-slate-600 text-sm font-medium">
+                      Amount Earned
+                    </p>
+                    <p className="text-3xl font-bold text-amber-600 mt-2">
+                      ${bonusStats.totalEarned.toLocaleString()}
+                    </p>
+                  </div>
+                  <div className="w-12 h-12 rounded-lg bg-amber-100 flex items-center justify-center">
+                    💰
+                  </div>
+                </div>
+              </div>
+
+              {/* Amount Paid */}
+              <div className="bg-white rounded-lg border border-slate-200 p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-slate-600 text-sm font-medium">Amount Paid</p>
+                    <p className="text-3xl font-bold text-primary-600 mt-2">
+                      ${bonusStats.totalPaid.toLocaleString()}
+                    </p>
+                  </div>
+                  <div className="w-12 h-12 rounded-lg bg-primary-100 flex items-center justify-center">
+                    <CheckCircle className="w-6 h-6 text-primary-600" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Filters and Sorting */}
+            <div className="bg-white rounded-lg border border-slate-200 p-6 space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                {/* Search */}
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Search Staff
+                  </label>
+                  <div className="relative">
+                    <Search className="w-4 h-4 absolute left-3 top-3 text-slate-400" />
+                    <input
+                      type="text"
+                      placeholder="Name or email..."
+                      value={bonusSearchTerm}
+                      onChange={(e) => setBonusSearchTerm(e.target.value)}
+                      className="w-full pl-9 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    />
+                  </div>
+                </div>
+
+                {/* Status Filter */}
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Status
+                  </label>
+                  <select
+                    value={bonusStatusFilter}
+                    onChange={(e) =>
+                      setBonusStatusFilter(e.target.value as "all" | "earned" | "paid")
+                    }
+                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  >
+                    <option value="all">All</option>
+                    <option value="earned">Earned (Pending)</option>
+                    <option value="paid">Paid</option>
+                  </select>
+                </div>
+
+                {/* Sort By */}
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Sort By
+                  </label>
+                  <select
+                    value={bonusSortBy}
+                    onChange={(e) =>
+                      setBonusSortBy(e.target.value as "amount" | "date" | "staff")
+                    }
+                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  >
+                    <option value="date">Latest First</option>
+                    <option value="amount">Highest Amount</option>
+                    <option value="staff">Staff Name</option>
+                  </select>
+                </div>
+
+                {/* Clear Filters */}
+                <div className="flex items-end">
+                  <button
+                    onClick={() => {
+                      setBonusSearchTerm("");
+                      setBonusStatusFilter("all");
+                      setBonusSortBy("date");
+                    }}
+                    className="w-full px-4 py-2 text-sm font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition"
+                  >
+                    Clear Filters
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Bonus Table */}
+            <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-slate-50 border-b border-slate-200">
+                    <tr>
+                      <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
+                        Staff Member
+                      </th>
+                      <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
+                        Period
+                      </th>
+                      <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">
+                        Performance
+                      </th>
+                      <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">
+                        Tier
+                      </th>
+                      <th className="px-6 py-4 text-right text-xs font-bold text-slate-700 uppercase">
+                        Amount
+                      </th>
+                      <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">
+                        Status
+                      </th>
+                      <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
+                        Date
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200">
+                    {filteredAndSortedBonuses.length > 0 ? (
+                      filteredAndSortedBonuses.map(({ bonus, staff }) => (
+                        <tr key={bonus.id} className="hover:bg-slate-50 transition">
+                          <td className="px-6 py-4">
+                            <div className="flex items-center gap-2">
+                              <div className="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center text-xs font-bold text-primary-700">
+                                {staff?.firstName.charAt(0)}
+                              </div>
+                              <div>
+                                <p className="font-medium text-slate-900">
+                                  {staff?.firstName} {staff?.lastName}
+                                </p>
+                                <p className="text-xs text-slate-600">{staff?.email}</p>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 text-sm text-slate-600">
+                            {new Date(bonus.year, bonus.month - 1).toLocaleString(
+                              "default",
+                              { month: "long", year: "numeric" }
+                            )}
+                          </td>
+                          <td className="px-6 py-4 text-center">
+                            <span className="inline-block px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                              {bonus.performanceScore}/100
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 text-center">
+                            {bonus.bonusTier === "gold" && (
+                              <span className="inline-block px-3 py-1 rounded-full text-sm font-bold bg-yellow-100 text-yellow-800">
+                                🥇 Gold
+                              </span>
+                            )}
+                            {bonus.bonusTier === "silver" && (
+                              <span className="inline-block px-3 py-1 rounded-full text-sm font-bold bg-gray-100 text-gray-800">
+                                🥈 Silver
+                              </span>
+                            )}
+                            {bonus.bonusTier === "bronze" && (
+                              <span className="inline-block px-3 py-1 rounded-full text-sm font-bold bg-orange-100 text-orange-800">
+                                🥉 Bronze
+                              </span>
+                            )}
+                            {bonus.bonusTier === "none" && (
+                              <span className="inline-block px-3 py-1 rounded-full text-sm font-medium bg-slate-100 text-slate-600">
+                                None
+                              </span>
+                            )}
+                          </td>
+                          <td className="px-6 py-4 text-right">
+                            <p className="font-bold text-green-600">
+                              {bonus.bonusAmount > 0
+                                ? `${bonus.currency} ${bonus.bonusAmount.toLocaleString()}`
+                                : "-"}
+                            </p>
+                          </td>
+                          <td className="px-6 py-4 text-center">
+                            {bonus.status === "paid" ? (
+                              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                                <CheckCircle className="w-4 h-4" />
+                                Paid
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium bg-amber-100 text-amber-800">
+                                <AlertCircle className="w-4 h-4" />
+                                Earned
+                              </span>
+                            )}
+                          </td>
+                          <td className="px-6 py-4 text-sm text-slate-600">
+                            {new Date(bonus.awardedAt).toLocaleDateString()}
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td
+                          colSpan={7}
+                          className="px-6 py-8 text-center text-slate-500"
+                        >
+                          No bonuses found
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="px-6 py-4 bg-slate-50 border-t border-slate-200 text-sm text-slate-600">
+                Showing {filteredAndSortedBonuses.length} bonus record(s)
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </AdminLayout>
   );

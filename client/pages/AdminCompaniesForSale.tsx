@@ -761,27 +761,127 @@ export default function AdminCompaniesForSale() {
                 </div>
               </div>
 
-              {/* Search Button */}
-              <div className="flex justify-end gap-2 pt-2">
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    setShowListModal(false);
-                    setSearchCompanyNumber("");
-                    setSearchAuthCode("");
-                    setSearchResults([]);
-                  }}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  onClick={handleSearchCompanies}
-                  className="bg-primary-600 hover:bg-primary-700"
-                >
-                  <Search className="w-4 h-4 mr-2" />
-                  Search Companies
-                </Button>
+              {/* Lookup from Companies House */}
+              <div className="border-t pt-4">
+                <h3 className="text-md font-semibold text-slate-900 mb-3">
+                  Import from Companies House
+                </h3>
+                <div className="bg-slate-50 p-4 rounded-lg">
+                  <p className="text-sm text-slate-600 mb-4">
+                    Enter a Company Number to fetch the latest data from Companies House
+                  </p>
+                  <Button
+                    onClick={fetchFromCompaniesHouse}
+                    disabled={isLoadingCH || !searchCompanyNumber}
+                    className="w-full bg-blue-600 hover:bg-blue-700"
+                  >
+                    {isLoadingCH ? "Fetching..." : "Lookup from Companies House"}
+                  </Button>
+                </div>
               </div>
+
+              {/* Fetched Company Preview */}
+              {fetchedCompanyData && (
+                <div className="border-t pt-4">
+                  <h3 className="text-md font-semibold text-slate-900 mb-4">
+                    Company Data Preview
+                  </h3>
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 space-y-3">
+                    <div className="grid grid-cols-2 gap-3 text-sm">
+                      <div>
+                        <p className="text-slate-600 font-medium">Company Name</p>
+                        <p className="text-slate-900 font-semibold">
+                          {fetchedCompanyData.companyName}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-slate-600 font-medium">Company Number</p>
+                        <p className="text-slate-900 font-mono">
+                          {fetchedCompanyData.companyNumber}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-slate-600 font-medium">Incorporation Date</p>
+                        <p className="text-slate-900">
+                          {fetchedCompanyData.incorporationDate
+                            ? new Date(
+                                fetchedCompanyData.incorporationDate
+                              ).toLocaleDateString("en-GB")
+                            : "N/A"}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-slate-600 font-medium">Status</p>
+                        <p className="text-slate-900">
+                          {fetchedCompanyData.status || "Unknown"}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-slate-600 font-medium">
+                          Next Confirmation Date
+                        </p>
+                        <p className="text-slate-900">
+                          {fetchedCompanyData.nextConfirmationDate
+                            ? new Date(
+                                fetchedCompanyData.nextConfirmationDate
+                              ).toLocaleDateString("en-GB")
+                            : "N/A"}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-slate-600 font-medium">
+                          First Accounts Made Up To
+                        </p>
+                        <p className="text-slate-900">
+                          {fetchedCompanyData.firstAccountsMadeUpTo
+                            ? new Date(
+                                fetchedCompanyData.firstAccountsMadeUpTo
+                              ).toLocaleDateString("en-GB")
+                            : "N/A"}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex justify-end gap-2 mt-4">
+                    <Button
+                      variant="outline"
+                      onClick={handleRejectImport}
+                    >
+                      Reject
+                    </Button>
+                    <Button
+                      onClick={handleAcceptImport}
+                      className="bg-green-600 hover:bg-green-700"
+                    >
+                      Accept & Import
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              {/* Search Button */}
+              {!fetchedCompanyData && (
+                <div className="flex justify-end gap-2 pt-2">
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setShowListModal(false);
+                      setSearchCompanyNumber("");
+                      setSearchAuthCode("");
+                      setSearchResults([]);
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={handleSearchCompanies}
+                    className="bg-primary-600 hover:bg-primary-700"
+                  >
+                    <Search className="w-4 h-4 mr-2" />
+                    Search Existing Companies
+                  </Button>
+                </div>
+              )}
 
               {/* Search Results */}
               {searchResults.length > 0 && (

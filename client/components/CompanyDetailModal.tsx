@@ -158,12 +158,12 @@ export default function CompanyDetailModal({
             )}
           </div>
 
-          {/* Company Owner Information */}
+          {/* Account Owner (Client) Information */}
           {owner && (
             <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg p-6 border border-purple-200">
               <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
                 <User className="w-5 h-5 text-purple-600" />
-                Company Owner / Account Manager
+                Account Owner (Client)
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>

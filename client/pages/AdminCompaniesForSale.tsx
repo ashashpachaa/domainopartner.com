@@ -44,8 +44,8 @@ export default function AdminCompaniesForSale() {
   const [importedCompanies, setImportedCompanies] = useState<CompanyForSale[]>([]);
 
   const companies = useMemo(() => {
-    return mockCompaniesForSale;
-  }, []);
+    return [...mockCompaniesForSale, ...importedCompanies];
+  }, [importedCompanies]);
 
   const filtered = useMemo(() => {
     return companies.filter((company) => {

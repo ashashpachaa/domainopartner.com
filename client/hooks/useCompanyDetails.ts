@@ -1,4 +1,4 @@
-import { RegisteredCompany } from "@/lib/mockData";
+import { RegisteredCompany, mockRegisteredCompanies } from "@/lib/mockData";
 
 export interface CompanyDetailsResult {
   isLoading: boolean;

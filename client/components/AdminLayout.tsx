@@ -29,6 +29,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [expandedMenu, setExpandedMenu] = useState<string | null>(null);
 
   const handleLogout = () => {
     localStorage.removeItem("adminToken");

@@ -811,6 +811,122 @@ export default function AdminUKCompanySetup() {
     }
   };
 
+  const handleViewDetails = (inc: CompanyIncorporation) => {
+    setSelectedIncorporation(inc);
+    setShowDetailModal(true);
+  };
+
+  const handleEditIncorporation = (inc: CompanyIncorporation) => {
+    setFormData({
+      companyName: inc.companyName,
+      companyType: inc.companyType as any,
+      jurisdiction: "england-wales",
+      registeredOfficeAddress: {
+        line1: inc.registeredOfficeAddress.split(",")[0] || "",
+        line2: "",
+        town: inc.registeredOfficeCity,
+        county: "",
+        postcode: inc.registeredOfficePostcode,
+        country: inc.registeredOfficeCountry,
+      },
+      shareCapital: inc.shareCapital.toString(),
+      shareClass: {
+        description: "Ordinary",
+        currency: inc.currency,
+        nominalValue: "1",
+        type: "Ordinary",
+        prescribedParticulars: "Each share is entitled to one vote in any circumstances. Each share is entitled to share equally in dividend payments or any other distribution, including a distribution arising from a winding up of the company.",
+      },
+      shareClassification: false,
+      businessActivities: [""],
+      sicCodes: inc.sicCode ? [inc.sicCode] : [],
+      tradingAddress: "",
+      documentsSelection: {
+        articlesOfAssociation: "model",
+        firstBoardMinute: "included",
+        shareCertificate: "basic",
+        printedDocuments: false,
+        boundRecords: false,
+        hmrcLetter: false,
+        consentLetters: false,
+      },
+      bankingDetails: {
+        barclaysBankAccount: false,
+      },
+      extras: {
+        sameDayService: false,
+        certificateOfGoodStanding: false,
+        companySeal: false,
+        companyStamp: false,
+        companyNamePlate: false,
+        domainName: false,
+      },
+      confirmations: {
+        memorandumAccepted: inc.memorandumOfAssociationAccepted,
+        futureActivitiesLawful: false,
+        termsAccepted: inc.articlesOfAssociationAccepted,
+        authorityGiven: false,
+      },
+    });
+    setOfficers(
+      inc.directors.map((d, i) => ({
+        id: `OFF${i}`,
+        title: "",
+        firstName: d.firstName,
+        middleName: "",
+        lastName: d.lastName,
+        dateOfBirth: "",
+        nationality: "",
+        businessOccupation: "",
+        personType: "individual",
+        roles: { director: true, secretary: false, shareholder: false, psc: false },
+        residentialAddress: {
+          line1: d.address || "",
+          line2: "",
+          town: d.city || "",
+          county: "",
+          postcode: d.postcode || "",
+          country: d.country || "",
+        },
+        serviceAddress: { line1: "", line2: "", town: "", county: "", postcode: "", country: "" },
+        shareholderAddress: { line1: "", line2: "", town: "", county: "", postcode: "", country: "" },
+        shareholdings: {
+          shareClass: "Ordinary",
+          currency: "GBP",
+          nominalValue: "1",
+          numberOfShares: "1",
+          amountPaid: "1",
+        },
+        significantControl: {
+          trustShares25: "No",
+          trustVotingRights25: "",
+          firmShares: "No",
+          firmVotingRights: "No",
+          appointDirectors: "No",
+          trustControl: {
+            sharesOver25: "No",
+            votingRightsOver25: "",
+          },
+          firmControl: {
+            sharesOver25: "No",
+            votingRightsOver25: "",
+          },
+        },
+      }))
+    );
+    setActiveTab("create");
+    setCurrentStep(0);
+    setShowDetailModal(false);
+  };
+
+  const handleSubmitIncorporationToCompaniesHouse = (inc: CompanyIncorporation) => {
+    const updated = { ...inc, status: "submitted" as const };
+    localStorage.setItem(`incorporation_${inc.id}`, JSON.stringify(updated));
+    setIncorporations(incorporations.map(i => i.id === inc.id ? updated : i));
+    setShowDetailModal(false);
+    toast.success("Company incorporation submitted to Companies House!");
+  };
+
   return (
     <AdminLayout>
       <div className="p-8 space-y-8">

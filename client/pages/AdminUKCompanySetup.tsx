@@ -3030,7 +3030,30 @@ export default function AdminUKCompanySetup() {
                   </div>
                 )}
 
-                {(selectedIncorporation.status === "submitted" || selectedIncorporation.status === "completed") && (
+                {selectedIncorporation.paymentStatus === "paid" && (
+                  <div className="border-t border-slate-200 pt-6 bg-green-50 p-6 rounded-lg">
+                    <h3 className="font-bold text-green-900 mb-4">✓ Order Confirmed</h3>
+                    <div className="space-y-3 text-green-800">
+                      <p>Your company incorporation order has been received by Companies House.</p>
+                      <div className="bg-white p-3 rounded border border-green-200">
+                        <p className="text-xs font-bold text-slate-600">PAYMENT REFERENCE</p>
+                        <p className="font-mono font-bold">{selectedIncorporation.paymentReference}</p>
+                      </div>
+                      <div className="text-sm space-y-2">
+                        <p><strong>Next Steps:</strong></p>
+                        <ol className="list-decimal list-inside space-y-1">
+                          <li>Companies House will process your order (3-5 business days)</li>
+                          <li>You'll receive a confirmation email with your company number</li>
+                          <li>Your company will be entered in the Companies House register</li>
+                          <li>You can then manage your company online</li>
+                        </ol>
+                      </div>
+                      <p className="text-xs">You can use the payment reference above to track your order status with Companies House.</p>
+                    </div>
+                  </div>
+                )}
+
+                {(selectedIncorporation.status === "submitted" || selectedIncorporation.status === "completed") && selectedIncorporation.paymentStatus === "paid" && (
                   <div className="border-t border-slate-200 pt-6">
                     <h3 className="font-bold text-slate-900 mb-4">Companies House Details</h3>
                     <div className="space-y-4">

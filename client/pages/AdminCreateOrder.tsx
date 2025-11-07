@@ -69,6 +69,9 @@ export default function AdminCreateOrder() {
   >([]);
   const [fileDescription, setFileDescription] = useState("");
   const [companyName, setCompanyName] = useState("");
+  const [companyNumber, setCompanyNumber] = useState("");
+  const [showCompanySelector, setShowCompanySelector] = useState(false);
+  const [availableCompanies, setAvailableCompanies] = useState(mockCompaniesForSale.filter(c => c.country === "United Kingdom" && c.registrationStatus !== "sold"));
 
   const selectedProduct = mockProducts.find((p) => p.id === formData.productId);
   const salesStaff = mockStaff.filter((s) => s.role === "sales");

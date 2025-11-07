@@ -320,27 +320,50 @@ export default function AdminCompanies() {
                     <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
                       Company Name
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
-                      Country
-                    </th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
-                      Company No
-                    </th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
-                      User
-                    </th>
+                    {selectedCountry === "UK" ? (
+                      <>
+                        <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
+                          Company Number
+                        </th>
+                        <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
+                          Incorporation Date
+                        </th>
+                        <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
+                          Next Confirmation Date
+                        </th>
+                        <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
+                          First Accounts Made Up To
+                        </th>
+                      </>
+                    ) : (
+                      <>
+                        <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
+                          Country
+                        </th>
+                        <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
+                          Company No
+                        </th>
+                        <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
+                          User
+                        </th>
+                      </>
+                    )}
                     <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
                       Status
                     </th>
                     <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
                       Incorporated
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
-                      Next Renewal
-                    </th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
-                      Accounts
-                    </th>
+                    {selectedCountry !== "UK" && (
+                      <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
+                        Next Renewal
+                      </th>
+                    )}
+                    {selectedCountry !== "UK" && (
+                      <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
+                        Accounts
+                      </th>
+                    )}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200">
@@ -358,15 +381,34 @@ export default function AdminCompanies() {
                             {company.companyName}
                           </p>
                         </td>
-                        <td className="px-6 py-4 text-sm text-slate-600">
-                          {company.country}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-slate-600">
-                          {company.companyNumber}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-slate-600">
-                          {getUserName(company.userId)}
-                        </td>
+                        {selectedCountry === "UK" ? (
+                          <>
+                            <td className="px-6 py-4 text-sm text-slate-600">
+                              {company.companyNumber}
+                            </td>
+                            <td className="px-6 py-4 text-sm text-slate-600">
+                              {formatDate(company.incorporationDate)}
+                            </td>
+                            <td className="px-6 py-4 text-sm text-slate-600">
+                              {formatDate(company.nextRenewalDate)}
+                            </td>
+                            <td className="px-6 py-4 text-sm text-slate-600">
+                              {formatDate(company.nextAccountsFilingDate)}
+                            </td>
+                          </>
+                        ) : (
+                          <>
+                            <td className="px-6 py-4 text-sm text-slate-600">
+                              {company.country}
+                            </td>
+                            <td className="px-6 py-4 text-sm text-slate-600">
+                              {company.companyNumber}
+                            </td>
+                            <td className="px-6 py-4 text-sm text-slate-600">
+                              {getUserName(company.userId)}
+                            </td>
+                          </>
+                        )}
                         <td className="px-6 py-4">
                           <span
                             className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${
@@ -385,27 +427,31 @@ export default function AdminCompanies() {
                         <td className="px-6 py-4 text-sm text-slate-600">
                           {formatDate(company.incorporationDate)}
                         </td>
-                        <td className="px-6 py-4">
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm text-slate-600">
-                              {formatDate(company.nextRenewalDate)}
-                            </span>
+                        {selectedCountry !== "UK" && (
+                          <td className="px-6 py-4">
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm text-slate-600">
+                                {formatDate(company.nextRenewalDate)}
+                              </span>
+                              {isRenewalSoon && (
+                                <AlertCircle
+                                  className="w-4 h-4 text-orange-600"
+                                  title={`${daysUntilRenewal} days remaining`}
+                                />
+                              )}
+                            </div>
                             {isRenewalSoon && (
-                              <AlertCircle
-                                className="w-4 h-4 text-orange-600"
-                                title={`${daysUntilRenewal} days remaining`}
-                              />
+                              <p className="text-xs text-orange-600 mt-1">
+                                {daysUntilRenewal}d
+                              </p>
                             )}
-                          </div>
-                          {isRenewalSoon && (
-                            <p className="text-xs text-orange-600 mt-1">
-                              {daysUntilRenewal}d
-                            </p>
-                          )}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-slate-600">
-                          {formatDate(company.nextAccountsFilingDate)}
-                        </td>
+                          </td>
+                        )}
+                        {selectedCountry !== "UK" && (
+                          <td className="px-6 py-4 text-sm text-slate-600">
+                            {formatDate(company.nextAccountsFilingDate)}
+                          </td>
+                        )}
                       </tr>
                     );
                   })}

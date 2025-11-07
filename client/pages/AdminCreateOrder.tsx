@@ -95,6 +95,16 @@ export default function AdminCreateOrder() {
           countries: [product.country],
         }));
         setSelectedCountries([product.country]);
+
+        // Show company selector if UK Acquisitions Package is selected
+        if (product.id === "P005") { // UK Acquisitions Package
+          setShowCompanySelector(true);
+          setAvailableCompanies(mockCompaniesForSale.filter(c => c.country === "United Kingdom" && c.registrationStatus !== "sold"));
+        } else {
+          setShowCompanySelector(false);
+          setCompanyName("");
+          setCompanyNumber("");
+        }
       }
     } else {
       setFormData((prev) => ({

@@ -449,7 +449,8 @@ export default function AdminCompaniesNeedRenewal() {
                               <div className="flex items-center gap-2">
                                 <Button
                                   onClick={() => {
-                                    // TODO: Navigate to company detail view
+                                    setSelectedCompany(company);
+                                    setShowDetailModal(true);
                                   }}
                                   className="bg-blue-600 hover:bg-blue-700 text-white text-xs h-8 px-3"
                                 >
@@ -457,7 +458,7 @@ export default function AdminCompaniesNeedRenewal() {
                                 </Button>
                                 <Button
                                   onClick={() => {
-                                    // TODO: Navigate to company edit page
+                                    toast.info("Edit functionality coming soon");
                                   }}
                                   className="bg-slate-600 hover:bg-slate-700 text-white text-xs h-8 px-3"
                                 >

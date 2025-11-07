@@ -47,6 +47,7 @@ import ClientDocuments from "./pages/ClientDocuments";
 import ClientProfile from "./pages/ClientProfile";
 import ClientCompanies from "./pages/ClientCompanies";
 import AdminCompanies from "./pages/AdminCompanies";
+import AdminCompaniesNeedRenewal from "./pages/AdminCompaniesNeedRenewal";
 import AdminCompaniesForSale from "./pages/AdminCompaniesForSale";
 import NotFound from "./pages/NotFound";
 

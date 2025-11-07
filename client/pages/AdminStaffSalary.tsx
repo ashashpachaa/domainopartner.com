@@ -655,14 +655,59 @@ export default function AdminStaffSalary() {
           </div>
 
           {/* Net Salary Calculation */}
-          <div className="mt-6 pt-6 border-t border-green-300">
+          <div className="mt-6 pt-6 border-t border-green-300 space-y-4">
             <div className="flex justify-between items-center">
               <p className="text-lg font-semibold text-slate-900">
-                Estimated Net Salary (before underperformance deduction):
+                Base Salary:
               </p>
-              <p className="text-3xl font-bold text-green-600">
+              <p className="text-2xl font-bold text-slate-900">
                 {currencySymbol}
-                {(formData.baseSalary - formData.totalRejectionFees).toLocaleString()}
+                {formData.baseSalary.toLocaleString()}
+              </p>
+            </div>
+            {currentMonthBonus && currentMonthBonus.bonusAmount > 0 && (
+              <div className="flex justify-between items-center text-green-700">
+                <p className="text-lg font-semibold">
+                  + Current Month Bonus (Earned):
+                </p>
+                <p className="text-2xl font-bold text-green-600">
+                  +{currencySymbol}
+                  {currentMonthBonus.bonusAmount.toLocaleString()}
+                </p>
+              </div>
+            )}
+            <div className="flex justify-between items-center text-red-700">
+              <p className="text-lg font-semibold">
+                - Rejection Fees:
+              </p>
+              <p className="text-2xl font-bold text-red-600">
+                -{currencySymbol}
+                {formData.totalRejectionFees.toLocaleString()}
+              </p>
+            </div>
+            {formData.underperformanceDeduction > 0 && (
+              <div className="flex justify-between items-center text-red-700">
+                <p className="text-lg font-semibold">
+                  - Underperformance Deduction:
+                </p>
+                <p className="text-2xl font-bold text-red-600">
+                  -{currencySymbol}
+                  {formData.underperformanceDeduction.toLocaleString()}
+                </p>
+              </div>
+            )}
+            <div className="flex justify-between items-center pt-4 border-t border-green-300 bg-green-100 px-3 py-2 rounded">
+              <p className="text-lg font-bold text-green-900">
+                Total Compensation:
+              </p>
+              <p className="text-3xl font-bold text-green-900">
+                {currencySymbol}
+                {(
+                  formData.baseSalary -
+                  formData.totalRejectionFees -
+                  (formData.underperformanceDeduction > 0 ? formData.underperformanceDeduction : 0) +
+                  (currentMonthBonus?.bonusAmount || 0)
+                ).toLocaleString()}
               </p>
             </div>
           </div>

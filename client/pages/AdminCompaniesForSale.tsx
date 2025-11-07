@@ -201,6 +201,21 @@ export default function AdminCompaniesForSale() {
       return;
     }
 
+    if (!importAuthCode.trim()) {
+      toast.error("Auth Code is required to import a company");
+      return;
+    }
+
+    // Check for duplicate company number
+    const isDuplicate = [...mockCompaniesForSale, ...importedCompanies].some(
+      (c) => c.companyNumber === fetchedCompanyData.companyNumber
+    );
+
+    if (isDuplicate) {
+      toast.error("Company with this number already exists");
+      return;
+    }
+
     const newCompany: CompanyForSale = {
       id: `CFS-CH-${Date.now()}`,
       companyName: fetchedCompanyData.companyName,
@@ -208,7 +223,7 @@ export default function AdminCompaniesForSale() {
       incorporationDate: fetchedCompanyData.incorporationDate || new Date().toISOString(),
       nextConfirmationDate: fetchedCompanyData.nextConfirmationDate || new Date().toISOString(),
       firstAccountsMadeUpTo: fetchedCompanyData.firstAccountsMadeUpTo || new Date().toISOString(),
-      authCode: `CH-${fetchedCompanyData.companyNumber}`,
+      authCode: importAuthCode.trim(),
       country: "United Kingdom",
       registrationStatus: fetchedCompanyData.status === "active" ? "active" : "dormant",
       businessType: fetchedCompanyData.sic?.[0] || "General Business",
@@ -226,6 +241,7 @@ export default function AdminCompaniesForSale() {
     setImportedCompanies([...importedCompanies, newCompany]);
     toast.success(`${newCompany.companyName} has been imported!`);
     setFetchedCompanyData(null);
+    setImportAuthCode("");
     setSearchCompanyNumber("");
     setSearchAuthCode("");
   };

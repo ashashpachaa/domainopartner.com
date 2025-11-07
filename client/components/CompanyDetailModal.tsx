@@ -1,6 +1,6 @@
-import { X, User, Phone, Mail, MapPin, Building2 } from "lucide-react";
+import { X, User, Phone, Mail, MapPin, Building2, UserCheck } from "lucide-react";
 import { RegisteredCompany } from "@/hooks/useCompanyDetails";
-import { mockUsers } from "@/lib/mockData";
+import { mockUsers, mockOrders, mockStaff } from "@/lib/mockData";
 
 interface CompanyDetailModalProps {
   company: RegisteredCompany;
@@ -12,6 +12,14 @@ export default function CompanyDetailModal({
   onClose,
 }: CompanyDetailModalProps) {
   const owner = mockUsers.find((u) => u.id === company.userId);
+
+  // Find the order linked to this company
+  const linkedOrder = mockOrders.find((o) => o.id === company.orderId);
+
+  // Get the sales staff assigned to this company
+  const salesStaff = linkedOrder
+    ? mockStaff.find((s) => s.id === linkedOrder.assignedToSalesId)
+    : null;
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">

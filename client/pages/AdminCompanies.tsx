@@ -310,6 +310,9 @@ export default function AdminCompanies() {
                       Company Name
                     </th>
                     <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
+                      Country
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
                       Company No
                     </th>
                     <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">

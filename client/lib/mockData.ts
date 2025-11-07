@@ -336,6 +336,9 @@ export interface CompanyForSale {
   companyNumber: string;
   country: string;
   incorporationDate: string;
+  nextConfirmationDate: string; // First statement date
+  firstAccountsMadeUpTo: string;
+  authCode: string;
   registrationStatus: "active" | "dormant" | "liquidation";
   businessType: string;
   askingPrice: number;

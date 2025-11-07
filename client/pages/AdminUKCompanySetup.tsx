@@ -687,14 +687,6 @@ export default function AdminUKCompanySetup() {
                             </div>
                           </div>
                         </div>
-
-                        <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                          <h4 className="font-bold text-blue-900">Price of incorporation</h4>
-                          <p className="text-blue-900 font-bold text-lg mt-2">Total (inc. VAT): £{(12 * 1.2).toFixed(2)}</p>
-                          <p className="text-blue-700 text-sm mt-1">
-                            <a href="#" className="underline">View breakdown</a>
-                          </p>
-                        </div>
                       </div>
                     )}
 

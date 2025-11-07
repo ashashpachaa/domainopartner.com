@@ -321,6 +321,7 @@ export interface RegisteredCompany {
   userId: string;
   companyNumber: string;
   companyName: string;
+  country: string; // e.g., "United Kingdom", "United States", "Sweden"
   incorporationDate: string; // YYYY-MM-DD
   nextRenewalDate: string; // YYYY-MM-DD
   nextAccountsFilingDate: string; // YYYY-MM-DD

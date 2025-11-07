@@ -16,13 +16,29 @@ import { Input } from "@/components/ui/input";
 import { mockProducts, Product } from "@/lib/mockData";
 
 export default function AdminProducts() {
-  const [products, setProducts] = useState<Product[]>(mockProducts);
+  const [products, setProducts] = useState<Product[]>(() => {
+    // Load from localStorage first, merge with mockProducts
+    const storedProducts = localStorage.getItem("products");
+    if (storedProducts) {
+      try {
+        return JSON.parse(storedProducts);
+      } catch {
+        return mockProducts;
+      }
+    }
+    return mockProducts;
+  });
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState<
     "all" | "active" | "inactive"
   >("all");
   const [serviceFilter, setServiceFilter] = useState<string>("");
   const [selectedProducts, setSelectedProducts] = useState<Set<string>>(new Set());
+
+  // Save products to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem("products", JSON.stringify(products));
+  }, [products]);
 
   const filteredProducts = products.filter((product) => {
     const matchesSearch =

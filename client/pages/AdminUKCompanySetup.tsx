@@ -2901,6 +2901,115 @@ export default function AdminUKCompanySetup() {
             )}
           </div>
         )}
+
+        {showDetailModal && selectedIncorporation && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-lg shadow-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+              <div className="sticky top-0 bg-white border-b border-slate-200 p-6 flex items-center justify-between">
+                <h2 className="text-2xl font-bold text-slate-900">Company Details</h2>
+                <button
+                  onClick={() => setShowDetailModal(false)}
+                  className="text-slate-400 hover:text-slate-600"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+
+              <div className="p-6 space-y-6">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm text-slate-600">Company Name</p>
+                    <p className="font-bold text-slate-900">{selectedIncorporation.companyName}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-slate-600">Status</p>
+                    <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(selectedIncorporation.status)}`}>
+                      {selectedIncorporation.status.toUpperCase()}
+                    </span>
+                  </div>
+                  <div>
+                    <p className="text-sm text-slate-600">Company Type</p>
+                    <p className="font-bold text-slate-900">{selectedIncorporation.companyType.replace(/_/g, " ")}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-slate-600">SIC Code</p>
+                    <p className="font-bold text-slate-900">{selectedIncorporation.sicCode}</p>
+                  </div>
+                </div>
+
+                <div className="border-t border-slate-200 pt-6">
+                  <h3 className="font-bold text-slate-900 mb-4">Registered Office Address</h3>
+                  <p className="text-slate-700">{selectedIncorporation.registeredOfficeAddress}</p>
+                  <p className="text-slate-700">{selectedIncorporation.registeredOfficeCity} {selectedIncorporation.registeredOfficePostcode}</p>
+                  <p className="text-slate-700">{selectedIncorporation.registeredOfficeCountry}</p>
+                </div>
+
+                <div className="border-t border-slate-200 pt-6">
+                  <h3 className="font-bold text-slate-900 mb-4">Share Capital</h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-sm text-slate-600">Amount</p>
+                      <p className="font-bold text-slate-900">£{selectedIncorporation.shareCapital}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-slate-600">Filing Fee</p>
+                      <p className="font-bold text-slate-900">£{selectedIncorporation.filingFee}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="border-t border-slate-200 pt-6">
+                  <h3 className="font-bold text-slate-900 mb-4">Directors ({selectedIncorporation.directors.length})</h3>
+                  <div className="space-y-2">
+                    {selectedIncorporation.directors.map((d, i) => (
+                      <div key={i} className="bg-slate-50 p-3 rounded-lg">
+                        <p className="font-bold text-slate-900">{d.firstName} {d.lastName}</p>
+                        <p className="text-sm text-slate-600">{d.address}, {d.city} {d.postcode}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="border-t border-slate-200 pt-6">
+                  <h3 className="font-bold text-slate-900 mb-4">Shareholders ({selectedIncorporation.shareholders.length})</h3>
+                  <div className="space-y-2">
+                    {selectedIncorporation.shareholders.map((s, i) => (
+                      <div key={i} className="bg-slate-50 p-3 rounded-lg">
+                        <p className="font-bold text-slate-900">{s.firstName} {s.lastName}</p>
+                        <p className="text-sm text-slate-600">Shares: {s.shareAllocation} ({s.ownershipPercentage}%)</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="border-t border-slate-200 pt-6 flex gap-3">
+                  <Button
+                    onClick={() => setShowDetailModal(false)}
+                    variant="outline"
+                  >
+                    Close
+                  </Button>
+                  {selectedIncorporation.status === "draft" && (
+                    <>
+                      <Button
+                        onClick={() => handleEditIncorporation(selectedIncorporation)}
+                        variant="outline"
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        onClick={() => handleSubmitIncorporationToCompaniesHouse(selectedIncorporation)}
+                        className="bg-green-600 hover:bg-green-700"
+                      >
+                        Submit to Companies House
+                      </Button>
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </AdminLayout>
   );

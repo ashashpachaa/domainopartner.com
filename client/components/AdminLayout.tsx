@@ -29,7 +29,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [expandedMenu, setExpandedMenu] = useState<string | null>(null);
+  const [expandedMenu, setExpandedMenu] = useState<string | null>(
+    location.pathname.startsWith("/admin/companies") ? "companies" : null
+  );
 
   const handleLogout = () => {
     localStorage.removeItem("adminToken");

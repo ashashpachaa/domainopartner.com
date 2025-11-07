@@ -287,9 +287,87 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       {/* Main Content */}
       <div className="flex-1 overflow-auto">
         {/* Top Bar */}
-        <header className="bg-white border-b border-slate-200 px-8 py-4 flex items-center justify-between">
+        <header className="bg-white border-b border-slate-200 px-8 py-4 flex items-center justify-between relative">
           <h1 className="text-2xl font-bold text-slate-900">Admin Dashboard</h1>
           <div className="flex items-center gap-4">
+            {/* View Dashboard Dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => setShowDashboardDropdown(!showDashboardDropdown)}
+                className="flex items-center gap-2 px-4 py-2 bg-primary-50 hover:bg-primary-100 border border-primary-200 rounded-lg text-primary-700 font-medium transition"
+              >
+                <Eye className="w-4 h-4" />
+                View Dashboard
+                <ChevronDown className="w-4 h-4" />
+              </button>
+
+              {/* Dropdown Menu */}
+              {showDashboardDropdown && (
+                <div className="absolute right-0 mt-2 w-80 bg-white border border-slate-200 rounded-lg shadow-lg z-50">
+                  {/* Tabs */}
+                  <div className="flex border-b border-slate-200">
+                    <button
+                      onClick={() => setDashboardTab("users")}
+                      className={`flex-1 px-4 py-3 font-medium text-sm transition ${
+                        dashboardTab === "users"
+                          ? "text-primary-600 border-b-2 border-primary-600"
+                          : "text-slate-600 hover:text-slate-900"
+                      }`}
+                    >
+                      👥 Users ({mockUsers.length})
+                    </button>
+                    <button
+                      onClick={() => setDashboardTab("staff")}
+                      className={`flex-1 px-4 py-3 font-medium text-sm transition ${
+                        dashboardTab === "staff"
+                          ? "text-primary-600 border-b-2 border-primary-600"
+                          : "text-slate-600 hover:text-slate-900"
+                      }`}
+                    >
+                      👨‍💼 Staff ({mockStaff.length})
+                    </button>
+                  </div>
+
+                  {/* List */}
+                  <div className="max-h-96 overflow-y-auto">
+                    {dashboardTab === "users" ? (
+                      mockUsers.map((user) => (
+                        <button
+                          key={user.id}
+                          onClick={() => {
+                            navigate(`/admin/view-user/${user.id}`);
+                            setShowDashboardDropdown(false);
+                          }}
+                          className="w-full text-left px-4 py-3 hover:bg-slate-50 border-b border-slate-100 transition"
+                        >
+                          <p className="font-medium text-slate-900">
+                            {user.firstName} {user.lastName}
+                          </p>
+                          <p className="text-xs text-slate-600">{user.email}</p>
+                        </button>
+                      ))
+                    ) : (
+                      mockStaff.map((staff) => (
+                        <button
+                          key={staff.id}
+                          onClick={() => {
+                            navigate(`/admin/view-staff/${staff.id}`);
+                            setShowDashboardDropdown(false);
+                          }}
+                          className="w-full text-left px-4 py-3 hover:bg-slate-50 border-b border-slate-100 transition"
+                        >
+                          <p className="font-medium text-slate-900">
+                            {staff.firstName} {staff.lastName}
+                          </p>
+                          <p className="text-xs text-slate-600">{staff.department || "Staff"}</p>
+                        </button>
+                      ))
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
             <div className="text-right text-sm">
               <p className="text-slate-900 font-medium">Admin User</p>
               <p className="text-slate-600">admin@domaino.com</p>

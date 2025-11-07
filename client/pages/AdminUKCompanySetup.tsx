@@ -195,11 +195,20 @@ export default function AdminUKCompanySetup() {
   const handleSubmitIncorporation = () => {
     if (
       !formData.companyName ||
+      !formData.registeredOfficeAddress ||
+      !formData.registeredOfficeCity ||
+      !formData.registeredOfficePostcode ||
+      !formData.shareCapital ||
       directors.length === 0 ||
-      shareholders.length === 0
+      shareholders.length === 0 ||
+      !formData.memorandumOfAssociationAccepted ||
+      !formData.articlesOfAssociationAccepted ||
+      !formData.complianceStatementAccepted ||
+      !formData.directorConsentAccepted ||
+      !formData.shareholderConsentAccepted
     ) {
       toast.error(
-        "Please fill in all required fields (company details, at least 1 director, at least 1 shareholder)",
+        "Please fill in all required fields and accept all declarations (company details, at least 1 director, at least 1 shareholder, and all legal declarations)",
       );
       return;
     }

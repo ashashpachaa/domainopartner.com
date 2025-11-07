@@ -747,6 +747,7 @@ export default function AdminUKCompanySetup() {
   };
 
   const resetForm = () => {
+    setEditingIncorporationId(null);
     setFormData({
       companyName: "",
       companyType: "private_limited",

@@ -361,15 +361,16 @@ export async function handleIncorporationSubmission(req: any, res: any) {
       // Always return success with filing reference
       const responsePayload = {
         success: true,
-        filingReference,
+        filingReference: actualFilingReference,
         incorporationId,
         message: apiMessage,
         status: "submitted",
         submittedAt: new Date().toISOString(),
         apiSuccess,
+        apiResponse: responseData,
       };
 
-      console.log("Incorporation response:", responsePayload);
+      console.log("\n📋 Final Incorporation Response:", responsePayload);
       return res.status(200).json(responsePayload);
     } catch (error: any) {
       console.error("Incorporation processing error:", error);

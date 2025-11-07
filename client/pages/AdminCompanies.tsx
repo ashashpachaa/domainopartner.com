@@ -440,6 +440,11 @@ export default function AdminCompanies() {
                           </span>
                         </td>
                         {selectedCountry === "UK" && (
+                          <td className="px-6 py-4 text-sm font-medium text-slate-900">
+                            {company.authCode}
+                          </td>
+                        )}
+                        {selectedCountry === "UK" && (
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-2">
                               <Button

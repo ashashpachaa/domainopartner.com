@@ -2863,10 +2863,33 @@ export default function AdminUKCompanySetup() {
                           </div>
                         </div>
                       </div>
-                      <Button variant="outline" className="flex items-center gap-2">
-                        View Details
-                        <ChevronRight className="w-4 h-4" />
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button
+                          onClick={() => handleViewDetails(inc)}
+                          variant="outline"
+                          className="flex items-center gap-2"
+                        >
+                          View Details
+                          <ChevronRight className="w-4 h-4" />
+                        </Button>
+                        {inc.status === "draft" && (
+                          <>
+                            <Button
+                              onClick={() => handleEditIncorporation(inc)}
+                              variant="outline"
+                              className="flex items-center gap-2"
+                            >
+                              Edit
+                            </Button>
+                            <Button
+                              onClick={() => handleSubmitIncorporationToCompaniesHouse(inc)}
+                              className="bg-green-600 hover:bg-green-700 flex items-center gap-2"
+                            >
+                              Submit
+                            </Button>
+                          </>
+                        )}
+                      </div>
                     </div>
                   </div>
                 ))}

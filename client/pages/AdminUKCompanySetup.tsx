@@ -353,6 +353,21 @@ export default function AdminUKCompanySetup() {
       return;
     }
 
+    if (isValidating) {
+      toast.error("Please wait for company name validation to complete");
+      return;
+    }
+
+    if (validationResult?.isAvailable === false) {
+      toast.error("Please choose a different company name. This name already exists or is too similar to an existing company.");
+      return;
+    }
+
+    if (validationResult?.isAvailable === null && formData.companyName) {
+      toast.error("Please validate the company name before submitting");
+      return;
+    }
+
     if (officers.length === 0) {
       toast.error("Please add at least one director");
       return;

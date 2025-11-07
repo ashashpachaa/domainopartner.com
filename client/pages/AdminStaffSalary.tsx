@@ -126,6 +126,33 @@ export default function AdminStaffSalary() {
 
   const currencySymbol = currencySymbols[formData.currency] || formData.currency;
 
+  // Get current month and bonuses for this staff
+  const today = new Date();
+  const currentMonth = today.getMonth() + 1;
+  const currentYear = today.getFullYear();
+
+  const staffBonuses = useMemo(() => {
+    return mockStaffBonuses
+      .filter((b) => b.staffId === staffId)
+      .sort((a, b) => {
+        const dateA = new Date(a.year, a.month - 1);
+        const dateB = new Date(b.year, b.month - 1);
+        return dateB.getTime() - dateA.getTime();
+      });
+  }, [staffId]);
+
+  const currentMonthBonus = staffBonuses.find(
+    (b) => b.month === currentMonth && b.year === currentYear
+  );
+
+  const totalBonusesEarned = staffBonuses
+    .filter((b) => b.status === "earned")
+    .reduce((sum, b) => sum + b.bonusAmount, 0);
+
+  const totalBonusesPaid = staffBonuses
+    .filter((b) => b.status === "paid")
+    .reduce((sum, b) => sum + b.bonusAmount, 0);
+
   return (
     <AdminLayout>
       <div className="space-y-6">

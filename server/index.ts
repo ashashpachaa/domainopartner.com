@@ -8,6 +8,7 @@ import {
   handleCompanySearch,
   handleCompanyDetails,
   handleCompanyApprovalWebhook,
+  handleWebhookStatus,
 } from "./routes/companiesHouse";
 
 const upload = multer({ storage: multer.memoryStorage() });

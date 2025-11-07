@@ -249,6 +249,19 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             {sidebarOpen && <span className="font-medium">Items/Products</span>}
           </Link>
           <Link
+            to="/admin/accounting"
+            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition ${
+              isActive("/admin/accounting") ||
+              location.pathname.startsWith("/admin/accounting/") ||
+              isActive("/admin/expenses")
+                ? "bg-primary-600 text-white"
+                : "text-slate-400 hover:bg-slate-800"
+            }`}
+          >
+            <Wallet className="w-5 h-5" />
+            {sidebarOpen && <span className="font-medium">Accounting</span>}
+          </Link>
+          <Link
             to="/admin/staff"
             className={`flex items-center gap-3 px-4 py-3 rounded-lg transition ${
               isActive("/admin/staff")

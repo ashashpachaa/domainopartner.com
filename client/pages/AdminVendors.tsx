@@ -19,7 +19,9 @@ interface VendorFormData {
 export default function AdminVendors() {
   const [vendors, setVendors] = useState<Vendor[]>(mockVendors);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterStatus, setFilterStatus] = useState<"all" | "active" | "inactive">("all");
+  const [filterStatus, setFilterStatus] = useState<
+    "all" | "active" | "inactive"
+  >("all");
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState<VendorFormData>({
@@ -42,7 +44,7 @@ export default function AdminVendors() {
         (v) =>
           v.name.toLowerCase().includes(search) ||
           v.email.toLowerCase().includes(search) ||
-          v.country.toLowerCase().includes(search)
+          v.country.toLowerCase().includes(search),
       );
     }
 
@@ -58,7 +60,10 @@ export default function AdminVendors() {
       totalVendors: vendors.length,
       activeVendors: vendors.filter((v) => v.status === "active").length,
       totalSpent: vendors.reduce((sum, v) => sum + v.totalSpent, 0),
-      averageSpent: vendors.length > 0 ? vendors.reduce((sum, v) => sum + v.totalSpent, 0) / vendors.length : 0,
+      averageSpent:
+        vendors.length > 0
+          ? vendors.reduce((sum, v) => sum + v.totalSpent, 0) / vendors.length
+          : 0,
     };
   }, [vendors]);
 
@@ -82,7 +87,10 @@ export default function AdminVendors() {
         ? vendors.find((v) => v.id === editingId)?.totalSpent || 0
         : 0,
       currency: "USD",
-      createdAt: editingId ? vendors.find((v) => v.id === editingId)?.createdAt || new Date().toISOString() : new Date().toISOString(),
+      createdAt: editingId
+        ? vendors.find((v) => v.id === editingId)?.createdAt ||
+          new Date().toISOString()
+        : new Date().toISOString(),
     };
 
     if (editingId) {
@@ -129,7 +137,7 @@ export default function AdminVendors() {
 
   const handleStatusChange = (id: string, newStatus: "active" | "inactive") => {
     setVendors(
-      vendors.map((v) => (v.id === id ? { ...v, status: newStatus } : v))
+      vendors.map((v) => (v.id === id ? { ...v, status: newStatus } : v)),
     );
     toast.success(`Vendor marked as ${newStatus}`);
   };
@@ -140,8 +148,12 @@ export default function AdminVendors() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900">Vendor Management</h1>
-            <p className="text-slate-600 mt-2">Manage vendor information and payment terms</p>
+            <h1 className="text-3xl font-bold text-slate-900">
+              Vendor Management
+            </h1>
+            <p className="text-slate-600 mt-2">
+              Manage vendor information and payment terms
+            </p>
           </div>
           <Button
             onClick={() => {
@@ -169,13 +181,19 @@ export default function AdminVendors() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="bg-white rounded-lg border border-slate-200 p-6">
             <p className="text-slate-600 text-sm">Total Vendors</p>
-            <p className="text-2xl font-bold text-slate-900 mt-2">{stats.totalVendors}</p>
-            <p className="text-xs text-slate-500 mt-1">{stats.activeVendors} active</p>
+            <p className="text-2xl font-bold text-slate-900 mt-2">
+              {stats.totalVendors}
+            </p>
+            <p className="text-xs text-slate-500 mt-1">
+              {stats.activeVendors} active
+            </p>
           </div>
 
           <div className="bg-white rounded-lg border border-slate-200 p-6">
             <p className="text-slate-600 text-sm">Total Spent</p>
-            <p className="text-2xl font-bold text-slate-900 mt-2">${stats.totalSpent.toLocaleString()}</p>
+            <p className="text-2xl font-bold text-slate-900 mt-2">
+              ${stats.totalSpent.toLocaleString()}
+            </p>
           </div>
 
           <div className="bg-white rounded-lg border border-slate-200 p-6">
@@ -207,7 +225,9 @@ export default function AdminVendors() {
                 <input
                   type="text"
                   value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
                   placeholder="Vendor name"
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                 />
@@ -220,7 +240,9 @@ export default function AdminVendors() {
                 <input
                   type="email"
                   value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
                   placeholder="vendor@example.com"
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                 />
@@ -233,7 +255,9 @@ export default function AdminVendors() {
                 <input
                   type="tel"
                   value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, phone: e.target.value })
+                  }
                   placeholder="+1-xxx-xxx-xxxx"
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                 />
@@ -246,7 +270,9 @@ export default function AdminVendors() {
                 <input
                   type="text"
                   value={formData.country}
-                  onChange={(e) => setFormData({ ...formData, country: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, country: e.target.value })
+                  }
                   placeholder="Country"
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                 />
@@ -259,7 +285,9 @@ export default function AdminVendors() {
                 <input
                   type="text"
                   value={formData.address}
-                  onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, address: e.target.value })
+                  }
                   placeholder="Street address"
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                 />
@@ -272,7 +300,9 @@ export default function AdminVendors() {
                 <input
                   type="text"
                   value={formData.taxId}
-                  onChange={(e) => setFormData({ ...formData, taxId: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, taxId: e.target.value })
+                  }
                   placeholder="Tax ID"
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                 />
@@ -285,7 +315,9 @@ export default function AdminVendors() {
                 <input
                   type="number"
                   value={formData.paymentTerms}
-                  onChange={(e) => setFormData({ ...formData, paymentTerms: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, paymentTerms: e.target.value })
+                  }
                   placeholder="30"
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                 />
@@ -297,7 +329,9 @@ export default function AdminVendors() {
                 </label>
                 <select
                   value={formData.status}
-                  onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, status: e.target.value as any })
+                  }
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                 >
                   <option value="active">Active</option>
@@ -310,7 +344,10 @@ export default function AdminVendors() {
               <Button onClick={() => setShowForm(false)} variant="outline">
                 Cancel
               </Button>
-              <Button onClick={handleAddVendor} className="bg-primary-600 hover:bg-primary-700">
+              <Button
+                onClick={handleAddVendor}
+                className="bg-primary-600 hover:bg-primary-700"
+              >
                 {editingId ? "Update Vendor" : "Add Vendor"}
               </Button>
             </div>
@@ -343,13 +380,22 @@ export default function AdminVendors() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredVendors.length > 0 ? (
             filteredVendors.map((vendor) => (
-              <div key={vendor.id} className="bg-white rounded-lg border border-slate-200 overflow-hidden hover:shadow-lg transition">
-                <div className={`p-6 ${vendor.status === "active" ? "bg-green-50" : "bg-red-50"}`}>
+              <div
+                key={vendor.id}
+                className="bg-white rounded-lg border border-slate-200 overflow-hidden hover:shadow-lg transition"
+              >
+                <div
+                  className={`p-6 ${vendor.status === "active" ? "bg-green-50" : "bg-red-50"}`}
+                >
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-bold text-slate-900">{vendor.name}</h3>
+                    <h3 className="text-lg font-bold text-slate-900">
+                      {vendor.name}
+                    </h3>
                     <select
                       value={vendor.status}
-                      onChange={(e) => handleStatusChange(vendor.id, e.target.value as any)}
+                      onChange={(e) =>
+                        handleStatusChange(vendor.id, e.target.value as any)
+                      }
                       className={`px-3 py-1 rounded-full text-xs font-semibold border-0 ${
                         vendor.status === "active"
                           ? "bg-green-200 text-green-800"
@@ -364,14 +410,20 @@ export default function AdminVendors() {
                   <div className="space-y-2 mb-4">
                     <div className="flex items-center gap-2 text-slate-600">
                       <Mail className="w-4 h-4" />
-                      <a href={`mailto:${vendor.email}`} className="text-primary-600 hover:text-primary-700">
+                      <a
+                        href={`mailto:${vendor.email}`}
+                        className="text-primary-600 hover:text-primary-700"
+                      >
                         {vendor.email}
                       </a>
                     </div>
                     {vendor.phone && (
                       <div className="flex items-center gap-2 text-slate-600">
                         <Phone className="w-4 h-4" />
-                        <a href={`tel:${vendor.phone}`} className="text-primary-600 hover:text-primary-700">
+                        <a
+                          href={`tel:${vendor.phone}`}
+                          className="text-primary-600 hover:text-primary-700"
+                        >
                           {vendor.phone}
                         </a>
                       </div>
@@ -386,7 +438,9 @@ export default function AdminVendors() {
 
                   <div className="bg-white rounded-lg p-3 mb-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-slate-600">Total Spent</span>
+                      <span className="text-sm text-slate-600">
+                        Total Spent
+                      </span>
                       <span className="text-lg font-bold text-slate-900">
                         ${vendor.totalSpent.toLocaleString()}
                       </span>
@@ -396,12 +450,16 @@ export default function AdminVendors() {
                   <div className="grid grid-cols-2 gap-2 text-xs text-slate-600 bg-slate-50 rounded-lg p-3 mb-4">
                     <div>
                       <p className="text-slate-500">Payment Terms</p>
-                      <p className="font-bold text-slate-900">{vendor.paymentTerms} days</p>
+                      <p className="font-bold text-slate-900">
+                        {vendor.paymentTerms} days
+                      </p>
                     </div>
                     {vendor.taxId && (
                       <div>
                         <p className="text-slate-500">Tax ID</p>
-                        <p className="font-bold text-slate-900 truncate">{vendor.taxId}</p>
+                        <p className="font-bold text-slate-900 truncate">
+                          {vendor.taxId}
+                        </p>
                       </div>
                     )}
                   </div>
@@ -427,7 +485,9 @@ export default function AdminVendors() {
             ))
           ) : (
             <div className="col-span-full text-center py-12">
-              <p className="text-slate-500">No vendors found. Add one to get started.</p>
+              <p className="text-slate-500">
+                No vendors found. Add one to get started.
+              </p>
             </div>
           )}
         </div>

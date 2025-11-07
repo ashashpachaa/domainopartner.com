@@ -271,7 +271,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             }`}
           >
             <Building2 className="w-5 h-5" />
-            {sidebarOpen && <span className="font-medium">UK Company Setup</span>}
+            {sidebarOpen && (
+              <span className="font-medium">UK Company Setup</span>
+            )}
           </Link>
           <Link
             to="/admin/staff"
@@ -364,7 +366,11 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                   <div className="px-4 py-3 border-b border-slate-200">
                     <input
                       type="text"
-                      placeholder={dashboardTab === "users" ? "Search users..." : "Search staff..."}
+                      placeholder={
+                        dashboardTab === "users"
+                          ? "Search users..."
+                          : "Search staff..."
+                      }
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
@@ -374,59 +380,63 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
                   {/* List */}
                   <div className="max-h-96 overflow-y-auto">
-                    {dashboardTab === "users" ? (
-                      mockUsers
-                        .filter(
-                          (user) =>
-                            `${user.firstName} ${user.lastName}`
-                              .toLowerCase()
-                              .includes(searchQuery.toLowerCase()) ||
-                            user.email.toLowerCase().includes(searchQuery.toLowerCase()),
-                        )
-                        .map((user) => (
-                          <button
-                            key={user.id}
-                            onClick={() => {
-                              navigate(`/admin/view-user/${user.id}`);
-                              setShowDashboardDropdown(false);
-                              setSearchQuery("");
-                            }}
-                            className="w-full text-left px-4 py-3 hover:bg-slate-50 border-b border-slate-100 transition"
-                          >
-                            <p className="font-medium text-slate-900">
-                              {user.firstName} {user.lastName}
-                            </p>
-                            <p className="text-xs text-slate-600">{user.email}</p>
-                          </button>
-                        ))
-                    ) : (
-                      mockStaff
-                        .filter(
-                          (staff) =>
-                            `${staff.firstName} ${staff.lastName}`
-                              .toLowerCase()
-                              .includes(searchQuery.toLowerCase()) ||
-                            (staff.department || "")
-                              .toLowerCase()
-                              .includes(searchQuery.toLowerCase()),
-                        )
-                        .map((staff) => (
-                          <button
-                            key={staff.id}
-                            onClick={() => {
-                              navigate(`/admin/view-staff/${staff.id}`);
-                              setShowDashboardDropdown(false);
-                              setSearchQuery("");
-                            }}
-                            className="w-full text-left px-4 py-3 hover:bg-slate-50 border-b border-slate-100 transition"
-                          >
-                            <p className="font-medium text-slate-900">
-                              {staff.firstName} {staff.lastName}
-                            </p>
-                            <p className="text-xs text-slate-600">{staff.department || "Staff"}</p>
-                          </button>
-                        ))
-                    )}
+                    {dashboardTab === "users"
+                      ? mockUsers
+                          .filter(
+                            (user) =>
+                              `${user.firstName} ${user.lastName}`
+                                .toLowerCase()
+                                .includes(searchQuery.toLowerCase()) ||
+                              user.email
+                                .toLowerCase()
+                                .includes(searchQuery.toLowerCase()),
+                          )
+                          .map((user) => (
+                            <button
+                              key={user.id}
+                              onClick={() => {
+                                navigate(`/admin/view-user/${user.id}`);
+                                setShowDashboardDropdown(false);
+                                setSearchQuery("");
+                              }}
+                              className="w-full text-left px-4 py-3 hover:bg-slate-50 border-b border-slate-100 transition"
+                            >
+                              <p className="font-medium text-slate-900">
+                                {user.firstName} {user.lastName}
+                              </p>
+                              <p className="text-xs text-slate-600">
+                                {user.email}
+                              </p>
+                            </button>
+                          ))
+                      : mockStaff
+                          .filter(
+                            (staff) =>
+                              `${staff.firstName} ${staff.lastName}`
+                                .toLowerCase()
+                                .includes(searchQuery.toLowerCase()) ||
+                              (staff.department || "")
+                                .toLowerCase()
+                                .includes(searchQuery.toLowerCase()),
+                          )
+                          .map((staff) => (
+                            <button
+                              key={staff.id}
+                              onClick={() => {
+                                navigate(`/admin/view-staff/${staff.id}`);
+                                setShowDashboardDropdown(false);
+                                setSearchQuery("");
+                              }}
+                              className="w-full text-left px-4 py-3 hover:bg-slate-50 border-b border-slate-100 transition"
+                            >
+                              <p className="font-medium text-slate-900">
+                                {staff.firstName} {staff.lastName}
+                              </p>
+                              <p className="text-xs text-slate-600">
+                                {staff.department || "Staff"}
+                              </p>
+                            </button>
+                          ))}
 
                     {/* Empty State */}
                     {((dashboardTab === "users" &&
@@ -435,7 +445,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                           `${user.firstName} ${user.lastName}`
                             .toLowerCase()
                             .includes(searchQuery.toLowerCase()) ||
-                          user.email.toLowerCase().includes(searchQuery.toLowerCase()),
+                          user.email
+                            .toLowerCase()
+                            .includes(searchQuery.toLowerCase()),
                       ).length === 0) ||
                       (dashboardTab === "staff" &&
                         mockStaff.filter(

@@ -505,9 +505,25 @@ export interface StaffBonus {
 
 // ========== ACCOUNTING SYSTEM INTERFACES ==========
 
-export type ExpenseCategory = "payroll" | "utilities" | "office_supplies" | "equipment" | "rent" | "marketing" | "transportation" | "software" | "maintenance" | "vendor" | "other";
+export type ExpenseCategory =
+  | "payroll"
+  | "utilities"
+  | "office_supplies"
+  | "equipment"
+  | "rent"
+  | "marketing"
+  | "transportation"
+  | "software"
+  | "maintenance"
+  | "vendor"
+  | "other";
 
-export type TaxType = "income_tax" | "payroll_tax" | "vat" | "corporate_tax" | "sales_tax";
+export type TaxType =
+  | "income_tax"
+  | "payroll_tax"
+  | "vat"
+  | "corporate_tax"
+  | "sales_tax";
 
 export interface Expense {
   id: string;
@@ -917,7 +933,13 @@ export interface CompanyIncorporation {
   memorandumOfAssociation?: string; // Base64 encoded PDF
   articlesOfAssociation?: string; // Base64 encoded PDF
   statementOfCompliance?: string; // Declaration text
-  status: "draft" | "submitted" | "payment_pending" | "filing" | "completed" | "rejected";
+  status:
+    | "draft"
+    | "submitted"
+    | "payment_pending"
+    | "filing"
+    | "completed"
+    | "rejected";
   filingReference?: string;
   companyRegistrationNumber?: string;
   companyAuthenticationCode?: string;

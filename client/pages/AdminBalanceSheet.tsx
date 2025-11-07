@@ -7,9 +7,11 @@ import { Button } from "@/components/ui/button";
 export default function AdminBalanceSheet() {
   const balanceSheetData = useMemo(() => {
     // Assets
-    const cashBalance = mockOrders
-      .filter((o) => o.status === "completed")
-      .reduce((sum, o) => sum + o.amount, 0) - mockExpenses.reduce((sum, e) => sum + e.amount, 0);
+    const cashBalance =
+      mockOrders
+        .filter((o) => o.status === "completed")
+        .reduce((sum, o) => sum + o.amount, 0) -
+      mockExpenses.reduce((sum, e) => sum + e.amount, 0);
 
     const accountsReceivable = mockOrders
       .filter((o) => o.status === "awaiting_client_acceptance")
@@ -19,7 +21,8 @@ export default function AdminBalanceSheet() {
     const equipment = 75000;
     const otherAssets = 25000;
 
-    const totalAssets = cashBalance + accountsReceivable + inventory + equipment + otherAssets;
+    const totalAssets =
+      cashBalance + accountsReceivable + inventory + equipment + otherAssets;
 
     // Liabilities
     const accountsPayable = mockExpenses
@@ -30,7 +33,8 @@ export default function AdminBalanceSheet() {
     const longTermDebt = 100000;
     const otherLiabilities = 30000;
 
-    const totalLiabilities = accountsPayable + shortTermDebt + longTermDebt + otherLiabilities;
+    const totalLiabilities =
+      accountsPayable + shortTermDebt + longTermDebt + otherLiabilities;
 
     // Equity
     const commonStock = 300000;
@@ -119,9 +123,15 @@ TOTAL LIABILITIES AND EQUITY: $${(balanceSheetData.liabilities.total + balanceSh
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-slate-900">Balance Sheet</h1>
-            <p className="text-slate-600 mt-2">Assets, Liabilities & Equity as of {new Date().toLocaleDateString()}</p>
+            <p className="text-slate-600 mt-2">
+              Assets, Liabilities & Equity as of{" "}
+              {new Date().toLocaleDateString()}
+            </p>
           </div>
-          <Button onClick={downloadPDF} className="bg-primary-600 hover:bg-primary-700 flex items-center gap-2">
+          <Button
+            onClick={downloadPDF}
+            className="bg-primary-600 hover:bg-primary-700 flex items-center gap-2"
+          >
             <Download className="w-4 h-4" />
             Download PDF
           </Button>
@@ -138,24 +148,40 @@ TOTAL LIABILITIES AND EQUITY: $${(balanceSheetData.liabilities.total + balanceSh
             <div className="divide-y divide-slate-200">
               {/* Current Assets */}
               <div className="p-6">
-                <h3 className="font-bold text-slate-900 mb-3">Current Assets</h3>
+                <h3 className="font-bold text-slate-900 mb-3">
+                  Current Assets
+                </h3>
                 <div className="space-y-2 ml-4">
                   <div className="flex justify-between text-slate-600">
                     <span>Cash & Equivalents</span>
-                    <span>${balanceSheetData.assets.cash.toLocaleString()}</span>
+                    <span>
+                      ${balanceSheetData.assets.cash.toLocaleString()}
+                    </span>
                   </div>
                   <div className="flex justify-between text-slate-600">
                     <span>Accounts Receivable</span>
-                    <span>${balanceSheetData.assets.accountsReceivable.toLocaleString()}</span>
+                    <span>
+                      $
+                      {balanceSheetData.assets.accountsReceivable.toLocaleString()}
+                    </span>
                   </div>
                   <div className="flex justify-between text-slate-600">
                     <span>Inventory</span>
-                    <span>${balanceSheetData.assets.inventory.toLocaleString()}</span>
+                    <span>
+                      ${balanceSheetData.assets.inventory.toLocaleString()}
+                    </span>
                   </div>
                 </div>
                 <div className="flex justify-between font-bold text-slate-900 mt-3 pt-3 border-t border-slate-200">
                   <span>Total Current</span>
-                  <span>${(balanceSheetData.assets.cash + balanceSheetData.assets.accountsReceivable + balanceSheetData.assets.inventory).toLocaleString()}</span>
+                  <span>
+                    $
+                    {(
+                      balanceSheetData.assets.cash +
+                      balanceSheetData.assets.accountsReceivable +
+                      balanceSheetData.assets.inventory
+                    ).toLocaleString()}
+                  </span>
                 </div>
               </div>
 
@@ -165,24 +191,38 @@ TOTAL LIABILITIES AND EQUITY: $${(balanceSheetData.liabilities.total + balanceSh
                 <div className="space-y-2 ml-4">
                   <div className="flex justify-between text-slate-600">
                     <span>Equipment</span>
-                    <span>${balanceSheetData.assets.equipment.toLocaleString()}</span>
+                    <span>
+                      ${balanceSheetData.assets.equipment.toLocaleString()}
+                    </span>
                   </div>
                   <div className="flex justify-between text-slate-600">
                     <span>Other Assets</span>
-                    <span>${balanceSheetData.assets.other.toLocaleString()}</span>
+                    <span>
+                      ${balanceSheetData.assets.other.toLocaleString()}
+                    </span>
                   </div>
                 </div>
                 <div className="flex justify-between font-bold text-slate-900 mt-3 pt-3 border-t border-slate-200">
                   <span>Total Fixed</span>
-                  <span>${(balanceSheetData.assets.equipment + balanceSheetData.assets.other).toLocaleString()}</span>
+                  <span>
+                    $
+                    {(
+                      balanceSheetData.assets.equipment +
+                      balanceSheetData.assets.other
+                    ).toLocaleString()}
+                  </span>
                 </div>
               </div>
 
               {/* Total Assets */}
               <div className="p-6 bg-blue-50 border-t border-blue-200">
                 <div className="flex justify-between items-center">
-                  <h3 className="text-lg font-bold text-blue-900">TOTAL ASSETS</h3>
-                  <p className="text-2xl font-bold text-blue-600">${balanceSheetData.assets.total.toLocaleString()}</p>
+                  <h3 className="text-lg font-bold text-blue-900">
+                    TOTAL ASSETS
+                  </h3>
+                  <p className="text-2xl font-bold text-blue-600">
+                    ${balanceSheetData.assets.total.toLocaleString()}
+                  </p>
                 </div>
               </div>
             </div>
@@ -197,34 +237,56 @@ TOTAL LIABILITIES AND EQUITY: $${(balanceSheetData.liabilities.total + balanceSh
             <div className="divide-y divide-slate-200">
               {/* Current Liabilities */}
               <div className="p-6">
-                <h3 className="font-bold text-slate-900 mb-3">Current Liabilities</h3>
+                <h3 className="font-bold text-slate-900 mb-3">
+                  Current Liabilities
+                </h3>
                 <div className="space-y-2 ml-4">
                   <div className="flex justify-between text-slate-600">
                     <span>Accounts Payable</span>
-                    <span>${balanceSheetData.liabilities.accountsPayable.toLocaleString()}</span>
+                    <span>
+                      $
+                      {balanceSheetData.liabilities.accountsPayable.toLocaleString()}
+                    </span>
                   </div>
                   <div className="flex justify-between text-slate-600">
                     <span>Short-Term Debt</span>
-                    <span>${balanceSheetData.liabilities.shortTermDebt.toLocaleString()}</span>
+                    <span>
+                      $
+                      {balanceSheetData.liabilities.shortTermDebt.toLocaleString()}
+                    </span>
                   </div>
                   <div className="flex justify-between text-slate-600">
                     <span>Other Current Liab.</span>
-                    <span>${balanceSheetData.liabilities.other.toLocaleString()}</span>
+                    <span>
+                      ${balanceSheetData.liabilities.other.toLocaleString()}
+                    </span>
                   </div>
                 </div>
                 <div className="flex justify-between font-bold text-slate-900 mt-3 pt-3 border-t border-slate-200">
                   <span>Total Current</span>
-                  <span>${(balanceSheetData.liabilities.accountsPayable + balanceSheetData.liabilities.shortTermDebt + balanceSheetData.liabilities.other).toLocaleString()}</span>
+                  <span>
+                    $
+                    {(
+                      balanceSheetData.liabilities.accountsPayable +
+                      balanceSheetData.liabilities.shortTermDebt +
+                      balanceSheetData.liabilities.other
+                    ).toLocaleString()}
+                  </span>
                 </div>
               </div>
 
               {/* Long-Term Liabilities */}
               <div className="p-6">
-                <h3 className="font-bold text-slate-900 mb-3">Long-Term Liabilities</h3>
+                <h3 className="font-bold text-slate-900 mb-3">
+                  Long-Term Liabilities
+                </h3>
                 <div className="space-y-2 ml-4">
                   <div className="flex justify-between text-slate-600">
                     <span>Long-Term Debt</span>
-                    <span>${balanceSheetData.liabilities.longTermDebt.toLocaleString()}</span>
+                    <span>
+                      $
+                      {balanceSheetData.liabilities.longTermDebt.toLocaleString()}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -232,8 +294,12 @@ TOTAL LIABILITIES AND EQUITY: $${(balanceSheetData.liabilities.total + balanceSh
               {/* Total Liabilities */}
               <div className="p-6 bg-red-50 border-t border-red-200">
                 <div className="flex justify-between items-center">
-                  <h3 className="text-lg font-bold text-red-900">TOTAL LIABILITIES</h3>
-                  <p className="text-2xl font-bold text-red-600">${balanceSheetData.liabilities.total.toLocaleString()}</p>
+                  <h3 className="text-lg font-bold text-red-900">
+                    TOTAL LIABILITIES
+                  </h3>
+                  <p className="text-2xl font-bold text-red-600">
+                    ${balanceSheetData.liabilities.total.toLocaleString()}
+                  </p>
                 </div>
               </div>
             </div>
@@ -242,7 +308,9 @@ TOTAL LIABILITIES AND EQUITY: $${(balanceSheetData.liabilities.total + balanceSh
           {/* Equity */}
           <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
             <div className="bg-green-50 border-b border-green-200 p-6">
-              <h2 className="text-xl font-bold text-green-900">STOCKHOLDERS' EQUITY</h2>
+              <h2 className="text-xl font-bold text-green-900">
+                STOCKHOLDERS' EQUITY
+              </h2>
             </div>
 
             <div className="divide-y divide-slate-200">
@@ -251,11 +319,16 @@ TOTAL LIABILITIES AND EQUITY: $${(balanceSheetData.liabilities.total + balanceSh
                 <div className="space-y-3">
                   <div className="flex justify-between text-slate-600">
                     <span>Common Stock</span>
-                    <span>${balanceSheetData.equity.commonStock.toLocaleString()}</span>
+                    <span>
+                      ${balanceSheetData.equity.commonStock.toLocaleString()}
+                    </span>
                   </div>
                   <div className="flex justify-between text-slate-600">
                     <span>Retained Earnings</span>
-                    <span>${balanceSheetData.equity.retainedEarnings.toLocaleString()}</span>
+                    <span>
+                      $
+                      {balanceSheetData.equity.retainedEarnings.toLocaleString()}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -263,21 +336,41 @@ TOTAL LIABILITIES AND EQUITY: $${(balanceSheetData.liabilities.total + balanceSh
               {/* Total Equity */}
               <div className="p-6 bg-green-50 border-t border-green-200">
                 <div className="flex justify-between items-center">
-                  <h3 className="text-lg font-bold text-green-900">TOTAL EQUITY</h3>
-                  <p className="text-2xl font-bold text-green-600">${balanceSheetData.equity.total.toLocaleString()}</p>
+                  <h3 className="text-lg font-bold text-green-900">
+                    TOTAL EQUITY
+                  </h3>
+                  <p className="text-2xl font-bold text-green-600">
+                    ${balanceSheetData.equity.total.toLocaleString()}
+                  </p>
                 </div>
               </div>
 
               {/* Verification */}
               <div className="p-6 bg-slate-50">
                 <div className="space-y-2 text-sm">
-                  <p className="text-slate-600">Liabilities + Equity: ${(balanceSheetData.liabilities.total + balanceSheetData.equity.total).toLocaleString()}</p>
-                  <p className={`font-bold ${
-                    Math.abs(balanceSheetData.assets.total - (balanceSheetData.liabilities.total + balanceSheetData.equity.total)) < 1
-                      ? "text-green-600"
-                      : "text-red-600"
-                  }`}>
-                    {Math.abs(balanceSheetData.assets.total - (balanceSheetData.liabilities.total + balanceSheetData.equity.total)) < 1
+                  <p className="text-slate-600">
+                    Liabilities + Equity: $
+                    {(
+                      balanceSheetData.liabilities.total +
+                      balanceSheetData.equity.total
+                    ).toLocaleString()}
+                  </p>
+                  <p
+                    className={`font-bold ${
+                      Math.abs(
+                        balanceSheetData.assets.total -
+                          (balanceSheetData.liabilities.total +
+                            balanceSheetData.equity.total),
+                      ) < 1
+                        ? "text-green-600"
+                        : "text-red-600"
+                    }`}
+                  >
+                    {Math.abs(
+                      balanceSheetData.assets.total -
+                        (balanceSheetData.liabilities.total +
+                          balanceSheetData.equity.total),
+                    ) < 1
                       ? "✓ Balanced"
                       : "⚠ Not Balanced"}
                   </p>
@@ -292,8 +385,14 @@ TOTAL LIABILITIES AND EQUITY: $${(balanceSheetData.liabilities.total + balanceSh
           <div className="bg-white rounded-lg border border-slate-200 p-6">
             <p className="text-slate-600 text-sm">Current Ratio</p>
             <p className="text-3xl font-bold text-slate-900 mt-2">
-              {((balanceSheetData.assets.cash + balanceSheetData.assets.accountsReceivable + balanceSheetData.assets.inventory) / 
-                (balanceSheetData.liabilities.accountsPayable + balanceSheetData.liabilities.shortTermDebt + balanceSheetData.liabilities.other)).toFixed(2)}
+              {(
+                (balanceSheetData.assets.cash +
+                  balanceSheetData.assets.accountsReceivable +
+                  balanceSheetData.assets.inventory) /
+                (balanceSheetData.liabilities.accountsPayable +
+                  balanceSheetData.liabilities.shortTermDebt +
+                  balanceSheetData.liabilities.other)
+              ).toFixed(2)}
             </p>
             <p className="text-xs text-slate-500 mt-1">Liquidity position</p>
           </div>
@@ -301,7 +400,10 @@ TOTAL LIABILITIES AND EQUITY: $${(balanceSheetData.liabilities.total + balanceSh
           <div className="bg-white rounded-lg border border-slate-200 p-6">
             <p className="text-slate-600 text-sm">Debt-to-Equity</p>
             <p className="text-3xl font-bold text-slate-900 mt-2">
-              {(balanceSheetData.liabilities.total / balanceSheetData.equity.total).toFixed(2)}
+              {(
+                balanceSheetData.liabilities.total /
+                balanceSheetData.equity.total
+              ).toFixed(2)}
             </p>
             <p className="text-xs text-slate-500 mt-1">Leverage ratio</p>
           </div>
@@ -309,7 +411,12 @@ TOTAL LIABILITIES AND EQUITY: $${(balanceSheetData.liabilities.total + balanceSh
           <div className="bg-white rounded-lg border border-slate-200 p-6">
             <p className="text-slate-600 text-sm">Equity Ratio</p>
             <p className="text-3xl font-bold text-slate-900 mt-2">
-              {((balanceSheetData.equity.total / balanceSheetData.assets.total) * 100).toFixed(1)}%
+              {(
+                (balanceSheetData.equity.total /
+                  balanceSheetData.assets.total) *
+                100
+              ).toFixed(1)}
+              %
             </p>
             <p className="text-xs text-slate-500 mt-1">Ownership stake</p>
           </div>

@@ -47,7 +47,9 @@ const EXPENSE_CATEGORIES = [
 export default function AdminExpenses() {
   const [expenses, setExpenses] = useState<Expense[]>(mockExpenses);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterStatus, setFilterStatus] = useState<"all" | "pending" | "paid" | "overdue">("all");
+  const [filterStatus, setFilterStatus] = useState<
+    "all" | "pending" | "paid" | "overdue"
+  >("all");
   const [filterCategory, setFilterCategory] = useState<string>("all");
   const [sortBy, setSortBy] = useState<"date" | "amount" | "vendor">("date");
   const [showForm, setShowForm] = useState(false);
@@ -74,7 +76,7 @@ export default function AdminExpenses() {
         (e) =>
           e.description.toLowerCase().includes(search) ||
           e.vendor?.toLowerCase().includes(search) ||
-          e.reference?.toLowerCase().includes(search)
+          e.reference?.toLowerCase().includes(search),
       );
     }
 
@@ -104,7 +106,9 @@ export default function AdminExpenses() {
   const stats = useMemo(() => {
     return {
       totalExpenses: expenses.reduce((sum, e) => sum + e.amount, 0),
-      paidAmount: expenses.filter((e) => e.status === "paid").reduce((sum, e) => sum + e.amount, 0),
+      paidAmount: expenses
+        .filter((e) => e.status === "paid")
+        .reduce((sum, e) => sum + e.amount, 0),
       pendingAmount: expenses
         .filter((e) => e.status === "pending")
         .reduce((sum, e) => sum + e.amount, 0),
@@ -188,13 +192,26 @@ export default function AdminExpenses() {
     toast.success("Expense deleted");
   };
 
-  const handleStatusChange = (id: string, newStatus: "pending" | "paid" | "overdue") => {
-    setExpenses(expenses.map((e) => (e.id === id ? { ...e, status: newStatus } : e)));
+  const handleStatusChange = (
+    id: string,
+    newStatus: "pending" | "paid" | "overdue",
+  ) => {
+    setExpenses(
+      expenses.map((e) => (e.id === id ? { ...e, status: newStatus } : e)),
+    );
     toast.success(`Expense marked as ${newStatus}`);
   };
 
   const downloadCSV = () => {
-    const headers = ["ID", "Date", "Category", "Description", "Vendor", "Amount", "Status"];
+    const headers = [
+      "ID",
+      "Date",
+      "Category",
+      "Description",
+      "Vendor",
+      "Amount",
+      "Status",
+    ];
     const rows = filteredAndSortedExpenses.map((e) => [
       e.id,
       e.date,
@@ -238,8 +255,12 @@ export default function AdminExpenses() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900">Expenses Management</h1>
-            <p className="text-slate-600 mt-2">Track and manage all business expenses</p>
+            <h1 className="text-3xl font-bold text-slate-900">
+              Expenses Management
+            </h1>
+            <p className="text-slate-600 mt-2">
+              Track and manage all business expenses
+            </p>
           </div>
           <Button
             onClick={() => {
@@ -270,11 +291,15 @@ export default function AdminExpenses() {
           <div className="bg-white rounded-lg border border-slate-200 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-slate-600 text-sm font-medium">Total Expenses</p>
+                <p className="text-slate-600 text-sm font-medium">
+                  Total Expenses
+                </p>
                 <p className="text-2xl font-bold text-slate-900 mt-2">
                   ${stats.totalExpenses.toLocaleString()}
                 </p>
-                <p className="text-xs text-slate-500 mt-1">{stats.totalCount} transactions</p>
+                <p className="text-xs text-slate-500 mt-1">
+                  {stats.totalCount} transactions
+                </p>
               </div>
               <DollarSign className="w-12 h-12 text-primary-100" />
             </div>
@@ -287,7 +312,9 @@ export default function AdminExpenses() {
                 <p className="text-2xl font-bold text-green-600 mt-2">
                   ${stats.paidAmount.toLocaleString()}
                 </p>
-                <p className="text-xs text-slate-500 mt-1">{stats.paidCount} paid</p>
+                <p className="text-xs text-slate-500 mt-1">
+                  {stats.paidCount} paid
+                </p>
               </div>
               <Check className="w-12 h-12 text-green-100" />
             </div>
@@ -300,7 +327,9 @@ export default function AdminExpenses() {
                 <p className="text-2xl font-bold text-yellow-600 mt-2">
                   ${stats.pendingAmount.toLocaleString()}
                 </p>
-                <p className="text-xs text-slate-500 mt-1">{stats.pendingCount} pending</p>
+                <p className="text-xs text-slate-500 mt-1">
+                  {stats.pendingCount} pending
+                </p>
               </div>
               <AlertCircle className="w-12 h-12 text-yellow-100" />
             </div>
@@ -313,7 +342,9 @@ export default function AdminExpenses() {
                 <p className="text-2xl font-bold text-red-600 mt-2">
                   ${stats.overdueAmount.toLocaleString()}
                 </p>
-                <p className="text-xs text-slate-500 mt-1">{stats.overdueCount} overdue</p>
+                <p className="text-xs text-slate-500 mt-1">
+                  {stats.overdueCount} overdue
+                </p>
               </div>
               <AlertCircle className="w-12 h-12 text-red-100" />
             </div>
@@ -328,10 +359,14 @@ export default function AdminExpenses() {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Category *</label>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Category *
+                </label>
                 <select
                   value={formData.category}
-                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, category: e.target.value })
+                  }
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 >
                   {EXPENSE_CATEGORIES.map((cat) => (
@@ -343,42 +378,58 @@ export default function AdminExpenses() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Amount *</label>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Amount *
+                </label>
                 <input
                   type="number"
                   value={formData.amount}
-                  onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, amount: e.target.value })
+                  }
                   placeholder="0.00"
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Date *</label>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Date *
+                </label>
                 <input
                   type="date"
                   value={formData.date}
-                  onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, date: e.target.value })
+                  }
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Vendor</label>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Vendor
+                </label>
                 <input
                   type="text"
                   value={formData.vendor}
-                  onChange={(e) => setFormData({ ...formData, vendor: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, vendor: e.target.value })
+                  }
                   placeholder="Vendor name"
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Status</label>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Status
+                </label>
                 <select
                   value={formData.status}
-                  onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, status: e.target.value as any })
+                  }
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 >
                   <option value="pending">Pending</option>
@@ -394,7 +445,9 @@ export default function AdminExpenses() {
                 <input
                   type="text"
                   value={formData.paymentMethod}
-                  onChange={(e) => setFormData({ ...formData, paymentMethod: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, paymentMethod: e.target.value })
+                  }
                   placeholder="e.g., Credit Card, Bank Transfer"
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 />
@@ -407,28 +460,38 @@ export default function AdminExpenses() {
                 <input
                   type="text"
                   value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, description: e.target.value })
+                  }
                   placeholder="Expense description"
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Due Date</label>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Due Date
+                </label>
                 <input
                   type="date"
                   value={formData.dueDate}
-                  onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, dueDate: e.target.value })
+                  }
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 />
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-slate-700 mb-2">Notes</label>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Notes
+                </label>
                 <input
                   type="text"
                   value={formData.notes}
-                  onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, notes: e.target.value })
+                  }
                   placeholder="Additional notes"
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 />
@@ -436,13 +499,13 @@ export default function AdminExpenses() {
             </div>
 
             <div className="flex gap-2 justify-end pt-4">
-              <Button
-                onClick={() => setShowForm(false)}
-                variant="outline"
-              >
+              <Button onClick={() => setShowForm(false)} variant="outline">
                 Cancel
               </Button>
-              <Button onClick={handleAddExpense} className="bg-primary-600 hover:bg-primary-700">
+              <Button
+                onClick={handleAddExpense}
+                className="bg-primary-600 hover:bg-primary-700"
+              >
                 {editingId ? "Update Expense" : "Add Expense"}
               </Button>
             </div>
@@ -467,7 +530,9 @@ export default function AdminExpenses() {
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">Search</label>
+              <label className="block text-sm font-medium text-slate-700 mb-2">
+                Search
+              </label>
               <div className="relative">
                 <Search className="absolute left-3 top-2.5 w-4 h-4 text-slate-400" />
                 <input
@@ -481,7 +546,9 @@ export default function AdminExpenses() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">Status</label>
+              <label className="block text-sm font-medium text-slate-700 mb-2">
+                Status
+              </label>
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value as any)}
@@ -495,7 +562,9 @@ export default function AdminExpenses() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">Category</label>
+              <label className="block text-sm font-medium text-slate-700 mb-2">
+                Category
+              </label>
               <select
                 value={filterCategory}
                 onChange={(e) => setFilterCategory(e.target.value)}
@@ -511,7 +580,9 @@ export default function AdminExpenses() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">Sort By</label>
+              <label className="block text-sm font-medium text-slate-700 mb-2">
+                Sort By
+              </label>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
@@ -578,7 +649,9 @@ export default function AdminExpenses() {
                     <td className="px-6 py-4 text-sm text-slate-900 font-medium">
                       {expense.description}
                     </td>
-                    <td className="px-6 py-4 text-sm text-slate-600">{expense.vendor || "-"}</td>
+                    <td className="px-6 py-4 text-sm text-slate-600">
+                      {expense.vendor || "-"}
+                    </td>
                     <td className="px-6 py-4 text-sm font-bold text-slate-900 text-right">
                       ${expense.amount.toLocaleString()}
                     </td>
@@ -589,7 +662,7 @@ export default function AdminExpenses() {
                           handleStatusChange(expense.id, e.target.value as any)
                         }
                         className={`px-3 py-1 rounded-full text-xs font-semibold border-0 ${getStatusColor(
-                          expense.status
+                          expense.status,
                         )}`}
                       >
                         <option value="pending">Pending</option>
@@ -617,7 +690,10 @@ export default function AdminExpenses() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={7} className="px-6 py-8 text-center text-slate-500">
+                  <td
+                    colSpan={7}
+                    className="px-6 py-8 text-center text-slate-500"
+                  >
                     No expenses found. Add one to get started.
                   </td>
                 </tr>
@@ -628,40 +704,49 @@ export default function AdminExpenses() {
 
         {/* Summary */}
         <div className="bg-gradient-to-br from-primary-50 to-blue-50 rounded-lg border border-primary-200 p-6">
-          <h2 className="text-lg font-bold text-slate-900 mb-4">Expense Summary</h2>
+          <h2 className="text-lg font-bold text-slate-900 mb-4">
+            Expense Summary
+          </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div>
               <p className="text-slate-600 text-sm">Showing</p>
-              <p className="text-2xl font-bold text-primary-600">{filteredAndSortedExpenses.length}</p>
-              <p className="text-xs text-slate-500">of {expenses.length} expenses</p>
+              <p className="text-2xl font-bold text-primary-600">
+                {filteredAndSortedExpenses.length}
+              </p>
+              <p className="text-xs text-slate-500">
+                of {expenses.length} expenses
+              </p>
             </div>
             <div>
               <p className="text-slate-600 text-sm">Filtered Total</p>
               <p className="text-2xl font-bold text-primary-600">
-                ${filteredAndSortedExpenses.reduce((sum, e) => sum + e.amount, 0).toLocaleString()}
+                $
+                {filteredAndSortedExpenses
+                  .reduce((sum, e) => sum + e.amount, 0)
+                  .toLocaleString()}
               </p>
             </div>
             <div>
               <p className="text-slate-600 text-sm">Avg Amount</p>
               <p className="text-2xl font-bold text-primary-600">
-                ${
-                  filteredAndSortedExpenses.length > 0
-                    ? Math.round(
-                        filteredAndSortedExpenses.reduce((sum, e) => sum + e.amount, 0) /
-                          filteredAndSortedExpenses.length
-                      )
-                    : 0
-                }
+                $
+                {filteredAndSortedExpenses.length > 0
+                  ? Math.round(
+                      filteredAndSortedExpenses.reduce(
+                        (sum, e) => sum + e.amount,
+                        0,
+                      ) / filteredAndSortedExpenses.length,
+                    )
+                  : 0}
               </p>
             </div>
             <div>
               <p className="text-slate-600 text-sm">Largest Expense</p>
               <p className="text-2xl font-bold text-primary-600">
-                ${
-                  filteredAndSortedExpenses.length > 0
-                    ? Math.max(...filteredAndSortedExpenses.map((e) => e.amount))
-                    : 0
-                }
+                $
+                {filteredAndSortedExpenses.length > 0
+                  ? Math.max(...filteredAndSortedExpenses.map((e) => e.amount))
+                  : 0}
               </p>
             </div>
           </div>

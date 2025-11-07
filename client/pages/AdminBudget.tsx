@@ -40,9 +40,14 @@ export default function AdminBudget() {
       totalBudget,
       totalActual,
       totalVariance,
-      variancePercent: totalBudget > 0 ? ((totalVariance / totalBudget) * 100).toFixed(1) : "0",
-      overBudgetCount: budgets.filter((b) => b.actualAmount > b.budgetAmount).length,
-      underBudgetCount: budgets.filter((b) => b.actualAmount < b.budgetAmount).length,
+      variancePercent:
+        totalBudget > 0
+          ? ((totalVariance / totalBudget) * 100).toFixed(1)
+          : "0",
+      overBudgetCount: budgets.filter((b) => b.actualAmount > b.budgetAmount)
+        .length,
+      underBudgetCount: budgets.filter((b) => b.actualAmount < b.budgetAmount)
+        .length,
     };
   }, [budgets]);
 
@@ -105,7 +110,9 @@ export default function AdminBudget() {
   };
 
   const getMonthName = (month: number) => {
-    return new Date(2024, month - 1).toLocaleString("default", { month: "long" });
+    return new Date(2024, month - 1).toLocaleString("default", {
+      month: "long",
+    });
   };
 
   const getVarianceColor = (budgeted: number, actual: number) => {
@@ -123,8 +130,12 @@ export default function AdminBudget() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900">Budget Planning</h1>
-            <p className="text-slate-600 mt-2">Track budgets and spending variance</p>
+            <h1 className="text-3xl font-bold text-slate-900">
+              Budget Planning
+            </h1>
+            <p className="text-slate-600 mt-2">
+              Track budgets and spending variance
+            </p>
           </div>
           <Button
             onClick={() => {
@@ -161,29 +172,40 @@ export default function AdminBudget() {
             </p>
           </div>
 
-          <div className={`${
-            stats.totalVariance >= 0
-              ? "bg-green-50 border-green-200"
-              : "bg-red-50 border-red-200"
-          } rounded-lg border p-6`}>
-            <p className={`text-sm ${stats.totalVariance >= 0 ? "text-green-700" : "text-red-700"}`}>
+          <div
+            className={`${
+              stats.totalVariance >= 0
+                ? "bg-green-50 border-green-200"
+                : "bg-red-50 border-red-200"
+            } rounded-lg border p-6`}
+          >
+            <p
+              className={`text-sm ${stats.totalVariance >= 0 ? "text-green-700" : "text-red-700"}`}
+            >
               Variance
             </p>
-            <p className={`text-2xl font-bold mt-2 ${
-              stats.totalVariance >= 0 ? "text-green-600" : "text-red-600"
-            }`}>
-              {stats.totalVariance >= 0 ? "-" : "+"}${Math.abs(stats.totalVariance).toLocaleString()}
+            <p
+              className={`text-2xl font-bold mt-2 ${
+                stats.totalVariance >= 0 ? "text-green-600" : "text-red-600"
+              }`}
+            >
+              {stats.totalVariance >= 0 ? "-" : "+"}$
+              {Math.abs(stats.totalVariance).toLocaleString()}
             </p>
           </div>
 
           <div className="bg-white rounded-lg border border-slate-200 p-6">
             <p className="text-slate-600 text-sm">Over Budget</p>
-            <p className="text-2xl font-bold text-red-600 mt-2">{stats.overBudgetCount}</p>
+            <p className="text-2xl font-bold text-red-600 mt-2">
+              {stats.overBudgetCount}
+            </p>
           </div>
 
           <div className="bg-white rounded-lg border border-slate-200 p-6">
             <p className="text-slate-600 text-sm">Under Budget</p>
-            <p className="text-2xl font-bold text-green-600 mt-2">{stats.underBudgetCount}</p>
+            <p className="text-2xl font-bold text-green-600 mt-2">
+              {stats.underBudgetCount}
+            </p>
           </div>
         </div>
 
@@ -195,10 +217,14 @@ export default function AdminBudget() {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Category *</label>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Category *
+                </label>
                 <select
                   value={formData.category}
-                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, category: e.target.value })
+                  }
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                 >
                   {EXPENSE_CATEGORIES.map((cat) => (
@@ -210,21 +236,32 @@ export default function AdminBudget() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Amount *</label>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Amount *
+                </label>
                 <input
                   type="number"
                   value={formData.budgetAmount}
-                  onChange={(e) => setFormData({ ...formData, budgetAmount: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, budgetAmount: e.target.value })
+                  }
                   placeholder="0.00"
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Month</label>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Month
+                </label>
                 <select
                   value={formData.month}
-                  onChange={(e) => setFormData({ ...formData, month: parseInt(e.target.value) })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      month: parseInt(e.target.value),
+                    })
+                  }
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                 >
                   {Array.from({ length: 12 }, (_, i) => i + 1).map((m) => (
@@ -236,10 +273,14 @@ export default function AdminBudget() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Year</label>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Year
+                </label>
                 <select
                   value={formData.year}
-                  onChange={(e) => setFormData({ ...formData, year: parseInt(e.target.value) })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, year: parseInt(e.target.value) })
+                  }
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                 >
                   <option value={2023}>2023</option>
@@ -249,11 +290,15 @@ export default function AdminBudget() {
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-slate-700 mb-2">Notes</label>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Notes
+                </label>
                 <input
                   type="text"
                   value={formData.notes}
-                  onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, notes: e.target.value })
+                  }
                   placeholder="Notes (optional)"
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                 />
@@ -264,7 +309,10 @@ export default function AdminBudget() {
               <Button onClick={() => setShowForm(false)} variant="outline">
                 Cancel
               </Button>
-              <Button onClick={handleAddBudget} className="bg-primary-600 hover:bg-primary-700">
+              <Button
+                onClick={handleAddBudget}
+                className="bg-primary-600 hover:bg-primary-700"
+              >
                 {editingId ? "Update" : "Create"} Budget
               </Button>
             </div>
@@ -303,7 +351,8 @@ export default function AdminBudget() {
               {budgets.length > 0 ? (
                 budgets.map((budget) => {
                   const variance = budget.budgetAmount - budget.actualAmount;
-                  const percentUsed = (budget.actualAmount / budget.budgetAmount) * 100;
+                  const percentUsed =
+                    (budget.actualAmount / budget.budgetAmount) * 100;
 
                   return (
                     <tr key={budget.id} className="hover:bg-slate-50">
@@ -319,20 +368,27 @@ export default function AdminBudget() {
                       <td className="px-6 py-4 text-sm font-bold text-slate-900 text-right">
                         ${budget.actualAmount.toLocaleString()}
                       </td>
-                      <td className={`px-6 py-4 text-sm font-bold text-right ${getVarianceColor(
-                        budget.budgetAmount,
-                        budget.actualAmount
-                      )}`}>
-                        {variance >= 0 ? "-" : "+"}${Math.abs(variance).toLocaleString()}
+                      <td
+                        className={`px-6 py-4 text-sm font-bold text-right ${getVarianceColor(
+                          budget.budgetAmount,
+                          budget.actualAmount,
+                        )}`}
+                      >
+                        {variance >= 0 ? "-" : "+"}$
+                        {Math.abs(variance).toLocaleString()}
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-2">
                           <div className="w-24 bg-slate-200 rounded-full h-2">
                             <div
                               className={`h-2 rounded-full ${
-                                percentUsed > 100 ? "bg-red-500" : "bg-green-500"
+                                percentUsed > 100
+                                  ? "bg-red-500"
+                                  : "bg-green-500"
                               }`}
-                              style={{ width: `${Math.min(percentUsed, 100)}%` }}
+                              style={{
+                                width: `${Math.min(percentUsed, 100)}%`,
+                              }}
                             />
                           </div>
                           <span className="text-xs font-bold text-slate-600 w-10">
@@ -361,7 +417,10 @@ export default function AdminBudget() {
                 })
               ) : (
                 <tr>
-                  <td colSpan={7} className="px-6 py-8 text-center text-slate-500">
+                  <td
+                    colSpan={7}
+                    className="px-6 py-8 text-center text-slate-500"
+                  >
                     No budgets created. Add one to get started.
                   </td>
                 </tr>
@@ -374,58 +433,72 @@ export default function AdminBudget() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Category Budgets */}
           <div className="bg-white rounded-lg border border-slate-200 p-6">
-            <h2 className="text-lg font-bold text-slate-900 mb-6">Budget by Category</h2>
+            <h2 className="text-lg font-bold text-slate-900 mb-6">
+              Budget by Category
+            </h2>
             <div className="space-y-4">
               {Array.from(
                 new Map(
-                  budgets.map((b) => [
-                    b.category,
-                    { budgeted: 0, actual: 0 },
-                  ])
-                )
-              )
-                .map(([category, _]) => {
-                  const categoryBudgets = budgets.filter((b) => b.category === category);
-                  const totalBudgeted = categoryBudgets.reduce((sum, b) => sum + b.budgetAmount, 0);
-                  const totalActual = categoryBudgets.reduce((sum, b) => sum + b.actualAmount, 0);
+                  budgets.map((b) => [b.category, { budgeted: 0, actual: 0 }]),
+                ),
+              ).map(([category, _]) => {
+                const categoryBudgets = budgets.filter(
+                  (b) => b.category === category,
+                );
+                const totalBudgeted = categoryBudgets.reduce(
+                  (sum, b) => sum + b.budgetAmount,
+                  0,
+                );
+                const totalActual = categoryBudgets.reduce(
+                  (sum, b) => sum + b.actualAmount,
+                  0,
+                );
 
-                  return (
-                    <div key={category} className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium text-slate-600">
-                          {getCategoryLabel(category as string)}
-                        </span>
-                        <span className="text-sm font-bold text-slate-900">
-                          ${totalBudgeted.toLocaleString()}
-                        </span>
-                      </div>
-                      <div className="w-full bg-slate-200 rounded-full h-2">
-                        <div
-                          className={`h-2 rounded-full ${
-                            totalActual > totalBudgeted ? "bg-red-500" : "bg-blue-500"
-                          }`}
-                          style={{
-                            width: `${Math.min((totalActual / totalBudgeted) * 100, 100)}%`,
-                          }}
-                        />
-                      </div>
+                return (
+                  <div key={category} className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-slate-600">
+                        {getCategoryLabel(category as string)}
+                      </span>
+                      <span className="text-sm font-bold text-slate-900">
+                        ${totalBudgeted.toLocaleString()}
+                      </span>
                     </div>
-                  );
-                })}
+                    <div className="w-full bg-slate-200 rounded-full h-2">
+                      <div
+                        className={`h-2 rounded-full ${
+                          totalActual > totalBudgeted
+                            ? "bg-red-500"
+                            : "bg-blue-500"
+                        }`}
+                        style={{
+                          width: `${Math.min((totalActual / totalBudgeted) * 100, 100)}%`,
+                        }}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
           {/* Variance Summary */}
           <div className="bg-white rounded-lg border border-slate-200 p-6">
-            <h2 className="text-lg font-bold text-slate-900 mb-6">Performance Summary</h2>
+            <h2 className="text-lg font-bold text-slate-900 mb-6">
+              Performance Summary
+            </h2>
             <div className="space-y-4">
               <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg border border-green-200 p-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <TrendingUp className="w-5 h-5 text-green-600" />
-                    <span className="text-green-700 font-medium">Under Budget</span>
+                    <span className="text-green-700 font-medium">
+                      Under Budget
+                    </span>
                   </div>
-                  <p className="text-2xl font-bold text-green-600">{stats.underBudgetCount}</p>
+                  <p className="text-2xl font-bold text-green-600">
+                    {stats.underBudgetCount}
+                  </p>
                 </div>
               </div>
 
@@ -433,20 +506,29 @@ export default function AdminBudget() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <TrendingDown className="w-5 h-5 text-red-600" />
-                    <span className="text-red-700 font-medium">Over Budget</span>
+                    <span className="text-red-700 font-medium">
+                      Over Budget
+                    </span>
                   </div>
-                  <p className="text-2xl font-bold text-red-600">{stats.overBudgetCount}</p>
+                  <p className="text-2xl font-bold text-red-600">
+                    {stats.overBudgetCount}
+                  </p>
                 </div>
               </div>
 
               <div className="bg-white rounded-lg border border-slate-200 p-4">
                 <p className="text-slate-600 text-sm">Overall Variance</p>
-                <p className={`text-3xl font-bold mt-2 ${
-                  stats.totalVariance >= 0 ? "text-green-600" : "text-red-600"
-                }`}>
-                  {stats.totalVariance >= 0 ? "-" : "+"}${Math.abs(stats.totalVariance).toLocaleString()}
+                <p
+                  className={`text-3xl font-bold mt-2 ${
+                    stats.totalVariance >= 0 ? "text-green-600" : "text-red-600"
+                  }`}
+                >
+                  {stats.totalVariance >= 0 ? "-" : "+"}$
+                  {Math.abs(stats.totalVariance).toLocaleString()}
                 </p>
-                <p className="text-xs text-slate-500 mt-1">{stats.variancePercent}% of budget</p>
+                <p className="text-xs text-slate-500 mt-1">
+                  {stats.variancePercent}% of budget
+                </p>
               </div>
             </div>
           </div>

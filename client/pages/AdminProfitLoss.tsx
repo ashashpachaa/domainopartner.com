@@ -14,22 +14,27 @@ export default function AdminProfitLoss() {
     const months: Record<number, any> = {};
 
     for (let m = 1; m <= 12; m++) {
-      const monthRevenue = mockOrders
-        .filter((o) => o.status === "completed")
-        .reduce((sum) => sum + o.amount, 0) / 12; // Simplified: distribute evenly
+      const monthRevenue =
+        mockOrders
+          .filter((o) => o.status === "completed")
+          .reduce((sum) => sum + o.amount, 0) / 12; // Simplified: distribute evenly
 
       const monthExpenses = mockExpenses
         .filter((e) => new Date(e.date).getMonth() + 1 === m)
         .reduce((sum, e) => sum + e.amount, 0);
 
-      const monthPayroll = mockStaffSalaries.reduce((sum, s) => sum + s.baseSalary, 0) / 12;
+      const monthPayroll =
+        mockStaffSalaries.reduce((sum, s) => sum + s.baseSalary, 0) / 12;
 
       const cogs = monthRevenue * 0.3; // 30% COGS
       const grossProfit = monthRevenue - cogs;
       const operatingExpenses = monthExpenses - monthPayroll;
       const operatingIncome = grossProfit - operatingExpenses;
       const interestExpense = operatingIncome > 0 ? operatingIncome * 0.05 : 0;
-      const taxExpense = Math.max(0, (operatingIncome - interestExpense) * 0.21);
+      const taxExpense = Math.max(
+        0,
+        (operatingIncome - interestExpense) * 0.21,
+      );
       const netProfit = operatingIncome - interestExpense - taxExpense;
 
       months[m] = {
@@ -44,7 +49,8 @@ export default function AdminProfitLoss() {
         interestExpense,
         taxExpense,
         netProfit,
-        profitMargin: monthRevenue > 0 ? ((netProfit / monthRevenue) * 100).toFixed(2) : 0,
+        profitMargin:
+          monthRevenue > 0 ? ((netProfit / monthRevenue) * 100).toFixed(2) : 0,
       };
     }
 
@@ -54,23 +60,29 @@ export default function AdminProfitLoss() {
   const selectedMonthData = pnlData[selectedMonth];
 
   const annualSummary = useMemo(() => {
-    const totalRevenue = Object.values(pnlData).reduce((sum: number, m: any) => sum + m.revenue, 0);
-    const totalCogs = Object.values(pnlData).reduce((sum: number, m: any) => sum + m.cogs, 0);
+    const totalRevenue = Object.values(pnlData).reduce(
+      (sum: number, m: any) => sum + m.revenue,
+      0,
+    );
+    const totalCogs = Object.values(pnlData).reduce(
+      (sum: number, m: any) => sum + m.cogs,
+      0,
+    );
     const totalOperatingExpenses = Object.values(pnlData).reduce(
       (sum: number, m: any) => sum + m.operatingExpenses,
-      0
+      0,
     );
     const totalInterest = Object.values(pnlData).reduce(
       (sum: number, m: any) => sum + m.interestExpense,
-      0
+      0,
     );
     const totalTax = Object.values(pnlData).reduce(
       (sum: number, m: any) => sum + m.taxExpense,
-      0
+      0,
     );
     const totalNetProfit = Object.values(pnlData).reduce(
       (sum: number, m: any) => sum + m.netProfit,
-      0
+      0,
     );
 
     return {
@@ -80,12 +92,17 @@ export default function AdminProfitLoss() {
       totalInterest,
       totalTax,
       totalNetProfit,
-      profitMargin: totalRevenue > 0 ? ((totalNetProfit / totalRevenue) * 100).toFixed(2) : 0,
+      profitMargin:
+        totalRevenue > 0
+          ? ((totalNetProfit / totalRevenue) * 100).toFixed(2)
+          : 0,
     };
   }, [pnlData]);
 
   const getMonthName = (month: number) => {
-    return new Date(2024, month - 1).toLocaleString("default", { month: "long" });
+    return new Date(2024, month - 1).toLocaleString("default", {
+      month: "long",
+    });
   };
 
   const downloadPDF = () => {
@@ -131,10 +148,17 @@ Profit Margin: ${selectedMonthData.profitMargin}%
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900">Profit & Loss Statement</h1>
-            <p className="text-slate-600 mt-2">Detailed income and expense analysis</p>
+            <h1 className="text-3xl font-bold text-slate-900">
+              Profit & Loss Statement
+            </h1>
+            <p className="text-slate-600 mt-2">
+              Detailed income and expense analysis
+            </p>
           </div>
-          <Button onClick={downloadPDF} className="bg-primary-600 hover:bg-primary-700 flex items-center gap-2">
+          <Button
+            onClick={downloadPDF}
+            className="bg-primary-600 hover:bg-primary-700 flex items-center gap-2"
+          >
             <Download className="w-4 h-4" />
             Download PDF
           </Button>
@@ -186,7 +210,9 @@ Profit Margin: ${selectedMonthData.profitMargin}%
 
             {/* COGS Section */}
             <div className="p-6 space-y-3">
-              <h3 className="font-bold text-slate-900 text-lg">COST OF GOODS SOLD</h3>
+              <h3 className="font-bold text-slate-900 text-lg">
+                COST OF GOODS SOLD
+              </h3>
               <div className="space-y-2 ml-4">
                 <div className="flex justify-between text-slate-600">
                   <span>Cost of Goods Sold (30% of revenue)</span>
@@ -195,45 +221,67 @@ Profit Margin: ${selectedMonthData.profitMargin}%
               </div>
               <div className="flex justify-between font-bold text-slate-900 text-lg pt-2 border-t border-slate-200">
                 <span>GROSS PROFIT</span>
-                <span className="text-green-600">${selectedMonthData.grossProfit.toLocaleString()}</span>
+                <span className="text-green-600">
+                  ${selectedMonthData.grossProfit.toLocaleString()}
+                </span>
               </div>
             </div>
 
             {/* Operating Expenses Section */}
             <div className="p-6 space-y-3">
-              <h3 className="font-bold text-slate-900 text-lg">OPERATING EXPENSES</h3>
+              <h3 className="font-bold text-slate-900 text-lg">
+                OPERATING EXPENSES
+              </h3>
               <div className="space-y-2 ml-4">
                 <div className="flex justify-between text-slate-600">
                   <span>Payroll & Benefits</span>
-                  <span>-${selectedMonthData.payrollCosts.toLocaleString()}</span>
+                  <span>
+                    -${selectedMonthData.payrollCosts.toLocaleString()}
+                  </span>
                 </div>
                 <div className="flex justify-between text-slate-600">
                   <span>Other Operating Expenses</span>
-                  <span>-${selectedMonthData.otherExpenses.toLocaleString()}</span>
+                  <span>
+                    -${selectedMonthData.otherExpenses.toLocaleString()}
+                  </span>
                 </div>
               </div>
               <div className="flex justify-between font-bold text-slate-900 text-lg pt-2 border-t border-slate-200">
                 <span>TOTAL OPERATING EXPENSES</span>
-                <span>-${selectedMonthData.operatingExpenses.toLocaleString()}</span>
+                <span>
+                  -${selectedMonthData.operatingExpenses.toLocaleString()}
+                </span>
               </div>
               <div className="flex justify-between font-bold text-slate-900 text-lg pt-2">
                 <span>OPERATING INCOME</span>
-                <span className="text-blue-600">${selectedMonthData.operatingIncome.toLocaleString()}</span>
+                <span className="text-blue-600">
+                  ${selectedMonthData.operatingIncome.toLocaleString()}
+                </span>
               </div>
             </div>
 
             {/* Other Income/Expense Section */}
             <div className="p-6 space-y-3">
-              <h3 className="font-bold text-slate-900 text-lg">OTHER INCOME / EXPENSE</h3>
+              <h3 className="font-bold text-slate-900 text-lg">
+                OTHER INCOME / EXPENSE
+              </h3>
               <div className="space-y-2 ml-4">
                 <div className="flex justify-between text-slate-600">
                   <span>Interest Expense</span>
-                  <span>-${selectedMonthData.interestExpense.toLocaleString()}</span>
+                  <span>
+                    -${selectedMonthData.interestExpense.toLocaleString()}
+                  </span>
                 </div>
               </div>
               <div className="flex justify-between font-bold text-slate-900 text-lg pt-2 border-t border-slate-200">
                 <span>INCOME BEFORE TAXES</span>
-                <span>${(selectedMonthData.operatingIncome - selectedMonthData.interestExpense).toLocaleString()}</span>
+                <span>
+                  $
+                  {(
+                    selectedMonthData.operatingIncome -
+                    selectedMonthData.interestExpense
+                  ).toLocaleString()}
+                </span>
               </div>
             </div>
 
@@ -249,32 +297,40 @@ Profit Margin: ${selectedMonthData.profitMargin}%
             </div>
 
             {/* Net Profit Section */}
-            <div className={`p-6 space-y-3 ${
-              selectedMonthData.netProfit >= 0
-                ? "bg-green-50 border-t border-green-200"
-                : "bg-red-50 border-t border-red-200"
-            }`}>
+            <div
+              className={`p-6 space-y-3 ${
+                selectedMonthData.netProfit >= 0
+                  ? "bg-green-50 border-t border-green-200"
+                  : "bg-red-50 border-t border-red-200"
+              }`}
+            >
               <div className="flex justify-between items-center">
-                <h3 className={`text-2xl font-bold ${
-                  selectedMonthData.netProfit >= 0
-                    ? "text-green-900"
-                    : "text-red-900"
-                }`}>
+                <h3
+                  className={`text-2xl font-bold ${
+                    selectedMonthData.netProfit >= 0
+                      ? "text-green-900"
+                      : "text-red-900"
+                  }`}
+                >
                   NET PROFIT / LOSS
                 </h3>
                 <div className="text-right">
-                  <p className={`text-3xl font-bold ${
-                    selectedMonthData.netProfit >= 0
-                      ? "text-green-600"
-                      : "text-red-600"
-                  }`}>
+                  <p
+                    className={`text-3xl font-bold ${
+                      selectedMonthData.netProfit >= 0
+                        ? "text-green-600"
+                        : "text-red-600"
+                    }`}
+                  >
                     ${selectedMonthData.netProfit.toLocaleString()}
                   </p>
-                  <p className={`text-sm mt-1 ${
-                    selectedMonthData.netProfit >= 0
-                      ? "text-green-700"
-                      : "text-red-700"
-                  }`}>
+                  <p
+                    className={`text-sm mt-1 ${
+                      selectedMonthData.netProfit >= 0
+                        ? "text-green-700"
+                        : "text-red-700"
+                    }`}
+                  >
                     Profit Margin: {selectedMonthData.profitMargin}%
                   </p>
                 </div>
@@ -285,7 +341,9 @@ Profit Margin: ${selectedMonthData.profitMargin}%
 
         {/* Annual Summary */}
         <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg border border-slate-200 p-8">
-          <h2 className="text-2xl font-bold text-slate-900 mb-6">Annual Summary {selectedYear}</h2>
+          <h2 className="text-2xl font-bold text-slate-900 mb-6">
+            Annual Summary {selectedYear}
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div>
               <p className="text-slate-600 text-sm">Total Revenue</p>
@@ -317,30 +375,38 @@ Profit Margin: ${selectedMonthData.profitMargin}%
                 -${annualSummary.totalTax.toLocaleString()}
               </p>
             </div>
-            <div className={`rounded-lg border-2 p-4 ${
-              annualSummary.totalNetProfit >= 0
-                ? "bg-green-50 border-green-200"
-                : "bg-red-50 border-red-200"
-            }`}>
-              <p className={`text-sm font-medium ${
+            <div
+              className={`rounded-lg border-2 p-4 ${
                 annualSummary.totalNetProfit >= 0
-                  ? "text-green-700"
-                  : "text-red-700"
-              }`}>
+                  ? "bg-green-50 border-green-200"
+                  : "bg-red-50 border-red-200"
+              }`}
+            >
+              <p
+                className={`text-sm font-medium ${
+                  annualSummary.totalNetProfit >= 0
+                    ? "text-green-700"
+                    : "text-red-700"
+                }`}
+              >
                 Annual Net Profit
               </p>
-              <p className={`text-2xl font-bold mt-2 ${
-                annualSummary.totalNetProfit >= 0
-                  ? "text-green-600"
-                  : "text-red-600"
-              }`}>
+              <p
+                className={`text-2xl font-bold mt-2 ${
+                  annualSummary.totalNetProfit >= 0
+                    ? "text-green-600"
+                    : "text-red-600"
+                }`}
+              >
                 ${annualSummary.totalNetProfit.toLocaleString()}
               </p>
-              <p className={`text-xs mt-1 ${
-                annualSummary.totalNetProfit >= 0
-                  ? "text-green-600"
-                  : "text-red-600"
-              }`}>
+              <p
+                className={`text-xs mt-1 ${
+                  annualSummary.totalNetProfit >= 0
+                    ? "text-green-600"
+                    : "text-red-600"
+                }`}
+              >
                 Margin: {annualSummary.profitMargin}%
               </p>
             </div>
@@ -349,12 +415,16 @@ Profit Margin: ${selectedMonthData.profitMargin}%
 
         {/* Monthly Trend */}
         <div className="bg-white rounded-lg border border-slate-200 p-6">
-          <h2 className="text-lg font-bold text-slate-900 mb-6">Monthly Trend</h2>
+          <h2 className="text-lg font-bold text-slate-900 mb-6">
+            Monthly Trend
+          </h2>
           <div className="space-y-2">
             {Object.values(pnlData).map((month: any) => (
               <div key={month.month} className="flex items-center gap-4">
                 <div className="w-24">
-                  <p className="text-sm font-medium text-slate-600">{getMonthName(month.month)}</p>
+                  <p className="text-sm font-medium text-slate-600">
+                    {getMonthName(month.month)}
+                  </p>
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center gap-2 h-8">
@@ -362,27 +432,51 @@ Profit Margin: ${selectedMonthData.profitMargin}%
                       <>
                         <div className="flex items-center gap-1">
                           <TrendingUp className="w-4 h-4 text-green-600" />
-                          <div className="bg-green-200 h-6 rounded" style={{ width: `${Math.min(
-                            (month.netProfit / Math.max(...Object.values(pnlData).map((m: any) => m.netProfit))) * 300,
-                            300
-                          )}px` }} />
+                          <div
+                            className="bg-green-200 h-6 rounded"
+                            style={{
+                              width: `${Math.min(
+                                (month.netProfit /
+                                  Math.max(
+                                    ...Object.values(pnlData).map(
+                                      (m: any) => m.netProfit,
+                                    ),
+                                  )) *
+                                  300,
+                                300,
+                              )}px`,
+                            }}
+                          />
                         </div>
                       </>
                     ) : (
                       <>
                         <div className="flex items-center gap-1">
                           <TrendingDown className="w-4 h-4 text-red-600" />
-                          <div className="bg-red-200 h-6 rounded" style={{ width: `${Math.min(
-                            Math.abs(month.netProfit) / Math.max(...Object.values(pnlData).map((m: any) => Math.abs(m.netProfit))) * 300,
-                            300
-                          )}px` }} />
+                          <div
+                            className="bg-red-200 h-6 rounded"
+                            style={{
+                              width: `${Math.min(
+                                (Math.abs(month.netProfit) /
+                                  Math.max(
+                                    ...Object.values(pnlData).map((m: any) =>
+                                      Math.abs(m.netProfit),
+                                    ),
+                                  )) *
+                                  300,
+                                300,
+                              )}px`,
+                            }}
+                          />
                         </div>
                       </>
                     )}
                   </div>
                 </div>
                 <div className="w-32 text-right">
-                  <p className={`text-sm font-bold ${month.netProfit >= 0 ? "text-green-600" : "text-red-600"}`}>
+                  <p
+                    className={`text-sm font-bold ${month.netProfit >= 0 ? "text-green-600" : "text-red-600"}`}
+                  >
                     ${month.netProfit.toLocaleString()}
                   </p>
                 </div>

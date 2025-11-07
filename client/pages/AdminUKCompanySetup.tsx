@@ -9,7 +9,14 @@ import {
 } from "@/lib/mockData";
 import AdminLayout from "@/components/AdminLayout";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash2, Edit2, FileText, Download, CheckCircle } from "lucide-react";
+import {
+  Plus,
+  Trash2,
+  Edit2,
+  FileText,
+  Download,
+  CheckCircle,
+} from "lucide-react";
 import { toast } from "sonner";
 
 interface IncorporationFormData {
@@ -47,7 +54,7 @@ interface ShareholderFormData {
 export default function AdminUKCompanySetup() {
   const navigate = useNavigate();
   const [incorporations, setIncorporations] = useState<CompanyIncorporation[]>(
-    mockCompanyIncorporations
+    mockCompanyIncorporations,
   );
   const [showNewForm, setShowNewForm] = useState(false);
   const [activeTab, setActiveTab] = useState<"list" | "create">("list");
@@ -82,15 +89,16 @@ export default function AdminUKCompanySetup() {
   // Shareholders
   const [shareholders, setShareholders] = useState<CompanyShareholder[]>([]);
   const [showShareholderForm, setShowShareholderForm] = useState(false);
-  const [shareholderFormData, setShareholderFormData] = useState<ShareholderFormData>({
-    firstName: "",
-    lastName: "",
-    address: "",
-    postcode: "",
-    city: "",
-    country: "United Kingdom",
-    shareAllocation: "",
-  });
+  const [shareholderFormData, setShareholderFormData] =
+    useState<ShareholderFormData>({
+      firstName: "",
+      lastName: "",
+      address: "",
+      postcode: "",
+      city: "",
+      country: "United Kingdom",
+      shareAllocation: "",
+    });
 
   // Stats
   const stats = useMemo(() => {
@@ -132,13 +140,21 @@ export default function AdminUKCompanySetup() {
 
   // Add Shareholder
   const handleAddShareholder = () => {
-    if (!shareholderFormData.firstName || !shareholderFormData.shareAllocation) {
+    if (
+      !shareholderFormData.firstName ||
+      !shareholderFormData.shareAllocation
+    ) {
       toast.error("Please fill in shareholder details");
       return;
     }
 
-    const totalShares = shareholders.reduce((sum, s) => sum + parseInt(shareholderFormData.shareAllocation), 0) + parseInt(shareholderFormData.shareAllocation);
-    const ownershipPercentage = (parseInt(shareholderFormData.shareAllocation) / totalShares) * 100;
+    const totalShares =
+      shareholders.reduce(
+        (sum, s) => sum + parseInt(shareholderFormData.shareAllocation),
+        0,
+      ) + parseInt(shareholderFormData.shareAllocation);
+    const ownershipPercentage =
+      (parseInt(shareholderFormData.shareAllocation) / totalShares) * 100;
 
     const newShareholder: CompanyShareholder = {
       id: `SHA${Date.now()}`,
@@ -168,7 +184,9 @@ export default function AdminUKCompanySetup() {
       directors.length === 0 ||
       shareholders.length === 0
     ) {
-      toast.error("Please fill in all required fields (company details, at least 1 director, at least 1 shareholder)");
+      toast.error(
+        "Please fill in all required fields (company details, at least 1 director, at least 1 shareholder)",
+      );
       return;
     }
 
@@ -186,7 +204,10 @@ export default function AdminUKCompanySetup() {
     };
 
     // Save to localStorage
-    localStorage.setItem(`incorporation_${newIncorporation.id}`, JSON.stringify(newIncorporation));
+    localStorage.setItem(
+      `incorporation_${newIncorporation.id}`,
+      JSON.stringify(newIncorporation),
+    );
 
     // Add to state
     setIncorporations([newIncorporation, ...incorporations]);
@@ -211,15 +232,22 @@ export default function AdminUKCompanySetup() {
   };
 
   // Submit to Companies House (redirect to payment)
-  const handleSubmitToCompaniesHouse = (incorporation: CompanyIncorporation) => {
+  const handleSubmitToCompaniesHouse = (
+    incorporation: CompanyIncorporation,
+  ) => {
     // Update status to payment_pending
     const updated = { ...incorporation, status: "payment_pending" as const };
-    setIncorporations(incorporations.map((i) => (i.id === incorporation.id ? updated : i)));
-    localStorage.setItem(`incorporation_${incorporation.id}`, JSON.stringify(updated));
+    setIncorporations(
+      incorporations.map((i) => (i.id === incorporation.id ? updated : i)),
+    );
+    localStorage.setItem(
+      `incorporation_${incorporation.id}`,
+      JSON.stringify(updated),
+    );
 
     // Redirect to Companies House payment page with details
     const paymentUrl = `https://www.payments.service.gov.uk/?company=${encodeURIComponent(
-      incorporation.companyName
+      incorporation.companyName,
     )}&fee=12&reference=${incorporation.id}`;
 
     toast.success("Redirecting to payment page...");
@@ -253,7 +281,9 @@ export default function AdminUKCompanySetup() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900">UK Company Setup</h1>
+            <h1 className="text-3xl font-bold text-slate-900">
+              UK Company Setup
+            </h1>
             <p className="text-slate-600 mt-2">
               Create and file new companies with Companies House
             </p>
@@ -277,34 +307,48 @@ export default function AdminUKCompanySetup() {
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           <div className="bg-white rounded-lg border border-slate-200 p-6">
             <p className="text-slate-600 text-sm">Total</p>
-            <p className="text-2xl font-bold text-slate-900 mt-2">{stats.total}</p>
+            <p className="text-2xl font-bold text-slate-900 mt-2">
+              {stats.total}
+            </p>
           </div>
           <div className="bg-white rounded-lg border border-slate-200 p-6">
             <p className="text-slate-600 text-sm">Draft</p>
-            <p className="text-2xl font-bold text-yellow-600 mt-2">{stats.draft}</p>
+            <p className="text-2xl font-bold text-yellow-600 mt-2">
+              {stats.draft}
+            </p>
           </div>
           <div className="bg-white rounded-lg border border-slate-200 p-6">
             <p className="text-slate-600 text-sm">Submitted</p>
-            <p className="text-2xl font-bold text-blue-600 mt-2">{stats.submitted}</p>
+            <p className="text-2xl font-bold text-blue-600 mt-2">
+              {stats.submitted}
+            </p>
           </div>
           <div className="bg-white rounded-lg border border-slate-200 p-6">
             <p className="text-slate-600 text-sm">Completed</p>
-            <p className="text-2xl font-bold text-green-600 mt-2">{stats.completed}</p>
+            <p className="text-2xl font-bold text-green-600 mt-2">
+              {stats.completed}
+            </p>
           </div>
           <div className="bg-white rounded-lg border border-slate-200 p-6">
             <p className="text-slate-600 text-sm">Rejected</p>
-            <p className="text-2xl font-bold text-red-600 mt-2">{stats.rejected}</p>
+            <p className="text-2xl font-bold text-red-600 mt-2">
+              {stats.rejected}
+            </p>
           </div>
         </div>
 
         {/* New Company Form */}
         {showNewForm && activeTab === "create" && (
           <div className="bg-white rounded-lg border border-slate-200 p-8 space-y-8">
-            <h2 className="text-2xl font-bold text-slate-900">Create New Company</h2>
+            <h2 className="text-2xl font-bold text-slate-900">
+              Create New Company
+            </h2>
 
             {/* Company Details Section */}
             <div className="space-y-4 p-6 bg-slate-50 rounded-lg">
-              <h3 className="text-lg font-bold text-slate-900">Company Details</h3>
+              <h3 className="text-lg font-bold text-slate-900">
+                Company Details
+              </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">
@@ -337,7 +381,9 @@ export default function AdminUKCompanySetup() {
                   >
                     <option value="private_limited">Private Limited</option>
                     <option value="public_limited">Public Limited</option>
-                    <option value="limited_by_guarantee">Limited by Guarantee</option>
+                    <option value="limited_by_guarantee">
+                      Limited by Guarantee
+                    </option>
                   </select>
                 </div>
 
@@ -385,7 +431,10 @@ export default function AdminUKCompanySetup() {
                     type="text"
                     value={formData.registeredOfficeCity}
                     onChange={(e) =>
-                      setFormData({ ...formData, registeredOfficeCity: e.target.value })
+                      setFormData({
+                        ...formData,
+                        registeredOfficeCity: e.target.value,
+                      })
                     }
                     placeholder="London"
                     className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500"
@@ -427,7 +476,9 @@ export default function AdminUKCompanySetup() {
             {/* Directors Section */}
             <div className="space-y-4 p-6 bg-slate-50 rounded-lg">
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-bold text-slate-900">Directors * (at least 1)</h3>
+                <h3 className="text-lg font-bold text-slate-900">
+                  Directors * (at least 1)
+                </h3>
                 <Button
                   onClick={() => setShowDirectorForm(!showDirectorForm)}
                   variant="outline"
@@ -564,11 +615,14 @@ export default function AdminUKCompanySetup() {
                       className="bg-white p-3 rounded-lg border border-slate-200 flex items-center justify-between"
                     >
                       <span className="text-sm font-medium text-slate-900">
-                        {director.firstName} {director.lastName} ({director.nationality})
+                        {director.firstName} {director.lastName} (
+                        {director.nationality})
                       </span>
                       <button
                         onClick={() =>
-                          setDirectors(directors.filter((d) => d.id !== director.id))
+                          setDirectors(
+                            directors.filter((d) => d.id !== director.id),
+                          )
                         }
                         className="text-red-600 hover:text-red-700"
                       >
@@ -583,7 +637,9 @@ export default function AdminUKCompanySetup() {
             {/* Shareholders Section */}
             <div className="space-y-4 p-6 bg-slate-50 rounded-lg">
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-bold text-slate-900">Shareholders * (at least 1)</h3>
+                <h3 className="text-lg font-bold text-slate-900">
+                  Shareholders * (at least 1)
+                </h3>
                 <Button
                   onClick={() => setShowShareholderForm(!showShareholderForm)}
                   variant="outline"
@@ -713,12 +769,24 @@ export default function AdminUKCompanySetup() {
                           {shareholder.firstName} {shareholder.lastName}
                         </span>
                         <p className="text-xs text-slate-500">
-                          {shareholder.shareAllocation} shares ({shareholderFormData.shareAllocation ? Math.round((shareholder.shareAllocation / parseInt(shareholderFormData.shareAllocation)) * 100) : 0}%)
+                          {shareholder.shareAllocation} shares (
+                          {shareholderFormData.shareAllocation
+                            ? Math.round(
+                                (shareholder.shareAllocation /
+                                  parseInt(
+                                    shareholderFormData.shareAllocation,
+                                  )) *
+                                  100,
+                              )
+                            : 0}
+                          %)
                         </p>
                       </div>
                       <button
                         onClick={() =>
-                          setShareholders(shareholders.filter((s) => s.id !== shareholder.id))
+                          setShareholders(
+                            shareholders.filter((s) => s.id !== shareholder.id),
+                          )
                         }
                         className="text-red-600 hover:text-red-700"
                       >
@@ -765,7 +833,9 @@ export default function AdminUKCompanySetup() {
         {/* Incorporations List */}
         {activeTab === "list" && (
           <div className="space-y-4">
-            <h2 className="text-xl font-bold text-slate-900">Company Incorporations</h2>
+            <h2 className="text-xl font-bold text-slate-900">
+              Company Incorporations
+            </h2>
             <div className="grid grid-cols-1 gap-4">
               {incorporations.length > 0 ? (
                 incorporations.map((inc) => (
@@ -781,37 +851,51 @@ export default function AdminUKCompanySetup() {
                           </h3>
                           <span
                             className={`px-3 py-1 rounded-full text-xs font-semibold border-0 ${getStatusColor(
-                              inc.status
+                              inc.status,
                             )}`}
                           >
                             {inc.status.replace(/_/g, " ").toUpperCase()}
                           </span>
                         </div>
                         <p className="text-sm text-slate-600 mb-3">
-                          Type: <span className="font-medium">{inc.companyType.replace(/_/g, " ").toUpperCase()}</span>
+                          Type:{" "}
+                          <span className="font-medium">
+                            {inc.companyType.replace(/_/g, " ").toUpperCase()}
+                          </span>
                         </p>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                           <div>
                             <p className="text-slate-600">Directors</p>
-                            <p className="font-bold text-slate-900">{inc.directors.length}</p>
+                            <p className="font-bold text-slate-900">
+                              {inc.directors.length}
+                            </p>
                           </div>
                           <div>
                             <p className="text-slate-600">Shareholders</p>
-                            <p className="font-bold text-slate-900">{inc.shareholders.length}</p>
+                            <p className="font-bold text-slate-900">
+                              {inc.shareholders.length}
+                            </p>
                           </div>
                           <div>
                             <p className="text-slate-600">Share Capital</p>
-                            <p className="font-bold text-slate-900">{inc.shareCapital}</p>
+                            <p className="font-bold text-slate-900">
+                              {inc.shareCapital}
+                            </p>
                           </div>
                           <div>
                             <p className="text-slate-600">Filing Fee</p>
-                            <p className="font-bold text-slate-900">£{inc.filingFee}</p>
+                            <p className="font-bold text-slate-900">
+                              £{inc.filingFee}
+                            </p>
                           </div>
                         </div>
                         {inc.companyRegistrationNumber && (
                           <div className="mt-3 p-3 bg-green-50 rounded-lg border border-green-200">
                             <p className="text-xs text-green-700">
-                              CRN: <span className="font-bold">{inc.companyRegistrationNumber}</span>
+                              CRN:{" "}
+                              <span className="font-bold">
+                                {inc.companyRegistrationNumber}
+                              </span>
                             </p>
                           </div>
                         )}
@@ -842,7 +926,10 @@ export default function AdminUKCompanySetup() {
                 ))
               ) : (
                 <div className="text-center py-12">
-                  <p className="text-slate-500">No companies created yet. Click "New Company" to get started.</p>
+                  <p className="text-slate-500">
+                    No companies created yet. Click "New Company" to get
+                    started.
+                  </p>
                 </div>
               )}
             </div>

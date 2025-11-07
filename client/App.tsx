@@ -51,6 +51,13 @@ import AdminCompaniesNeedRenewal from "./pages/AdminCompaniesNeedRenewal";
 import AdminCompaniesForSale from "./pages/AdminCompaniesForSale";
 import AdminViewUserDashboard from "./pages/AdminViewUserDashboard";
 import AdminViewStaffDashboard from "./pages/AdminViewStaffDashboard";
+import AdminAccounting from "./pages/AdminAccounting";
+import AdminExpenses from "./pages/AdminExpenses";
+import AdminProfitLoss from "./pages/AdminProfitLoss";
+import AdminBalanceSheet from "./pages/AdminBalanceSheet";
+import AdminCashFlow from "./pages/AdminCashFlow";
+import AdminBudget from "./pages/AdminBudget";
+import AdminVendors from "./pages/AdminVendors";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();

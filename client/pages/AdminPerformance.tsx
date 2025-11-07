@@ -203,6 +203,75 @@ Final Score: ${report.totalScore}/100
     );
   };
 
+  // Bonus helper function
+  const calculateBonusAmount = (score: number, currency: string): { amount: number; tier: "bronze" | "silver" | "gold" | "none" } => {
+    const currencyMap: { [key: string]: { bronze: number; silver: number; gold: number } } = {
+      USD: { bronze: 100, silver: 250, gold: 500 },
+      EUR: { bronze: 100, silver: 250, gold: 500 },
+      GBP: { bronze: 120, silver: 300, gold: 600 },
+    };
+
+    const rates = currencyMap[currency] || { bronze: 100, silver: 250, gold: 500 };
+
+    if (score >= 95) return { amount: rates.gold, tier: "gold" };
+    if (score >= 90) return { amount: rates.silver, tier: "silver" };
+    if (score >= 85) return { amount: rates.bronze, tier: "bronze" };
+    return { amount: 0, tier: "none" };
+  };
+
+  // Filter and sort bonuses
+  const filteredAndSortedBonuses = useMemo(() => {
+    let bonuses = mockStaffBonuses
+      .map((bonus) => {
+        const staff = mockStaff.find((s) => s.id === bonus.staffId);
+        return { bonus, staff };
+      })
+      .filter((item) => item.staff);
+
+    // Status filter
+    if (bonusStatusFilter !== "all") {
+      bonuses = bonuses.filter((item) => item.bonus.status === bonusStatusFilter);
+    }
+
+    // Search filter
+    if (bonusSearchTerm) {
+      const search = bonusSearchTerm.toLowerCase();
+      bonuses = bonuses.filter(
+        (item) =>
+          item.staff?.firstName.toLowerCase().includes(search) ||
+          item.staff?.lastName.toLowerCase().includes(search) ||
+          item.staff?.email.toLowerCase().includes(search)
+      );
+    }
+
+    // Sort
+    bonuses.sort((a, b) => {
+      switch (bonusSortBy) {
+        case "amount":
+          return b.bonus.bonusAmount - a.bonus.bonusAmount;
+        case "staff":
+          const aName = `${a.staff?.firstName} ${a.staff?.lastName}`;
+          const bName = `${b.staff?.firstName} ${b.staff?.lastName}`;
+          return aName.localeCompare(bName);
+        case "date":
+        default:
+          return new Date(b.bonus.awardedAt).getTime() - new Date(a.bonus.awardedAt).getTime();
+      }
+    });
+
+    return bonuses;
+  }, [bonusSearchTerm, bonusStatusFilter, bonusSortBy]);
+
+  // Bonus statistics
+  const bonusStats = useMemo(() => {
+    const earned = mockStaffBonuses.filter((b) => b.status === "earned");
+    const paid = mockStaffBonuses.filter((b) => b.status === "paid");
+    const totalEarned = earned.reduce((sum, b) => sum + b.bonusAmount, 0);
+    const totalPaid = paid.reduce((sum, b) => sum + b.bonusAmount, 0);
+
+    return { earned: earned.length, paid: paid.length, totalEarned, totalPaid };
+  }, []);
+
   const totalUnderperforming = mockStaffPerformances.filter(
     (p) => p.currentScore < 60
   ).length;

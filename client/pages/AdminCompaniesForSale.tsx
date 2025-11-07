@@ -16,8 +16,12 @@ import { toast } from "sonner";
 
 export default function AdminCompaniesForSale() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterStatus, setFilterStatus] = useState<"all" | "active" | "dormant" | "liquidation">("all");
-  const [sortBy, setSortBy] = useState<"date" | "name" | "price" | "interest">("date");
+  const [filterStatus, setFilterStatus] = useState<
+    "all" | "active" | "dormant" | "liquidation"
+  >("all");
+  const [sortBy, setSortBy] = useState<"date" | "name" | "price" | "interest">(
+    "date",
+  );
   const [selectedCompanies, setSelectedCompanies] = useState<string[]>([]);
 
   const companies = useMemo(() => {
@@ -28,7 +32,9 @@ export default function AdminCompaniesForSale() {
     return companies.filter((company) => {
       const matchesSearch =
         company.companyName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        company.companyNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        company.companyNumber
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
         company.businessType.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesStatus =
         filterStatus === "all" || company.registrationStatus === filterStatus;
@@ -39,7 +45,10 @@ export default function AdminCompaniesForSale() {
   const sorted = useMemo(() => {
     const list = [...filtered];
     if (sortBy === "date") {
-      list.sort((a, b) => new Date(b.listedAt).getTime() - new Date(a.listedAt).getTime());
+      list.sort(
+        (a, b) =>
+          new Date(b.listedAt).getTime() - new Date(a.listedAt).getTime(),
+      );
     } else if (sortBy === "name") {
       list.sort((a, b) => a.companyName.localeCompare(b.companyName));
     } else if (sortBy === "price") {
@@ -79,7 +88,18 @@ export default function AdminCompaniesForSale() {
 
   const handleExportCSV = () => {
     const csv = [
-      ["Company Name", "Company Number", "Country", "Business Type", "Registration Status", "Asking Price", "Currency", "Views", "Inquiries", "Listed Date"],
+      [
+        "Company Name",
+        "Company Number",
+        "Country",
+        "Business Type",
+        "Registration Status",
+        "Asking Price",
+        "Currency",
+        "Views",
+        "Inquiries",
+        "Listed Date",
+      ],
       ...sorted.map((c) => [
         c.companyName,
         c.companyNumber,
@@ -121,8 +141,12 @@ export default function AdminCompaniesForSale() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900">Companies for Sale</h1>
-            <p className="text-slate-600 mt-1">Browse and manage companies available for acquisition</p>
+            <h1 className="text-3xl font-bold text-slate-900">
+              Companies for Sale
+            </h1>
+            <p className="text-slate-600 mt-1">
+              Browse and manage companies available for acquisition
+            </p>
           </div>
           <Button className="bg-primary-600 hover:bg-primary-700 flex items-center gap-2">
             <Plus className="w-4 h-4" />
@@ -135,8 +159,12 @@ export default function AdminCompaniesForSale() {
           <div className="bg-white rounded-lg border border-slate-200 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-slate-600 text-sm font-medium">Total Companies</p>
-                <p className="text-2xl font-bold text-slate-900 mt-2">{stats.totalCompanies}</p>
+                <p className="text-slate-600 text-sm font-medium">
+                  Total Companies
+                </p>
+                <p className="text-2xl font-bold text-slate-900 mt-2">
+                  {stats.totalCompanies}
+                </p>
               </div>
               <Building2 className="w-10 h-10 text-primary-100 opacity-50" />
             </div>
@@ -145,7 +173,9 @@ export default function AdminCompaniesForSale() {
           <div className="bg-white rounded-lg border border-slate-200 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-slate-600 text-sm font-medium">Total Value</p>
+                <p className="text-slate-600 text-sm font-medium">
+                  Total Value
+                </p>
                 <p className="text-2xl font-bold text-slate-900 mt-2">
                   £{(stats.totalValue / 1000000).toFixed(1)}M
                 </p>
@@ -160,7 +190,9 @@ export default function AdminCompaniesForSale() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-slate-600 text-sm font-medium">Avg Price</p>
-                <p className="text-2xl font-bold text-slate-900 mt-2">£{stats.avgPrice.toLocaleString()}</p>
+                <p className="text-2xl font-bold text-slate-900 mt-2">
+                  £{stats.avgPrice.toLocaleString()}
+                </p>
               </div>
               <div className="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center">
                 <TrendingUp className="w-5 h-5 text-purple-600" />
@@ -171,8 +203,12 @@ export default function AdminCompaniesForSale() {
           <div className="bg-white rounded-lg border border-slate-200 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-slate-600 text-sm font-medium">Total Views</p>
-                <p className="text-2xl font-bold text-slate-900 mt-2">{stats.totalViews}</p>
+                <p className="text-slate-600 text-sm font-medium">
+                  Total Views
+                </p>
+                <p className="text-2xl font-bold text-slate-900 mt-2">
+                  {stats.totalViews}
+                </p>
               </div>
               <Eye className="w-10 h-10 text-blue-100 opacity-50" />
             </div>
@@ -181,8 +217,12 @@ export default function AdminCompaniesForSale() {
           <div className="bg-white rounded-lg border border-slate-200 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-slate-600 text-sm font-medium">Total Inquiries</p>
-                <p className="text-2xl font-bold text-slate-900 mt-2">{stats.totalInquiries}</p>
+                <p className="text-slate-600 text-sm font-medium">
+                  Total Inquiries
+                </p>
+                <p className="text-2xl font-bold text-slate-900 mt-2">
+                  {stats.totalInquiries}
+                </p>
               </div>
               <MessageSquare className="w-10 h-10 text-green-100 opacity-50" />
             </div>
@@ -193,7 +233,9 @@ export default function AdminCompaniesForSale() {
         <div className="bg-white rounded-lg border border-slate-200 p-6 space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">Search</label>
+              <label className="block text-sm font-medium text-slate-700 mb-2">
+                Search
+              </label>
               <div className="relative">
                 <Search className="absolute left-3 top-3 w-4 h-4 text-slate-400" />
                 <input
@@ -207,7 +249,9 @@ export default function AdminCompaniesForSale() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">Status</label>
+              <label className="block text-sm font-medium text-slate-700 mb-2">
+                Status
+              </label>
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value as any)}
@@ -221,7 +265,9 @@ export default function AdminCompaniesForSale() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">Sort By</label>
+              <label className="block text-sm font-medium text-slate-700 mb-2">
+                Sort By
+              </label>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
@@ -255,19 +301,38 @@ export default function AdminCompaniesForSale() {
                 <th className="px-6 py-4 text-left">
                   <input
                     type="checkbox"
-                    checked={selectedCompanies.length === companies.length && companies.length > 0}
+                    checked={
+                      selectedCompanies.length === companies.length &&
+                      companies.length > 0
+                    }
                     onChange={(e) => handleSelectAll(e.target.checked)}
                     className="rounded border-slate-300"
                   />
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">Company</th>
-                <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">Business Type</th>
-                <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">Asking Price</th>
-                <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">Status</th>
-                <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">Interest</th>
-                <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">Views</th>
-                <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">Listed</th>
-                <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">Actions</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
+                  Company
+                </th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
+                  Business Type
+                </th>
+                <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">
+                  Asking Price
+                </th>
+                <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">
+                  Status
+                </th>
+                <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">
+                  Interest
+                </th>
+                <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">
+                  Views
+                </th>
+                <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">
+                  Listed
+                </th>
+                <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-200">
@@ -280,17 +345,25 @@ export default function AdminCompaniesForSale() {
                     <input
                       type="checkbox"
                       checked={selectedCompanies.includes(company.id)}
-                      onChange={(e) => handleSelectCompany(company.id, e.target.checked)}
+                      onChange={(e) =>
+                        handleSelectCompany(company.id, e.target.checked)
+                      }
                       className="rounded border-slate-300"
                     />
                   </td>
                   <td className="px-6 py-4">
                     <div>
-                      <p className="font-medium text-slate-900">{company.companyName}</p>
-                      <p className="text-sm text-slate-600">{company.companyNumber}</p>
+                      <p className="font-medium text-slate-900">
+                        {company.companyName}
+                      </p>
+                      <p className="text-sm text-slate-600">
+                        {company.companyNumber}
+                      </p>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-slate-700">{company.businessType}</td>
+                  <td className="px-6 py-4 text-slate-700">
+                    {company.businessType}
+                  </td>
                   <td className="px-6 py-4 text-center font-bold text-slate-900">
                     {company.currency} {company.askingPrice.toLocaleString()}
                   </td>
@@ -298,7 +371,8 @@ export default function AdminCompaniesForSale() {
                     <span
                       className={`inline-block px-3 py-1 rounded-full text-xs font-semibold border ${getStatusColor(company.registrationStatus)}`}
                     >
-                      {company.registrationStatus.charAt(0).toUpperCase() + company.registrationStatus.slice(1)}
+                      {company.registrationStatus.charAt(0).toUpperCase() +
+                        company.registrationStatus.slice(1)}
                     </span>
                   </td>
                   <td className="px-6 py-4 text-center">
@@ -317,7 +391,9 @@ export default function AdminCompaniesForSale() {
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => toast.info(`Viewing details for ${company.companyName}`)}
+                      onClick={() =>
+                        toast.info(`Viewing details for ${company.companyName}`)
+                      }
                       className="text-primary-600 hover:text-primary-700"
                     >
                       View
@@ -332,7 +408,9 @@ export default function AdminCompaniesForSale() {
             <div className="text-center py-12">
               <Building2 className="w-12 h-12 text-slate-300 mx-auto mb-4" />
               <p className="text-slate-600 font-medium">No companies found</p>
-              <p className="text-slate-500 text-sm mt-1">Try adjusting your search or filters</p>
+              <p className="text-slate-500 text-sm mt-1">
+                Try adjusting your search or filters
+              </p>
             </div>
           )}
         </div>
@@ -340,12 +418,23 @@ export default function AdminCompaniesForSale() {
         {/* Summary */}
         <div className="bg-slate-50 rounded-lg border border-slate-200 p-4">
           <p className="text-sm text-slate-600">
-            Showing <span className="font-semibold text-slate-900">{sorted.length}</span> of{" "}
-            <span className="font-semibold text-slate-900">{companies.length}</span> companies
+            Showing{" "}
+            <span className="font-semibold text-slate-900">
+              {sorted.length}
+            </span>{" "}
+            of{" "}
+            <span className="font-semibold text-slate-900">
+              {companies.length}
+            </span>{" "}
+            companies
             {selectedCompanies.length > 0 && (
               <>
                 {" "}
-                • <span className="font-semibold text-slate-900">{selectedCompanies.length}</span> selected
+                •{" "}
+                <span className="font-semibold text-slate-900">
+                  {selectedCompanies.length}
+                </span>{" "}
+                selected
               </>
             )}
           </p>

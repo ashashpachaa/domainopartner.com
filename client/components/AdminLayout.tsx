@@ -30,7 +30,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [expandedMenu, setExpandedMenu] = useState<string | null>(
-    location.pathname.startsWith("/admin/companies") ? "companies" : null
+    location.pathname.startsWith("/admin/companies") ? "companies" : null,
   );
 
   const handleLogout = () => {
@@ -144,9 +144,15 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           </Link>
           <div className="space-y-1">
             <button
-              onClick={() => setExpandedMenu(expandedMenu === "companies" ? null : "companies")}
+              onClick={() =>
+                setExpandedMenu(
+                  expandedMenu === "companies" ? null : "companies",
+                )
+              }
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition ${
-                isActive("/admin/companies") || isActive("/admin/companies/for-sale") || location.pathname.startsWith("/admin/companies/")
+                isActive("/admin/companies") ||
+                isActive("/admin/companies/for-sale") ||
+                location.pathname.startsWith("/admin/companies/")
                   ? "bg-primary-600 text-white"
                   : "text-slate-400 hover:bg-slate-800"
               }`}
@@ -154,7 +160,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
               <Building2 className="w-5 h-5" />
               {sidebarOpen && (
                 <>
-                  <span className="font-medium flex-1 text-left">Companies</span>
+                  <span className="font-medium flex-1 text-left">
+                    Companies
+                  </span>
                   <ChevronDown
                     className={`w-4 h-4 transition-transform ${expandedMenu === "companies" ? "rotate-180" : ""}`}
                   />

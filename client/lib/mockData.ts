@@ -6014,7 +6014,8 @@ export const mockCompaniesForSale: CompanyForSale[] = [
     contact: "John Smith",
     contactEmail: "john@techventure.co.uk",
     contactPhone: "+44 20 7946 0958",
-    description: "Established software development company with a strong client base. Annual revenue £500k. Looking for strategic acquisition.",
+    description:
+      "Established software development company with a strong client base. Annual revenue £500k. Looking for strategic acquisition.",
     listedAt: "2024-01-10",
     views: 245,
     inquiries: 12,
@@ -6032,7 +6033,8 @@ export const mockCompaniesForSale: CompanyForSale[] = [
     contact: "Sarah Johnson",
     contactEmail: "sarah@digitalmarketingpro.uk",
     contactPhone: "+44 121 456 7890",
-    description: "Digital marketing agency with expertise in SEO and social media. Profitable with recurring clients. Ready for expansion.",
+    description:
+      "Digital marketing agency with expertise in SEO and social media. Profitable with recurring clients. Ready for expansion.",
     listedAt: "2024-01-05",
     views: 178,
     inquiries: 8,
@@ -6050,7 +6052,8 @@ export const mockCompaniesForSale: CompanyForSale[] = [
     contact: "Michael Chen",
     contactEmail: "michael@greenenergysys.co.uk",
     contactPhone: "+44 161 234 5678",
-    description: "Renewable energy consulting firm. Strong government contracts. Annual turnover £800k. Seeking investor partnership.",
+    description:
+      "Renewable energy consulting firm. Strong government contracts. Annual turnover £800k. Seeking investor partnership.",
     listedAt: "2024-01-15",
     views: 312,
     inquiries: 19,
@@ -6068,7 +6071,8 @@ export const mockCompaniesForSale: CompanyForSale[] = [
     contact: "Emma Wilson",
     contactEmail: "emma@ecomretail.co.uk",
     contactPhone: "+44 113 276 6789",
-    description: "Established online retail business with 50k monthly visitors. Multiple product lines. Good profit margins.",
+    description:
+      "Established online retail business with 50k monthly visitors. Multiple product lines. Good profit margins.",
     listedAt: "2024-01-08",
     views: 201,
     inquiries: 15,
@@ -6086,7 +6090,8 @@ export const mockCompaniesForSale: CompanyForSale[] = [
     contact: "David Thompson",
     contactEmail: "david@bcgroupltd.co.uk",
     contactPhone: "+44 20 3456 7890",
-    description: "Management consulting firm specializing in business transformation. Blue-chip clients. High margins.",
+    description:
+      "Management consulting firm specializing in business transformation. Blue-chip clients. High margins.",
     listedAt: "2024-01-12",
     views: 156,
     inquiries: 10,
@@ -6104,7 +6109,8 @@ export const mockCompaniesForSale: CompanyForSale[] = [
     contact: "Dr. Lisa Anderson",
     contactEmail: "lisa@healthtech.co.uk",
     contactPhone: "+44 131 456 7890",
-    description: "Healthcare technology startup with innovative medical software. Patent pending. Looking for venture capital.",
+    description:
+      "Healthcare technology startup with innovative medical software. Patent pending. Looking for venture capital.",
     listedAt: "2024-01-18",
     views: 289,
     inquiries: 22,
@@ -6122,7 +6128,8 @@ export const mockCompaniesForSale: CompanyForSale[] = [
     contact: "Robert Cooper",
     contactEmail: "robert@propmanagement.co.uk",
     contactPhone: "+44 20 7234 5678",
-    description: "Property management company managing 150+ residential units. Stable rental income. Professional team in place.",
+    description:
+      "Property management company managing 150+ residential units. Stable rental income. Professional team in place.",
     listedAt: "2024-01-06",
     views: 167,
     inquiries: 7,

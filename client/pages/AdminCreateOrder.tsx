@@ -297,6 +297,21 @@ export default function AdminCreateOrder() {
     mockOrders.push(newOrder);
     localStorage.setItem(`order_${newOrder.id}`, JSON.stringify(newOrder));
 
+    // Mark company as sold if UK Acquisitions Package was selected
+    if (product?.id === "P005" && companyNumber) {
+      const companyIndex = mockCompaniesForSale.findIndex(
+        (c) => c.companyNumber === companyNumber
+      );
+      if (companyIndex !== -1) {
+        mockCompaniesForSale[companyIndex].registrationStatus = "sold";
+        // Save updated companies list to localStorage
+        localStorage.setItem(
+          "companiesForSale",
+          JSON.stringify(mockCompaniesForSale)
+        );
+      }
+    }
+
     toast.success("Order created successfully!");
     navigate(`/admin/operations/${newOrder.id}`);
   };

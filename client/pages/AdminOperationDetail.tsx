@@ -415,6 +415,7 @@ export default function AdminOperationDetail() {
       const rejectionStatus = getRejectionStatus();
       const currentStaff = mockStaff.find((s) => s.id === effectiveUserId);
       const isReworkFlow = [
+        "pending_operation",
         "pending_operation_manager_review",
         "awaiting_client_acceptance",
       ].includes(order.status);

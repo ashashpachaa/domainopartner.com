@@ -1073,10 +1073,16 @@ export default function AdminUKCompanySetup() {
         }),
       });
 
-      const result = await response.json();
+      let result;
+      try {
+        result = await response.json();
+      } catch (parseError) {
+        console.error("Failed to parse response:", parseError);
+        throw new Error("Invalid response from server");
+      }
 
       if (!response.ok) {
-        throw new Error(result.error || "Failed to process payment");
+        throw new Error(result.error || result.details || "Failed to process payment");
       }
 
       const paymentRef = result.paymentReference;
@@ -1092,11 +1098,13 @@ export default function AdminUKCompanySetup() {
       setIncorporations(incorporations.map(i => i.id === inc.id ? updated : i));
       setSelectedIncorporation(updated);
 
+      toast.dismiss();
       toast.success(
-        `✓ Payment Confirmed!\nReference: ${paymentRef}\n\nYour filing fee has been received.`
+        `✓ Payment Confirmed!\nReference: ${paymentRef}`
       );
     } catch (error: any) {
       console.error("Payment error:", error);
+      toast.dismiss();
       toast.error(error.message || "Failed to process payment");
     }
   };

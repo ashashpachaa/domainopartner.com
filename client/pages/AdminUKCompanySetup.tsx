@@ -1047,20 +1047,50 @@ export default function AdminUKCompanySetup() {
     toast.success("Company registration completed! Company number and AUTH CODE saved.");
   };
 
-  const handleProcessPayment = (inc: CompanyIncorporation) => {
-    const paymentRef = `CH-${Date.now()}`;
-    const updated = {
-      ...inc,
-      paymentStatus: "paid" as const,
-      paymentReference: paymentRef,
-      paymentDate: new Date().toISOString().split("T")[0],
-    };
+  const handleProcessPayment = async (inc: CompanyIncorporation) => {
+    try {
+      toast.loading("Processing payment with Companies House...");
 
-    localStorage.setItem(`incorporation_${inc.id}`, JSON.stringify(updated));
-    setIncorporations(incorporations.map(i => i.id === inc.id ? updated : i));
-    setSelectedIncorporation(updated);
+      // Call the payment endpoint
+      const response = await fetch("/api/companies-house/process-payment", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          incorporationId: inc.id,
+          amount: inc.filingFee,
+          currency: "GBP",
+          companyName: inc.companyName,
+        }),
+      });
 
-    toast.success(`Payment processed! Reference: ${paymentRef}`);
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to process payment");
+      }
+
+      const paymentRef = result.paymentReference;
+
+      const updated = {
+        ...inc,
+        paymentStatus: "paid" as const,
+        paymentReference: paymentRef,
+        paymentDate: new Date().toISOString().split("T")[0],
+      };
+
+      localStorage.setItem(`incorporation_${inc.id}`, JSON.stringify(updated));
+      setIncorporations(incorporations.map(i => i.id === inc.id ? updated : i));
+      setSelectedIncorporation(updated);
+
+      toast.success(
+        `✓ Payment Confirmed!\nReference: ${paymentRef}\n\nYour filing fee has been received.`
+      );
+    } catch (error: any) {
+      console.error("Payment error:", error);
+      toast.error(error.message || "Failed to process payment");
+    }
   };
 
   return (

@@ -150,6 +150,50 @@ export default function AdminCompanies() {
           </p>
         </div>
 
+        {/* Country Tabs */}
+        <div className="mb-6 flex gap-2 border-b border-slate-200">
+          <button
+            onClick={() => setSelectedCountry("all")}
+            className={`px-4 py-3 font-medium border-b-2 transition ${
+              selectedCountry === "all"
+                ? "border-blue-600 text-blue-600"
+                : "border-transparent text-slate-600 hover:text-slate-900"
+            }`}
+          >
+            🌍 All Countries
+          </button>
+          <button
+            onClick={() => setSelectedCountry("UK")}
+            className={`px-4 py-3 font-medium border-b-2 transition ${
+              selectedCountry === "UK"
+                ? "border-blue-600 text-blue-600"
+                : "border-transparent text-slate-600 hover:text-slate-900"
+            }`}
+          >
+            🇬🇧 United Kingdom
+          </button>
+          <button
+            onClick={() => setSelectedCountry("USA")}
+            className={`px-4 py-3 font-medium border-b-2 transition ${
+              selectedCountry === "USA"
+                ? "border-blue-600 text-blue-600"
+                : "border-transparent text-slate-600 hover:text-slate-900"
+            }`}
+          >
+            🇺🇸 United States
+          </button>
+          <button
+            onClick={() => setSelectedCountry("Sweden")}
+            className={`px-4 py-3 font-medium border-b-2 transition ${
+              selectedCountry === "Sweden"
+                ? "border-blue-600 text-blue-600"
+                : "border-transparent text-slate-600 hover:text-slate-900"
+            }`}
+          >
+            🇸🇪 Sweden
+          </button>
+        </div>
+
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
           <div className="bg-white rounded-lg border border-slate-200 p-6">

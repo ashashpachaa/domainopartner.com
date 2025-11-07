@@ -364,49 +364,55 @@ export default function AdminProducts() {
                 </div>
 
                 {/* Actions */}
-                <div className="flex gap-2 border-t border-slate-200 pt-4">
-                  <Link to={`/admin/products/${product.id}`} className="flex-1">
+                <div className="grid grid-cols-4 gap-1 border-t border-slate-200 pt-3 mt-3 -mx-6 px-6">
+                  <Link to={`/admin/products/${product.id}`} className="col-span-1">
                     <Button
                       variant="outline"
                       size="sm"
-                      className="w-full text-primary-600 hover:text-primary-700 hover:bg-primary-50"
+                      className="w-full text-primary-600 hover:text-primary-700 hover:bg-primary-50 text-xs py-1"
+                      title="View product details"
                     >
-                      <Eye className="w-4 h-4 mr-2" />
-                      View
+                      <Eye className="w-3 h-3" />
+                      <span className="hidden sm:inline ml-1">View</span>
                     </Button>
                   </Link>
                   <Link
                     to={`/admin/products/${product.id}/edit`}
-                    className="flex-1"
+                    className="col-span-1"
                   >
                     <Button
                       variant="outline"
                       size="sm"
-                      className="w-full text-slate-600 hover:text-slate-700 hover:bg-slate-100"
+                      className="w-full text-slate-600 hover:text-slate-700 hover:bg-slate-100 text-xs py-1"
+                      title="Edit product"
                     >
-                      <Edit2 className="w-4 h-4 mr-2" />
-                      Edit
+                      <Edit2 className="w-3 h-3" />
+                      <span className="hidden sm:inline ml-1">Edit</span>
                     </Button>
                   </Link>
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => toggleProductStatus(product.id)}
-                    className={`flex-1 ${
+                    className={`col-span-1 text-xs py-1 ${
                       product.status === "active"
                         ? "text-yellow-600 hover:text-yellow-700 hover:bg-yellow-50"
                         : "text-green-600 hover:text-green-700 hover:bg-green-50"
                     }`}
+                    title={product.status === "active" ? "Deactivate product" : "Activate product"}
                   >
-                    {product.status === "active" ? "Deactivate" : "Activate"}
+                    <span className="text-xs">
+                      {product.status === "active" ? "Off" : "On"}
+                    </span>
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => deleteProduct(product.id)}
-                    className="flex-1 text-red-600 hover:text-red-700 hover:bg-red-50"
+                    className="col-span-1 text-red-600 hover:text-red-700 hover:bg-red-50 py-1"
+                    title="Delete product"
                   >
-                    <Trash2 className="w-4 h-4" />
+                    <Trash2 className="w-3 h-3" />
                   </Button>
                 </div>
               </div>

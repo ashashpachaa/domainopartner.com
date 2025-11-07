@@ -338,27 +338,55 @@ export default function AdminCompaniesNeedRenewal() {
                     <th className="px-6 py-4 text-left text-xs font-bold text-red-700 uppercase">
                       Company Name
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-red-700 uppercase">
-                      Country
-                    </th>
-                    <th className="px-6 py-4 text-center text-xs font-bold text-red-700 uppercase">
-                      Days Until Renewal
-                    </th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-red-700 uppercase">
-                      Renewal Date
-                    </th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-red-700 uppercase">
-                      Accounts Due
-                    </th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-red-700 uppercase">
-                      Auth Code
-                    </th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-red-700 uppercase">
-                      Contact
-                    </th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-red-700 uppercase">
-                      Action
-                    </th>
+                    {selectedCountry === "UK" ? (
+                      <>
+                        <th className="px-6 py-4 text-left text-xs font-bold text-red-700 uppercase">
+                          Company Number
+                        </th>
+                        <th className="px-6 py-4 text-left text-xs font-bold text-red-700 uppercase">
+                          Incorporation Date
+                        </th>
+                        <th className="px-6 py-4 text-left text-xs font-bold text-red-700 uppercase">
+                          Next Confirmation Date
+                        </th>
+                        <th className="px-6 py-4 text-left text-xs font-bold text-red-700 uppercase">
+                          First Accounts Made Up To
+                        </th>
+                        <th className="px-6 py-4 text-left text-xs font-bold text-red-700 uppercase">
+                          Status
+                        </th>
+                        <th className="px-6 py-4 text-left text-xs font-bold text-red-700 uppercase">
+                          Auth Code
+                        </th>
+                        <th className="px-6 py-4 text-left text-xs font-bold text-red-700 uppercase">
+                          Action
+                        </th>
+                      </>
+                    ) : (
+                      <>
+                        <th className="px-6 py-4 text-left text-xs font-bold text-red-700 uppercase">
+                          Country
+                        </th>
+                        <th className="px-6 py-4 text-center text-xs font-bold text-red-700 uppercase">
+                          Days Until Renewal
+                        </th>
+                        <th className="px-6 py-4 text-left text-xs font-bold text-red-700 uppercase">
+                          Renewal Date
+                        </th>
+                        <th className="px-6 py-4 text-left text-xs font-bold text-red-700 uppercase">
+                          Accounts Due
+                        </th>
+                        <th className="px-6 py-4 text-left text-xs font-bold text-red-700 uppercase">
+                          Auth Code
+                        </th>
+                        <th className="px-6 py-4 text-left text-xs font-bold text-red-700 uppercase">
+                          Contact
+                        </th>
+                        <th className="px-6 py-4 text-left text-xs font-bold text-red-700 uppercase">
+                          Action
+                        </th>
+                      </>
+                    )}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200">
@@ -379,65 +407,107 @@ export default function AdminCompaniesNeedRenewal() {
                             {company.companyName}
                           </p>
                         </td>
-                        <td className="px-6 py-4 text-sm text-slate-600">
-                          {company.country}
-                        </td>
-                        <td className="px-6 py-4 text-center">
-                          <span
-                            className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold ${
-                              isVeryUrgent
-                                ? "bg-red-200 text-red-800"
-                                : isUrgent
-                                  ? "bg-orange-200 text-orange-800"
-                                  : "bg-yellow-200 text-yellow-800"
-                            }`}
-                          >
-                            {urgencyDays}d
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 text-sm text-slate-600">
-                          {formatDate(company.nextRenewalDate)}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-slate-600">
-                          {formatDate(company.nextAccountsFilingDate)}
-                        </td>
-                        <td className="px-6 py-4 text-sm font-medium text-slate-900">
-                          {company.authCode}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-slate-600">
-                          {getUserName(company.userId)}
-                        </td>
-                        <td className="px-6 py-4">
-                          <div className="flex items-center gap-2">
-                            <button
-                              onClick={() =>
-                                handleSendReminder(company.id, company.companyName)
-                              }
-                              className="p-2 hover:bg-blue-100 rounded-lg text-blue-600 transition"
-                              title="Send reminder email"
-                            >
-                              <Mail className="w-4 h-4" />
-                            </button>
-                            {selectedCountry === "UK" && (
-                              <Button
-                                onClick={() => {
-                                  toast.success(
-                                    `${company.companyName} added to sales list`,
-                              );
-                                }}
-                                className="bg-purple-600 hover:bg-purple-700 text-white text-xs h-8 px-3"
+                        {selectedCountry === "UK" ? (
+                          <>
+                            <td className="px-6 py-4 text-sm text-slate-600">
+                              {company.companyNumber}
+                            </td>
+                            <td className="px-6 py-4 text-sm text-slate-600">
+                              {formatDate(company.incorporationDate)}
+                            </td>
+                            <td className="px-6 py-4 text-sm text-slate-600">
+                              {formatDate(company.nextRenewalDate)}
+                            </td>
+                            <td className="px-6 py-4 text-sm text-slate-600">
+                              {formatDate(company.nextAccountsFilingDate)}
+                            </td>
+                            <td className="px-6 py-4">
+                              <span
+                                className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${
+                                  company.status === "active"
+                                    ? "bg-green-100 text-green-700"
+                                    : "bg-red-100 text-red-700"
+                                }`}
                               >
-                                Sell
-                              </Button>
-                            )}
-                            <Button
-                              onClick={() => handleMarkRenewed(company.id)}
-                              className="bg-green-600 hover:bg-green-700 text-white text-xs h-8 px-3"
-                            >
-                              Renewed
-                            </Button>
-                          </div>
-                        </td>
+                                {company.status.charAt(0).toUpperCase() +
+                                  company.status.slice(1)}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4 text-sm font-medium text-slate-900">
+                              {company.authCode}
+                            </td>
+                            <td className="px-6 py-4">
+                              <div className="flex items-center gap-2">
+                                <Button
+                                  onClick={() => {
+                                    // TODO: Navigate to company detail view
+                                  }}
+                                  className="bg-blue-600 hover:bg-blue-700 text-white text-xs h-8 px-3"
+                                >
+                                  View
+                                </Button>
+                                <Button
+                                  onClick={() => {
+                                    // TODO: Navigate to company edit page
+                                  }}
+                                  className="bg-slate-600 hover:bg-slate-700 text-white text-xs h-8 px-3"
+                                >
+                                  Edit
+                                </Button>
+                              </div>
+                            </td>
+                          </>
+                        ) : (
+                          <>
+                            <td className="px-6 py-4 text-sm text-slate-600">
+                              {company.country}
+                            </td>
+                            <td className="px-6 py-4 text-center">
+                              <span
+                                className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold ${
+                                  isVeryUrgent
+                                    ? "bg-red-200 text-red-800"
+                                    : isUrgent
+                                      ? "bg-orange-200 text-orange-800"
+                                      : "bg-yellow-200 text-yellow-800"
+                                }`}
+                              >
+                                {urgencyDays}d
+                              </span>
+                            </td>
+                            <td className="px-6 py-4 text-sm text-slate-600">
+                              {formatDate(company.nextRenewalDate)}
+                            </td>
+                            <td className="px-6 py-4 text-sm text-slate-600">
+                              {formatDate(company.nextAccountsFilingDate)}
+                            </td>
+                            <td className="px-6 py-4 text-sm font-medium text-slate-900">
+                              {company.authCode}
+                            </td>
+                            <td className="px-6 py-4 text-sm text-slate-600">
+                              {getUserName(company.userId)}
+                            </td>
+                            <td className="px-6 py-4">
+                              <div className="flex items-center gap-2">
+                                <button
+                                  onClick={() =>
+                                    handleSendReminder(company.id, company.companyName)
+                                  }
+                                  className="p-2 hover:bg-blue-100 rounded-lg text-blue-600 transition"
+                                  title="Send reminder email"
+                                >
+                                  <Mail className="w-4 h-4" />
+                                </button>
+                                <Button
+                                  onClick={() => handleMarkRenewed(company.id)}
+                                  className="bg-green-600 hover:bg-green-700 text-white text-xs h-8 px-3"
+                                >
+                                  Renewed
+                                </Button>
+                              </div>
+                            </td>
+                          </>
+                        )}
                       </tr>
                     );
                   })}

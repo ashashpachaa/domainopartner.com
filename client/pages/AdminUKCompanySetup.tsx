@@ -634,7 +634,7 @@ export default function AdminUKCompanySetup() {
                   <div className="flex-1">
                     {currentStep === 0 && (
                       <div className="space-y-6">
-                        <h2 className="text-2xl font-bold text-slate-900">Enter company name and select company type</h2>
+                        <h2 className="text-2xl font-bold text-slate-900">Enter company details</h2>
 
                         <div className="space-y-4">
                           <div>

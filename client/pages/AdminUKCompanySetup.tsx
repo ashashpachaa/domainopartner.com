@@ -1957,6 +1957,55 @@ export default function AdminUKCompanySetup() {
                               <span className="text-sm">No</span>
                             </label>
                           </div>
+                          {currentOfficer.significantControl.votingRightsOver25 === "Yes" && (
+                            <div className="ml-4 space-y-2">
+                              <label className="flex items-center gap-2 cursor-pointer">
+                                <input
+                                  type="radio"
+                                  name="votingRightsLevel"
+                                  value="More than 25% but not more than 50%"
+                                  checked={currentOfficer.significantControl.votingRightsOver50 === "More than 25% but not more than 50%"}
+                                  onChange={(e) =>
+                                    setCurrentOfficer({
+                                      ...currentOfficer,
+                                      significantControl: { ...currentOfficer.significantControl, votingRightsOver50: e.target.value },
+                                    })
+                                  }
+                                />
+                                <span className="text-sm">More than 25% but not more than 50% of the voting rights in the company</span>
+                              </label>
+                              <label className="flex items-center gap-2 cursor-pointer">
+                                <input
+                                  type="radio"
+                                  name="votingRightsLevel"
+                                  value="More than 50% but less than 75%"
+                                  checked={currentOfficer.significantControl.votingRightsOver50 === "More than 50% but less than 75%"}
+                                  onChange={(e) =>
+                                    setCurrentOfficer({
+                                      ...currentOfficer,
+                                      significantControl: { ...currentOfficer.significantControl, votingRightsOver50: e.target.value },
+                                    })
+                                  }
+                                />
+                                <span className="text-sm">More than 50% but less than 75% of the voting rights in the company</span>
+                              </label>
+                              <label className="flex items-center gap-2 cursor-pointer">
+                                <input
+                                  type="radio"
+                                  name="votingRightsLevel"
+                                  value="75% or more of the voting rights"
+                                  checked={currentOfficer.significantControl.votingRightsOver50 === "75% or more of the voting rights"}
+                                  onChange={(e) =>
+                                    setCurrentOfficer({
+                                      ...currentOfficer,
+                                      significantControl: { ...currentOfficer.significantControl, votingRightsOver50: e.target.value },
+                                    })
+                                  }
+                                />
+                                <span className="text-sm">75% or more of the voting rights in the company</span>
+                              </label>
+                            </div>
+                          )}
                         </div>
 
                         <div className="space-y-3 border-t border-slate-200 pt-4">

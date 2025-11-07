@@ -212,6 +212,10 @@ const App = () => (
             path="/admin/companies"
             element={<AdminRoute element={<AdminCompanies />} />}
           />
+          <Route
+            path="/admin/companies/for-sale"
+            element={<AdminRoute element={<AdminCompaniesForSale />} />}
+          />
 
           {/* Client Routes */}
           <Route path="/client/dashboard" element={<ProtectedRoute element={<ClientDashboard />} />} />

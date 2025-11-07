@@ -364,6 +364,11 @@ export default function AdminCompanies() {
                     </th>
                     {selectedCountry === "UK" && (
                       <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
+                        Auth Code
+                      </th>
+                    )}
+                    {selectedCountry === "UK" && (
+                      <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
                         Action
                       </th>
                     )}

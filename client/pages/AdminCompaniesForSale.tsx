@@ -107,6 +107,43 @@ export default function AdminCompaniesForSale() {
     }
   };
 
+  const handleSearchCompanies = () => {
+    if (!searchCompanyNumber && !searchAuthCode) {
+      toast.error("Please enter Company Number or Auth Code");
+      return;
+    }
+
+    const ukCompanies = companies.filter(
+      (c) => c.country === "United Kingdom"
+    );
+    const results = ukCompanies.filter((company) => {
+      const matchesNumber = searchCompanyNumber
+        ? company.companyNumber
+            .toLowerCase()
+            .includes(searchCompanyNumber.toLowerCase())
+        : true;
+      const matchesAuthCode = searchAuthCode
+        ? company.authCode
+            .toLowerCase()
+            .includes(searchAuthCode.toLowerCase())
+        : true;
+      return matchesNumber && matchesAuthCode;
+    });
+
+    setSearchResults(results);
+    if (results.length === 0) {
+      toast.info("No companies found matching your search criteria");
+    }
+  };
+
+  const handleListCompany = (company: CompanyForSale) => {
+    toast.success(`${company.companyName} has been listed for sale!`);
+    setShowListModal(false);
+    setSearchCompanyNumber("");
+    setSearchAuthCode("");
+    setSearchResults([]);
+  };
+
   const handleExportCSV = () => {
     const csv = [
       [

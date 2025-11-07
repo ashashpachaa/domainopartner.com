@@ -392,33 +392,25 @@ export default function AdminCompanies() {
                             {company.companyName}
                           </p>
                         </td>
-                        {selectedCountry === "UK" ? (
-                          <>
-                            <td className="px-6 py-4 text-sm text-slate-600">
-                              {company.companyNumber}
-                            </td>
-                            <td className="px-6 py-4 text-sm text-slate-600">
-                              {formatDate(company.incorporationDate)}
-                            </td>
-                            <td className="px-6 py-4 text-sm text-slate-600">
-                              {formatDate(company.nextRenewalDate)}
-                            </td>
-                            <td className="px-6 py-4 text-sm text-slate-600">
-                              {formatDate(company.nextAccountsFilingDate)}
-                            </td>
-                          </>
-                        ) : (
-                          <>
-                            <td className="px-6 py-4 text-sm text-slate-600">
-                              {company.country}
-                            </td>
-                            <td className="px-6 py-4 text-sm text-slate-600">
-                              {company.companyNumber}
-                            </td>
-                            <td className="px-6 py-4 text-sm text-slate-600">
-                              {getUserName(company.userId)}
-                            </td>
-                          </>
+                        <td className="px-6 py-4 text-sm text-slate-600">
+                          {selectedCountry === "UK"
+                            ? company.companyNumber
+                            : company.country}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-slate-600">
+                          {selectedCountry === "UK"
+                            ? formatDate(company.incorporationDate)
+                            : company.companyNumber}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-slate-600">
+                          {selectedCountry === "UK"
+                            ? formatDate(company.nextRenewalDate)
+                            : getUserName(company.userId)}
+                        </td>
+                        {selectedCountry === "UK" && (
+                          <td className="px-6 py-4 text-sm text-slate-600">
+                            {formatDate(company.nextAccountsFilingDate)}
+                          </td>
                         )}
                         <td className="px-6 py-4">
                           <span

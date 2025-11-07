@@ -110,6 +110,17 @@ export default function AdminCompanies() {
     );
   };
 
+  const checkIfNeedsRenewal = (company: RegisteredCompany) => {
+    const daysUntilConfirmation = daysUntilDate(company.nextRenewalDate);
+    const daysUntilAccounts = daysUntilDate(company.nextAccountsFilingDate);
+
+    // Check if within 15 days of either date
+    const confirmationDue = daysUntilConfirmation <= 15 && daysUntilConfirmation > 0;
+    const accountsDue = daysUntilAccounts <= 15 && daysUntilAccounts > 0;
+
+    return confirmationDue || accountsDue;
+  };
+
   const exportToCSV = () => {
     let headers: string[];
     let rows: (string | number)[][];

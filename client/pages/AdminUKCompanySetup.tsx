@@ -23,39 +23,38 @@ import { toast } from "sonner";
 import { storeRegisteredCompany } from "@/hooks/useCompanyDetails";
 import { useCompanyNameValidation } from "@/hooks/useCompanyNameValidation";
 
-const NATIONALITIES = Array.from(new Set([
-  "Afghan", "Albanian", "Algerian", "Andorran", "Angolan", "Argentine", "Armenian",
+const NATIONALITIES = [
+  "Afghan", "Albanian", "Algerian", "American", "Andorran", "Angolan", "Argentine", "Armenian",
   "Australian", "Austrian", "Azerbaijani", "Bahamian", "Bahraini", "Bangladeshi",
   "Barbadian", "Belarusian", "Belgian", "Belizean", "Beninese", "Bhutanese", "Bolivian",
   "Bosnian", "Botswanan", "Brazilian", "British", "Bruneian", "Bulgarian", "Burkinabe",
   "Burmese", "Burundian", "Cambodian", "Cameroonian", "Canadian", "Cape Verdean", "Central African",
   "Chadian", "Chilean", "Chinese", "Colombian", "Comoran", "Congolese", "Costa Rican",
   "Croatian", "Cuban", "Cypriot", "Czech", "Danish", "Djiboutian", "Dominican", "Dutch",
-  "East Timorese", "Ecuadorean", "Egyptian", "Salvadoran", "Equatorial Guinean",
-  "Eritrean", "Estonian", "Eswatini", "Ethiopian", "Fijian", "Finnish", "French", "Gabonese",
+  "East Timorese", "Ecuadorean", "Egyptian", "Emirati", "Equatorial Guinean", "Eritrean",
+  "Estonian", "Eswatini", "Ethiopian", "Fijian", "Filipino", "Finnish", "French", "Gabonese",
   "Gambian", "Georgian", "German", "Ghanaian", "Gibraltarian", "Greek", "Grenadian",
   "Guatemalan", "Guernsey", "Guinean", "Guinea-Bissauan", "Guyanese", "Haitian",
   "Honduran", "Hong Kong", "Hungarian", "Icelander", "Indian", "Indonesian", "Iranian",
   "Iraqi", "Irish", "Israeli", "Italian", "Jamaican", "Japanese", "Jerseian", "Jordanian",
-  "Kazakhstani", "Kenyan", "Kiribati", "North Korean", "South Korean", "Kosovan", "Kuwaiti",
-  "Kyrgyzstani", "Laotian", "Latvian", "Lebanese", "Basotho", "Liberian", "Libyan",
-  "Liechtensteiner", "Lithuanian", "Luxembourger", "Macanese", "Macedonian", "Malagasy",
-  "Malawian", "Malaysian", "Maldivian", "Malian", "Maltese", "Manx", "Marshallese",
-  "Mauritian", "Mauritanian", "Mexican", "Micronesian", "Moldovan", "Monégasque",
-  "Mongolian", "Montenegrin", "Moroccan", "Mozambican", "Namibian", "Nauruan", "Nepali",
-  "New Zealand", "Nicaraguan", "Nigerian", "Niuean", "Norwegian", "Omani",
-  "Pakistani", "Palauan", "Palestinian", "Panamanian", "Papua New Guinean", "Paraguayan",
-  "Peruvian", "Filipino", "Polish", "Portuguese", "Puerto Rican", "Qatari", "Romanian",
-  "Russian", "Rwandan", "Saint Kitts and Nevis", "Saint Lucian", "Saint Vincentian",
-  "Samoan", "Sammarinese", "São Toméan", "Saudi Arabian", "Scottish", "Senegalese",
-  "Serbian", "Seychellois", "Sierra Leonean", "Singaporean", "Slovak", "Slovenian",
-  "Solomon Islander", "Somali", "South African", "South Sudanese", "Spanish", "Sri Lankan",
-  "Sudanese", "Surinamese", "Swazi", "Swedish", "Swiss", "Syrian", "Taiwanese", "Tajikistani",
-  "Tanzanian", "Thai", "Togolese", "Tongan", "Trinidadian", "Tobagonian", "Tunisian",
-  "Turkish", "Turkmen", "Tuvaluan", "Ugandan", "Ukrainian", "Emirati", "American", "Uruguayan",
-  "Uzbekistani", "Ni-Vanuatu", "Vatican", "Venezuelan", "Vietnamese",
-  "Virgin Islander", "Welsh", "Yemeni", "Zambian", "Zimbabwean"
-])).sort();
+  "Kazakhstani", "Kenyan", "Kiribati", "Kosovan", "Kuwaiti", "Kyrgyzstani", "Laotian",
+  "Latvian", "Lebanese", "Liberian", "Libyan", "Liechtensteiner", "Lithuanian", "Luxembourger",
+  "Macanese", "Macedonian", "Malagasy", "Malawian", "Malaysian", "Maldivian", "Malian",
+  "Maltese", "Manx", "Marshallese", "Mauritian", "Mauritanian", "Mexican", "Micronesian",
+  "Moldovan", "Monégasque", "Mongolian", "Montenegrin", "Moroccan", "Mozambican", "Namibian",
+  "Nauruan", "Nepali", "New Zealand", "Nicaraguan", "Nigerian", "Niuean", "North Korean",
+  "Norwegian", "Omani", "Pakistani", "Palauan", "Palestinian", "Panamanian",
+  "Papua New Guinean", "Paraguayan", "Peruvian", "Polish", "Portuguese", "Puerto Rican",
+  "Qatari", "Romanian", "Russian", "Rwandan", "Saint Kitts and Nevis", "Saint Lucian",
+  "Saint Vincentian", "Salvadoran", "Samoan", "Sammarinese", "São Toméan", "Saudi Arabian",
+  "Scottish", "Senegalese", "Serbian", "Seychellois", "Sierra Leonean", "Singaporean",
+  "Slovak", "Slovenian", "Solomon Islander", "Somali", "South African", "South Korean",
+  "South Sudanese", "Spanish", "Sri Lankan", "Sudanese", "Surinamese", "Swazi",
+  "Swedish", "Swiss", "Syrian", "Taiwanese", "Tajikistani", "Tanzanian", "Thai", "Togolese",
+  "Tongan", "Trinidadian", "Tobagonian", "Tunisian", "Turkish", "Turkmen", "Tuvaluan",
+  "Ugandan", "Ukrainian", "Uruguayan", "Uzbekistani", "Vatican", "Venezuelan", "Vietnamese",
+  "Virgin Islander", "Welsh", "Yemeni", "Ni-Vanuatu", "Zambian", "Zimbabwean"
+].sort();
 
 const SIC_CODES = [
   { code: "01110", description: "Growing of cereals (except rice), leguminous crops and oil seeds" },

@@ -490,6 +490,44 @@ export default function AdminCreateOrder() {
                 </div>
               </div>
 
+              {/* Company Selection for UK Acquisitions */}
+              {showCompanySelector && availableCompanies.length > 0 && (
+                <div className="pb-8 border-b border-slate-200">
+                  <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+                    <span className="flex items-center justify-center w-8 h-8 rounded-full bg-purple-100 text-purple-700 text-sm font-semibold">
+                      ★
+                    </span>
+                    Select Company to Acquire
+                  </h2>
+                  <p className="text-sm text-slate-600 mb-4">
+                    Choose a UK company from the Companies for Sale list that will be acquired through this order.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {availableCompanies.map((company) => (
+                      <div
+                        key={company.id}
+                        onClick={() => selectCompanyForAcquisition(company)}
+                        className={`p-4 border-2 rounded-lg cursor-pointer transition ${
+                          companyNumber === company.companyNumber
+                            ? "border-primary-500 bg-primary-50"
+                            : "border-slate-200 hover:border-primary-300"
+                        }`}
+                      >
+                        <h4 className="font-semibold text-slate-900">
+                          {company.companyName}
+                        </h4>
+                        <p className="text-sm text-slate-600 mt-1">
+                          Company No: {company.companyNumber}
+                        </p>
+                        <p className="text-xs text-slate-500 mt-2">
+                          Status: {company.registrationStatus}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {/* Step 3: Sales Assignment */}
               <div className="pb-8 border-b border-slate-200">
                 <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">

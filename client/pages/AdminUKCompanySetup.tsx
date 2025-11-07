@@ -30,6 +30,12 @@ interface IncorporationFormData {
   registeredOfficeCountry: string;
   shareCapital: string;
   shareType: string;
+  sicCode: string;
+  memorandumOfAssociationAccepted: boolean;
+  articlesOfAssociationAccepted: boolean;
+  complianceStatementAccepted: boolean;
+  directorConsentAccepted: boolean;
+  shareholderConsentAccepted: boolean;
 }
 
 interface DirectorFormData {

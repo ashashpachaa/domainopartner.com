@@ -345,33 +345,19 @@ export default function AdminCompanies() {
                     <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
                       Company Name
                     </th>
-                    {selectedCountry === "UK" ? (
-                      <>
-                        <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
-                          Company Number
-                        </th>
-                        <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
-                          Incorporation Date
-                        </th>
-                        <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
-                          Next Confirmation Date
-                        </th>
-                        <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
-                          First Accounts Made Up To
-                        </th>
-                      </>
-                    ) : (
-                      <>
-                        <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
-                          Country
-                        </th>
-                        <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
-                          Company No
-                        </th>
-                        <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
-                          User
-                        </th>
-                      </>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
+                      {selectedCountry === "UK" ? "Company Number" : "Country"}
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
+                      {selectedCountry === "UK" ? "Incorporation Date" : "Company No"}
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
+                      {selectedCountry === "UK" ? "Next Confirmation Date" : "User"}
+                    </th>
+                    {selectedCountry === "UK" && (
+                      <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
+                        First Accounts Made Up To
+                      </th>
                     )}
                     <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
                       Status

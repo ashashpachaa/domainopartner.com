@@ -307,7 +307,7 @@ export default function AdminOperationDetail() {
     const rejectionMap: { [key: string]: string } = {
       new: "new",
       pending_sales_review: "rejected_by_sales",
-      pending_operation: "rejected_by_operation",
+      pending_operation: "pending_sales_review",
       pending_operation_manager_review: "pending_operation",
       awaiting_client_acceptance: "pending_operation_manager_review",
       pending_apostille: "rejected_by_apostille",

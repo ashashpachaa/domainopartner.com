@@ -348,6 +348,9 @@ export default function AdminCompanies() {
                           </p>
                         </td>
                         <td className="px-6 py-4 text-sm text-slate-600">
+                          {company.country}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-slate-600">
                           {company.companyNumber}
                         </td>
                         <td className="px-6 py-4 text-sm text-slate-600">

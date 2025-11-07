@@ -104,6 +104,7 @@ export default function AdminCompanies() {
   const exportToCSV = () => {
     const headers = [
       "Company Name",
+      "Country",
       "Company Number",
       "User",
       "Status",
@@ -115,6 +116,7 @@ export default function AdminCompanies() {
 
     const rows = sorted.map((company) => [
       company.companyName,
+      company.country,
       company.companyNumber,
       getUserName(company.userId),
       company.status,

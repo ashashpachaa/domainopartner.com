@@ -877,6 +877,18 @@ export default function AdminCompaniesForSale() {
                       </div>
                     </div>
                   </div>
+                  <div className="border-t pt-4 mt-4">
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      Auth Code <span className="text-red-600">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g., AUTH001TVS"
+                      value={importAuthCode}
+                      onChange={(e) => setImportAuthCode(e.target.value)}
+                      className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent mb-4"
+                    />
+                  </div>
                   <div className="flex justify-end gap-2 mt-4">
                     <Button
                       variant="outline"
@@ -887,6 +899,7 @@ export default function AdminCompaniesForSale() {
                     <Button
                       onClick={handleAcceptImport}
                       className="bg-green-600 hover:bg-green-700"
+                      disabled={!importAuthCode.trim()}
                     >
                       Accept & Import
                     </Button>

@@ -929,6 +929,29 @@ export default function AdminUKCompanySetup() {
     toast.success("Company incorporation submitted to Companies House!");
   };
 
+  const handleUpdateIncorporationCompaniesHouseData = (companyNumber: string, authCode: string) => {
+    if (!selectedIncorporation) return;
+
+    if (!companyNumber.trim() || !authCode.trim()) {
+      toast.error("Please fill in both Company Number and AUTH CODE");
+      return;
+    }
+
+    const updated = {
+      ...selectedIncorporation,
+      companyRegistrationNumber: companyNumber,
+      companyAuthenticationCode: authCode,
+      status: "completed" as const,
+    };
+
+    localStorage.setItem(`incorporation_${selectedIncorporation.id}`, JSON.stringify(updated));
+    setIncorporations(incorporations.map(i => i.id === selectedIncorporation.id ? updated : i));
+    setSelectedIncorporation(updated);
+    setEditingCompanyNumber("");
+    setEditingAuthCode("");
+    toast.success("Company registration completed! Company number and AUTH CODE saved.");
+  };
+
   return (
     <AdminLayout>
       <div className="p-8 space-y-8">

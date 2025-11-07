@@ -94,6 +94,47 @@ export async function handleCompanySearch(req: any, res: any) {
   }
 }
 
+export async function handleCompanyApprovalWebhook(req: any, res: any) {
+  try {
+    const { incorporationId, companyNumber, authCode, status } = req.body;
+
+    if (!incorporationId || !companyNumber) {
+      return res.status(400).json({
+        error: "Missing required fields: incorporationId, companyNumber",
+      });
+    }
+
+    console.log("Companies House Webhook Received:", {
+      incorporationId,
+      companyNumber,
+      status,
+      timestamp: new Date().toISOString(),
+    });
+
+    res.json({
+      success: true,
+      message: "Webhook received successfully",
+      incorporationId,
+      companyNumber,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error: any) {
+    console.error("Webhook processing error:", error);
+    res.status(500).json({
+      error: "Failed to process webhook",
+      details: error.message,
+    });
+  }
+}
+
+export function generateCompanyNumber(): string {
+  const timestamp = Date.now();
+  const random = Math.floor(Math.random() * 10000)
+    .toString()
+    .padStart(4, "0");
+  return `${timestamp.toString().slice(-6)}${random}`;
+}
+
 export async function handleCompanyDetails(req: any, res: any) {
   const { companyNumber } = req.query;
 

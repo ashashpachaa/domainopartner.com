@@ -3221,9 +3221,9 @@ After payment:
                       ) : (
                         <button
                           onClick={() => handleProcessPayment(selectedIncorporation)}
-                          className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition"
+                          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition flex items-center justify-center gap-2"
                         >
-                          💳 Pay Filing Fee (£{selectedIncorporation.filingFee})
+                          🌐 Pay to Companies House (£{selectedIncorporation.filingFee})
                         </button>
                       )}
                     </div>

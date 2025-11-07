@@ -258,20 +258,21 @@ export default function AdminUKCompanySetup() {
       completedAt: new Date().toISOString(),
     };
 
-    // Store in Registry
+    // Store in Registry (using RegisteredCompany interface)
     const registeredCompanyData = {
       id: `REG${crn}`,
+      orderId: "",
+      userId: "S001",
       companyName: incorporation.companyName,
       companyNumber: crn,
       country: "United Kingdom",
       status: "active" as const,
       incorporationDate: new Date().toISOString().split("T")[0],
-      nextConfirmationDate: nextConfirmationDate.toISOString().split("T")[0],
-      firstAccountsMadeUpTo: firstAccountsDue.toISOString().split("T")[0],
+      nextRenewalDate: nextConfirmationDate.toISOString().split("T")[0],
+      nextAccountsFilingDate: firstAccountsDue.toISOString().split("T")[0],
       registeredOffice: `${incorporation.registeredOfficeAddress}, ${incorporation.registeredOfficeCity}, ${incorporation.registeredOfficePostcode}`,
       authCode: authCode,
-      certificateOfIncorporation: "CERT_" + crn + ".pdf",
-      createdAt: new Date().toISOString(),
+      fetchedAt: new Date().toISOString(),
     };
 
     // Store in both systems

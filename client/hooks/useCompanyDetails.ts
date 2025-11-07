@@ -34,6 +34,7 @@ export async function fetchCompanyDetails(
       userId: "", // Will be set by caller
       companyNumber: apiData.companyNumber,
       companyName: apiData.companyName,
+      country: apiData.country || "United Kingdom", // Default to UK if not provided
       incorporationDate: apiData.incorporationDate,
       nextRenewalDate: apiData.nextRenewalDate,
       nextAccountsFilingDate: apiData.accounts?.nextFilingDate || "",

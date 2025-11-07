@@ -48,21 +48,32 @@ export default function AdminCompanies() {
 
   const sorted = useMemo(() => {
     const list = [...filtered];
-    if (sortBy === "date") {
-      list.sort(
-        (a, b) =>
-          new Date(b.fetchedAt).getTime() - new Date(a.fetchedAt).getTime(),
-      );
-    } else if (sortBy === "name") {
-      list.sort((a, b) => a.companyName.localeCompare(b.companyName));
-    } else if (sortBy === "renewal") {
-      list.sort(
-        (a, b) =>
-          new Date(a.nextRenewalDate).getTime() -
-          new Date(b.nextRenewalDate).getTime(),
-      );
-    }
-    return list;
+
+    // First, separate companies needing renewal from others
+    const needsRenewal = list.filter((c) => checkIfNeedsRenewal(c));
+    const noRenewalNeeded = list.filter((c) => !checkIfNeedsRenewal(c));
+
+    // Sort each group separately
+    const sortGroup = (group: RegisteredCompany[]) => {
+      if (sortBy === "date") {
+        group.sort(
+          (a, b) =>
+            new Date(b.fetchedAt).getTime() - new Date(a.fetchedAt).getTime(),
+        );
+      } else if (sortBy === "name") {
+        group.sort((a, b) => a.companyName.localeCompare(b.companyName));
+      } else if (sortBy === "renewal") {
+        group.sort(
+          (a, b) =>
+            new Date(a.nextRenewalDate).getTime() -
+            new Date(b.nextRenewalDate).getTime(),
+        );
+      }
+      return group;
+    };
+
+    // Combine with renewal-needed companies first
+    return [...sortGroup(needsRenewal), ...sortGroup(noRenewalNeeded)];
   }, [filtered, sortBy]);
 
   const stats = useMemo(() => {

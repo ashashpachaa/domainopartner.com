@@ -836,25 +836,28 @@ export default function AdminUKCompanySetup() {
                 <div className="flex gap-8">
                   <div className="w-48 flex-shrink-0">
                     <div className="space-y-2">
-                      {steps.map((step, idx) => (
-                        <div
-                          key={step.id}
-                          onClick={() => setCurrentStep(idx)}
-                          className={`p-4 rounded-lg cursor-pointer transition ${
-                            currentStep === idx
-                              ? "bg-blue-600 text-white"
-                              : currentStep > idx
-                              ? "bg-green-100 text-green-900"
-                              : "bg-slate-100 text-slate-700"
-                          }`}
-                        >
-                          <div className="flex items-center gap-2">
-                            <span className="font-bold">{step.id}</span>
-                            {currentStep > idx && <CheckCircle className="w-4 h-4" />}
+                      {steps.map((step, idx) => {
+                        const status = getStepCompletionStatus(idx);
+                        return (
+                          <div
+                            key={step.id}
+                            onClick={() => setCurrentStep(idx)}
+                            className={`p-4 rounded-lg cursor-pointer transition ${
+                              status === "current"
+                                ? "bg-blue-600 text-white"
+                                : status === "completed"
+                                ? "bg-green-100 text-green-900"
+                                : "bg-red-100 text-red-900"
+                            }`}
+                          >
+                            <div className="flex items-center gap-2">
+                              <span className="font-bold">{step.id}</span>
+                              {status === "completed" && <CheckCircle className="w-4 h-4" />}
+                            </div>
+                            <p className="text-sm font-medium">{step.name}</p>
                           </div>
-                          <p className="text-sm font-medium">{step.name}</p>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   </div>
 

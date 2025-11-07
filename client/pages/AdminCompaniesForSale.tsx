@@ -41,6 +41,7 @@ export default function AdminCompaniesForSale() {
   const [searchResults, setSearchResults] = useState<CompanyForSale[]>([]);
   const [isLoadingCH, setIsLoadingCH] = useState(false);
   const [fetchedCompanyData, setFetchedCompanyData] = useState<any>(null);
+  const [importAuthCode, setImportAuthCode] = useState("");
   const [importedCompanies, setImportedCompanies] = useState<CompanyForSale[]>([]);
 
   const companies = useMemo(() => {

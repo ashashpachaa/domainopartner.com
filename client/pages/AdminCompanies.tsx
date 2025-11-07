@@ -434,9 +434,33 @@ export default function AdminCompanies() {
                               company.status.slice(1)}
                           </span>
                         </td>
-                        <td className="px-6 py-4 text-sm text-slate-600">
-                          {formatDate(company.incorporationDate)}
-                        </td>
+                        {selectedCountry === "UK" && (
+                          <td className="px-6 py-4">
+                            <div className="flex items-center gap-2">
+                              <Button
+                                onClick={() => {
+                                  // TODO: Navigate to company detail view
+                                }}
+                                className="bg-blue-600 hover:bg-blue-700 text-white text-xs h-8 px-3"
+                              >
+                                View
+                              </Button>
+                              <Button
+                                onClick={() => {
+                                  // TODO: Navigate to company edit page
+                                }}
+                                className="bg-slate-600 hover:bg-slate-700 text-white text-xs h-8 px-3"
+                              >
+                                Edit
+                              </Button>
+                            </div>
+                          </td>
+                        )}
+                        {selectedCountry !== "UK" && (
+                          <td className="px-6 py-4 text-sm text-slate-600">
+                            {formatDate(company.incorporationDate)}
+                          </td>
+                        )}
                         {selectedCountry !== "UK" && (
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-2">

@@ -822,6 +822,30 @@ export default function AdminUKCompanySetup() {
     }
   };
 
+  const handleWebhookUpdate = (update: any) => {
+    const incorporation = incorporations.find(i => i.id === update.incorporationId);
+    if (incorporation) {
+      const updated = {
+        ...incorporation,
+        companyRegistrationNumber: update.companyNumber,
+        companyAuthenticationCode: update.authCode,
+        status: "completed" as const,
+      };
+
+      localStorage.setItem(`incorporation_${updated.id}`, JSON.stringify(updated));
+      setIncorporations(incorporations.map(i => i.id === update.incorporationId ? updated : i));
+
+      if (selectedIncorporation?.id === update.incorporationId) {
+        setSelectedIncorporation(updated);
+      }
+
+      clearWebhookUpdate(update.incorporationId);
+      toast.success(`✓ Companies House Approved! Company #${update.companyNumber}`);
+    }
+  };
+
+  useCompaniesHouseWebhook(handleWebhookUpdate);
+
   const handleViewDetails = (inc: CompanyIncorporation) => {
     setSelectedIncorporation(inc);
     setEditingCompanyNumber(inc.companyRegistrationNumber || "");

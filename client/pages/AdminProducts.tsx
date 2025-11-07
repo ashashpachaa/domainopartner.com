@@ -116,21 +116,27 @@ export default function AdminProducts() {
         `Are you sure you want to delete ${selectedProducts.size} product(s)?`,
       )
     ) {
+      const deletedCount = selectedProducts.size;
       setProducts(
         products.filter((p) => !selectedProducts.has(p.id)),
       );
       setSelectedProducts(new Set());
+      toast.success(`${deletedCount} product(s) deleted successfully`);
     }
   };
 
   const bulkToggleStatus = (newStatus: "active" | "inactive") => {
     if (selectedProducts.size === 0) return;
+    const count = selectedProducts.size;
     setProducts(
       products.map((p) =>
         selectedProducts.has(p.id) ? { ...p, status: newStatus } : p,
       ),
     );
     setSelectedProducts(new Set());
+    toast.success(
+      `${count} product(s) marked as ${newStatus}`,
+    );
   };
 
   return (

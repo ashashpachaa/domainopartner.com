@@ -958,16 +958,26 @@ export default function AdminUKCompanySetup() {
                           </div>
 
                           <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-2">SIC Code(s) *</label>
+                            <label className="block text-sm font-medium text-slate-700 mb-2">SIC Code(s) * (Maximum 4)</label>
                             <div className="space-y-2">
+                              {formData.sicCodes.length >= 4 && (
+                                <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-sm text-amber-800">
+                                  ⚠️ Maximum 4 SIC codes can be selected
+                                </div>
+                              )}
                               <select
                                 onChange={(e) => {
                                   if (e.target.value && !formData.sicCodes.includes(e.target.value)) {
-                                    setFormData({ ...formData, sicCodes: [...formData.sicCodes, e.target.value] });
-                                    e.target.value = "";
+                                    if (formData.sicCodes.length < 4) {
+                                      setFormData({ ...formData, sicCodes: [...formData.sicCodes, e.target.value] });
+                                      e.target.value = "";
+                                    } else {
+                                      toast.error("Maximum 4 SIC codes can be selected");
+                                    }
                                   }
                                 }}
-                                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                                disabled={formData.sicCodes.length >= 4}
+                                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 disabled:bg-slate-100 disabled:cursor-not-allowed"
                               >
                                 <option value="">-- Select SIC Code --</option>
                                 {SIC_CODES.map(code => (

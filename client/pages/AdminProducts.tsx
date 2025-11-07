@@ -69,6 +69,48 @@ export default function AdminProducts() {
     return services.length > 0 ? services.join(", ") : "No additional services";
   };
 
+  const toggleSelectProduct = (productId: string) => {
+    const newSelected = new Set(selectedProducts);
+    if (newSelected.has(productId)) {
+      newSelected.delete(productId);
+    } else {
+      newSelected.add(productId);
+    }
+    setSelectedProducts(newSelected);
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedProducts.size === filteredProducts.length) {
+      setSelectedProducts(new Set());
+    } else {
+      setSelectedProducts(new Set(filteredProducts.map((p) => p.id)));
+    }
+  };
+
+  const bulkDeleteProducts = () => {
+    if (selectedProducts.size === 0) return;
+    if (
+      confirm(
+        `Are you sure you want to delete ${selectedProducts.size} product(s)?`,
+      )
+    ) {
+      setProducts(
+        products.filter((p) => !selectedProducts.has(p.id)),
+      );
+      setSelectedProducts(new Set());
+    }
+  };
+
+  const bulkToggleStatus = (newStatus: "active" | "inactive") => {
+    if (selectedProducts.size === 0) return;
+    setProducts(
+      products.map((p) =>
+        selectedProducts.has(p.id) ? { ...p, status: newStatus } : p,
+      ),
+    );
+    setSelectedProducts(new Set());
+  };
+
   return (
     <AdminLayout>
       <div className="space-y-6">

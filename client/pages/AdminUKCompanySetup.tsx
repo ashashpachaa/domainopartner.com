@@ -992,19 +992,17 @@ export default function AdminUKCompanySetup() {
         }
       );
 
-      let result;
-      try {
-        result = await response.json();
-      } catch (parseError) {
-        console.error("Failed to parse response:", parseError);
-        throw new Error("Invalid response from server");
-      }
-
       if (!response.ok) {
-        throw new Error(result.error || result.details || "Failed to submit incorporation");
+        throw new Error(`Server returned ${response.status}`);
       }
 
-      // Use the real filing reference from Companies House
+      const result = await response.json();
+
+      if (!result.success || !result.filingReference) {
+        throw new Error(result.error || "Invalid response from server");
+      }
+
+      // Use the filing reference from Companies House
       const filingReference = result.filingReference;
 
       const updated = {
@@ -1021,7 +1019,7 @@ export default function AdminUKCompanySetup() {
 
       toast.dismiss();
       toast.success(
-        `✓ Company submitted to Companies House!\nFiling Reference: ${filingReference}`
+        `✓ Company submitted!\nFiling Reference: ${filingReference}`
       );
     } catch (error: any) {
       console.error("Submission error:", error);

@@ -14,6 +14,8 @@ import {
 import { mockCompaniesForSale, CompanyForSale } from "@/lib/mockData";
 import { toast } from "sonner";
 
+type CountryTab = "all" | "UK" | "USA" | "Sweden";
+
 export default function AdminCompaniesForSale() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState<
@@ -23,6 +25,7 @@ export default function AdminCompaniesForSale() {
     "date",
   );
   const [selectedCompanies, setSelectedCompanies] = useState<string[]>([]);
+  const [selectedCountry, setSelectedCountry] = useState<CountryTab>("all");
 
   const companies = useMemo(() => {
     return mockCompaniesForSale;

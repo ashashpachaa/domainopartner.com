@@ -815,6 +815,8 @@ export default function AdminUKCompanySetup() {
 
   const handleViewDetails = (inc: CompanyIncorporation) => {
     setSelectedIncorporation(inc);
+    setEditingCompanyNumber(inc.companyRegistrationNumber || "");
+    setEditingAuthCode(inc.companyAuthenticationCode || "");
     setShowDetailModal(true);
   };
 

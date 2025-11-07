@@ -499,6 +499,9 @@ export default function AdminCompaniesForSale() {
                     Auth Code
                   </th>
                   <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">
+                    Status
+                  </th>
+                  <th className="px-6 py-4 text-center text-xs font-bold text-slate-700 uppercase">
                     Actions
                   </th>
                 </tr>

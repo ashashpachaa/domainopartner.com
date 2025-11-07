@@ -3061,9 +3061,15 @@ export default function AdminUKCompanySetup() {
                     <h3 className="font-bold text-green-900 mb-4">✓ Order Confirmed</h3>
                     <div className="space-y-3 text-green-800">
                       <p>Your company incorporation order has been received by Companies House.</p>
-                      <div className="bg-white p-3 rounded border border-green-200">
-                        <p className="text-xs font-bold text-slate-600">PAYMENT REFERENCE</p>
-                        <p className="font-mono font-bold">{selectedIncorporation.paymentReference}</p>
+                      <div className="space-y-2">
+                        <div className="bg-white p-3 rounded border border-green-200">
+                          <p className="text-xs font-bold text-slate-600">TEMPORARY COMPANY REFERENCE</p>
+                          <p className="font-mono font-bold text-lg">{selectedIncorporation.companyRegistrationNumber}</p>
+                        </div>
+                        <div className="bg-white p-3 rounded border border-green-200">
+                          <p className="text-xs font-bold text-slate-600">PAYMENT REFERENCE</p>
+                          <p className="font-mono font-bold">{selectedIncorporation.paymentReference}</p>
+                        </div>
                       </div>
                       <div className="text-sm space-y-2">
                         <p><strong>Next Steps:</strong></p>

@@ -316,6 +316,16 @@ Final Score: ${report.totalScore}/100
           >
             Monthly Reports
           </Button>
+          <Button
+            onClick={() => setActiveTab("bonus")}
+            className={`px-4 py-2 font-medium transition ${
+              activeTab === "bonus"
+                ? "bg-primary-600 text-white"
+                : "text-slate-600 hover:text-slate-900 bg-transparent"
+            }`}
+          >
+            💰 Bonus History
+          </Button>
         </div>
 
         {/* Live Performance Tab */}

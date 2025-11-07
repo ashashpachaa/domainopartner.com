@@ -531,6 +531,14 @@ export default function AdminCompaniesNeedRenewal() {
           Showing {sorted.length} companies needing renewal
         </div>
       </div>
+
+      {/* Company Detail Modal */}
+      {showDetailModal && selectedCompany && (
+        <CompanyDetailModal
+          company={selectedCompany}
+          onClose={() => setShowDetailModal(false)}
+        />
+      )}
     </AdminLayout>
   );
 }

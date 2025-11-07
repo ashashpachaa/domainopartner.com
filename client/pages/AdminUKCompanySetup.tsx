@@ -755,6 +755,59 @@ export default function AdminUKCompanySetup() {
                               </label>
                             </div>
                           </div>
+
+                          <div>
+                            <label className="block text-sm font-medium text-slate-700 mb-2">Jurisdiction *</label>
+                            <select
+                              value={formData.jurisdiction}
+                              onChange={(e) => setFormData({ ...formData, jurisdiction: e.target.value as any })}
+                              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                            >
+                              {JURISDICTIONS.map(j => (
+                                <option key={j.code} value={j.code}>{j.label}</option>
+                              ))}
+                            </select>
+                          </div>
+
+                          <div>
+                            <label className="block text-sm font-medium text-slate-700 mb-2">SIC Code(s) *</label>
+                            <div className="space-y-2">
+                              <select
+                                onChange={(e) => {
+                                  if (e.target.value && !formData.sicCodes.includes(e.target.value)) {
+                                    setFormData({ ...formData, sicCodes: [...formData.sicCodes, e.target.value] });
+                                    e.target.value = "";
+                                  }
+                                }}
+                                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                              >
+                                <option value="">-- Select SIC Code --</option>
+                                {SIC_CODES.map(code => (
+                                  <option key={code.code} value={code.code}>
+                                    {code.code} - {code.description}
+                                  </option>
+                                ))}
+                              </select>
+                              {formData.sicCodes.length > 0 && (
+                                <div className="flex flex-wrap gap-2">
+                                  {formData.sicCodes.map(code => {
+                                    const sicDetail = SIC_CODES.find(s => s.code === code);
+                                    return (
+                                      <div key={code} className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm flex items-center gap-2">
+                                        <span>{code} - {sicDetail?.description}</span>
+                                        <button
+                                          onClick={() => setFormData({ ...formData, sicCodes: formData.sicCodes.filter(s => s !== code) })}
+                                          className="text-blue-600 hover:text-blue-800 font-bold"
+                                        >
+                                          ✕
+                                        </button>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              )}
+                            </div>
+                          </div>
                         </div>
                       </div>
                     )}

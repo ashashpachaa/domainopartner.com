@@ -14,6 +14,7 @@ import AdminLayout from "@/components/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { mockProducts, Product } from "@/lib/mockData";
+import { toast } from "sonner";
 
 export default function AdminProducts() {
   const [products, setProducts] = useState<Product[]>(() => {

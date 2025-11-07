@@ -1149,6 +1149,16 @@ export default function AdminUKCompanySetup() {
   return (
     <AdminLayout>
       <div className="p-8 space-y-8">
+        <div className="bg-green-50 border border-green-200 rounded-lg p-4 flex items-center gap-3">
+          <div className="w-6 h-6 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0">
+            <span className="text-white font-bold text-sm">✓</span>
+          </div>
+          <div className="flex-1">
+            <p className="font-bold text-green-900">✓ Real Companies House API integration is now live</p>
+            <p className="text-sm text-green-800 mt-1">Your company submissions will be sent to Companies House production system with live credentials.</p>
+          </div>
+        </div>
+
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-slate-900">UK Company Setup</h1>
@@ -1482,7 +1492,7 @@ export default function AdminUKCompanySetup() {
                                       {officer.roles.director && <span className="text-green-600 font-bold">✓</span>}
                                     </td>
                                     <td className="px-4 py-3 text-center">
-                                      {officer.roles.secretary && <span className="text-green-600 font-bold">✓</span>}
+                                      {officer.roles.secretary && <span className="text-green-600 font-bold">���</span>}
                                     </td>
                                     <td className="px-4 py-3 text-center">
                                       {officer.roles.shareholder && <span className="text-slate-900">{officer.shareholdings.numberOfShares}</span>}

@@ -606,10 +606,8 @@ export default function AdminUKCompanySetup() {
     return (
       formData.companyName &&
       validationResult?.isAvailable === true &&
-      formData.registeredOfficeAddress.line1 &&
-      formData.registeredOfficeAddress.town &&
-      formData.registeredOfficeAddress.postcode &&
-      formData.businessActivities.some(a => a && a.trim() !== "")
+      formData.companyType &&
+      formData.sicCodes.length > 0
     );
   };
 

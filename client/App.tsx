@@ -49,6 +49,8 @@ import ClientCompanies from "./pages/ClientCompanies";
 import AdminCompanies from "./pages/AdminCompanies";
 import AdminCompaniesNeedRenewal from "./pages/AdminCompaniesNeedRenewal";
 import AdminCompaniesForSale from "./pages/AdminCompaniesForSale";
+import AdminViewUserDashboard from "./pages/AdminViewUserDashboard";
+import AdminViewStaffDashboard from "./pages/AdminViewStaffDashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();

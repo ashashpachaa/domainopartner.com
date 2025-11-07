@@ -511,7 +511,7 @@ export default function AdminUKCompanySetup() {
     setFormData({
       companyName: "",
       companyType: "private_limited",
-      registeredOfficeLocation: "England and Wales",
+      jurisdiction: "england-wales",
       registeredOfficeAddress: {
         line1: "",
         line2: "",
@@ -530,6 +530,7 @@ export default function AdminUKCompanySetup() {
       },
       shareClassification: false,
       businessActivities: [""],
+      sicCodes: [],
       tradingAddress: "",
       documentsSelection: {
         articlesOfAssociation: "model",

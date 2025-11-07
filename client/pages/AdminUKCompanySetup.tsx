@@ -175,7 +175,7 @@ interface OfficerDetail {
 interface IncorporationFormData {
   companyName: string;
   companyType: "private_limited" | "public_limited" | "unlimited" | "private_guarantee";
-  registeredOfficeLocation: string;
+  jurisdiction: "england-wales" | "scotland" | "northern-ireland";
   registeredOfficeAddress: {
     line1: string;
     line2: string;
@@ -194,6 +194,7 @@ interface IncorporationFormData {
   };
   shareClassification: boolean;
   businessActivities: string[];
+  sicCodes: string[];
   tradingAddress: string;
   documentsSelection: {
     articlesOfAssociation: string;

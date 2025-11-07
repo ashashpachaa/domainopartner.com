@@ -631,6 +631,133 @@ export default function AdminCompaniesForSale() {
             )}
           </p>
         </div>
+
+        {/* List Company Modal */}
+        <Dialog open={showListModal} onOpenChange={setShowListModal}>
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>List Company for Sale</DialogTitle>
+              <DialogDescription>
+                Search for a UK company by Company Number or Auth Code to list it for sale
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="space-y-6 py-4">
+              {/* Search Filters */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Company Number
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g., 14234567"
+                    value={searchCompanyNumber}
+                    onChange={(e) => setSearchCompanyNumber(e.target.value)}
+                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Auth Code
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g., AUTH001TVS"
+                    value={searchAuthCode}
+                    onChange={(e) => setSearchAuthCode(e.target.value)}
+                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  />
+                </div>
+              </div>
+
+              {/* Search Button */}
+              <div className="flex justify-end gap-2 pt-2">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setShowListModal(false);
+                    setSearchCompanyNumber("");
+                    setSearchAuthCode("");
+                    setSearchResults([]);
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={handleSearchCompanies}
+                  className="bg-primary-600 hover:bg-primary-700"
+                >
+                  <Search className="w-4 h-4 mr-2" />
+                  Search Companies
+                </Button>
+              </div>
+
+              {/* Search Results */}
+              {searchResults.length > 0 && (
+                <div className="border-t pt-6">
+                  <h3 className="text-lg font-semibold text-slate-900 mb-4">
+                    Search Results ({searchResults.length})
+                  </h3>
+                  <div className="space-y-3 max-h-96 overflow-y-auto">
+                    {searchResults.map((company) => (
+                      <div
+                        key={company.id}
+                        className="flex items-center justify-between p-4 border border-slate-200 rounded-lg hover:bg-slate-50"
+                      >
+                        <div className="flex-1">
+                          <p className="font-semibold text-slate-900">
+                            {company.companyName}
+                          </p>
+                          <div className="grid grid-cols-2 gap-4 text-sm text-slate-600 mt-3">
+                            <p>
+                              <span className="text-slate-700 font-medium">Company Number:</span> {company.companyNumber}
+                            </p>
+                            <p>
+                              <span className="text-slate-700 font-medium">Auth Code:</span>{" "}
+                              <span className="font-mono text-slate-700">
+                                {company.authCode}
+                              </span>
+                            </p>
+                            <p>
+                              <span className="text-slate-700 font-medium">Incorporation Date:</span>{" "}
+                              {new Date(
+                                company.incorporationDate
+                              ).toLocaleDateString("en-GB")}
+                            </p>
+                            <p>
+                              <span className="text-slate-700 font-medium">Next Confirmation:</span>{" "}
+                              {new Date(
+                                company.nextConfirmationDate
+                              ).toLocaleDateString("en-GB")}
+                            </p>
+                          </div>
+                        </div>
+                        <Button
+                          onClick={() => handleListCompany(company)}
+                          className="bg-green-600 hover:bg-green-700 ml-4 flex-shrink-0"
+                        >
+                          List Company
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* No results message */}
+              {searchResults.length === 0 && (searchCompanyNumber || searchAuthCode) && (
+                <div className="text-center py-8">
+                  <Building2 className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+                  <p className="text-slate-600 font-medium">No companies found</p>
+                  <p className="text-slate-500 text-sm mt-1">
+                    Try adjusting your search criteria
+                  </p>
+                </div>
+              )}
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </AdminLayout>
   );

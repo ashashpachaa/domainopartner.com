@@ -243,11 +243,19 @@ export default function AdminProducts() {
               >
                 {/* Header */}
                 <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <h3 className="text-lg font-bold text-slate-900">
-                      {product.name}
-                    </h3>
-                    <p className="text-sm text-slate-600 mt-1">{product.id}</p>
+                  <div className="flex items-start gap-3">
+                    <input
+                      type="checkbox"
+                      checked={selectedProducts.has(product.id)}
+                      onChange={() => toggleSelectProduct(product.id)}
+                      className="w-5 h-5 rounded mt-1"
+                    />
+                    <div>
+                      <h3 className="text-lg font-bold text-slate-900">
+                        {product.name}
+                      </h3>
+                      <p className="text-sm text-slate-600 mt-1">{product.id}</p>
+                    </div>
                   </div>
                   <div
                     className={`px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 ${

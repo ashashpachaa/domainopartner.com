@@ -2046,37 +2046,336 @@ export default function AdminUKCompanySetup() {
 
                         <div className="space-y-3 border-t border-slate-200 pt-4">
                           <p className="font-medium text-slate-900">4. The person has the right to exercise, or actually exercises, significant influence or control over the company.</p>
-                          <div className="flex gap-4">
-                            <label className="flex items-center gap-2 cursor-pointer">
-                              <input
-                                type="radio"
-                                name="exerciseControl"
-                                value="Yes"
-                                checked={currentOfficer.significantControl.exerciseControl === "Yes"}
-                                onChange={(e) =>
-                                  setCurrentOfficer({
-                                    ...currentOfficer,
-                                    significantControl: { ...currentOfficer.significantControl, exerciseControl: e.target.value },
-                                  })
-                                }
-                              />
-                              <span className="text-sm">Yes</span>
-                            </label>
-                            <label className="flex items-center gap-2 cursor-pointer">
-                              <input
-                                type="radio"
-                                name="exerciseControl"
-                                value="No"
-                                checked={currentOfficer.significantControl.exerciseControl === "No"}
-                                onChange={(e) =>
-                                  setCurrentOfficer({
-                                    ...currentOfficer,
-                                    significantControl: { ...currentOfficer.significantControl, exerciseControl: e.target.value },
-                                  })
-                                }
-                              />
-                              <span className="text-sm">No</span>
-                            </label>
+                          <p className="text-sm text-slate-700">No</p>
+                        </div>
+
+                        <div className="border-t border-slate-200 pt-4">
+                          <h4 className="font-bold text-slate-900 mb-4">The person has control over a trust</h4>
+                          <div className="space-y-4">
+                            <div className="space-y-3">
+                              <p className="font-medium text-slate-900">1. The trustees of the trust hold, directly or indirectly, more than 25% of the shares</p>
+                              <div className="flex gap-4">
+                                <label className="flex items-center gap-2 cursor-pointer">
+                                  <input
+                                    type="radio"
+                                    name="trustShares25"
+                                    value="Yes"
+                                    checked={currentOfficer.significantControl.trustControl.sharesOver25 === "Yes"}
+                                    onChange={(e) =>
+                                      setCurrentOfficer({
+                                        ...currentOfficer,
+                                        significantControl: {
+                                          ...currentOfficer.significantControl,
+                                          trustControl: { ...currentOfficer.significantControl.trustControl, sharesOver25: e.target.value },
+                                        },
+                                      })
+                                    }
+                                  />
+                                  <span className="text-sm">Yes</span>
+                                </label>
+                                <label className="flex items-center gap-2 cursor-pointer">
+                                  <input
+                                    type="radio"
+                                    name="trustShares25"
+                                    value="No"
+                                    checked={currentOfficer.significantControl.trustControl.sharesOver25 === "No"}
+                                    onChange={(e) =>
+                                      setCurrentOfficer({
+                                        ...currentOfficer,
+                                        significantControl: {
+                                          ...currentOfficer.significantControl,
+                                          trustControl: { ...currentOfficer.significantControl.trustControl, sharesOver25: e.target.value },
+                                        },
+                                      })
+                                    }
+                                  />
+                                  <span className="text-sm">No</span>
+                                </label>
+                              </div>
+                              {currentOfficer.significantControl.trustControl.sharesOver25 === "Yes" && (
+                                <div className="ml-4 space-y-2">
+                                  <label className="flex items-center gap-2 cursor-pointer">
+                                    <input
+                                      type="radio"
+                                      name="trustSharesLevel"
+                                      value="More than 25% but not more than 50%"
+                                      checked={currentOfficer.significantControl.trustControl.votingRightsOver25 === "More than 25% but not more than 50%"}
+                                      onChange={(e) =>
+                                        setCurrentOfficer({
+                                          ...currentOfficer,
+                                          significantControl: {
+                                            ...currentOfficer.significantControl,
+                                            trustControl: { ...currentOfficer.significantControl.trustControl, votingRightsOver25: e.target.value },
+                                          },
+                                        })
+                                      }
+                                    />
+                                    <span className="text-sm">More than 25% but not more than 50% of the shares in the company</span>
+                                  </label>
+                                  <label className="flex items-center gap-2 cursor-pointer">
+                                    <input
+                                      type="radio"
+                                      name="trustSharesLevel"
+                                      value="More than 50% but less than 75%"
+                                      checked={currentOfficer.significantControl.trustControl.votingRightsOver25 === "More than 50% but less than 75%"}
+                                      onChange={(e) =>
+                                        setCurrentOfficer({
+                                          ...currentOfficer,
+                                          significantControl: {
+                                            ...currentOfficer.significantControl,
+                                            trustControl: { ...currentOfficer.significantControl.trustControl, votingRightsOver25: e.target.value },
+                                          },
+                                        })
+                                      }
+                                    />
+                                    <span className="text-sm">More than 50% but less than 75% of the shares in the company</span>
+                                  </label>
+                                  <label className="flex items-center gap-2 cursor-pointer">
+                                    <input
+                                      type="radio"
+                                      name="trustSharesLevel"
+                                      value="75% or more of the shares"
+                                      checked={currentOfficer.significantControl.trustControl.votingRightsOver25 === "75% or more of the shares"}
+                                      onChange={(e) =>
+                                        setCurrentOfficer({
+                                          ...currentOfficer,
+                                          significantControl: {
+                                            ...currentOfficer.significantControl,
+                                            trustControl: { ...currentOfficer.significantControl.trustControl, votingRightsOver25: e.target.value },
+                                          },
+                                        })
+                                      }
+                                    />
+                                    <span className="text-sm">75% or more of the shares in the company</span>
+                                  </label>
+                                </div>
+                              )}
+                            </div>
+
+                            <div className="space-y-3 border-t border-slate-200 pt-3">
+                              <p className="font-medium text-slate-900">2. The trustees of the trust hold, directly or indirectly, more than 25% of the voting rights</p>
+                              <div className="flex gap-4">
+                                <label className="flex items-center gap-2 cursor-pointer">
+                                  <input
+                                    type="radio"
+                                    name="trustVoting25"
+                                    value="Yes"
+                                    checked={currentOfficer.significantControl.trustControl.votingRightsOver25 === "Yes"}
+                                    onChange={(e) =>
+                                      setCurrentOfficer({
+                                        ...currentOfficer,
+                                        significantControl: {
+                                          ...currentOfficer.significantControl,
+                                          trustControl: { ...currentOfficer.significantControl.trustControl, votingRightsOver25: e.target.value },
+                                        },
+                                      })
+                                    }
+                                  />
+                                  <span className="text-sm">Yes</span>
+                                </label>
+                                <label className="flex items-center gap-2 cursor-pointer">
+                                  <input
+                                    type="radio"
+                                    name="trustVoting25"
+                                    value="No"
+                                    checked={currentOfficer.significantControl.trustControl.votingRightsOver25 === "No"}
+                                    onChange={(e) =>
+                                      setCurrentOfficer({
+                                        ...currentOfficer,
+                                        significantControl: {
+                                          ...currentOfficer.significantControl,
+                                          trustControl: { ...currentOfficer.significantControl.trustControl, votingRightsOver25: e.target.value },
+                                        },
+                                      })
+                                    }
+                                  />
+                                  <span className="text-sm">No</span>
+                                </label>
+                              </div>
+                            </div>
+
+                            <div className="space-y-3 border-t border-slate-200 pt-3">
+                              <p className="font-medium text-slate-900">3. The trustees hold the right, directly or indirectly, to appoint or remove a majority of the board of directors.</p>
+                              <div className="flex gap-4">
+                                <label className="flex items-center gap-2 cursor-pointer">
+                                  <input
+                                    type="radio"
+                                    name="trustAppointDirectors"
+                                    value="Yes"
+                                    checked={currentOfficer.significantControl.trustControl.trustAppointDirectors === "Yes"}
+                                    onChange={(e) =>
+                                      setCurrentOfficer({
+                                        ...currentOfficer,
+                                        significantControl: {
+                                          ...currentOfficer.significantControl,
+                                          trustControl: { ...currentOfficer.significantControl.trustControl, trustAppointDirectors: e.target.value },
+                                        },
+                                      })
+                                    }
+                                  />
+                                  <span className="text-sm">Yes</span>
+                                </label>
+                                <label className="flex items-center gap-2 cursor-pointer">
+                                  <input
+                                    type="radio"
+                                    name="trustAppointDirectors"
+                                    value="No"
+                                    checked={currentOfficer.significantControl.trustControl.trustAppointDirectors === "No"}
+                                    onChange={(e) =>
+                                      setCurrentOfficer({
+                                        ...currentOfficer,
+                                        significantControl: {
+                                          ...currentOfficer.significantControl,
+                                          trustControl: { ...currentOfficer.significantControl.trustControl, trustAppointDirectors: e.target.value },
+                                        },
+                                      })
+                                    }
+                                  />
+                                  <span className="text-sm">No</span>
+                                </label>
+                              </div>
+                            </div>
+
+                            <div className="space-y-3 border-t border-slate-200 pt-3">
+                              <p className="font-medium text-slate-900">4. The trustees have the right to exercise, or actually exercise, significant influence or control.</p>
+                              <p className="text-sm text-slate-700">No</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="border-t border-slate-200 pt-4">
+                          <h4 className="font-bold text-slate-900 mb-4">The person has control over a firm</h4>
+                          <div className="space-y-4">
+                            <div className="space-y-3">
+                              <p className="font-medium text-slate-900">1. The members of the firm hold, directly or indirectly, more than 25% of the shares</p>
+                              <div className="flex gap-4">
+                                <label className="flex items-center gap-2 cursor-pointer">
+                                  <input
+                                    type="radio"
+                                    name="firmShares25"
+                                    value="Yes"
+                                    checked={currentOfficer.significantControl.firmControl.sharesOver25 === "Yes"}
+                                    onChange={(e) =>
+                                      setCurrentOfficer({
+                                        ...currentOfficer,
+                                        significantControl: {
+                                          ...currentOfficer.significantControl,
+                                          firmControl: { ...currentOfficer.significantControl.firmControl, sharesOver25: e.target.value },
+                                        },
+                                      })
+                                    }
+                                  />
+                                  <span className="text-sm">Yes</span>
+                                </label>
+                                <label className="flex items-center gap-2 cursor-pointer">
+                                  <input
+                                    type="radio"
+                                    name="firmShares25"
+                                    value="No"
+                                    checked={currentOfficer.significantControl.firmControl.sharesOver25 === "No"}
+                                    onChange={(e) =>
+                                      setCurrentOfficer({
+                                        ...currentOfficer,
+                                        significantControl: {
+                                          ...currentOfficer.significantControl,
+                                          firmControl: { ...currentOfficer.significantControl.firmControl, sharesOver25: e.target.value },
+                                        },
+                                      })
+                                    }
+                                  />
+                                  <span className="text-sm">No</span>
+                                </label>
+                              </div>
+                            </div>
+
+                            <div className="space-y-3 border-t border-slate-200 pt-3">
+                              <p className="font-medium text-slate-900">2. The members of the firm hold, directly or indirectly, more than 25% of the voting rights</p>
+                              <div className="flex gap-4">
+                                <label className="flex items-center gap-2 cursor-pointer">
+                                  <input
+                                    type="radio"
+                                    name="firmVoting25"
+                                    value="Yes"
+                                    checked={currentOfficer.significantControl.firmControl.votingRightsOver25 === "Yes"}
+                                    onChange={(e) =>
+                                      setCurrentOfficer({
+                                        ...currentOfficer,
+                                        significantControl: {
+                                          ...currentOfficer.significantControl,
+                                          firmControl: { ...currentOfficer.significantControl.firmControl, votingRightsOver25: e.target.value },
+                                        },
+                                      })
+                                    }
+                                  />
+                                  <span className="text-sm">Yes</span>
+                                </label>
+                                <label className="flex items-center gap-2 cursor-pointer">
+                                  <input
+                                    type="radio"
+                                    name="firmVoting25"
+                                    value="No"
+                                    checked={currentOfficer.significantControl.firmControl.votingRightsOver25 === "No"}
+                                    onChange={(e) =>
+                                      setCurrentOfficer({
+                                        ...currentOfficer,
+                                        significantControl: {
+                                          ...currentOfficer.significantControl,
+                                          firmControl: { ...currentOfficer.significantControl.firmControl, votingRightsOver25: e.target.value },
+                                        },
+                                      })
+                                    }
+                                  />
+                                  <span className="text-sm">No</span>
+                                </label>
+                              </div>
+                            </div>
+
+                            <div className="space-y-3 border-t border-slate-200 pt-3">
+                              <p className="font-medium text-slate-900">3. The members of the firm hold the right, directly or indirectly, to appoint or remove a majority of the board of directors</p>
+                              <div className="flex gap-4">
+                                <label className="flex items-center gap-2 cursor-pointer">
+                                  <input
+                                    type="radio"
+                                    name="firmAppointDirectors"
+                                    value="Yes"
+                                    checked={currentOfficer.significantControl.firmControl.votingRightsOver25 === "Yes"}
+                                    onChange={(e) =>
+                                      setCurrentOfficer({
+                                        ...currentOfficer,
+                                        significantControl: {
+                                          ...currentOfficer.significantControl,
+                                          firmControl: { ...currentOfficer.significantControl.firmControl, votingRightsOver25: e.target.value },
+                                        },
+                                      })
+                                    }
+                                  />
+                                  <span className="text-sm">Yes</span>
+                                </label>
+                                <label className="flex items-center gap-2 cursor-pointer">
+                                  <input
+                                    type="radio"
+                                    name="firmAppointDirectors"
+                                    value="No"
+                                    checked={currentOfficer.significantControl.firmControl.votingRightsOver25 === "No"}
+                                    onChange={(e) =>
+                                      setCurrentOfficer({
+                                        ...currentOfficer,
+                                        significantControl: {
+                                          ...currentOfficer.significantControl,
+                                          firmControl: { ...currentOfficer.significantControl.firmControl, votingRightsOver25: e.target.value },
+                                        },
+                                      })
+                                    }
+                                  />
+                                  <span className="text-sm">No</span>
+                                </label>
+                              </div>
+                            </div>
+
+                            <div className="space-y-3 border-t border-slate-200 pt-3">
+                              <p className="font-medium text-slate-900">4. The members of the firm have the right to exercise, or actually exercise, significant influence or control.</p>
+                              <p className="text-sm text-slate-700">No</p>
+                            </div>
                           </div>
                         </div>
                       </div>

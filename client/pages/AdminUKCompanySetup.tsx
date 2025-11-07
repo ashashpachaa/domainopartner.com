@@ -558,10 +558,57 @@ export default function AdminUKCompanySetup() {
                             <input
                               type="text"
                               value={formData.companyName}
-                              onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
+                              onChange={(e) => {
+                                setFormData({ ...formData, companyName: e.target.value });
+                                checkCompanyName(e.target.value);
+                              }}
                               placeholder="Company name"
                               className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                             />
+                            {formData.companyName && (
+                              <div className="mt-2 space-y-1">
+                                {isValidating && (
+                                  <div className="flex items-center gap-2 text-blue-600 text-sm">
+                                    <Loader className="w-4 h-4 animate-spin" />
+                                    <span>Checking availability...</span>
+                                  </div>
+                                )}
+
+                                {!isValidating && validationResult && (
+                                  <>
+                                    {validationResult.isAvailable === true && (
+                                      <div className="flex items-center gap-2 text-green-600 text-sm">
+                                        <CheckSquare className="w-4 h-4" />
+                                        <span>✓ Company name is available</span>
+                                      </div>
+                                    )}
+
+                                    {validationResult.isAvailable === false && validationResult.exactMatch && (
+                                      <div className="flex items-center gap-2 text-red-600 text-sm">
+                                        <AlertCircle className="w-4 h-4" />
+                                        <div>
+                                          <span>✗ Company name already exists: </span>
+                                          <strong>{validationResult.exactMatch.title}</strong>
+                                          {validationResult.exactMatch.company_status && (
+                                            <span> ({validationResult.exactMatch.company_status})</span>
+                                          )}
+                                        </div>
+                                      </div>
+                                    )}
+
+                                    {validationResult.similarMatch && !validationResult.exactMatch && (
+                                      <div className="flex items-center gap-2 text-amber-600 text-sm">
+                                        <AlertCircle className="w-4 h-4" />
+                                        <div>
+                                          <span>⚠ Similar company found: </span>
+                                          <strong>{validationResult.similarMatch.title}</strong>
+                                        </div>
+                                      </div>
+                                    )}
+                                  </>
+                                )}
+                              </div>
+                            )}
                           </div>
 
                           <div>

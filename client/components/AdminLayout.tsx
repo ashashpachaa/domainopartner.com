@@ -184,6 +184,17 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                   Registered Companies
                 </Link>
                 <Link
+                  to="/admin/companies/need-renewal"
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition ${
+                    isActive("/admin/companies/need-renewal")
+                      ? "bg-red-600 text-white"
+                      : "text-slate-400 hover:bg-slate-800"
+                  }`}
+                >
+                  <div className="w-2 h-2 rounded-full bg-red-500"></div>
+                  Need Renewal
+                </Link>
+                <Link
                   to="/admin/companies/for-sale"
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition ${
                     isActive("/admin/companies/for-sale")

@@ -25,7 +25,7 @@ import {
 } from "@/lib/mockData";
 
 export default function AdminPerformance() {
-  const [activeTab, setActiveTab] = useState<"live" | "monthly">("live");
+  const [activeTab, setActiveTab] = useState<"live" | "monthly" | "bonus">("live");
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState<"score" | "name" | "rejections">(
     "score"
@@ -38,6 +38,11 @@ export default function AdminPerformance() {
   const [endMonth, setEndMonth] = useState(1);
   const [endYear, setEndYear] = useState(2024);
   const [monthlySearchTerm, setMonthlySearchTerm] = useState("");
+
+  // Bonus filter state
+  const [bonusSearchTerm, setBonusSearchTerm] = useState("");
+  const [bonusStatusFilter, setBonusStatusFilter] = useState<"all" | "earned" | "paid">("all");
+  const [bonusSortBy, setBonusSortBy] = useState<"amount" | "date" | "staff">("date");
 
   // Filter and sort performance data
   const filteredAndSorted = useMemo(() => {

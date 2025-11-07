@@ -147,6 +147,93 @@ export default function AdminCompaniesForSale() {
     setSearchResults([]);
   };
 
+  const fetchFromCompaniesHouse = async () => {
+    if (!searchCompanyNumber.trim()) {
+      toast.error("Please enter a Company Number");
+      return;
+    }
+
+    setIsLoadingCH(true);
+    try {
+      const response = await fetch(
+        `/api/companies-house/details?companyNumber=${encodeURIComponent(
+          searchCompanyNumber
+        )}`
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch company data");
+      }
+
+      const data = await response.json();
+
+      if (data.error) {
+        toast.error(data.error);
+        setFetchedCompanyData(null);
+        return;
+      }
+
+      setFetchedCompanyData({
+        companyName: data.companyName,
+        companyNumber: data.companyNumber,
+        incorporationDate: data.incorporationDate,
+        nextConfirmationDate: data.nextRenewalDate,
+        firstAccountsMadeUpTo: data.accounts?.nextFilingDate,
+        country: "United Kingdom",
+        status: data.status,
+        registeredOffice: data.registeredOffice,
+        sic: data.sic,
+      });
+      toast.success("Company data fetched successfully!");
+    } catch (error: any) {
+      console.error("Error fetching company data:", error);
+      toast.error(error.message || "Failed to fetch company data from Companies House");
+      setFetchedCompanyData(null);
+    } finally {
+      setIsLoadingCH(false);
+    }
+  };
+
+  const handleAcceptImport = () => {
+    if (!fetchedCompanyData) {
+      toast.error("No company data to import");
+      return;
+    }
+
+    const newCompany: CompanyForSale = {
+      id: `CFS-CH-${Date.now()}`,
+      companyName: fetchedCompanyData.companyName,
+      companyNumber: fetchedCompanyData.companyNumber,
+      incorporationDate: fetchedCompanyData.incorporationDate || new Date().toISOString(),
+      nextConfirmationDate: fetchedCompanyData.nextConfirmationDate || new Date().toISOString(),
+      firstAccountsMadeUpTo: fetchedCompanyData.firstAccountsMadeUpTo || new Date().toISOString(),
+      authCode: `CH-${fetchedCompanyData.companyNumber}`,
+      country: "United Kingdom",
+      registrationStatus: fetchedCompanyData.status === "active" ? "active" : "dormant",
+      businessType: fetchedCompanyData.sic?.[0] || "General Business",
+      askingPrice: 0,
+      currency: "GBP",
+      contact: "",
+      contactEmail: "",
+      contactPhone: "",
+      description: `Imported from Companies House - ${fetchedCompanyData.companyName}`,
+      listedAt: new Date().toISOString(),
+      views: 0,
+      inquiries: 0,
+    };
+
+    setImportedCompanies([...importedCompanies, newCompany]);
+    toast.success(`${newCompany.companyName} has been imported!`);
+    setFetchedCompanyData(null);
+    setSearchCompanyNumber("");
+    setSearchAuthCode("");
+  };
+
+  const handleRejectImport = () => {
+    setFetchedCompanyData(null);
+    toast.info("Import cancelled");
+  };
+
   const handleExportCSV = () => {
     const csv = [
       [

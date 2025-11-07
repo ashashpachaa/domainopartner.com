@@ -24,6 +24,8 @@ export default function AdminCompaniesNeedRenewal() {
   const [sortBy, setSortBy] = useState<"urgent" | "renewal" | "accounts">(
     "urgent",
   );
+  const [selectedCompany, setSelectedCompany] = useState<RegisteredCompany | null>(null);
+  const [showDetailModal, setShowDetailModal] = useState(false);
 
   const formatDate = (dateStr: string) => {
     return new Date(dateStr).toLocaleDateString("en-US", {

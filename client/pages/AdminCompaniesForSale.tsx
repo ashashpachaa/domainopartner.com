@@ -43,10 +43,23 @@ export default function AdminCompaniesForSale() {
   const [fetchedCompanyData, setFetchedCompanyData] = useState<any>(null);
   const [importAuthCode, setImportAuthCode] = useState("");
   const [importedCompanies, setImportedCompanies] = useState<CompanyForSale[]>([]);
+  const [mockCompanies, setMockCompanies] = useState<CompanyForSale[]>(mockCompaniesForSale);
+
+  // Load companies from localStorage if they've been updated (e.g., marked as sold)
+  useEffect(() => {
+    const storedCompanies = localStorage.getItem("companiesForSale");
+    if (storedCompanies) {
+      try {
+        setMockCompanies(JSON.parse(storedCompanies));
+      } catch {
+        setMockCompanies(mockCompaniesForSale);
+      }
+    }
+  }, []);
 
   const companies = useMemo(() => {
-    return [...mockCompaniesForSale, ...importedCompanies];
-  }, [importedCompanies]);
+    return [...mockCompanies, ...importedCompanies];
+  }, [mockCompanies, importedCompanies]);
 
   const filtered = useMemo(() => {
     return companies.filter((company) => {

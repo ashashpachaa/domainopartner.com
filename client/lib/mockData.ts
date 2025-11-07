@@ -503,6 +503,379 @@ export interface StaffBonus {
   notes?: string;
 }
 
+// ========== ACCOUNTING SYSTEM INTERFACES ==========
+
+export type ExpenseCategory = "payroll" | "utilities" | "office_supplies" | "equipment" | "rent" | "marketing" | "transportation" | "software" | "maintenance" | "vendor" | "other";
+
+export type TaxType = "income_tax" | "payroll_tax" | "vat" | "corporate_tax" | "sales_tax";
+
+export interface Expense {
+  id: string;
+  category: ExpenseCategory;
+  description: string;
+  amount: number;
+  currency: string;
+  vendor?: string;
+  date: string; // ISO date
+  dueDate?: string;
+  status: "pending" | "paid" | "overdue";
+  paymentMethod?: string;
+  reference?: string;
+  attachments?: string[]; // file paths
+  notes?: string;
+  createdBy: string; // staff ID
+  createdAt: string; // ISO timestamp
+  updatedAt: string;
+}
+
+export interface Vendor {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  country: string;
+  address: string;
+  taxId?: string;
+  paymentTerms: number; // days
+  status: "active" | "inactive";
+  totalSpent: number;
+  currency: string;
+  createdAt: string;
+}
+
+export interface TaxInfo {
+  staffId?: string; // for staff tax, null for company tax
+  year: number;
+  taxType: TaxType;
+  grossIncome: number;
+  deductions: number;
+  taxableIncome: number;
+  taxAmount: number;
+  currency: string;
+  status: "calculated" | "filed" | "paid";
+  notes?: string;
+}
+
+export interface Deduction {
+  id: string;
+  staffId: string;
+  type: "tax" | "insurance" | "retirement" | "loan" | "other";
+  description: string;
+  amount: number;
+  frequency: "monthly" | "quarterly" | "yearly" | "one_time";
+  startDate: string;
+  endDate?: string;
+  currency: string;
+  status: "active" | "inactive";
+}
+
+export interface GeneralLedgerEntry {
+  id: string;
+  date: string;
+  account: string;
+  debit?: number;
+  credit?: number;
+  description: string;
+  reference?: string;
+  createdBy: string;
+  createdAt: string;
+}
+
+export interface BudgetEntry {
+  id: string;
+  category: ExpenseCategory;
+  month: number;
+  year: number;
+  budgetAmount: number;
+  actualAmount: number;
+  currency: string;
+  notes?: string;
+  createdAt: string;
+}
+
+export interface FinancialReport {
+  id: string;
+  type: "profit_loss" | "balance_sheet" | "cash_flow";
+  period: "monthly" | "quarterly" | "yearly";
+  month?: number;
+  year: number;
+  startDate: string;
+  endDate: string;
+  data: Record<string, any>;
+  currency: string;
+  generatedAt: string;
+  generatedBy: string;
+}
+
+export interface ProfitLossReport {
+  period: string;
+  revenue: number;
+  costOfGoods: number;
+  grossProfit: number;
+  operatingExpenses: {
+    payroll: number;
+    utilities: number;
+    rent: number;
+    marketing: number;
+    other: number;
+  };
+  totalOperatingExpenses: number;
+  operatingIncome: number;
+  interestExpense: number;
+  taxExpense: number;
+  netProfit: number;
+  currency: string;
+}
+
+export interface BalanceSheetReport {
+  period: string;
+  assets: {
+    cash: number;
+    accountsReceivable: number;
+    inventory: number;
+    equipment: number;
+    other: number;
+  };
+  totalAssets: number;
+  liabilities: {
+    accountsPayable: number;
+    shortTermDebt: number;
+    longTermDebt: number;
+    other: number;
+  };
+  totalLiabilities: number;
+  equity: {
+    commonStock: number;
+    retainedEarnings: number;
+    other: number;
+  };
+  totalEquity: number;
+  currency: string;
+}
+
+export interface CashFlowReport {
+  period: string;
+  operatingActivities: {
+    netIncome: number;
+    depreciationAmortization: number;
+    changesInWorkingCapital: number;
+  };
+  totalOperatingCashFlow: number;
+  investingActivities: {
+    capitalExpenditures: number;
+    otherInvestments: number;
+  };
+  totalInvestingCashFlow: number;
+  financingActivities: {
+    debtRepayment: number;
+    equityRaised: number;
+    dividendsPaid: number;
+  };
+  totalFinancingCashFlow: number;
+  netCashChange: number;
+  endingCashBalance: number;
+  currency: string;
+}
+
+export const mockExpenses: Expense[] = [
+  {
+    id: "EXP001",
+    category: "office_supplies",
+    description: "Monthly office supplies and stationery",
+    amount: 450,
+    currency: "USD",
+    vendor: "Office Depot",
+    date: "2024-01-05",
+    status: "paid",
+    paymentMethod: "credit_card",
+    createdBy: "S001",
+    createdAt: "2024-01-05T10:30:00Z",
+    updatedAt: "2024-01-05T10:30:00Z",
+  },
+  {
+    id: "EXP002",
+    category: "utilities",
+    description: "Electricity bill - January",
+    amount: 1200,
+    currency: "USD",
+    vendor: "City Power",
+    date: "2024-01-01",
+    status: "paid",
+    paymentMethod: "bank_transfer",
+    createdBy: "S001",
+    createdAt: "2024-01-01T09:00:00Z",
+    updatedAt: "2024-01-01T09:00:00Z",
+  },
+  {
+    id: "EXP003",
+    category: "software",
+    description: "Monthly SaaS subscriptions",
+    amount: 3200,
+    currency: "USD",
+    vendor: "Various",
+    date: "2024-01-03",
+    status: "paid",
+    paymentMethod: "credit_card",
+    createdBy: "S001",
+    createdAt: "2024-01-03T11:00:00Z",
+    updatedAt: "2024-01-03T11:00:00Z",
+  },
+  {
+    id: "EXP004",
+    category: "rent",
+    description: "Office rent - January",
+    amount: 5000,
+    currency: "USD",
+    vendor: "Real Estate Partners",
+    date: "2024-01-01",
+    status: "paid",
+    paymentMethod: "bank_transfer",
+    createdBy: "S001",
+    createdAt: "2024-01-01T08:00:00Z",
+    updatedAt: "2024-01-01T08:00:00Z",
+  },
+  {
+    id: "EXP005",
+    category: "marketing",
+    description: "Google Ads campaign",
+    amount: 2000,
+    currency: "USD",
+    vendor: "Google Ads",
+    date: "2024-01-08",
+    status: "pending",
+    paymentMethod: "credit_card",
+    createdBy: "S001",
+    createdAt: "2024-01-08T14:15:00Z",
+    updatedAt: "2024-01-08T14:15:00Z",
+  },
+  {
+    id: "EXP006",
+    category: "equipment",
+    description: "Laptop purchase for new employee",
+    amount: 1500,
+    currency: "USD",
+    vendor: "TechStore",
+    date: "2024-01-06",
+    status: "paid",
+    paymentMethod: "purchase_order",
+    createdBy: "S001",
+    createdAt: "2024-01-06T13:45:00Z",
+    updatedAt: "2024-01-06T13:45:00Z",
+  },
+];
+
+export const mockVendors: Vendor[] = [
+  {
+    id: "VEN001",
+    name: "Office Depot",
+    email: "sales@officedepot.com",
+    phone: "+1-800-463-3768",
+    country: "United States",
+    address: "2500 National Commerce Drive, Elgin, IL 60123",
+    taxId: "12-3456789",
+    paymentTerms: 30,
+    status: "active",
+    totalSpent: 3250,
+    currency: "USD",
+    createdAt: "2023-06-15",
+  },
+  {
+    id: "VEN002",
+    name: "City Power",
+    email: "billing@citypower.com",
+    phone: "+1-555-0100",
+    country: "United States",
+    address: "1234 Energy Way, Houston, TX 77001",
+    taxId: "98-7654321",
+    paymentTerms: 15,
+    status: "active",
+    totalSpent: 3600,
+    currency: "USD",
+    createdAt: "2023-07-01",
+  },
+  {
+    id: "VEN003",
+    name: "Real Estate Partners",
+    email: "leasing@reppartners.com",
+    phone: "+1-212-555-0150",
+    country: "United States",
+    address: "200 5th Avenue, New York, NY 10010",
+    taxId: "55-6789012",
+    paymentTerms: 30,
+    status: "active",
+    totalSpent: 15000,
+    currency: "USD",
+    createdAt: "2023-05-01",
+  },
+  {
+    id: "VEN004",
+    name: "TechStore",
+    email: "business@techstore.com",
+    phone: "+1-510-555-0200",
+    country: "United States",
+    address: "500 Market Street, San Francisco, CA 94105",
+    taxId: "34-5678901",
+    paymentTerms: 45,
+    status: "active",
+    totalSpent: 8500,
+    currency: "USD",
+    createdAt: "2023-08-20",
+  },
+];
+
+export const mockBudgets: BudgetEntry[] = [
+  {
+    id: "BUD001",
+    category: "office_supplies",
+    month: 1,
+    year: 2024,
+    budgetAmount: 500,
+    actualAmount: 450,
+    currency: "USD",
+    createdAt: "2024-01-01",
+  },
+  {
+    id: "BUD002",
+    category: "utilities",
+    month: 1,
+    year: 2024,
+    budgetAmount: 1500,
+    actualAmount: 1200,
+    currency: "USD",
+    createdAt: "2024-01-01",
+  },
+  {
+    id: "BUD003",
+    category: "software",
+    month: 1,
+    year: 2024,
+    budgetAmount: 3500,
+    actualAmount: 3200,
+    currency: "USD",
+    createdAt: "2024-01-01",
+  },
+  {
+    id: "BUD004",
+    category: "rent",
+    month: 1,
+    year: 2024,
+    budgetAmount: 5000,
+    actualAmount: 5000,
+    currency: "USD",
+    createdAt: "2024-01-01",
+  },
+  {
+    id: "BUD005",
+    category: "marketing",
+    month: 1,
+    year: 2024,
+    budgetAmount: 3000,
+    actualAmount: 2000,
+    currency: "USD",
+    createdAt: "2024-01-01",
+  },
+];
+
 export const mockUsers: User[] = [
   {
     id: "1",

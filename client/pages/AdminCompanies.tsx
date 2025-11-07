@@ -132,38 +132,6 @@ export default function AdminCompanies() {
     };
   }, [companies, selectedCountry]);
 
-  const getUserName = (userId: string) => {
-    const user = mockUsers.find((u) => u.id === userId);
-    return user ? `${user.firstName} ${user.lastName}` : "Unknown User";
-  };
-
-  const formatDate = (dateStr: string) => {
-    return new Date(dateStr).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  };
-
-  const daysUntilDate = (dateStr: string) => {
-    const date = new Date(dateStr);
-    const today = new Date();
-    return Math.floor(
-      (date.getTime() - today.getTime()) / (1000 * 60 * 60 * 24),
-    );
-  };
-
-  const checkIfNeedsRenewal = (company: RegisteredCompany) => {
-    const daysUntilConfirmation = daysUntilDate(company.nextRenewalDate);
-    const daysUntilAccounts = daysUntilDate(company.nextAccountsFilingDate);
-
-    // Check if within 15 days of either date
-    const confirmationDue = daysUntilConfirmation <= 15 && daysUntilConfirmation > 0;
-    const accountsDue = daysUntilAccounts <= 15 && daysUntilAccounts > 0;
-
-    return confirmationDue || accountsDue;
-  };
-
   const exportToCSV = () => {
     let headers: string[];
     let rows: (string | number)[][];

@@ -3230,28 +3230,34 @@ After payment:
                   </div>
                 )}
 
-                {selectedIncorporation.paymentStatus === "paid" && (
-                  <div className="border-t border-slate-200 pt-6 bg-green-50 p-6 rounded-lg">
-                    <h3 className="font-bold text-green-900 mb-4">✓ Order Confirmed</h3>
-                    <div className="space-y-3 text-green-800">
-                      <p>Your company incorporation order has been received by Companies House.</p>
+                {selectedIncorporation.paymentStatus === "pending" && (
+                  <div className="border-t border-slate-200 pt-6 bg-blue-50 p-6 rounded-lg">
+                    <h3 className="font-bold text-blue-900 mb-4">⏳ Awaiting Payment to Companies House</h3>
+                    <div className="space-y-3 text-blue-800">
+                      <p>Your company incorporation has been submitted. Payment to Companies House is now required to proceed.</p>
                       <div className="space-y-2">
-                        <div className="bg-white p-3 rounded border border-green-200">
-                          <p className="text-xs font-bold text-slate-600">TEMPORARY COMPANY REFERENCE</p>
-                          <p className="font-mono font-bold text-lg">{selectedIncorporation.companyRegistrationNumber}</p>
+                        <div className="bg-white p-3 rounded border border-blue-200">
+                          <p className="text-xs font-bold text-slate-600">FILING REFERENCE</p>
+                          <p className="font-mono font-bold text-lg">{selectedIncorporation.filingReference}</p>
                         </div>
-                        <div className="bg-white p-3 rounded border border-green-200">
-                          <p className="text-xs font-bold text-slate-600">PAYMENT REFERENCE</p>
-                          <p className="font-mono font-bold">{selectedIncorporation.paymentReference}</p>
+                        <div className="bg-white p-3 rounded border border-blue-200">
+                          <p className="text-xs font-bold text-slate-600">FILING FEE</p>
+                          <p className="font-bold">£{selectedIncorporation.filingFee}</p>
+                        </div>
+                        <div className="bg-white p-3 rounded border border-orange-200 bg-orange-50">
+                          <p className="text-xs font-bold text-slate-600">PAYMENT DUE DATE</p>
+                          <p className="font-bold text-orange-700">{selectedIncorporation.paymentDueDate}</p>
+                          <p className="text-xs text-orange-600 mt-1">Payment must be received within 14 days</p>
                         </div>
                       </div>
                       <div className="text-sm space-y-2">
                         <p><strong>Next Steps:</strong></p>
                         <ol className="list-decimal list-inside space-y-1">
-                          <li>Companies House will process your order (3-5 business days)</li>
-                          <li>You'll receive a confirmation email with your company number</li>
-                          <li>Your company will be entered in the Companies House register</li>
-                          <li>You can then manage your company online</li>
+                          <li>Click "Pay to Companies House" button above to pay the filing fee</li>
+                          <li>Use your filing reference when prompted: <strong>{selectedIncorporation.filingReference}</strong></li>
+                          <li>Payment can be made online, by cheque, or bank transfer</li>
+                          <li>Once paid, Companies House will process your application (3-5 business days)</li>
+                          <li>You'll receive an email with your company number when approved</li>
                         </ol>
                       </div>
                       <p className="text-xs">You can use the payment reference above to track your order status with Companies House.</p>

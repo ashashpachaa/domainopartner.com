@@ -16,12 +16,15 @@ import {
 } from "@/hooks/useCompanyDetails";
 import { mockUsers, mockOrders } from "@/lib/mockData";
 
+type CountryTab = "all" | "UK" | "USA" | "Sweden";
+
 export default function AdminCompanies() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState<
     "all" | "active" | "dissolved"
   >("all");
   const [sortBy, setSortBy] = useState<"date" | "name" | "renewal">("date");
+  const [selectedCountry, setSelectedCountry] = useState<CountryTab>("all");
 
   const companies = useMemo(() => {
     return getRegisteredCompanies();

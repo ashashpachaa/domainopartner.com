@@ -1461,13 +1461,16 @@ export default function AdminUKCompanySetup() {
 
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-2">Nationality</label>
-                      <input
-                        type="text"
-                        placeholder="e.g., British, Egyptian"
+                      <select
                         value={currentOfficer.nationality}
                         onChange={(e) => setCurrentOfficer({ ...currentOfficer, nationality: e.target.value })}
                         className="w-full px-4 py-2 border border-slate-300 rounded-lg"
-                      />
+                      >
+                        <option value="">-- Select Nationality --</option>
+                        {NATIONALITIES.map(n => (
+                          <option key={n} value={n}>{n}</option>
+                        ))}
+                      </select>
                     </div>
 
                     <div>

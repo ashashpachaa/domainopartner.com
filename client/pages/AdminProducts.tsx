@@ -180,9 +180,21 @@ export default function AdminProducts() {
               Clear filters
             </button>
           )}
-          <p className="text-sm text-slate-600 mt-3">
-            Showing {filteredProducts.length} of {products.length} products
-          </p>
+          <div className="flex items-center justify-between mt-3">
+            <p className="text-sm text-slate-600">
+              Showing {filteredProducts.length} of {products.length} products
+            </p>
+            {filteredProducts.length > 0 && (
+              <button
+                onClick={toggleSelectAll}
+                className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+              >
+                {selectedProducts.size === filteredProducts.length
+                  ? "Deselect All"
+                  : "Select All"}
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Bulk Actions Bar */}

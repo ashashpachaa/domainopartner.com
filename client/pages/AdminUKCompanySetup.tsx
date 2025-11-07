@@ -997,6 +997,47 @@ export default function AdminUKCompanySetup() {
                           </div>
 
                           <div>
+                            <label className="block text-sm font-medium text-slate-700 mb-2">Registered Office Address *</label>
+                            <div className="space-y-3">
+                              <input
+                                type="text"
+                                placeholder="Address line 1"
+                                value={formData.registeredOfficeAddress.line1}
+                                onChange={(e) => setFormData({ ...formData, registeredOfficeAddress: { ...formData.registeredOfficeAddress, line1: e.target.value } })}
+                                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                              />
+                              <input
+                                type="text"
+                                placeholder="Address line 2 (optional)"
+                                value={formData.registeredOfficeAddress.line2}
+                                onChange={(e) => setFormData({ ...formData, registeredOfficeAddress: { ...formData.registeredOfficeAddress, line2: e.target.value } })}
+                                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                              />
+                              <input
+                                type="text"
+                                placeholder="Town/City"
+                                value={formData.registeredOfficeAddress.town}
+                                onChange={(e) => setFormData({ ...formData, registeredOfficeAddress: { ...formData.registeredOfficeAddress, town: e.target.value } })}
+                                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                              />
+                              <input
+                                type="text"
+                                placeholder="County"
+                                value={formData.registeredOfficeAddress.county}
+                                onChange={(e) => setFormData({ ...formData, registeredOfficeAddress: { ...formData.registeredOfficeAddress, county: e.target.value } })}
+                                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                              />
+                              <input
+                                type="text"
+                                placeholder="Postcode"
+                                value={formData.registeredOfficeAddress.postcode}
+                                onChange={(e) => setFormData({ ...formData, registeredOfficeAddress: { ...formData.registeredOfficeAddress, postcode: e.target.value } })}
+                                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                              />
+                            </div>
+                          </div>
+
+                          <div>
                             <label className="block text-sm font-medium text-slate-700 mb-2">SIC Code(s) * (Maximum 4)</label>
                             <div className="space-y-2">
                               {formData.sicCodes.length >= 4 && (

@@ -3001,6 +3001,35 @@ export default function AdminUKCompanySetup() {
                   </div>
                 </div>
 
+                {selectedIncorporation.status === "submitted" && (
+                  <div className="border-t border-slate-200 pt-6 bg-blue-50 p-6 rounded-lg">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold">!</div>
+                      <h3 className="font-bold text-slate-900">Payment Required</h3>
+                    </div>
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-center bg-white p-4 rounded-lg">
+                        <span className="text-slate-700">Filing Fee (Companies House):</span>
+                        <span className="font-bold text-xl">£{selectedIncorporation.filingFee}</span>
+                      </div>
+                      {selectedIncorporation.paymentStatus === "paid" ? (
+                        <div className="bg-green-50 border border-green-200 p-4 rounded-lg">
+                          <p className="text-green-800 font-bold mb-2">✓ Payment Confirmed</p>
+                          <p className="text-sm text-green-700">Reference: {selectedIncorporation.paymentReference}</p>
+                          <p className="text-sm text-green-700">Date: {selectedIncorporation.paymentDate}</p>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => handleProcessPayment(selectedIncorporation)}
+                          className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition"
+                        >
+                          💳 Pay Filing Fee (£{selectedIncorporation.filingFee})
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                )}
+
                 {(selectedIncorporation.status === "submitted" || selectedIncorporation.status === "completed") && (
                   <div className="border-t border-slate-200 pt-6">
                     <h3 className="font-bold text-slate-900 mb-4">Companies House Details</h3>

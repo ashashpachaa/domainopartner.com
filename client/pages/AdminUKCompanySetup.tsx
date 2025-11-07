@@ -954,6 +954,22 @@ export default function AdminUKCompanySetup() {
     toast.success("Company registration completed! Company number and AUTH CODE saved.");
   };
 
+  const handleProcessPayment = (inc: CompanyIncorporation) => {
+    const paymentRef = `CH-${Date.now()}`;
+    const updated = {
+      ...inc,
+      paymentStatus: "paid" as const,
+      paymentReference: paymentRef,
+      paymentDate: new Date().toISOString().split("T")[0],
+    };
+
+    localStorage.setItem(`incorporation_${inc.id}`, JSON.stringify(updated));
+    setIncorporations(incorporations.map(i => i.id === inc.id ? updated : i));
+    setSelectedIncorporation(updated);
+
+    toast.success(`Payment processed! Reference: ${paymentRef}`);
+  };
+
   return (
     <AdminLayout>
       <div className="p-8 space-y-8">

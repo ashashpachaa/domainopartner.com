@@ -22,6 +22,7 @@ export default function AdminProducts() {
     "all" | "active" | "inactive"
   >("all");
   const [serviceFilter, setServiceFilter] = useState<string>("");
+  const [selectedProducts, setSelectedProducts] = useState<Set<string>>(new Set());
 
   const filteredProducts = products.filter((product) => {
     const matchesSearch =

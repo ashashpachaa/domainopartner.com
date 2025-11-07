@@ -420,11 +420,24 @@ export default function AdminCompanies() {
                       daysUntilRenewal <= 90 && daysUntilRenewal > 0;
 
                     return (
-                      <tr key={company.id} className="hover:bg-slate-50">
+                      <tr
+                        key={company.id}
+                        className={`hover:bg-slate-50 ${
+                          checkIfNeedsRenewal(company) ? "bg-red-50" : ""
+                        }`}
+                      >
                         <td className="px-6 py-4">
-                          <p className="font-semibold text-slate-900">
-                            {company.companyName}
-                          </p>
+                          <div className="flex flex-col gap-2">
+                            <p className="font-semibold text-slate-900">
+                              {company.companyName}
+                            </p>
+                            {checkIfNeedsRenewal(company) && (
+                              <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold bg-red-200 text-red-800 w-fit">
+                                <AlertCircle className="w-3 h-3" />
+                                NEED RENEWAL
+                              </span>
+                            )}
+                          </div>
                         </td>
                         <td className="px-6 py-4 text-sm text-slate-600">
                           {selectedCountry === "UK"

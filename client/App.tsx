@@ -58,6 +58,7 @@ import AdminBalanceSheet from "./pages/AdminBalanceSheet";
 import AdminCashFlow from "./pages/AdminCashFlow";
 import AdminBudget from "./pages/AdminBudget";
 import AdminVendors from "./pages/AdminVendors";
+import AdminUKCompanySetup from "./pages/AdminUKCompanySetup";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();

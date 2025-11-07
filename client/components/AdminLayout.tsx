@@ -36,6 +36,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   );
   const [showDashboardDropdown, setShowDashboardDropdown] = useState(false);
   const [dashboardTab, setDashboardTab] = useState<"users" | "staff">("users");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleLogout = () => {
     localStorage.removeItem("adminToken");

@@ -248,6 +248,7 @@ export default function AdminCompaniesForSale() {
 
   const handleRejectImport = () => {
     setFetchedCompanyData(null);
+    setImportAuthCode("");
     toast.info("Import cancelled");
   };
 

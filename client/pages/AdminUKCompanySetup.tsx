@@ -23,7 +23,7 @@ import { toast } from "sonner";
 import { storeRegisteredCompany } from "@/hooks/useCompanyDetails";
 import { useCompanyNameValidation } from "@/hooks/useCompanyNameValidation";
 
-const NATIONALITIES = [
+const NATIONALITIES = Array.from(new Set([
   "Afghan", "Albanian", "Algerian", "Andorran", "Angolan", "Argentine", "Armenian",
   "Australian", "Austrian", "Azerbaijani", "Bahamian", "Bahraini", "Bangladeshi",
   "Barbadian", "Belarusian", "Belgian", "Belizean", "Beninese", "Bhutanese", "Bolivian",
@@ -43,7 +43,7 @@ const NATIONALITIES = [
   "Malawian", "Malaysian", "Maldivian", "Malian", "Maltese", "Manx", "Marshallese",
   "Mauritian", "Mauritanian", "Mexican", "Micronesian", "Moldovan", "Monégasque",
   "Mongolian", "Montenegrin", "Moroccan", "Mozambican", "Namibian", "Nauruan", "Nepali",
-  "Dutch", "New Zealand", "Nicaraguan", "Nigerian", "Niuean", "Norwegian", "Omani",
+  "New Zealand", "Nicaraguan", "Nigerian", "Niuean", "Norwegian", "Omani",
   "Pakistani", "Palauan", "Palestinian", "Panamanian", "Papua New Guinean", "Paraguayan",
   "Peruvian", "Filipino", "Polish", "Portuguese", "Puerto Rican", "Qatari", "Romanian",
   "Russian", "Rwandan", "Saint Kitts and Nevis", "Saint Lucian", "Saint Vincentian",
@@ -52,10 +52,10 @@ const NATIONALITIES = [
   "Solomon Islander", "Somali", "South African", "South Sudanese", "Spanish", "Sri Lankan",
   "Sudanese", "Surinamese", "Swazi", "Swedish", "Swiss", "Syrian", "Taiwanese", "Tajikistani",
   "Tanzanian", "Thai", "Togolese", "Tongan", "Trinidadian", "Tobagonian", "Tunisian",
-  "Turkish", "Turkmen", "Tuvaluan", "Ugandan", "Ukrainian", "Emirati", "British",
-  "American", "Uruguayan", "Uzbekistani", "Ni-Vanuatu", "Vatican", "Venezuelan", "Vietnamese",
+  "Turkish", "Turkmen", "Tuvaluan", "Ugandan", "Ukrainian", "Emirati", "American", "Uruguayan",
+  "Uzbekistani", "Ni-Vanuatu", "Vatican", "Venezuelan", "Vietnamese",
   "Virgin Islander", "Welsh", "Yemeni", "Zambian", "Zimbabwean"
-].sort();
+])).sort();
 
 const SIC_CODES = [
   { code: "01110", description: "Growing of cereals (except rice), leguminous crops and oil seeds" },

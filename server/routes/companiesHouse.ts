@@ -94,6 +94,8 @@ export async function handleCompanySearch(req: any, res: any) {
   }
 }
 
+const pendingWebhookUpdates: any[] = [];
+
 export async function handleCompanyApprovalWebhook(req: any, res: any) {
   try {
     const { incorporationId, companyNumber, authCode, status } = req.body;
@@ -104,24 +106,48 @@ export async function handleCompanyApprovalWebhook(req: any, res: any) {
       });
     }
 
-    console.log("Companies House Webhook Received:", {
+    const update = {
       incorporationId,
       companyNumber,
-      status,
+      authCode: authCode || "",
+      status: status || "approved",
       timestamp: new Date().toISOString(),
-    });
+    };
+
+    pendingWebhookUpdates.push(update);
+
+    console.log("Companies House Webhook Received:", update);
 
     res.json({
       success: true,
       message: "Webhook received successfully",
       incorporationId,
       companyNumber,
-      timestamp: new Date().toISOString(),
+      timestamp: update.timestamp,
     });
   } catch (error: any) {
     console.error("Webhook processing error:", error);
     res.status(500).json({
       error: "Failed to process webhook",
+      details: error.message,
+    });
+  }
+}
+
+export async function handleWebhookStatus(req: any, res: any) {
+  try {
+    const updates = [...pendingWebhookUpdates];
+
+    res.json({
+      success: true,
+      updates: updates,
+      count: updates.length,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error: any) {
+    console.error("Webhook status error:", error);
+    res.status(500).json({
+      error: "Failed to fetch webhook status",
       details: error.message,
     });
   }

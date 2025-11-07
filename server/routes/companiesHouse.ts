@@ -161,6 +161,52 @@ export function generateCompanyNumber(): string {
   return `${timestamp.toString().slice(-6)}${random}`;
 }
 
+export async function handlePaymentSubmission(req: any, res: any) {
+  try {
+    const { incorporationId, amount, currency, companyName } = req.body;
+
+    if (!incorporationId || !amount) {
+      return res.status(400).json({
+        error: "Missing required fields: incorporationId, amount",
+      });
+    }
+
+    // TODO: Integrate with Stripe or other payment processor
+    // For now, generate a payment reference and simulate successful payment
+
+    const paymentReference = `CH-${Date.now()}`;
+    const paymentId = `PAY-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+
+    console.log("Payment submitted:", {
+      incorporationId,
+      amount,
+      currency,
+      paymentReference,
+      paymentId,
+      companyName,
+    });
+
+    // Simulate payment processing
+    res.json({
+      success: true,
+      paymentReference,
+      paymentId,
+      amount,
+      currency: currency || "GBP",
+      status: "paid",
+      paidAt: new Date().toISOString(),
+      message:
+        "Payment processed successfully. Your filing fee has been received by Companies House.",
+    });
+  } catch (error: any) {
+    console.error("Payment submission error:", error);
+    res.status(500).json({
+      error: "Failed to process payment",
+      details: error.message,
+    });
+  }
+}
+
 export async function handleIncorporationSubmission(req: any, res: any) {
   try {
     const {

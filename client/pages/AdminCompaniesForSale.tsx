@@ -535,6 +535,20 @@ export default function AdminCompaniesForSale() {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-center">
+                      <span
+                        className={`inline-block px-3 py-1 rounded-full text-xs font-semibold border ${
+                          company.registrationStatus === "active"
+                            ? "bg-green-50 text-green-700 border-green-200"
+                            : company.registrationStatus === "dormant"
+                              ? "bg-yellow-50 text-yellow-700 border-yellow-200"
+                              : "bg-red-50 text-red-700 border-red-200"
+                        }`}
+                      >
+                        {company.registrationStatus.charAt(0).toUpperCase() +
+                          company.registrationStatus.slice(1)}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-center">
                       <div className="flex items-center justify-center gap-2">
                         <Button
                           variant="outline"

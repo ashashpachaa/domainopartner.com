@@ -7,6 +7,7 @@ import { handleOCR } from "./routes/ocr";
 import {
   handleCompanySearch,
   handleCompanyDetails,
+  handleCompanyApprovalWebhook,
 } from "./routes/companiesHouse";
 
 const upload = multer({ storage: multer.memoryStorage() });

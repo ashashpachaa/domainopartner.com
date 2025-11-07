@@ -233,6 +233,57 @@ export default function AdminUKCompanySetup() {
     toast.success("Company incorporation saved as draft");
   };
 
+  // Complete incorporation and add to Registry
+  const handleCompleteIncorporation = (incorporation: CompanyIncorporation) => {
+    // Generate realistic Companies House data
+    const crn = Math.floor(10000000 + Math.random() * 90000000).toString();
+    const authCode = Array.from({ length: 12 }, () =>
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"[Math.floor(Math.random() * 36)]
+    ).join("");
+
+    // Calculate next confirmation date (1 year from now)
+    const nextConfirmationDate = new Date();
+    nextConfirmationDate.setFullYear(nextConfirmationDate.getFullYear() + 1);
+
+    // Calculate first accounts due (18 months from incorporation)
+    const firstAccountsDue = new Date();
+    firstAccountsDue.setMonth(firstAccountsDue.getMonth() + 18);
+
+    // Create completed incorporation
+    const completed = {
+      ...incorporation,
+      status: "completed" as const,
+      companyRegistrationNumber: crn,
+      companyAuthenticationCode: authCode,
+      completedAt: new Date().toISOString(),
+    };
+
+    // Store in Registry
+    const registeredCompanyData = {
+      id: `REG${crn}`,
+      companyName: incorporation.companyName,
+      companyNumber: crn,
+      country: "United Kingdom",
+      status: "active" as const,
+      incorporationDate: new Date().toISOString().split("T")[0],
+      nextConfirmationDate: nextConfirmationDate.toISOString().split("T")[0],
+      firstAccountsMadeUpTo: firstAccountsDue.toISOString().split("T")[0],
+      registeredOffice: `${incorporation.registeredOfficeAddress}, ${incorporation.registeredOfficeCity}, ${incorporation.registeredOfficePostcode}`,
+      authCode: authCode,
+      certificateOfIncorporation: "CERT_" + crn + ".pdf",
+      createdAt: new Date().toISOString(),
+    };
+
+    // Store in both systems
+    storeRegisteredCompany(registeredCompanyData);
+    setIncorporations(incorporations.map((i) => (i.id === incorporation.id ? completed : i)));
+    localStorage.setItem(`incorporation_${incorporation.id}`, JSON.stringify(completed));
+
+    toast.success(
+      `✅ Company registered! CRN: ${crn} | AUTH CODE: ${authCode}`
+    );
+  };
+
   // Submit to Companies House (redirect to payment)
   const handleSubmitToCompaniesHouse = (
     incorporation: CompanyIncorporation,

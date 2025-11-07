@@ -71,7 +71,18 @@ export function storeRegisteredCompany(company: RegisteredCompany) {
 }
 
 export function getRegisteredCompanies(): RegisteredCompany[] {
-  return JSON.parse(localStorage.getItem("registeredCompanies") || "[]");
+  const storageData = JSON.parse(
+    localStorage.getItem("registeredCompanies") || "[]",
+  );
+  // Merge mock data with localStorage data, removing duplicates by ID
+  const combined = [...mockRegisteredCompanies, ...storageData];
+  const uniqueMap = new Map<string, RegisteredCompany>();
+  combined.forEach((company) => {
+    if (!uniqueMap.has(company.id)) {
+      uniqueMap.set(company.id, company);
+    }
+  });
+  return Array.from(uniqueMap.values());
 }
 
 export function getRegisteredCompaniesByUser(

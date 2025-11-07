@@ -7,12 +7,14 @@ import {
   AlertTriangle,
   Info,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   mockStaff,
   mockStaffSalaries,
+  mockStaffBonuses,
   Staff,
   StaffSalary,
+  StaffBonus,
 } from "@/lib/mockData";
 
 const currencySymbols: Record<string, string> = {

@@ -3068,6 +3068,15 @@ export default function AdminUKCompanySetup() {
                       </Button>
                     </>
                   )}
+                  {(selectedIncorporation.status === "submitted" || selectedIncorporation.status === "completed") && (
+                    <Button
+                      onClick={() => handleUpdateIncorporationCompaniesHouseData(editingCompanyNumber, editingAuthCode)}
+                      disabled={selectedIncorporation.status === "completed" && !editingCompanyNumber}
+                      className="bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300"
+                    >
+                      {selectedIncorporation.status === "completed" ? "Company Completed" : "Save Companies House Data"}
+                    </Button>
+                  )}
                 </div>
               </div>
             </div>

@@ -227,6 +227,16 @@ const App = () => (
             element={<AdminRoute element={<AdminCompaniesForSale />} />}
           />
 
+          {/* Admin View Dashboards */}
+          <Route
+            path="/admin/view-user/:userId"
+            element={<AdminRoute element={<AdminViewUserDashboard />} />}
+          />
+          <Route
+            path="/admin/view-staff/:staffId"
+            element={<AdminRoute element={<AdminViewStaffDashboard />} />}
+          />
+
           {/* Client Routes */}
           <Route
             path="/client/dashboard"

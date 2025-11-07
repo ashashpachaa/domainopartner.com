@@ -603,6 +603,45 @@ export default function AdminUKCompanySetup() {
     toast.success("Officer removed");
   };
 
+  const isStep0Complete = () => {
+    return (
+      formData.companyName &&
+      validationResult?.isAvailable === true &&
+      formData.registeredOfficeAddress.line1 &&
+      formData.registeredOfficeAddress.town &&
+      formData.registeredOfficeAddress.postcode &&
+      formData.businessActivities.some(a => a && a.trim() !== "")
+    );
+  };
+
+  const isStep1Complete = () => {
+    return officers.length > 0 && officers.some(o => o.roles.director);
+  };
+
+  const isStep2Complete = () => {
+    return true;
+  };
+
+  const isStep3Complete = () => {
+    return (
+      formData.confirmations.memorandumAccepted &&
+      formData.confirmations.termsAccepted
+    );
+  };
+
+  const isStep4Complete = () => {
+    return true;
+  };
+
+  const getStepCompletionStatus = (stepIndex: number): "completed" | "incomplete" | "current" => {
+    if (stepIndex === currentStep) return "current";
+
+    const validations = [isStep0Complete, isStep1Complete, isStep2Complete, isStep3Complete, isStep4Complete];
+    const isComplete = validations[stepIndex]?.();
+
+    return isComplete ? "completed" : "incomplete";
+  };
+
   const handleSubmitIncorporation = () => {
     if (!formData.companyName || !formData.registeredOfficeAddress.postcode) {
       toast.error("Please fill in required company details");

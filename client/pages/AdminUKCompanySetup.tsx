@@ -15,9 +15,13 @@ import {
   CheckCircle,
   Copy,
   X,
+  AlertCircle,
+  CheckSquare,
+  Loader,
 } from "lucide-react";
 import { toast } from "sonner";
 import { storeRegisteredCompany } from "@/hooks/useCompanyDetails";
+import { useCompanyNameValidation } from "@/hooks/useCompanyNameValidation";
 
 interface IncorporationStep {
   id: string;

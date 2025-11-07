@@ -943,13 +943,41 @@ export default function AdminUKCompanySetup() {
                           </div>
                         </div>
                         {inc.companyRegistrationNumber && (
-                          <div className="mt-3 p-3 bg-green-50 rounded-lg border border-green-200">
-                            <p className="text-xs text-green-700">
-                              CRN:{" "}
-                              <span className="font-bold">
-                                {inc.companyRegistrationNumber}
-                              </span>
-                            </p>
+                          <div className="mt-3 space-y-2 p-3 bg-green-50 rounded-lg border border-green-200">
+                            <div className="flex items-center justify-between">
+                              <p className="text-xs text-green-700">
+                                CRN:{" "}
+                                <span className="font-bold">
+                                  {inc.companyRegistrationNumber}
+                                </span>
+                              </p>
+                              <button
+                                onClick={() => {
+                                  navigator.clipboard.writeText(inc.companyRegistrationNumber!);
+                                  toast.success("CRN copied to clipboard");
+                                }}
+                                className="text-green-600 hover:text-green-700"
+                              >
+                                <Copy className="w-3 h-3" />
+                              </button>
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <p className="text-xs text-green-700">
+                                AUTH CODE:{" "}
+                                <span className="font-bold font-mono">
+                                  {inc.companyAuthenticationCode}
+                                </span>
+                              </p>
+                              <button
+                                onClick={() => {
+                                  navigator.clipboard.writeText(inc.companyAuthenticationCode!);
+                                  toast.success("AUTH CODE copied to clipboard");
+                                }}
+                                className="text-green-600 hover:text-green-700"
+                              >
+                                <Copy className="w-3 h-3" />
+                              </button>
+                            </div>
                           </div>
                         )}
                       </div>

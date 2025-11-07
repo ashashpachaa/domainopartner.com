@@ -682,8 +682,8 @@ export default function AdminUKCompanySetup() {
     const directors = officers.filter(o => o.roles.director);
     const shareholders = officers.filter(o => o.roles.shareholder);
 
-    const newIncorporation: CompanyIncorporation = {
-      id: `INC${Date.now()}`,
+    const incorporation: CompanyIncorporation = {
+      id: editingIncorporationId || `INC${Date.now()}`,
       companyName: formData.companyName,
       companyType: formData.companyType as any,
       registeredOfficeAddress: `${formData.registeredOfficeAddress.line1}, ${formData.registeredOfficeAddress.town}, ${formData.registeredOfficeAddress.postcode}`,
@@ -692,7 +692,7 @@ export default function AdminUKCompanySetup() {
       registeredOfficeCountry: formData.registeredOfficeAddress.country,
       shareCapital: parseInt(formData.shareCapital),
       shareType: formData.shareClass.type,
-      sicCode: formData.businessActivities[0] || "",
+      sicCode: formData.sicCodes[0] || "",
       directors: directors.map(o => ({
         id: o.id,
         firstName: o.firstName,
@@ -715,9 +715,9 @@ export default function AdminUKCompanySetup() {
         shareAllocation: parseInt(o.shareholdings.numberOfShares) || 0,
         ownershipPercentage: 0,
       })),
-      status: "draft",
+      status: editingIncorporationId ? "draft" : "draft",
       createdBy: "S001",
-      createdAt: new Date().toISOString(),
+      createdAt: editingIncorporationId ? (incorporations.find(i => i.id === editingIncorporationId)?.createdAt || new Date().toISOString()) : new Date().toISOString(),
       currency: "GBP",
       filingFee: 12,
       memorandumOfAssociationAccepted: formData.confirmations.memorandumAccepted,
@@ -728,7 +728,7 @@ export default function AdminUKCompanySetup() {
     };
 
     localStorage.setItem(
-      `incorporation_${newIncorporation.id}`,
+      `incorporation_${incorporation.id}`,
       JSON.stringify(newIncorporation),
     );
 

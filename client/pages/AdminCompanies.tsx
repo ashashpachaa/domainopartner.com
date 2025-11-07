@@ -111,29 +111,54 @@ export default function AdminCompanies() {
   };
 
   const exportToCSV = () => {
-    const headers = [
-      "Company Name",
-      "Country",
-      "Company Number",
-      "User",
-      "Status",
-      "Incorporated",
-      "Next Renewal",
-      "Accounts Due",
-      "Data Retrieved",
-    ];
+    let headers: string[];
+    let rows: (string | number)[][];
 
-    const rows = sorted.map((company) => [
-      company.companyName,
-      company.country,
-      company.companyNumber,
-      getUserName(company.userId),
-      company.status,
-      formatDate(company.incorporationDate),
-      formatDate(company.nextRenewalDate),
-      formatDate(company.nextAccountsFilingDate),
-      formatDate(company.fetchedAt),
-    ]);
+    if (selectedCountry === "UK") {
+      headers = [
+        "Company Name",
+        "Company Number",
+        "Incorporation Date",
+        "Next Confirmation Date",
+        "First Accounts Made Up To",
+        "Status",
+        "Data Retrieved",
+      ];
+
+      rows = sorted.map((company) => [
+        company.companyName,
+        company.companyNumber,
+        formatDate(company.incorporationDate),
+        formatDate(company.nextRenewalDate),
+        formatDate(company.nextAccountsFilingDate),
+        company.status,
+        formatDate(company.fetchedAt),
+      ]);
+    } else {
+      headers = [
+        "Company Name",
+        "Country",
+        "Company Number",
+        "User",
+        "Status",
+        "Incorporated",
+        "Next Renewal",
+        "Accounts Due",
+        "Data Retrieved",
+      ];
+
+      rows = sorted.map((company) => [
+        company.companyName,
+        company.country,
+        company.companyNumber,
+        getUserName(company.userId),
+        company.status,
+        formatDate(company.incorporationDate),
+        formatDate(company.nextRenewalDate),
+        formatDate(company.nextAccountsFilingDate),
+        formatDate(company.fetchedAt),
+      ]);
+    }
 
     const csv = [headers, ...rows]
       .map((row) => row.map((cell) => `"${cell}"`).join(","))

@@ -34,6 +34,7 @@ export function createServer() {
   // Companies House API endpoints
   app.get("/api/companies-house/search", handleCompanySearch);
   app.get("/api/companies-house/details", handleCompanyDetails);
+  app.post("/api/companies-house/webhook", handleCompanyApprovalWebhook);
 
   return app;
 }

@@ -17,9 +17,11 @@ import {
   mockStaff,
   mockStaffPerformances,
   mockMonthlyPerformanceReports,
+  mockStaffBonuses,
   Staff,
   StaffPerformance,
   MonthlyPerformanceReport,
+  StaffBonus,
 } from "@/lib/mockData";
 
 export default function AdminPerformance() {

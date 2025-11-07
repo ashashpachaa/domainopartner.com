@@ -418,6 +418,18 @@ export default function AdminCompaniesNeedRenewal() {
                             >
                               <Mail className="w-4 h-4" />
                             </button>
+                            {selectedCountry === "UK" && (
+                              <Button
+                                onClick={() => {
+                                  toast.success(
+                                    `${company.companyName} added to sales list`,
+                              );
+                                }}
+                                className="bg-purple-600 hover:bg-purple-700 text-white text-xs h-8 px-3"
+                              >
+                                Sell
+                              </Button>
+                            )}
                             <Button
                               onClick={() => handleMarkRenewed(company.id)}
                               className="bg-green-600 hover:bg-green-700 text-white text-xs h-8 px-3"

@@ -1,5 +1,4 @@
 import { useState, useMemo } from "react";
-import { Link } from "react-router-dom";
 import AdminLayout from "@/components/AdminLayout";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,13 +7,12 @@ import {
   Download,
   AlertCircle,
   CheckCircle2,
-  FileText,
 } from "lucide-react";
 import {
   getRegisteredCompanies,
   RegisteredCompany,
 } from "@/hooks/useCompanyDetails";
-import { mockUsers, mockOrders } from "@/lib/mockData";
+import { mockUsers } from "@/lib/mockData";
 
 type CountryTab = "all" | "UK" | "USA" | "Sweden";
 
@@ -26,11 +24,7 @@ export default function AdminCompanies() {
   const [sortBy, setSortBy] = useState<"date" | "name" | "renewal">("date");
   const [selectedCountry, setSelectedCountry] = useState<CountryTab>("all");
 
-  const getUserName = (userId: string) => {
-    const user = mockUsers.find((u) => u.id === userId);
-    return user ? `${user.firstName} ${user.lastName}` : "Unknown User";
-  };
-
+  // Helper functions
   const formatDate = (dateStr: string) => {
     return new Date(dateStr).toLocaleDateString("en-US", {
       year: "numeric",
@@ -47,17 +41,20 @@ export default function AdminCompanies() {
     );
   };
 
+  const getUserName = (userId: string) => {
+    const user = mockUsers.find((u) => u.id === userId);
+    return user ? `${user.firstName} ${user.lastName}` : "Unknown User";
+  };
+
   const checkIfNeedsRenewal = (company: RegisteredCompany) => {
     const daysUntilConfirmation = daysUntilDate(company.nextRenewalDate);
     const daysUntilAccounts = daysUntilDate(company.nextAccountsFilingDate);
-
-    // Check if within 15 days of either date
     const confirmationDue = daysUntilConfirmation <= 15 && daysUntilConfirmation > 0;
     const accountsDue = daysUntilAccounts <= 15 && daysUntilAccounts > 0;
-
     return confirmationDue || accountsDue;
   };
 
+  // Data loading and filtering
   const companies = useMemo(() => {
     return getRegisteredCompanies();
   }, []);
@@ -80,31 +77,28 @@ export default function AdminCompanies() {
 
   const sorted = useMemo(() => {
     const list = [...filtered];
-
-    // First, separate companies needing renewal from others
     const needsRenewal = list.filter((c) => checkIfNeedsRenewal(c));
     const noRenewalNeeded = list.filter((c) => !checkIfNeedsRenewal(c));
 
-    // Sort each group separately
     const sortGroup = (group: RegisteredCompany[]) => {
+      const sorted = [...group];
       if (sortBy === "date") {
-        group.sort(
+        sorted.sort(
           (a, b) =>
             new Date(b.fetchedAt).getTime() - new Date(a.fetchedAt).getTime(),
         );
       } else if (sortBy === "name") {
-        group.sort((a, b) => a.companyName.localeCompare(b.companyName));
+        sorted.sort((a, b) => a.companyName.localeCompare(b.companyName));
       } else if (sortBy === "renewal") {
-        group.sort(
+        sorted.sort(
           (a, b) =>
             new Date(a.nextRenewalDate).getTime() -
             new Date(b.nextRenewalDate).getTime(),
         );
       }
-      return group;
+      return sorted;
     };
 
-    // Combine with renewal-needed companies first
     return [...sortGroup(needsRenewal), ...sortGroup(noRenewalNeeded)];
   }, [filtered, sortBy]);
 
@@ -144,6 +138,7 @@ export default function AdminCompanies() {
         "Next Confirmation Date",
         "First Accounts Made Up To",
         "Status",
+        "Auth Code",
         "Data Retrieved",
       ];
 
@@ -154,6 +149,7 @@ export default function AdminCompanies() {
         formatDate(company.nextRenewalDate),
         formatDate(company.nextAccountsFilingDate),
         company.status,
+        company.authCode,
         formatDate(company.fetchedAt),
       ]);
     } else {
@@ -371,10 +367,14 @@ export default function AdminCompanies() {
                       {selectedCountry === "UK" ? "Company Number" : "Country"}
                     </th>
                     <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
-                      {selectedCountry === "UK" ? "Incorporation Date" : "Company No"}
+                      {selectedCountry === "UK"
+                        ? "Incorporation Date"
+                        : "Company No"}
                     </th>
                     <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">
-                      {selectedCountry === "UK" ? "Next Confirmation Date" : "User"}
+                      {selectedCountry === "UK"
+                        ? "Next Confirmation Date"
+                        : "User"}
                     </th>
                     {selectedCountry === "UK" && (
                       <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase">

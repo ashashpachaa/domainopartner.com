@@ -63,7 +63,12 @@ export default function AdminProducts() {
 
   const deleteProduct = (productId: string) => {
     if (confirm("Are you sure you want to delete this product?")) {
-      setProducts(products.filter((p) => p.id !== productId));
+      const newProducts = products.filter((p) => p.id !== productId);
+      setProducts(newProducts);
+      // Remove from selection if it was selected
+      const newSelected = new Set(selectedProducts);
+      newSelected.delete(productId);
+      setSelectedProducts(newSelected);
     }
   };
 

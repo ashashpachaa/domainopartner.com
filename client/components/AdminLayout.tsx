@@ -16,10 +16,12 @@ import {
   BarChart3,
   Wallet,
   Building2,
+  Eye,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ReactNode, useState } from "react";
 import { ChevronDown } from "lucide-react";
+import { mockUsers, mockStaff } from "@/lib/mockData";
 
 interface AdminLayoutProps {
   children: ReactNode;

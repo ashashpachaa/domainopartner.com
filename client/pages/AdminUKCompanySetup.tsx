@@ -1541,18 +1541,38 @@ export default function AdminUKCompanySetup() {
                         <h2 className="text-2xl font-bold text-slate-900">Enter company details</h2>
 
                         <div className="space-y-4">
-                          <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-2">Company name *</label>
-                            <input
-                              type="text"
-                              value={formData.companyName}
-                              onChange={(e) => {
-                                setFormData({ ...formData, companyName: e.target.value });
-                                checkCompanyName(e.target.value);
-                              }}
-                              placeholder="Company name"
-                              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500"
-                            />
+                          <div className="space-y-4">
+                            <div className="grid grid-cols-3 gap-4">
+                              <div className="col-span-2">
+                                <label className="block text-sm font-medium text-slate-700 mb-2">Company name *</label>
+                                <input
+                                  type="text"
+                                  value={formData.companyName}
+                                  onChange={(e) => {
+                                    setFormData({ ...formData, companyName: e.target.value });
+                                    checkCompanyName(e.target.value);
+                                  }}
+                                  placeholder="Company name"
+                                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-sm font-medium text-slate-700 mb-2">Suffix *</label>
+                                <select
+                                  value={formData.companySuffix}
+                                  onChange={(e) => setFormData({ ...formData, companySuffix: e.target.value as any })}
+                                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                                >
+                                  <option value="Ltd">Ltd</option>
+                                  <option value="Limited">Limited</option>
+                                  <option value="PLC">PLC</option>
+                                  <option value="Public Limited Company">Public Limited Company</option>
+                                  <option value="Unlimited">Unlimited</option>
+                                  <option value="LLP">LLP</option>
+                                  <option value="Partnership">Partnership</option>
+                                </select>
+                              </div>
+                            </div>
                             {formData.companyName && (
                               <div className="mt-2 space-y-1">
                                 {isValidating && (
@@ -1818,7 +1838,7 @@ export default function AdminUKCompanySetup() {
                                       {officer.roles.director && <span className="text-green-600 font-bold">✓</span>}
                                     </td>
                                     <td className="px-4 py-3 text-center">
-                                      {officer.roles.secretary && <span className="text-green-600 font-bold">����</span>}
+                                      {officer.roles.secretary && <span className="text-green-600 font-bold">���</span>}
                                     </td>
                                     <td className="px-4 py-3 text-center">
                                       {officer.roles.shareholder && <span className="text-slate-900">{officer.shareholdings.numberOfShares}</span>}

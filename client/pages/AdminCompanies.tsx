@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import AdminLayout from "@/components/AdminLayout";
@@ -13,6 +13,7 @@ import {
   TrendingUp,
   X,
   Plus,
+  Loader,
 } from "lucide-react";
 import {
   getRegisteredCompanies,

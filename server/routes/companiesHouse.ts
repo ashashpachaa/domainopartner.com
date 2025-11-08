@@ -525,6 +525,46 @@ export async function handleAmendmentSubmission(req: any, res: any) {
           })),
         });
         break;
+
+      case "annual_confirmation":
+        Object.assign(amendmentData, {
+          form_type: "CS01",
+          confirmation_year: amendment.confirmationYear,
+          directors_unchanged: amendment.directorsUnchanged,
+          shareholders_unchanged: amendment.shareholdersUnchanged,
+          address_unchanged: amendment.addressUnchanged,
+          capital_unchanged: amendment.capitalUnchanged,
+          sic_unchanged: amendment.sicUnchanged,
+          confirmed_address: amendment.addressUnchanged ? null : amendment.confirmedAddress,
+          confirmed_capital: amendment.capitalUnchanged ? null : amendment.confirmedShareCapital,
+          confirmed_sic_code: amendment.sicUnchanged ? null : amendment.confirmedSicCode,
+          secretary_details: amendment.secretaryDetails ? {
+            name: `${amendment.secretaryDetails.firstName} ${amendment.secretaryDetails.lastName}`,
+            address: amendment.secretaryDetails.address,
+            postcode: amendment.secretaryDetails.postcode,
+            city: amendment.secretaryDetails.city,
+            country: amendment.secretaryDetails.country,
+          } : null,
+          directors_list: amendment.confirmedDirectors?.map((d: any) => ({
+            name: `${d.firstName} ${d.lastName}`,
+            date_of_birth: d.dateOfBirth,
+            nationality: d.nationality,
+            address: d.address,
+            postcode: d.postcode,
+            city: d.city,
+            country: d.country,
+          })),
+          shareholders_list: amendment.confirmedShareholders?.map((s: any) => ({
+            name: `${s.firstName} ${s.lastName}`,
+            address: s.address,
+            postcode: s.postcode,
+            city: s.city,
+            country: s.country,
+            shares: s.shareAllocation,
+            ownership_percentage: s.ownershipPercentage,
+          })),
+        });
+        break;
     }
 
     try {

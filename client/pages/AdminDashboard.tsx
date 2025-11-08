@@ -16,7 +16,7 @@ import {
   Bell,
   Clock,
 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   mockUsers,
   User,
@@ -30,7 +30,6 @@ export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<"users" | "client-requests">(
     "users",
   );
-  const [users, setUsers] = useState<User[]>(mockUsers);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState<UserStatus | "all">("all");
   const [clientRequests, setClientRequests] = useState(mockClientRequests);
@@ -40,6 +39,29 @@ export default function AdminDashboard() {
   >("all");
   const [notificationDismissed, setNotificationDismissed] = useState(false);
   const [showNotificationToast, setShowNotificationToast] = useState(false);
+
+  // Load users from both mock data and localStorage
+  const users = useMemo(() => {
+    const allUsers = [...mockUsers];
+
+    // Load all users from localStorage (they're saved with keys like "user_*")
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key?.startsWith('user_')) {
+        try {
+          const userData = JSON.parse(localStorage.getItem(key) || '{}');
+          // Check if this user already exists in mockUsers
+          if (!allUsers.find(u => u.id === userData.id)) {
+            allUsers.push(userData);
+          }
+        } catch (e) {
+          console.error('Error parsing user from localStorage:', e);
+        }
+      }
+    }
+
+    return allUsers;
+  }, []);
 
   // Load client requests from both mock data and localStorage
   useEffect(() => {

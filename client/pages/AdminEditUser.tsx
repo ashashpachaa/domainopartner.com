@@ -57,7 +57,7 @@ export default function AdminEditUser() {
         `${b.firstName} ${b.lastName}`,
       ),
     );
-  }, [userId, isNew]);
+  }, []);
 
   const [formData, setFormData] = useState<Partial<User>>(
     existingUser || {

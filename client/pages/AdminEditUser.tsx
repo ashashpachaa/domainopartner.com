@@ -14,6 +14,31 @@ export default function AdminEditUser() {
 
   const existingUser = !isNew ? mockUsers.find((u) => u.id === userId) : null;
 
+  // Load all staff from both mockStaff and localStorage
+  const allStaff = useMemo(() => {
+    const staffMap = new Map<string, any>();
+
+    // First add all mock staff
+    mockStaff.forEach(staff => staffMap.set(staff.id, staff));
+
+    // Then merge with localStorage staff (overwrites mock if exists)
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key?.startsWith('staff_')) {
+        try {
+          const staffData = JSON.parse(localStorage.getItem(key) || '{}');
+          staffMap.set(staffData.id, staffData);
+        } catch (e) {
+          console.error('Error parsing staff from localStorage:', e);
+        }
+      }
+    }
+
+    return Array.from(staffMap.values()).sort((a, b) =>
+      `${a.firstName} ${a.lastName}`.localeCompare(`${b.firstName} ${b.lastName}`)
+    );
+  }, []);
+
   const [formData, setFormData] = useState<Partial<User>>(
     existingUser || {
       id: Date.now().toString(),

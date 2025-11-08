@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import AdminLayout from "@/components/AdminLayout";
 import { Button } from "@/components/ui/button";
@@ -12,9 +12,23 @@ export default function AdminEditProduct() {
   const navigate = useNavigate();
   const isNewProduct = productId === "new" || !productId;
 
-  const existingProduct = !isNewProduct
-    ? mockProducts.find((p) => p.id === productId)
-    : null;
+  // Load existing product from localStorage first, then fallback to mockProducts
+  const existingProduct = useMemo(() => {
+    if (isNewProduct) return null;
+
+    // First check localStorage for updated version
+    const localStorageProduct = localStorage.getItem(`product_${productId}`);
+    if (localStorageProduct) {
+      try {
+        return JSON.parse(localStorageProduct);
+      } catch (e) {
+        console.error('Error parsing product from localStorage:', e);
+      }
+    }
+
+    // Fallback to mockProducts
+    return mockProducts.find((p) => p.id === productId);
+  }, [productId, isNewProduct]);
 
   // Calculate the next product number based on max existing product ID
   const getNextProductNum = () => {

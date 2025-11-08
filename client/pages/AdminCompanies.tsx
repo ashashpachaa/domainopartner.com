@@ -545,11 +545,14 @@ export default function AdminCompanies() {
                               </Button>
                               <Button
                                 onClick={() => {
-                                  // TODO: Navigate to company edit page
+                                  setSelectedCompanyToList(company);
+                                  setShowListCompanyModal(true);
                                 }}
-                                className="bg-slate-600 hover:bg-slate-700 text-white text-xs h-8 px-3"
+                                className="bg-green-600 hover:bg-green-700 text-white text-xs h-8 px-3"
+                                title="List this company for sale"
                               >
-                                Edit
+                                <TrendingUp className="w-3 h-3 mr-1" />
+                                List
                               </Button>
                             </div>
                           </td>

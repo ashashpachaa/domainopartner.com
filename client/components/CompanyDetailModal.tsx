@@ -332,38 +332,122 @@ export default function CompanyDetailModal({
 
               {canAmend ? (
                 <div className="space-y-4">
-                  <p className="text-sm text-slate-600">
+                  <p className="text-sm text-slate-600 mb-4">
                     This company is linked to a UK Company Setup incorporation. You can file amendments to Companies House.
                   </p>
 
-                  {amendments.length > 0 && (
+                  {/* Amendment Tabs */}
+                  <div className="flex gap-2 mb-4 flex-wrap">
+                    <Button
+                      onClick={() => { setAmendmentTab("history"); setShowAmendmentForm(false); }}
+                      variant={amendmentTab === "history" ? "default" : "outline"}
+                      size="sm"
+                    >
+                      Amendment History
+                    </Button>
+                    <Button
+                      onClick={() => { setAmendmentTab("director_appoint"); setShowAmendmentForm(true); }}
+                      variant={amendmentTab === "director_appoint" ? "default" : "outline"}
+                      size="sm"
+                    >
+                      Appoint Director
+                    </Button>
+                    <Button
+                      onClick={() => { setAmendmentTab("director_resign"); setShowAmendmentForm(true); }}
+                      variant={amendmentTab === "director_resign" ? "default" : "outline"}
+                      size="sm"
+                    >
+                      Resign Director
+                    </Button>
+                    <Button
+                      onClick={() => { setAmendmentTab("address"); setShowAmendmentForm(true); }}
+                      variant={amendmentTab === "address" ? "default" : "outline"}
+                      size="sm"
+                    >
+                      Change Address
+                    </Button>
+                    <Button
+                      onClick={() => { setAmendmentTab("sic"); setShowAmendmentForm(true); }}
+                      variant={amendmentTab === "sic" ? "default" : "outline"}
+                      size="sm"
+                    >
+                      Change SIC
+                    </Button>
+                    <Button
+                      onClick={() => { setAmendmentTab("capital"); setShowAmendmentForm(true); }}
+                      variant={amendmentTab === "capital" ? "default" : "outline"}
+                      size="sm"
+                    >
+                      Increase Capital
+                    </Button>
+                    <Button
+                      onClick={() => { setAmendmentTab("shareholder"); setShowAmendmentForm(true); }}
+                      variant={amendmentTab === "shareholder" ? "default" : "outline"}
+                      size="sm"
+                    >
+                      Shareholder Change
+                    </Button>
+                    <Button
+                      onClick={() => { setAmendmentTab("annual_confirmation"); setShowAmendmentForm(true); }}
+                      variant={amendmentTab === "annual_confirmation" ? "default" : "outline"}
+                      size="sm"
+                    >
+                      Annual Confirmation
+                    </Button>
+                    <Button
+                      onClick={() => { setAmendmentTab("company_name_change"); setShowAmendmentForm(true); }}
+                      variant={amendmentTab === "company_name_change" ? "default" : "outline"}
+                      size="sm"
+                    >
+                      Change Company Name
+                    </Button>
+                  </div>
+
+                  {/* Amendment History View */}
+                  {amendmentTab === "history" && !showAmendmentForm && (
                     <div className="bg-white rounded-lg p-3 border border-orange-200">
-                      <p className="text-xs font-bold text-slate-700 mb-2">Recent Amendments: {amendments.length}</p>
-                      <div className="space-y-2">
-                        {amendments.slice(0, 3).map((amd: any) => (
-                          <div key={amd.id} className="text-xs text-slate-600 flex items-center justify-between">
-                            <span>
-                              {amd.formType.replace(/_/g, " ").toUpperCase()} - {amd.status}
-                            </span>
-                            {amd.filingReference && (
-                              <span className="text-orange-600 font-medium">{amd.filingReference}</span>
-                            )}
-                          </div>
-                        ))}
-                      </div>
+                      {amendments.length > 0 ? (
+                        <div className="space-y-2">
+                          <p className="text-xs font-bold text-slate-700 mb-3">Recent Amendments: {amendments.length}</p>
+                          {amendments.map((amd: any) => (
+                            <div key={amd.id} className="bg-slate-50 p-2 rounded border border-slate-200 text-xs">
+                              <div className="flex items-center justify-between">
+                                <span className="font-bold text-slate-900">
+                                  {amd.formType.replace(/_/g, " ").toUpperCase()}
+                                </span>
+                                <span className={`font-bold ${amd.status === "filed" ? "text-green-600" : amd.status === "rejected" ? "text-red-600" : "text-blue-600"}`}>
+                                  {amd.status}
+                                </span>
+                              </div>
+                              {amd.filingReference && (
+                                <p className="text-orange-600 font-medium mt-1">{amd.filingReference}</p>
+                              )}
+                              <p className="text-slate-500 mt-1">{new Date(amd.submittedAt || amd.createdAt).toLocaleDateString()}</p>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="text-slate-600 text-sm">No amendments filed yet</p>
+                      )}
                     </div>
                   )}
 
-                  <Button
-                    onClick={() => {
-                      toast.info("Opening amendment form in UK Company Setup page");
-                      // This would navigate to the UK Company Setup page with the company pre-selected
-                      window.location.href = `/admin/uk-company-setup?incorporationId=${incorporation.id}`;
-                    }}
-                    className="w-full bg-orange-600 hover:bg-orange-700 text-white"
-                  >
-                    File Amendment to Companies House
-                  </Button>
+                  {/* View Full Forms Link */}
+                  {showAmendmentForm && (
+                    <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
+                      <p className="text-sm text-slate-700 mb-3">
+                        To complete this amendment, you'll be taken to the full form editor.
+                      </p>
+                      <Button
+                        onClick={() => {
+                          window.location.href = `/admin/uk-company-setup?incorporationId=${incorporation.id}&amendment=${amendmentTab}`;
+                        }}
+                        className="w-full bg-orange-600 hover:bg-orange-700 text-white"
+                      >
+                        Open Full Amendment Form
+                      </Button>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <p className="text-sm text-slate-600">

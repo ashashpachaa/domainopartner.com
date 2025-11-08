@@ -615,8 +615,10 @@ export default function CompanyDetailModal({
                             className="w-full px-3 py-2 border border-slate-300 rounded text-sm"
                           />
                           <div className="flex gap-2 justify-end pt-2">
-                            <Button variant="outline" size="sm" onClick={() => { setShowAmendmentForm(false); setNewSicCode(""); }}>Cancel</Button>
-                            <Button size="sm" className="bg-blue-600 hover:bg-blue-700" onClick={() => { toast.success("SIC code change amendment submitted"); setShowAmendmentForm(false); }}>Submit</Button>
+                            <Button variant="outline" size="sm" disabled={isSubmitting} onClick={() => { setShowAmendmentForm(false); setNewSicCode(""); }}>Cancel</Button>
+                            <Button size="sm" disabled={isSubmitting || !newSicCode.trim()} className="bg-blue-600 hover:bg-blue-700" onClick={() => { submitAmendment("sic_change", { newSicCode }); }}>
+                              {isSubmitting ? "Submitting..." : "Submit"}
+                            </Button>
                           </div>
                         </div>
                       )}

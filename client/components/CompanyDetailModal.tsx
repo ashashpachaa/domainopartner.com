@@ -15,7 +15,8 @@ export default function CompanyDetailModal({
   company,
   onClose,
 }: CompanyDetailModalProps) {
-  const [showAmendmentOptions, setShowAmendmentOptions] = useState(false);
+  const [amendmentTab, setAmendmentTab] = useState<string>("history");
+  const [showAmendmentForm, setShowAmendmentForm] = useState(false);
   const { getIncorporationForCompany, canFileAmendments, getAmendmentHistory } = useCompanyIncorporationLink();
 
   const owner = mockUsers.find((u) => u.id === company.userId);

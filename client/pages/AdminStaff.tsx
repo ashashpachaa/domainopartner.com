@@ -63,6 +63,11 @@ export default function AdminStaff() {
   const [filterDepartment, setFilterDepartment] = useState<string>("");
   const [filterStatus, setFilterStatus] = useState<string>("all");
 
+  // Sync staff state with allStaff when component mounts
+  useEffect(() => {
+    setStaff(allStaff);
+  }, [allStaff]);
+
   const filteredStaff = staff
     .filter((member) => {
       const matchesSearch =

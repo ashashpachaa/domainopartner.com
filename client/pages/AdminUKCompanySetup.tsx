@@ -975,6 +975,14 @@ export default function AdminUKCompanySetup() {
 
   useCompaniesHouseWebhook(handleWebhookUpdate);
 
+  const filteredSicCodes = useMemo(() => {
+    if (!sicSearch.trim()) return [];
+    return SIC_CODES.filter(code =>
+      code.code.includes(sicSearch.toUpperCase()) ||
+      code.description.toLowerCase().includes(sicSearch.toLowerCase())
+    );
+  }, [sicSearch]);
+
   const handleViewDetails = (inc: CompanyIncorporation) => {
     setSelectedIncorporation(inc);
     setEditingCompanyNumber(inc.companyRegistrationNumber || "");

@@ -1457,6 +1457,12 @@ export default function AdminUKCompanySetup() {
         setShareholderForm({ firstName: "", lastName: "", address: "", postcode: "", city: "", country: "United Kingdom", shareAllocation: 0 });
         setSelectedShareholderId("");
         setNewCompanyName("");
+        setConfirmationYear(new Date().getFullYear());
+        setConfirmationData({ directorsUnchanged: true, shareholdersUnchanged: true, addressUnchanged: true, capitalUnchanged: true, sicUnchanged: true, hasSecretary: false });
+        setConfirmedAddress({ addressLine1: "", addressLine2: "", city: "", postcode: "", country: "United Kingdom" });
+        setConfirmedCapital(0);
+        setConfirmedSicCode("");
+        setSecretaryForm({ firstName: "", lastName: "", address: "", postcode: "", city: "", country: "United Kingdom" });
         setShowAmendmentForm(false);
         setAmendmentTab("history");
 

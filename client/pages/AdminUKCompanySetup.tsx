@@ -878,6 +878,7 @@ export default function AdminUKCompanySetup() {
     setEditingIncorporationId(null);
     setFormData({
       companyName: "",
+      companySuffix: "Ltd",
       companyType: "private_limited",
       jurisdiction: "england-wales",
       registeredOfficeAddress: {

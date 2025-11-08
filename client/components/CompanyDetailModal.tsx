@@ -16,6 +16,9 @@ export default function CompanyDetailModal({
   company,
   onClose,
 }: CompanyDetailModalProps) {
+  const [showAmendmentOptions, setShowAmendmentOptions] = useState(false);
+  const { getIncorporationForCompany, canFileAmendments, getAmendmentHistory } = useCompanyIncorporationLink();
+
   const owner = mockUsers.find((u) => u.id === company.userId);
 
   // Find the order linked to this company
@@ -25,6 +28,11 @@ export default function CompanyDetailModal({
   const salesStaff = linkedOrder
     ? mockStaff.find((s) => s.id === linkedOrder.assignedToSalesId)
     : null;
+
+  // Get linked incorporation for amendments
+  const incorporation = getIncorporationForCompany(company);
+  const canAmend = canFileAmendments(company);
+  const amendments = getAmendmentHistory(company);
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">

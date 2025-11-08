@@ -531,6 +531,60 @@ export default function AdminUKCompanySetup() {
   const [editingAuthCode, setEditingAuthCode] = useState("");
   const [editingIncorporationId, setEditingIncorporationId] = useState<string | null>(null);
 
+  // Amendment form states
+  const [amendmentTab, setAmendmentTab] = useState<"director_appoint" | "director_resign" | "address" | "sic" | "capital" | "shareholder" | "history">("history");
+  const [showAmendmentForm, setShowAmendmentForm] = useState(false);
+
+  // Director Appointment (TM01)
+  const [newDirector, setNewDirector] = useState({
+    firstName: "",
+    lastName: "",
+    dateOfBirth: "",
+    nationality: "British",
+    address: "",
+    postcode: "",
+    city: "",
+    country: "United Kingdom",
+  });
+
+  // Director Resignation (TM02)
+  const [resigningDirector, setResigningDirector] = useState({ id: "", resignationDate: "" });
+
+  // Address Change (AD01)
+  const [newAddress, setNewAddress] = useState({
+    addressLine1: "",
+    addressLine2: "",
+    city: "",
+    postcode: "",
+    country: "United Kingdom",
+  });
+
+  // SIC Code Change (CH01)
+  const [sicChange, setSicChange] = useState({
+    oldSicCode: "",
+    newSicCode: "",
+    newSicDescription: "",
+  });
+
+  // Share Capital Increase (SH01)
+  const [capitalChange, setCapitalChange] = useState({
+    oldCapital: 0,
+    newCapital: 0,
+    shareType: "",
+  });
+
+  // Shareholder Change (SA01)
+  const [shareholderAction, setShareholderAction] = useState<"add" | "remove" | "modify">("add");
+  const [shareholderForm, setShareholderForm] = useState({
+    firstName: "",
+    lastName: "",
+    address: "",
+    postcode: "",
+    city: "",
+    country: "United Kingdom",
+    shareAllocation: 0,
+  });
+
   const [defaultOfficer, setDefaultOfficer] = useState<OfficerDetail>({
     id: `OFF${Date.now()}`,
     title: "",

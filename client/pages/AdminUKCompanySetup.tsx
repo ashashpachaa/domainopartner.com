@@ -575,6 +575,7 @@ export default function AdminUKCompanySetup() {
 
   // Shareholder Change (SA01)
   const [shareholderAction, setShareholderAction] = useState<"add" | "remove" | "modify">("add");
+  const [selectedShareholderId, setSelectedShareholderId] = useState("");
   const [shareholderForm, setShareholderForm] = useState({
     firstName: "",
     lastName: "",

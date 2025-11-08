@@ -5,6 +5,7 @@ import { useCompanyIncorporationLink } from "@/hooks/useCompanyIncorporationLink
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
+import { X, Building2, Mail, AlertCircle, CheckSquare, Loader } from "lucide-react";
 
 interface CompanyDetailModalProps {
   company: RegisteredCompany;

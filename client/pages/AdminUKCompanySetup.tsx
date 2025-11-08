@@ -3606,6 +3606,13 @@ export default function AdminUKCompanySetup() {
                       >
                         Shareholder Change
                       </Button>
+                      <Button
+                        onClick={() => { setAmendmentTab("annual_confirmation"); setShowAmendmentForm(true); }}
+                        variant={amendmentTab === "annual_confirmation" ? "default" : "outline"}
+                        size="sm"
+                      >
+                        Annual Confirmation
+                      </Button>
                     </div>
 
                     {amendmentTab === "history" && !showAmendmentForm && (

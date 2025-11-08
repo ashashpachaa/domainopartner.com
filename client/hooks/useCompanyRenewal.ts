@@ -9,7 +9,7 @@ export function useCompanyRenewal() {
     setIsSubmitting(true);
     try {
       // Find the incorporation record by company number
-      const incorporation = mockIncorporations.find(
+      const incorporation = mockCompanyIncorporations.find(
         (inc) => inc.companyRegistrationNumber === companyNumber
       );
 

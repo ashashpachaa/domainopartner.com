@@ -80,6 +80,7 @@ export default function AdminClientRequestDetail() {
         subscriptionStatus: "active" as const,
         createdAt: new Date().toISOString(),
         lastLogin: new Date().toISOString(),
+        assignedToStaffId: assignedToStaffId || undefined,
       };
 
       mockUsers.push(newUser);

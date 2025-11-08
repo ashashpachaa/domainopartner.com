@@ -2,7 +2,7 @@ import AdminLayout from "@/components/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, Edit2, Globe, Mail, MapPin, Phone } from "lucide-react";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   mockUsers,
   mockOrders,

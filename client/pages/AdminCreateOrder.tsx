@@ -101,7 +101,7 @@ export default function AdminCreateOrder() {
   );
 
   const selectedProduct = mockProducts.find((p) => p.id === formData.productId);
-  const salesStaff = mockStaff.filter((s) => s.role === "sales");
+  const salesStaff = allStaff.filter((s) => s.role === "sales");
 
   const handleChange = (
     e: React.ChangeEvent<

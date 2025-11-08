@@ -327,6 +327,7 @@ export interface RegisteredCompany {
   nextAccountsFilingDate: string; // YYYY-MM-DD
   authCode: string; // e.g., "AUTH001-UK-2025"
   registeredOffice?: string;
+  registeredOfficeEmail?: string; // Email for amendments and filings
   sicCodes?: string[];
   status: "active" | "dissolved" | "liquidation" | "administration";
   fetchedAt: string; // ISO timestamp when data was fetched from Companies House

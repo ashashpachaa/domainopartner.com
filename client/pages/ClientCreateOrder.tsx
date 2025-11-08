@@ -591,10 +591,31 @@ export default function ClientCreateOrder() {
                   disabled={!selectedProduct}
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500 bg-slate-50 cursor-not-allowed disabled:opacity-75"
                 >
-                  <option value="USD">USD</option>
-                  <option value="EUR">EUR</option>
-                  <option value="GBP">GBP</option>
-                  <option value="AED">AED</option>
+                  <option value="AED">AED - United Arab Emirates Dirham</option>
+                  <option value="AUD">AUD - Australian Dollar</option>
+                  <option value="BHD">BHD - Bahraini Dinar</option>
+                  <option value="BRL">BRL - Brazilian Real</option>
+                  <option value="CAD">CAD - Canadian Dollar</option>
+                  <option value="CHF">CHF - Swiss Franc</option>
+                  <option value="CNY">CNY - Chinese Yuan</option>
+                  <option value="EGP">EGP - Egyptian Pound</option>
+                  <option value="EUR">EUR - Euro</option>
+                  <option value="GBP">GBP - British Pound</option>
+                  <option value="HKD">HKD - Hong Kong Dollar</option>
+                  <option value="IDR">IDR - Indonesian Rupiah</option>
+                  <option value="INR">INR - Indian Rupee</option>
+                  <option value="JPY">JPY - Japanese Yen</option>
+                  <option value="KWD">KWD - Kuwaiti Dinar</option>
+                  <option value="MYR">MYR - Malaysian Ringgit</option>
+                  <option value="OMR">OMR - Omani Rial</option>
+                  <option value="QAR">QAR - Qatari Rial</option>
+                  <option value="SAR">SAR - Saudi Arabian Riyal</option>
+                  <option value="SEK">SEK - Swedish Krona</option>
+                  <option value="SGD">SGD - Singapore Dollar</option>
+                  <option value="THB">THB - Thai Baht</option>
+                  <option value="TRY">TRY - Turkish Lira</option>
+                  <option value="USD">USD - US Dollar</option>
+                  <option value="ZAR">ZAR - South African Rand</option>
                 </select>
                 <p className="text-xs text-slate-500 mt-1">
                   {selectedProduct

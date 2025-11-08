@@ -268,11 +268,23 @@ export default function AdminClientRequestDetail() {
 
           {/* Review Information (if already reviewed) */}
           {request.reviewedAt && (
-            <div className="mb-6 p-4 bg-slate-50 border border-slate-200 rounded-lg">
-              <p className="text-sm text-slate-600">
-                Reviewed on {new Date(request.reviewedAt).toLocaleDateString()}{" "}
-                by <span className="font-medium">Admin</span>
-              </p>
+            <div className="mb-6 space-y-3">
+              <div className="p-4 bg-slate-50 border border-slate-200 rounded-lg">
+                <p className="text-sm text-slate-600">
+                  Reviewed on {new Date(request.reviewedAt).toLocaleDateString()}{" "}
+                  by <span className="font-medium">Admin</span>
+                </p>
+              </div>
+              {assignedToStaffId && (
+                <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                  <p className="text-sm text-blue-700">
+                    <User className="w-4 h-4 inline mr-2" />
+                    Assigned to: <span className="font-medium">
+                      {mockStaff.find(s => s.id === assignedToStaffId)?.firstName} {mockStaff.find(s => s.id === assignedToStaffId)?.lastName}
+                    </span>
+                  </p>
+                </div>
+              )}
             </div>
           )}
 

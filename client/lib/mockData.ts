@@ -918,6 +918,72 @@ export interface CompanyShareholder {
   ownershipPercentage: number;
 }
 
+export type CompanyAmendmentType =
+  | "director_appointment" // TM01
+  | "director_resignation" // TM02
+  | "director_change_details" // TM08
+  | "registered_office_change" // AD01
+  | "sic_code_change" // CH01
+  | "share_capital_increase" // SH01
+  | "shareholder_change"; // SA01
+
+export interface CompanyAmendment {
+  id: string;
+  incorporationId: string;
+  formType: CompanyAmendmentType; // Form type code (TM01, AD01, etc.)
+  status: "draft" | "submitted" | "filed" | "rejected";
+  createdAt: string;
+  submittedAt?: string;
+  filedAt?: string;
+  rejectionReason?: string;
+  filingReference?: string;
+
+  // Data for Director Appointment (TM01)
+  appointmentDirector?: CompanyDirector;
+
+  // Data for Director Resignation (TM02)
+  resignationDirector?: CompanyDirector;
+  resignationDate?: string;
+
+  // Data for Director Change Details (TM08)
+  directorId?: string;
+  directorChanges?: {
+    field: string; // "firstName", "lastName", "address", "postcode", "city", "country", "dateOfBirth", "nationality"
+    oldValue: string;
+    newValue: string;
+  }[];
+
+  // Data for Address Change (AD01)
+  newAddress?: {
+    addressLine1: string;
+    addressLine2?: string;
+    city: string;
+    postcode: string;
+    country: string;
+  };
+
+  // Data for SIC Code Change (CH01)
+  oldSicCode?: string;
+  newSicCode?: string;
+  newSicDescription?: string;
+
+  // Data for Share Capital Increase (SH01)
+  oldCapital?: number;
+  newCapital?: number;
+  capitalIncrease?: number;
+  shareType?: string;
+
+  // Data for Shareholder Change (SA01)
+  shareholderChanges?: {
+    action: "add" | "remove" | "modify";
+    shareholder: CompanyShareholder;
+    oldDetails?: CompanyShareholder;
+  }[];
+
+  notes?: string;
+  submittedBy?: string; // Staff ID
+}
+
 export interface CompanyIncorporation {
   id: string;
   companyName: string;

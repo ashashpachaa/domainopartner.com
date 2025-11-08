@@ -1,6 +1,11 @@
 import { X, User, Phone, Mail, MapPin, Building2, UserCheck } from "lucide-react";
 import { RegisteredCompany } from "@/hooks/useCompanyDetails";
 import { mockUsers, mockOrders, mockStaff } from "@/lib/mockData";
+import { useCompanyIncorporationLink } from "@/hooks/useCompanyIncorporationLink";
+import { FileText } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { toast } from "sonner";
 
 interface CompanyDetailModalProps {
   company: RegisteredCompany;

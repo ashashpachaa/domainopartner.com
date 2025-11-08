@@ -253,18 +253,32 @@ export default function ClientInvoices() {
                           : "N/A"}
                       </td>
                       <td className="px-6 py-4 text-center">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => {
-                            const link = document.createElement("a");
-                            link.href = invoice.pdfUrl || "#";
-                            link.download = `${invoice.id}.pdf`;
-                            link.click();
-                          }}
-                        >
-                          <Download className="w-4 h-4" />
-                        </Button>
+                        <div className="flex items-center justify-center gap-2">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => {
+                              setSelectedInvoice(invoice);
+                              setShowInvoiceDetail(true);
+                            }}
+                            title="View invoice details"
+                          >
+                            <Eye className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => {
+                              const link = document.createElement("a");
+                              link.href = invoice.pdfUrl || "#";
+                              link.download = `${invoice.id}.pdf`;
+                              link.click();
+                            }}
+                            title="Download invoice as PDF"
+                          >
+                            <Download className="w-4 h-4" />
+                          </Button>
+                        </div>
                       </td>
                     </tr>
                   ))}

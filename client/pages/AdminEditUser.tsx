@@ -117,9 +117,12 @@ export default function AdminEditUser() {
 
     try {
       if (isNew) {
+        // Generate a unique ID for the new user
+        const userId = `U${Date.now()}`;
+
         // Create new user
         const newUser: User = {
-          id: `U${mockUsers.length + 1}`,
+          id: userId,
           firstName: formData.firstName || "",
           lastName: formData.lastName || "",
           email: formData.email || "",
@@ -143,7 +146,7 @@ export default function AdminEditUser() {
         toast.success(
           `User ${newUser.firstName} ${newUser.lastName} created successfully!`,
         );
-        navigate(`/admin/users/${newUser.id}`);
+        navigate(`/admin/view-user/${newUser.id}`);
       } else {
         // Update existing user
         const updatedUser: User = {

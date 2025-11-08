@@ -1249,22 +1249,58 @@ export default function AdminUKCompanySetup() {
           break;
 
         case "shareholder":
-          if (!shareholderForm.firstName || !shareholderForm.lastName) {
-            toast.error("Please fill in shareholder details");
-            return;
-          }
-          amendmentData.formType = "shareholder_change";
-          amendmentData.amendment = {
-            shareholderChanges: [
-              {
-                action: shareholderAction,
-                shareholder: {
-                  id: `SHA${Date.now()}`,
-                  ...shareholderForm,
+          if (shareholderAction === "remove") {
+            if (!selectedShareholderId) {
+              toast.error("Please select a shareholder to remove");
+              return;
+            }
+            const toRemove = selectedIncorporation.shareholders.find(s => s.id === selectedShareholderId);
+            amendmentData.formType = "shareholder_change";
+            amendmentData.amendment = {
+              shareholderChanges: [
+                {
+                  action: "remove",
+                  shareholder: toRemove,
                 },
-              },
-            ],
-          };
+              ],
+            };
+          } else if (shareholderAction === "modify") {
+            if (!selectedShareholderId || !shareholderForm.firstName || !shareholderForm.lastName) {
+              toast.error("Please select a shareholder and fill in new details");
+              return;
+            }
+            const oldDetails = selectedIncorporation.shareholders.find(s => s.id === selectedShareholderId);
+            amendmentData.formType = "shareholder_change";
+            amendmentData.amendment = {
+              shareholderChanges: [
+                {
+                  action: "modify",
+                  shareholder: {
+                    id: selectedShareholderId,
+                    ...shareholderForm,
+                  },
+                  oldDetails: oldDetails,
+                },
+              ],
+            };
+          } else { // add
+            if (!shareholderForm.firstName || !shareholderForm.lastName) {
+              toast.error("Please fill in shareholder details");
+              return;
+            }
+            amendmentData.formType = "shareholder_change";
+            amendmentData.amendment = {
+              shareholderChanges: [
+                {
+                  action: "add",
+                  shareholder: {
+                    id: `SHA${Date.now()}`,
+                    ...shareholderForm,
+                  },
+                },
+              ],
+            };
+          }
           break;
       }
 

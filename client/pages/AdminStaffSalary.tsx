@@ -101,7 +101,7 @@ export default function AdminStaffSalary() {
       }
     }
     return mockStaff.find((s) => s.id === staffId);
-  }, [staffId]);
+  }, []);
 
   const salary = mockStaffSalaries.find((s) => s.staffId === staffId);
 

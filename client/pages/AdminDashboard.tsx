@@ -364,12 +364,37 @@ export default function AdminDashboard() {
               </p>
             </div>
 
+            {/* Delete Selected Button */}
+            {selectedUsers.size > 0 && (
+              <div className="flex items-center justify-between bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <span className="text-sm font-medium text-blue-900">
+                  {selectedUsers.size} user{selectedUsers.size > 1 ? 's' : ''} selected
+                </span>
+                <Button
+                  onClick={deleteSelectedUsers}
+                  className="bg-red-600 hover:bg-red-700 text-white flex items-center gap-2"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  Delete Selected
+                </Button>
+              </div>
+            )}
+
             {/* Users Table */}
             <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead className="bg-slate-50 border-b border-slate-200">
                     <tr>
+                      <th className="px-4 py-4 text-left">
+                        <input
+                          type="checkbox"
+                          checked={filteredUsers.length > 0 && selectedUsers.size === filteredUsers.length}
+                          onChange={selectAllUsers}
+                          className="w-4 h-4 rounded border-slate-300 cursor-pointer"
+                          title="Select all users"
+                        />
+                      </th>
                       <th className="px-6 py-4 text-left text-sm font-semibold text-slate-900">
                         Name
                       </th>

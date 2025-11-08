@@ -2519,78 +2519,7 @@ export interface CompanyIncorporation {
   amendments?: CompanyAmendment[]; // Track all amendments filed
 }
 
-export const mockCompanyIncorporations: CompanyIncorporation[] = [
-  {
-    id: "INC001",
-    companyName: "Tech Innovations Ltd",
-    companyType: "private_limited",
-    registeredOfficeAddress: "123 Tech Street",
-    registeredOfficePostcode: "SW1A 1AA",
-    registeredOfficeCity: "London",
-    registeredOfficeCountry: "United Kingdom",
-    directors: [
-      {
-        id: "DIR001",
-        firstName: "Ahmed",
-        lastName: "Hassan",
-        dateOfBirth: "1990-05-15",
-        nationality: "Egyptian",
-        address: "10 Director Lane",
-        postcode: "W1B 1AE",
-        city: "London",
-        country: "United Kingdom",
-      },
-    ],
-    shareholders: [
-      {
-        id: "SHA001",
-        firstName: "Ahmed",
-        lastName: "Hassan",
-        address: "10 Director Lane",
-        postcode: "W1B 1AE",
-        city: "London",
-        country: "United Kingdom",
-        shareAllocation: 1000,
-        ownershipPercentage: 100,
-      },
-    ],
-    shareCapital: 1000,
-    shareType: "Ordinary Shares",
-    status: "completed",
-    filingReference: "YYYY-MM-DD-12345",
-    companyRegistrationNumber: "15432890",
-    companyAuthenticationCode: "ABCD1234EF56GH",
-    createdBy: "S001",
-    createdAt: "2024-01-15",
-    submittedAt: "2024-01-15",
-    completedAt: "2024-01-16",
-    currency: "GBP",
-    filingFee: 12,
-    amendments: [
-      {
-        id: "AMD001",
-        incorporationId: "INC001",
-        formType: "director_appointment",
-        status: "filed",
-        createdAt: "2024-01-20",
-        submittedAt: "2024-01-20",
-        filedAt: "2024-01-21",
-        filingReference: "CH-AMEND-1762590453381",
-        appointmentDirector: {
-          id: "DIR002",
-          firstName: "Sarah",
-          lastName: "Johnson",
-          dateOfBirth: "1992-03-20",
-          nationality: "British",
-          address: "20 Executive Way",
-          postcode: "EC1A 1BB",
-          city: "London",
-          country: "United Kingdom",
-        },
-      },
-    ],
-  },
-];
+export const mockCompanyIncorporations: CompanyIncorporation[] = [];
 
 export const mockUsers: User[] = [
   {

@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { mockInvoices, mockOrders, Invoice } from "@/lib/mockData";
 import ClientLayout from "@/components/ClientLayout";
 import { Button } from "@/components/ui/button";
-import { Download, FileText, DollarSign } from "lucide-react";
+import { Download, FileText, DollarSign, Eye, X, ArrowRight } from "lucide-react";
 
 export default function ClientInvoices() {
   const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");

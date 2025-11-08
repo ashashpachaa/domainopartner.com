@@ -345,11 +345,10 @@ export default function CompanyDetailModal({
                 Company Amendments
               </h3>
 
-              {incorporation ? (
-                <div className="space-y-4">
-                  <p className="text-sm text-slate-600 mb-4">
-                    This company is linked to a UK Company Setup incorporation. You can file amendments to Companies House.
-                  </p>
+              <div className="space-y-4">
+                <p className="text-sm text-slate-600 mb-4">
+                  File amendments to update company details at Companies House.
+                </p>
 
                   {/* Amendment Tabs */}
                   <div className="flex gap-2 mb-4 flex-wrap">
@@ -646,12 +645,7 @@ export default function CompanyDetailModal({
                       )}
                     </div>
                   )}
-                </div>
-              ) : (
-                <p className="text-sm text-slate-600">
-                  This company is not yet eligible for amendments. It must be fully registered with Companies House first.
-                </p>
-              )}
+              </div>
             </div>
           )}
 

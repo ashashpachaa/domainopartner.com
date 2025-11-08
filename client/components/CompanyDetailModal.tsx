@@ -1,11 +1,10 @@
-import { X, User as UserIcon, Phone, Mail, MapPin, Building2, UserCheck, FileText } from "lucide-react";
+import { X, User as UserIcon, Phone, Mail, MapPin, Building2, UserCheck, FileText, AlertCircle, CheckSquare, Loader } from "lucide-react";
 import { RegisteredCompany } from "@/hooks/useCompanyDetails";
 import { mockUsers, mockOrders, mockStaff } from "@/lib/mockData";
 import { useCompanyIncorporationLink } from "@/hooks/useCompanyIncorporationLink";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
-import { X, Building2, Mail, AlertCircle, CheckSquare, Loader } from "lucide-react";
 
 interface CompanyDetailModalProps {
   company: RegisteredCompany;

@@ -441,21 +441,8 @@ export async function handleAmendmentSubmission(req: any, res: any) {
     console.log(`📨 Submitting ${formType} amendment for company ${companyRegistrationNumber}:`, amendment);
 
     try {
-      // Get OAuth 2.0 access token
-      let accessToken: string;
-      try {
-        accessToken = await getCompaniesHouseAccessToken();
-      } catch (tokenError: any) {
-        console.error(`❌ OAuth 2.0 token error:`, tokenError.message);
-        throw new Error(`Cannot authenticate with Companies House: ${tokenError.message}`);
-      }
-
-      const headers = {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        "User-Agent": "Domaino-Partner/1.0",
-      };
+      // Get Companies House API headers (Basic Auth with REST API key)
+      const headers = getCompaniesHouseHeaders();
 
       // Step 1: Create a transaction
       console.log(`🔄 Creating transaction for amendment...`);

@@ -12,7 +12,7 @@ import {
   Mail,
   Phone,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { mockStaff, Staff, StaffRole } from "@/lib/mockData";
 
 const roleColors: Record<StaffRole, string> = {

@@ -144,6 +144,40 @@ export default function AdminCompanies() {
     };
   }, [companies, selectedCountry]);
 
+  const handleListCompany = () => {
+    if (!selectedCompanyToList || askingPrice === 0 || !businessType.trim()) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    const newCompanyForSale = {
+      id: `CFS${Math.random().toString().substring(2, 5)}`,
+      companyName: selectedCompanyToList.companyName,
+      companyNumber: selectedCompanyToList.companyNumber,
+      country: "United Kingdom",
+      registrationStatus: selectedCompanyToList.status as "active" | "dormant" | "liquidation",
+      businessType: businessType,
+      incorporationDate: selectedCompanyToList.incorporationDate,
+      askingPrice: askingPrice,
+      currency: "GBP",
+      reason: reason || "General Sale",
+      inquiries: 0,
+      listedAt: new Date().toISOString(),
+    };
+
+    const existing = localStorage.getItem("companiesForSale");
+    const companies = existing ? JSON.parse(existing) : [...mockCompaniesForSale];
+    companies.push(newCompanyForSale);
+    localStorage.setItem("companiesForSale", JSON.stringify(companies));
+
+    toast.success(`${selectedCompanyToList.companyName} listed for sale at £${askingPrice.toLocaleString()}`);
+    setShowListCompanyModal(false);
+    setSelectedCompanyToList(null);
+    setAskingPrice(0);
+    setBusinessType("");
+    setReason("");
+  };
+
   const exportToCSV = () => {
     let headers: string[];
     let rows: (string | number)[][];

@@ -30,6 +30,7 @@ export default function AdminEditUser() {
       subscriptionStatus: "active",
       createdAt: new Date().toISOString().split("T")[0],
       lastLogin: new Date().toISOString(),
+      assignedToStaffId: undefined,
     },
   );
 

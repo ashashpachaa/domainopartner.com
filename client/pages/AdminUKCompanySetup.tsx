@@ -363,6 +363,7 @@ interface OfficerDetail {
 
 interface IncorporationFormData {
   companyName: string;
+  companySuffix: "Ltd" | "Limited" | "PLC" | "Public Limited Company" | "Unlimited" | "LLP" | "Partnership";
   companyType: "private_limited" | "public_limited" | "unlimited" | "private_guarantee";
   jurisdiction: "england-wales" | "scotland" | "northern-ireland";
   registeredOfficeAddress: {

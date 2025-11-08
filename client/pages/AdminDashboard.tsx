@@ -421,7 +421,7 @@ export default function AdminDashboard() {
                   <tbody className="divide-y divide-slate-200">
                     {filteredUsers.length === 0 ? (
                       <tr>
-                        <td colSpan={7} className="px-6 py-8 text-center">
+                        <td colSpan={8} className="px-6 py-8 text-center">
                           <p className="text-slate-600 text-sm">
                             No users found
                           </p>
@@ -431,8 +431,16 @@ export default function AdminDashboard() {
                       filteredUsers.map((user) => (
                         <tr
                           key={user.id}
-                          className="hover:bg-slate-50 transition"
+                          className={`hover:bg-slate-50 transition ${selectedUsers.has(user.id) ? 'bg-blue-50' : ''}`}
                         >
+                          <td className="px-4 py-4">
+                            <input
+                              type="checkbox"
+                              checked={selectedUsers.has(user.id)}
+                              onChange={() => toggleUserSelection(user.id)}
+                              className="w-4 h-4 rounded border-slate-300 cursor-pointer"
+                            />
+                          </td>
                           <td className="px-6 py-4">
                             <div>
                               <p className="font-medium text-slate-900">

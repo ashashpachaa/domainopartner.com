@@ -132,7 +132,7 @@ export default function ClientCreateOrder() {
   };
 
   const handleProductChange = (productId: string) => {
-    const product = mockProducts.find((p) => p.id === productId);
+    const product = products.find((p) => p.id === productId);
     setSelectedProduct(product);
     setFormData({
       ...formData,

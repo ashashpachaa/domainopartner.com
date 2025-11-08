@@ -1026,33 +1026,83 @@ export default function AdminOrderDetail() {
                 <h3 className="text-lg font-bold text-slate-900 mb-4">
                   Assigned To
                 </h3>
-                <div className="space-y-3">
-                  {order.assignedToSalesId && (
-                    <div>
-                      <label className="text-xs text-slate-500">Sales</label>
-                      <p className="text-sm font-medium text-slate-900">
-                        {getStaffName(order.assignedToSalesId)}
-                      </p>
-                    </div>
-                  )}
-                  {order.assignedToOperationId && (
-                    <div>
-                      <label className="text-xs text-slate-500">
-                        Operation
+                <div className="space-y-4">
+                  {order.assignedToSalesId && getStaffDetails(order.assignedToSalesId) && (
+                    <div className="pb-4 border-b border-slate-200 last:border-b-0">
+                      <label className="text-xs font-bold text-slate-500 uppercase tracking-wide">
+                        Sales Staff
                       </label>
-                      <p className="text-sm font-medium text-slate-900">
-                        {getStaffName(order.assignedToOperationId)}
-                      </p>
+                      {(() => {
+                        const details = getStaffDetails(order.assignedToSalesId);
+                        return (
+                          <div className="mt-2 space-y-1">
+                            <p className="text-sm font-semibold text-slate-900">
+                              {details?.name}
+                            </p>
+                            <p className="text-xs text-slate-600">
+                              {details?.role}
+                            </p>
+                            <p className="text-xs text-slate-500">
+                              {details?.department}
+                            </p>
+                          </div>
+                        );
+                      })()}
                     </div>
                   )}
-                  {order.assignedToManagerId && (
-                    <div>
-                      <label className="text-xs text-slate-500">Manager</label>
-                      <p className="text-sm font-medium text-slate-900">
-                        {getStaffName(order.assignedToManagerId)}
-                      </p>
+                  {order.assignedToOperationId && getStaffDetails(order.assignedToOperationId) && (
+                    <div className="pb-4 border-b border-slate-200 last:border-b-0">
+                      <label className="text-xs font-bold text-slate-500 uppercase tracking-wide">
+                        Operation Staff
+                      </label>
+                      {(() => {
+                        const details = getStaffDetails(order.assignedToOperationId);
+                        return (
+                          <div className="mt-2 space-y-1">
+                            <p className="text-sm font-semibold text-slate-900">
+                              {details?.name}
+                            </p>
+                            <p className="text-xs text-slate-600">
+                              {details?.role}
+                            </p>
+                            <p className="text-xs text-slate-500">
+                              {details?.department}
+                            </p>
+                          </div>
+                        );
+                      })()}
                     </div>
                   )}
+                  {order.assignedToManagerId && getStaffDetails(order.assignedToManagerId) && (
+                    <div className="pb-4 border-b border-slate-200 last:border-b-0">
+                      <label className="text-xs font-bold text-slate-500 uppercase tracking-wide">
+                        Operation Manager
+                      </label>
+                      {(() => {
+                        const details = getStaffDetails(order.assignedToManagerId);
+                        return (
+                          <div className="mt-2 space-y-1">
+                            <p className="text-sm font-semibold text-slate-900">
+                              {details?.name}
+                            </p>
+                            <p className="text-xs text-slate-600">
+                              {details?.role}
+                            </p>
+                            <p className="text-xs text-slate-500">
+                              {details?.department}
+                            </p>
+                          </div>
+                        );
+                      })()}
+                    </div>
+                  )}
+                  {!order.assignedToSalesId &&
+                    !order.assignedToOperationId &&
+                    !order.assignedToManagerId && (
+                      <p className="text-sm text-slate-500 py-4 text-center">
+                        No staff assigned yet
+                      </p>
+                    )}
                 </div>
               </div>
 

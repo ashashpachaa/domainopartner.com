@@ -689,8 +689,10 @@ export default function CompanyDetailModal({
                           </div>
                           <p className="text-xs text-slate-600 bg-slate-50 p-2 rounded">Directors and shareholders will be confirmed as unchanged unless updated here.</p>
                           <div className="flex gap-2 justify-end pt-2">
-                            <Button variant="outline" size="sm" onClick={() => { setShowAmendmentForm(false); setConfirmationYear(new Date().getFullYear()); }}>Cancel</Button>
-                            <Button size="sm" className="bg-blue-600 hover:bg-blue-700" onClick={() => { toast.success("Annual confirmation amendment submitted"); setShowAmendmentForm(false); }}>Submit</Button>
+                            <Button variant="outline" size="sm" disabled={isSubmitting} onClick={() => { setShowAmendmentForm(false); setConfirmationYear(new Date().getFullYear()); }}>Cancel</Button>
+                            <Button size="sm" disabled={isSubmitting} className="bg-blue-600 hover:bg-blue-700" onClick={() => { submitAmendment("annual_confirmation", { confirmationYear }); }}>
+                              {isSubmitting ? "Submitting..." : "Submit"}
+                            </Button>
                           </div>
                         </div>
                       )}

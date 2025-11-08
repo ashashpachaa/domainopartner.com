@@ -1026,6 +1026,7 @@ export interface CompanyIncorporation {
   paymentStatus?: "pending" | "paid" | "failed";
   paymentReference?: string;
   paymentDate?: string;
+  amendments?: CompanyAmendment[]; // Track all amendments filed
 }
 
 export const mockCompanyIncorporations: CompanyIncorporation[] = [

@@ -127,11 +127,16 @@ export default function AdminEditProduct() {
       // Add to mockProducts array
       mockProducts.push(newProduct);
 
-      // Save to localStorage
+      // Save to localStorage - BOTH individual key and main products array
       localStorage.setItem(
         `product_${newProduct.id}`,
         JSON.stringify(newProduct),
       );
+
+      // Also update the main products array in localStorage (for AdminProducts and ClientCreateOrder)
+      const allProducts = JSON.parse(localStorage.getItem("products") || JSON.stringify(mockProducts));
+      allProducts.push(newProduct);
+      localStorage.setItem("products", JSON.stringify(allProducts));
 
       toast.success("Product created successfully!");
     } else {
@@ -148,11 +153,21 @@ export default function AdminEditProduct() {
         mockProducts[index] = updatedProduct;
       }
 
-      // Update localStorage
+      // Update localStorage - BOTH individual key and main products array
       localStorage.setItem(
         `product_${updatedProduct.id}`,
         JSON.stringify(updatedProduct),
       );
+
+      // Also update the main products array in localStorage (for AdminProducts and ClientCreateOrder)
+      const allProducts = JSON.parse(localStorage.getItem("products") || JSON.stringify(mockProducts));
+      const productIndex = allProducts.findIndex((p: any) => p.id === updatedProduct.id);
+      if (productIndex >= 0) {
+        allProducts[productIndex] = updatedProduct;
+      } else {
+        allProducts.push(updatedProduct);
+      }
+      localStorage.setItem("products", JSON.stringify(allProducts));
 
       toast.success("Product updated successfully!");
     }

@@ -36,6 +36,21 @@ export default function AdminProducts() {
   const [serviceFilter, setServiceFilter] = useState<string>("");
   const [selectedProducts, setSelectedProducts] = useState<Set<string>>(new Set());
 
+  // Load products from localStorage when component mounts or comes back into view
+  useEffect(() => {
+    const storedProducts = localStorage.getItem("products");
+    if (storedProducts) {
+      try {
+        const parsed = JSON.parse(storedProducts);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setProducts(parsed);
+        }
+      } catch (e) {
+        console.error('Error loading products from localStorage:', e);
+      }
+    }
+  }, []);
+
   // Save products to localStorage whenever they change
   useEffect(() => {
     localStorage.setItem("products", JSON.stringify(products));

@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { mockOrders, mockInvoices, mockUsers } from "@/lib/mockData";
+import { mockOrders, mockInvoices, mockUsers, mockProducts } from "@/lib/mockData";
 import ClientLayout from "@/components/ClientLayout";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,6 +10,8 @@ import {
   Clock,
   ArrowRight,
   AlertCircle,
+  ShoppingCart,
+  CheckCircle,
 } from "lucide-react";
 
 export default function ClientDashboard() {

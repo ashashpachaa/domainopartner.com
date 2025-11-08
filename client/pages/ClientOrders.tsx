@@ -1,5 +1,4 @@
 import { useState, useMemo } from "react";
-import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { mockOrders } from "@/lib/mockData";
 import ClientLayout from "@/components/ClientLayout";

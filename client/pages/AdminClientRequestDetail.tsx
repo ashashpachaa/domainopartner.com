@@ -12,6 +12,7 @@ export default function AdminClientRequestDetail() {
   const navigate = useNavigate();
   const [rejectionReason, setRejectionReason] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
+  const [assignedToStaffId, setAssignedToStaffId] = useState("");
 
   const request = useMemo(() => {
     // Check in mock data first

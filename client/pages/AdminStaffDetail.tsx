@@ -66,7 +66,7 @@ export default function AdminStaffDetail() {
 
     // Fallback to mockStaff
     return mockStaff.find((s) => s.id === staffId);
-  }, [staffId]);
+  }, []);
 
   if (!member) {
     return (

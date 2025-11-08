@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, Save } from "lucide-react";
-import { FormEvent, useState, useMemo } from "react";
+import { FormEvent, useState, useMemo, useEffect } from "react";
 import { mockUsers, mockStaff, User, UserStatus } from "@/lib/mockData";
 import { toast } from "sonner";
 

@@ -14,6 +14,7 @@ import {
   getRegisteredCompanies,
   RegisteredCompany,
 } from "@/hooks/useCompanyDetails";
+import { useCompanyRenewal } from "@/hooks/useCompanyRenewal";
 import { mockUsers } from "@/lib/mockData";
 import { toast } from "sonner";
 

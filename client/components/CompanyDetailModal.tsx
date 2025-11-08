@@ -218,6 +218,53 @@ export default function CompanyDetailModal({
               </div>
               <div>
                 <label className="block text-xs font-semibold text-slate-600 uppercase mb-1">
+                  Registered Office Email
+                </label>
+                {isEditingEmail ? (
+                  <div className="flex gap-2">
+                    <input
+                      type="email"
+                      value={registeredOfficeEmail}
+                      onChange={(e) => setRegisteredOfficeEmail(e.target.value)}
+                      placeholder="office@company.co.uk"
+                      className="flex-1 px-3 py-2 border border-slate-300 rounded text-sm"
+                    />
+                    <Button
+                      size="sm"
+                      className="bg-green-600 hover:bg-green-700"
+                      onClick={handleSaveEmail}
+                      disabled={!registeredOfficeEmail.trim()}
+                    >
+                      Save
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => {
+                        setIsEditingEmail(false);
+                        setRegisteredOfficeEmail(company.registeredOfficeEmail || "");
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-between">
+                    <p className="text-slate-900 font-medium">
+                      {registeredOfficeEmail || "Not set"}
+                    </p>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => setIsEditingEmail(true)}
+                    >
+                      {registeredOfficeEmail ? "Edit" : "Add"}
+                    </Button>
+                  </div>
+                )}
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-slate-600 uppercase mb-1">
                   Incorporation Date
                 </label>
                 <p className="text-slate-900 font-medium">

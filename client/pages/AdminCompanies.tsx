@@ -85,6 +85,109 @@ export default function AdminCompanies() {
     return confirmationDue || accountsDue;
   };
 
+  // Import from Companies House
+  const fetchFromCompaniesHouse = async () => {
+    if (!importCompanyNumber.trim()) {
+      toast.error("Please enter a Company Number");
+      return;
+    }
+
+    setIsLoadingCH(true);
+    try {
+      const response = await fetch(
+        `/api/companies-house/details?companyNumber=${encodeURIComponent(
+          importCompanyNumber
+        )}`
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch company data");
+      }
+
+      const data = await response.json();
+
+      if (data.error) {
+        toast.error(data.error);
+        setFetchedCompanyData(null);
+        return;
+      }
+
+      setFetchedCompanyData({
+        companyName: data.companyName,
+        companyNumber: data.companyNumber,
+        incorporationDate: data.incorporationDate,
+        nextRenewalDate: data.nextRenewalDate,
+        nextAccountsFilingDate: data.accounts?.nextFilingDate,
+        country: "United Kingdom",
+        status: data.status,
+        registeredOffice: data.registeredOffice,
+        sic: data.sic,
+      });
+      toast.success("Company data fetched successfully!");
+    } catch (error: any) {
+      console.error("Error fetching company data:", error);
+      toast.error(error.message || "Failed to fetch company data from Companies House");
+      setFetchedCompanyData(null);
+    } finally {
+      setIsLoadingCH(false);
+    }
+  };
+
+  const handleAcceptImport = () => {
+    if (!fetchedCompanyData) {
+      toast.error("No company data to import");
+      return;
+    }
+
+    if (!importAuthCodeForFetched.trim()) {
+      toast.error("Auth Code is required to import a company");
+      return;
+    }
+
+    // Check for duplicate company number
+    const isDuplicate = companies.some(
+      (c) => c.companyNumber === fetchedCompanyData.companyNumber
+    );
+
+    if (isDuplicate) {
+      toast.error("Company with this number already exists");
+      return;
+    }
+
+    // Create a new registered company
+    const newCompany: RegisteredCompany = {
+      id: `REG-CH-${Date.now()}`,
+      companyName: fetchedCompanyData.companyName,
+      companyNumber: fetchedCompanyData.companyNumber,
+      incorporationDate: fetchedCompanyData.incorporationDate || new Date().toISOString(),
+      nextRenewalDate: fetchedCompanyData.nextRenewalDate || new Date().toISOString(),
+      nextAccountsFilingDate: fetchedCompanyData.nextAccountsFilingDate || new Date().toISOString(),
+      authCode: importAuthCodeForFetched.trim(),
+      country: "United Kingdom",
+      status: fetchedCompanyData.status === "active" ? "active" : "dissolved",
+      userId: "admin",
+      fetchedAt: new Date().toISOString(),
+    };
+
+    // Store the company
+    const companies = getRegisteredCompanies();
+    const updatedCompanies = [...companies, newCompany];
+    localStorage.setItem("registeredCompanies", JSON.stringify(updatedCompanies));
+
+    toast.success(`${newCompany.companyName} has been imported!`);
+    setFetchedCompanyData(null);
+    setImportAuthCodeForFetched("");
+    setImportCompanyNumber("");
+    setImportAuthCode("");
+    setShowImportModal(false);
+  };
+
+  const handleRejectImport = () => {
+    setFetchedCompanyData(null);
+    setImportAuthCodeForFetched("");
+    toast.info("Import cancelled");
+  };
+
   // Data loading and filtering
   const companies = useMemo(() => {
     return getRegisteredCompanies();

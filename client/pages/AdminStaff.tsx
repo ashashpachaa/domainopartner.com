@@ -34,7 +34,30 @@ const roleLabels: Record<StaffRole, string> = {
 };
 
 export default function AdminStaff() {
-  const [staff, setStaff] = useState<Staff[]>(mockStaff);
+  // Load staff from both mockStaff and localStorage
+  const allStaff = useMemo(() => {
+    const staffMap = new Map<string, Staff>();
+
+    // First add all mock staff
+    mockStaff.forEach(staff => staffMap.set(staff.id, staff));
+
+    // Then merge with localStorage staff (overwrites mock if exists)
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key?.startsWith('staff_')) {
+        try {
+          const staffData = JSON.parse(localStorage.getItem(key) || '{}');
+          staffMap.set(staffData.id, staffData);
+        } catch (e) {
+          console.error('Error parsing staff from localStorage:', e);
+        }
+      }
+    }
+
+    return Array.from(staffMap.values());
+  }, []);
+
+  const [staff, setStaff] = useState<Staff[]>(allStaff);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterRole, setFilterRole] = useState<StaffRole | "all">("all");
   const [filterDepartment, setFilterDepartment] = useState<string>("");

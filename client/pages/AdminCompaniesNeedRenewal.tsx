@@ -27,6 +27,7 @@ export default function AdminCompaniesNeedRenewal() {
   );
   const [selectedCompany, setSelectedCompany] = useState<RegisteredCompany | null>(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
+  const { submitCompanyRenewal, isSubmitting } = useCompanyRenewal();
 
   const formatDate = (dateStr: string) => {
     return new Date(dateStr).toLocaleDateString("en-US", {

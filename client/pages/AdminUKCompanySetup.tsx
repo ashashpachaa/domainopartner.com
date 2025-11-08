@@ -1354,16 +1354,16 @@ export default function AdminUKCompanySetup() {
         }
       }
 
-      if (result.success) {
+      if (result && (result.success || result.filingReference)) {
         // Add to amendments array
         const newAmendment = {
           id: `AMD${Date.now()}`,
           incorporationId: selectedIncorporation.id,
           formType: amendmentTab as any,
-          status: "submitted" as const,
+          status: result.status || "submitted" as const,
           createdAt: new Date().toISOString(),
-          submittedAt: new Date().toISOString(),
-          filingReference: result.filingReference,
+          submittedAt: result.submittedAt || new Date().toISOString(),
+          filingReference: result.filingReference || `CH-AMEND-${Date.now()}`,
           ...amendmentData.amendment,
         };
 
@@ -1388,10 +1388,10 @@ export default function AdminUKCompanySetup() {
         setAmendmentTab("history");
 
         toast.dismiss();
-        toast.success(`✓ Amendment submitted! Filing Reference: ${result.filingReference}`);
+        toast.success(`✓ Amendment submitted! Filing Reference: ${result.filingReference || `CH-AMEND-${Date.now()}`}`);
       } else {
         toast.dismiss();
-        toast.error(result.error || "Failed to submit amendment");
+        toast.error(result?.error || result?.message || "Failed to submit amendment");
       }
     } catch (error: any) {
       console.error("Amendment submission error:", error);

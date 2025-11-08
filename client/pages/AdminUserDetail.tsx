@@ -43,7 +43,7 @@ export default function AdminUserDetail() {
     }
 
     return Array.from(userMap.values());
-  }, [userId]);
+  }, []);
 
   // Load all staff from both mockStaff and localStorage
   const allStaff = useMemo(() => {

@@ -23,8 +23,21 @@ export default function CompanyDetailModal({
 
   // Load amendments on mount or when company changes
   useEffect(() => {
-    const loadedAmendments = getAmendmentHistory(company);
-    setAmendments(loadedAmendments);
+    // Try to get amendments from linked incorporation first
+    const linkedAmendments = getAmendmentHistory(company);
+    if (linkedAmendments.length > 0) {
+      setAmendments(linkedAmendments);
+      return;
+    }
+
+    // Fallback: check if amendments are stored directly on the company in localStorage
+    const storedCompany = localStorage.getItem(`company_${company.id}`);
+    if (storedCompany) {
+      const parsed = JSON.parse(storedCompany);
+      if (parsed.amendments) {
+        setAmendments(parsed.amendments);
+      }
+    }
   }, [company.id]);
 
   // Amendment form states

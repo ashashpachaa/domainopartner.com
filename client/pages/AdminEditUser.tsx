@@ -360,7 +360,7 @@ export default function AdminEditUser() {
                     className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500 bg-white"
                   >
                     <option value="">-- Select Staff Member --</option>
-                    {mockStaff.map((staff) => (
+                    {allStaff.map((staff) => (
                       <option key={staff.id} value={staff.id}>
                         {staff.firstName} {staff.lastName} ({staff.role.replace(/_/g, " ")})
                       </option>

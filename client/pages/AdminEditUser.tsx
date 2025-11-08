@@ -55,7 +55,7 @@ export default function AdminEditUser() {
     return Array.from(staffMap.values()).sort((a, b) =>
       `${a.firstName} ${a.lastName}`.localeCompare(`${b.firstName} ${b.lastName}`)
     );
-  }, []);
+  }, [userId, isNew]);
 
   const [formData, setFormData] = useState<Partial<User>>(
     existingUser || {

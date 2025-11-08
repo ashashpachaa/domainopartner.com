@@ -3,11 +3,27 @@ import AdminLayout from "@/components/AdminLayout";
 import { mockUsers, mockOrders } from "@/lib/mockData";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Mail, MapPin, Building2 } from "lucide-react";
+import { useMemo } from "react";
 
 export default function AdminViewUserDashboard() {
   const { userId } = useParams();
   const navigate = useNavigate();
-  const user = mockUsers.find((u) => u.id === userId);
+
+  // Load user from localStorage first, then fallback to mockUsers
+  const user = useMemo(() => {
+    // First check localStorage for updated version
+    const localStorageUser = localStorage.getItem(`user_${userId}`);
+    if (localStorageUser) {
+      try {
+        return JSON.parse(localStorageUser);
+      } catch (e) {
+        console.error('Error parsing user from localStorage:', e);
+      }
+    }
+
+    // Fallback to mockUsers
+    return mockUsers.find((u) => u.id === userId);
+  }, [userId]);
 
   if (!user) {
     return (

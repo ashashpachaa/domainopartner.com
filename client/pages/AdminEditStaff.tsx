@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, Save, CheckCircle2, Clock } from "lucide-react";
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useMemo, useEffect } from "react";
 import { mockStaff, Staff, StaffRole, WorkflowStage } from "@/lib/mockData";
 
 const staffRoles: { value: StaffRole; label: string }[] = [
@@ -36,7 +36,23 @@ export default function AdminEditStaff() {
   const navigate = useNavigate();
   const isNew = staffId === "new";
 
-  const existingMember = !isNew ? mockStaff.find((s) => s.id === staffId) : null;
+  // Load existing staff from localStorage first, then fallback to mockStaff
+  const existingMember = useMemo(() => {
+    if (isNew) return null;
+
+    // First check localStorage for updated version
+    const localStorageStaff = localStorage.getItem(`staff_${staffId}`);
+    if (localStorageStaff) {
+      try {
+        return JSON.parse(localStorageStaff);
+      } catch (e) {
+        console.error('Error parsing staff from localStorage:', e);
+      }
+    }
+
+    // Fallback to mockStaff
+    return mockStaff.find((s) => s.id === staffId);
+  }, [staffId, isNew]);
 
   const [formData, setFormData] = useState<Partial<Staff>>(
     existingMember || {
@@ -63,6 +79,13 @@ export default function AdminEditStaff() {
       })),
     }
   );
+
+  // Update formData when existingMember changes
+  useEffect(() => {
+    if (existingMember) {
+      setFormData(existingMember);
+    }
+  }, [existingMember]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>

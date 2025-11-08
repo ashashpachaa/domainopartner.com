@@ -529,6 +529,7 @@ export default function AdminUKCompanySetup() {
 
   const [selectedIncorporation, setSelectedIncorporation] = useState<CompanyIncorporation | null>(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
+  const [sicSearch, setSicSearch] = useState("");
   const [editingCompanyNumber, setEditingCompanyNumber] = useState("");
   const [editingAuthCode, setEditingAuthCode] = useState("");
   const [editingIncorporationId, setEditingIncorporationId] = useState<string | null>(null);

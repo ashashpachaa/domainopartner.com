@@ -471,6 +471,7 @@ export default function AdminUKCompanySetup() {
 
   const [formData, setFormData] = useState<IncorporationFormData>({
     companyName: "",
+    companySuffix: "Ltd",
     companyType: "private_limited",
     jurisdiction: "england-wales",
     registeredOfficeAddress: {

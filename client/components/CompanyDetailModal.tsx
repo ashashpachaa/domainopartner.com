@@ -559,8 +559,10 @@ export default function CompanyDetailModal({
                             </select>
                           </div>
                           <div className="flex gap-2 justify-end pt-2">
-                            <Button variant="outline" size="sm" onClick={() => { setShowAmendmentForm(false); setResignDirectorId(""); }}>Cancel</Button>
-                            <Button size="sm" className="bg-blue-600 hover:bg-blue-700" onClick={() => { toast.success("Director resignation amendment submitted"); setShowAmendmentForm(false); }}>Submit</Button>
+                            <Button variant="outline" size="sm" disabled={isSubmitting} onClick={() => { setShowAmendmentForm(false); setResignDirectorId(""); }}>Cancel</Button>
+                            <Button size="sm" disabled={isSubmitting || !resignDirectorId} className="bg-blue-600 hover:bg-blue-700" onClick={() => { submitAmendment("director_resign", { directorId: resignDirectorId }); }}>
+                              {isSubmitting ? "Submitting..." : "Submit"}
+                            </Button>
                           </div>
                         </div>
                       )}

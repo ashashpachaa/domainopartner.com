@@ -11,6 +11,7 @@ import {
   handleWebhookStatus,
   handleIncorporationSubmission,
   handlePaymentSubmission,
+  handleAmendmentSubmission,
 } from "./routes/companiesHouse";
 
 const upload = multer({ storage: multer.memoryStorage() });

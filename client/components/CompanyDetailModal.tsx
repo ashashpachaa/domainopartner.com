@@ -73,14 +73,39 @@ export default function CompanyDetailModal({
       }
 
       const result = await response.json();
+      const filingRef = result.filingReference || `CH-AMEND-${Date.now()}`;
+
+      // Persist amendment to incorporation's amendments array
+      if (incorporation) {
+        const newAmendment = {
+          id: `AMD-${Date.now()}`,
+          formType,
+          status: result.status || "filed",
+          filingReference: filingRef,
+          submittedAt: new Date().toISOString(),
+          amendment: amendmentData,
+        };
+
+        const updatedIncorporation = {
+          ...incorporation,
+          amendments: [...(incorporation.amendments || []), newAmendment],
+        };
+
+        localStorage.setItem(
+          `incorporation_${incorporation.id}`,
+          JSON.stringify(updatedIncorporation)
+        );
+      }
+
       toast.success(
-        `Amendment submitted! Reference: ${result.filingReference || "Pending"}`
+        `Amendment submitted! Reference: ${filingRef}`
       );
 
       setShowAmendmentForm(false);
       setAmendmentTab("history");
       resetAmendmentForms();
 
+      // Reload to reflect the new amendment in the UI
       setTimeout(() => window.location.reload(), 1500);
     } catch (error: any) {
       console.error("Amendment submission error:", error);

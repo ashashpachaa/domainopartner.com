@@ -3979,6 +3979,33 @@ export default function AdminUKCompanySetup() {
                           </div>
                         )}
 
+                        {amendmentTab === "company_name_change" && (
+                          <div className="space-y-4">
+                            <h4 className="font-bold text-slate-900">Change Company Name (NM01)</h4>
+
+                            <div>
+                              <label className="text-xs font-bold text-slate-700 block mb-2">Current Company Name</label>
+                              <div className="bg-slate-100 p-3 rounded-lg text-slate-900 font-medium">
+                                {selectedIncorporation.companyName}
+                              </div>
+                            </div>
+
+                            <div>
+                              <label className="text-xs font-bold text-slate-700 block mb-2">New Company Name *</label>
+                              <input
+                                type="text"
+                                placeholder="Enter new company name"
+                                value={newCompanyName}
+                                onChange={(e) => setNewCompanyName(e.target.value)}
+                                className="w-full px-3 py-2 border border-slate-300 rounded text-sm"
+                              />
+                              <p className="text-xs text-slate-600 mt-2">
+                                Company names must follow UK naming rules and be available at Companies House
+                              </p>
+                            </div>
+                          </div>
+                        )}
+
                         <div className="flex gap-2 pt-2">
                           <Button onClick={() => { setShowAmendmentForm(false); setAmendmentTab("history"); }} variant="outline" size="sm">Cancel</Button>
                           <Button onClick={handleSubmitAmendment} className="bg-green-600 hover:bg-green-700" size="sm">Submit Amendment</Button>

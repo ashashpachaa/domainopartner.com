@@ -3822,77 +3822,121 @@ export default function AdminUKCompanySetup() {
                         )}
 
                         {amendmentTab === "annual_confirmation" && (
-                          <div className="space-y-4">
+                          <div className="space-y-4 max-h-96 overflow-y-auto">
                             <h4 className="font-bold text-slate-900">Annual Confirmation Statement (CS01)</h4>
+                            <p className="text-xs text-slate-600">Edit company information below. Leave fields unchanged if no updates are needed.</p>
 
                             <div>
                               <label className="text-xs font-bold text-slate-700">Confirmation Year *</label>
                               <input type="number" value={confirmationYear} onChange={(e) => setConfirmationYear(parseInt(e.target.value))} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
                             </div>
 
-                            <div className="bg-slate-50 p-3 rounded-lg space-y-2">
-                              <p className="text-xs font-bold text-slate-700 mb-3">What has changed in the past year?</p>
-                              <label className="flex items-center gap-2">
-                                <input type="checkbox" checked={confirmationData.directorsUnchanged} onChange={(e) => setConfirmationData({...confirmationData, directorsUnchanged: e.target.checked})} className="w-4 h-4" />
-                                <span className="text-sm font-medium">Directors unchanged</span>
-                              </label>
-                              <label className="flex items-center gap-2">
-                                <input type="checkbox" checked={confirmationData.shareholdersUnchanged} onChange={(e) => setConfirmationData({...confirmationData, shareholdersUnchanged: e.target.checked})} className="w-4 h-4" />
-                                <span className="text-sm font-medium">Shareholders unchanged</span>
-                              </label>
-                              <label className="flex items-center gap-2">
-                                <input type="checkbox" checked={confirmationData.addressUnchanged} onChange={(e) => setConfirmationData({...confirmationData, addressUnchanged: e.target.checked})} className="w-4 h-4" />
-                                <span className="text-sm font-medium">Registered office unchanged</span>
-                              </label>
-                              <label className="flex items-center gap-2">
-                                <input type="checkbox" checked={confirmationData.capitalUnchanged} onChange={(e) => setConfirmationData({...confirmationData, capitalUnchanged: e.target.checked})} className="w-4 h-4" />
-                                <span className="text-sm font-medium">Share capital unchanged</span>
-                              </label>
-                              <label className="flex items-center gap-2">
-                                <input type="checkbox" checked={confirmationData.sicUnchanged} onChange={(e) => setConfirmationData({...confirmationData, sicUnchanged: e.target.checked})} className="w-4 h-4" />
-                                <span className="text-sm font-medium">SIC code unchanged</span>
-                              </label>
+                            <div className="border-t pt-4">
+                              <h5 className="font-bold text-slate-800 text-sm mb-3">Directors</h5>
+                              <div className="bg-slate-50 p-3 rounded-lg space-y-2">
+                                {selectedIncorporation.directors.map((dir, idx) => (
+                                  <div key={dir.id} className="bg-white p-3 rounded border border-slate-200">
+                                    <p className="text-xs font-bold text-slate-600 mb-2">Director {idx + 1}: {dir.firstName} {dir.lastName}</p>
+                                    <label className="flex items-center gap-2">
+                                      <input type="checkbox" checked={confirmationData.directorsUnchanged} onChange={(e) => setConfirmationData({...confirmationData, directorsUnchanged: e.target.checked})} className="w-4 h-4" />
+                                      <span className="text-xs">Director information unchanged</span>
+                                    </label>
+                                  </div>
+                                ))}
+                              </div>
                             </div>
 
-                            {!confirmationData.addressUnchanged && (
-                              <div className="space-y-2 bg-blue-50 p-3 rounded-lg border border-blue-200">
-                                <label className="text-xs font-bold text-slate-700">Updated Registered Office Address</label>
-                                <input type="text" placeholder="Address Line 1 *" value={confirmedAddress.addressLine1} onChange={(e) => setConfirmedAddress({...confirmedAddress, addressLine1: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
-                                <input type="text" placeholder="Address Line 2" value={confirmedAddress.addressLine2} onChange={(e) => setConfirmedAddress({...confirmedAddress, addressLine2: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
-                                <input type="text" placeholder="City *" value={confirmedAddress.city} onChange={(e) => setConfirmedAddress({...confirmedAddress, city: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
-                                <input type="text" placeholder="Postcode *" value={confirmedAddress.postcode} onChange={(e) => setConfirmedAddress({...confirmedAddress, postcode: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                            <div className="border-t pt-4">
+                              <h5 className="font-bold text-slate-800 text-sm mb-3">Shareholders</h5>
+                              <div className="bg-slate-50 p-3 rounded-lg space-y-2">
+                                {selectedIncorporation.shareholders.map((sha, idx) => (
+                                  <div key={sha.id} className="bg-white p-3 rounded border border-slate-200">
+                                    <p className="text-xs font-bold text-slate-600 mb-2">Shareholder {idx + 1}: {sha.firstName} {sha.lastName} ({sha.ownershipPercentage}%)</p>
+                                    <label className="flex items-center gap-2">
+                                      <input type="checkbox" checked={confirmationData.shareholdersUnchanged} onChange={(e) => setConfirmationData({...confirmationData, shareholdersUnchanged: e.target.checked})} className="w-4 h-4" />
+                                      <span className="text-xs">Shareholder information unchanged</span>
+                                    </label>
+                                  </div>
+                                ))}
                               </div>
-                            )}
+                            </div>
 
-                            {!confirmationData.capitalUnchanged && (
-                              <div className="space-y-2 bg-blue-50 p-3 rounded-lg border border-blue-200">
-                                <label className="text-xs font-bold text-slate-700">Updated Share Capital *</label>
-                                <input type="number" placeholder="Capital amount" value={confirmedCapital} onChange={(e) => setConfirmedCapital(parseInt(e.target.value) || 0)} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                            <div className="border-t pt-4">
+                              <h5 className="font-bold text-slate-800 text-sm mb-3">Registered Office Address</h5>
+                              <div className="bg-slate-50 p-3 rounded-lg space-y-2">
+                                <div className="bg-white p-3 rounded border border-slate-200">
+                                  <p className="text-xs font-bold text-slate-600 mb-2">Current: {selectedIncorporation.registeredOfficeAddress}, {selectedIncorporation.registeredOfficeCity}, {selectedIncorporation.registeredOfficePostcode}</p>
+                                  <label className="flex items-center gap-2">
+                                    <input type="checkbox" checked={confirmationData.addressUnchanged} onChange={(e) => setConfirmationData({...confirmationData, addressUnchanged: e.target.checked})} className="w-4 h-4" />
+                                    <span className="text-xs">Address unchanged</span>
+                                  </label>
+                                </div>
+                                {!confirmationData.addressUnchanged && (
+                                  <div className="bg-blue-50 p-3 rounded border border-blue-200 space-y-2">
+                                    <p className="text-xs font-bold text-slate-700">New Address</p>
+                                    <input type="text" placeholder="Address Line 1 *" value={confirmedAddress.addressLine1} onChange={(e) => setConfirmedAddress({...confirmedAddress, addressLine1: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                                    <input type="text" placeholder="City *" value={confirmedAddress.city} onChange={(e) => setConfirmedAddress({...confirmedAddress, city: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                                    <input type="text" placeholder="Postcode *" value={confirmedAddress.postcode} onChange={(e) => setConfirmedAddress({...confirmedAddress, postcode: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                                  </div>
+                                )}
                               </div>
-                            )}
+                            </div>
 
-                            {!confirmationData.sicUnchanged && (
-                              <div className="space-y-2 bg-blue-50 p-3 rounded-lg border border-blue-200">
-                                <label className="text-xs font-bold text-slate-700">Updated SIC Code *</label>
-                                <input type="text" placeholder="SIC code (e.g., 62010)" value={confirmedSicCode} onChange={(e) => setConfirmedSicCode(e.target.value)} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                            <div className="border-t pt-4">
+                              <h5 className="font-bold text-slate-800 text-sm mb-3">Share Capital</h5>
+                              <div className="bg-slate-50 p-3 rounded-lg space-y-2">
+                                <div className="bg-white p-3 rounded border border-slate-200">
+                                  <p className="text-xs font-bold text-slate-600 mb-2">Current: £{selectedIncorporation.shareCapital} ({selectedIncorporation.shareType})</p>
+                                  <label className="flex items-center gap-2">
+                                    <input type="checkbox" checked={confirmationData.capitalUnchanged} onChange={(e) => setConfirmationData({...confirmationData, capitalUnchanged: e.target.checked})} className="w-4 h-4" />
+                                    <span className="text-xs">Share capital unchanged</span>
+                                  </label>
+                                </div>
+                                {!confirmationData.capitalUnchanged && (
+                                  <div className="bg-blue-50 p-3 rounded border border-blue-200 space-y-2">
+                                    <p className="text-xs font-bold text-slate-700">New Capital Amount</p>
+                                    <input type="number" placeholder="Capital amount *" value={confirmedCapital} onChange={(e) => setConfirmedCapital(parseInt(e.target.value) || 0)} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                                  </div>
+                                )}
                               </div>
-                            )}
+                            </div>
 
-                            <label className="flex items-center gap-2">
-                              <input type="checkbox" checked={confirmationData.hasSecretary} onChange={(e) => setConfirmationData({...confirmationData, hasSecretary: e.target.checked})} className="w-4 h-4" />
-                              <span className="text-sm font-medium">Company has a Secretary</span>
-                            </label>
-
-                            {confirmationData.hasSecretary && (
-                              <div className="space-y-2 bg-green-50 p-3 rounded-lg border border-green-200">
-                                <label className="text-xs font-bold text-slate-700">Secretary Details</label>
-                                <input type="text" placeholder="First Name *" value={secretaryForm.firstName} onChange={(e) => setSecretaryForm({...secretaryForm, firstName: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
-                                <input type="text" placeholder="Last Name *" value={secretaryForm.lastName} onChange={(e) => setSecretaryForm({...secretaryForm, lastName: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
-                                <input type="text" placeholder="Address *" value={secretaryForm.address} onChange={(e) => setSecretaryForm({...secretaryForm, address: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
-                                <input type="text" placeholder="City *" value={secretaryForm.city} onChange={(e) => setSecretaryForm({...secretaryForm, city: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
-                                <input type="text" placeholder="Postcode *" value={secretaryForm.postcode} onChange={(e) => setSecretaryForm({...secretaryForm, postcode: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                            <div className="border-t pt-4">
+                              <h5 className="font-bold text-slate-800 text-sm mb-3">SIC Code</h5>
+                              <div className="bg-slate-50 p-3 rounded-lg space-y-2">
+                                <div className="bg-white p-3 rounded border border-slate-200">
+                                  <p className="text-xs font-bold text-slate-600 mb-2">Current: {selectedIncorporation.sicCode || "Not set"}</p>
+                                  <label className="flex items-center gap-2">
+                                    <input type="checkbox" checked={confirmationData.sicUnchanged} onChange={(e) => setConfirmationData({...confirmationData, sicUnchanged: e.target.checked})} className="w-4 h-4" />
+                                    <span className="text-xs">SIC code unchanged</span>
+                                  </label>
+                                </div>
+                                {!confirmationData.sicUnchanged && (
+                                  <div className="bg-blue-50 p-3 rounded border border-blue-200 space-y-2">
+                                    <p className="text-xs font-bold text-slate-700">New SIC Code</p>
+                                    <input type="text" placeholder="SIC code (e.g., 62010) *" value={confirmedSicCode} onChange={(e) => setConfirmedSicCode(e.target.value)} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                                  </div>
+                                )}
                               </div>
-                            )}
+                            </div>
+
+                            <div className="border-t pt-4">
+                              <label className="flex items-center gap-2">
+                                <input type="checkbox" checked={confirmationData.hasSecretary} onChange={(e) => setConfirmationData({...confirmationData, hasSecretary: e.target.checked})} className="w-4 h-4" />
+                                <span className="text-sm font-medium">Company has a Secretary</span>
+                              </label>
+
+                              {confirmationData.hasSecretary && (
+                                <div className="space-y-2 bg-green-50 p-3 rounded-lg border border-green-200 mt-3">
+                                  <label className="text-xs font-bold text-slate-700">Secretary Details</label>
+                                  <input type="text" placeholder="First Name *" value={secretaryForm.firstName} onChange={(e) => setSecretaryForm({...secretaryForm, firstName: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                                  <input type="text" placeholder="Last Name *" value={secretaryForm.lastName} onChange={(e) => setSecretaryForm({...secretaryForm, lastName: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                                  <input type="text" placeholder="Address *" value={secretaryForm.address} onChange={(e) => setSecretaryForm({...secretaryForm, address: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                                  <input type="text" placeholder="City *" value={secretaryForm.city} onChange={(e) => setSecretaryForm({...secretaryForm, city: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                                  <input type="text" placeholder="Postcode *" value={secretaryForm.postcode} onChange={(e) => setSecretaryForm({...secretaryForm, postcode: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                                </div>
+                              )}
+                            </div>
                           </div>
                         )}
 

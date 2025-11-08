@@ -326,6 +326,22 @@ export default function CompanyDetailModal({
                 </div>
               </div>
             )}
+
+            {/* Reminder about Companies House email */}
+            <div className="mt-6 pt-4 border-t border-slate-200 bg-blue-50 p-4 rounded-lg border border-blue-200">
+              <h4 className="font-semibold text-blue-900 mb-2 flex items-center gap-2">
+                <Mail className="w-4 h-4" />
+                📧 Amendment Confirmation Email
+              </h4>
+              <p className="text-sm text-blue-800 mb-3">
+                Companies House will send amendment confirmations to the registered office email address.
+              </p>
+              <ul className="text-sm text-blue-800 space-y-1 ml-4 list-disc">
+                <li>Update the email above to ensure you receive filings confirmations</li>
+                <li>You can also check/update it on the <a href="https://www.companieshouse.gov.uk/services/authenticationandlogin" target="_blank" rel="noopener noreferrer" className="font-semibold text-blue-600 hover:text-blue-700 underline">Companies House portal</a> (Company Details → Registered Office)</li>
+                <li>Confirmations usually arrive within 1-2 hours after filing</li>
+              </ul>
+            </div>
           </div>
 
           {/* Account Owner (Client) Information */}

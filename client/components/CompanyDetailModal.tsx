@@ -338,14 +338,14 @@ export default function CompanyDetailModal({
           )}
 
           {/* Amendments Section */}
-          {incorporation && (
+          {company.country === "United Kingdom" && (
             <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-lg p-6 border border-orange-200">
               <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
                 <FileText className="w-5 h-5 text-orange-600" />
                 Company Amendments
               </h3>
 
-              {canAmend ? (
+              {incorporation ? (
                 <div className="space-y-4">
                   <p className="text-sm text-slate-600 mb-4">
                     This company is linked to a UK Company Setup incorporation. You can file amendments to Companies House.

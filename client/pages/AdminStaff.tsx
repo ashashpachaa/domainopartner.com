@@ -34,8 +34,14 @@ const roleLabels: Record<StaffRole, string> = {
 };
 
 export default function AdminStaff() {
-  // Load staff from both mockStaff and localStorage
-  const allStaff = useMemo(() => {
+  const [staff, setStaff] = useState<Staff[]>(mockStaff);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterRole, setFilterRole] = useState<StaffRole | "all">("all");
+  const [filterDepartment, setFilterDepartment] = useState<string>("");
+  const [filterStatus, setFilterStatus] = useState<string>("all");
+
+  // Load staff from both mockStaff and localStorage when component mounts
+  useEffect(() => {
     const staffMap = new Map<string, Staff>();
 
     // First add all mock staff
@@ -54,19 +60,8 @@ export default function AdminStaff() {
       }
     }
 
-    return Array.from(staffMap.values());
+    setStaff(Array.from(staffMap.values()));
   }, []);
-
-  const [staff, setStaff] = useState<Staff[]>(allStaff);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filterRole, setFilterRole] = useState<StaffRole | "all">("all");
-  const [filterDepartment, setFilterDepartment] = useState<string>("");
-  const [filterStatus, setFilterStatus] = useState<string>("all");
-
-  // Sync staff state with allStaff when component mounts
-  useEffect(() => {
-    setStaff(allStaff);
-  }, [allStaff]);
 
   const filteredStaff = staff
     .filter((member) => {

@@ -1343,6 +1343,7 @@ export default function AdminUKCompanySetup() {
         setSicChange({ oldSicCode: "", newSicCode: "", newSicDescription: "" });
         setCapitalChange({ oldCapital: 0, newCapital: 0, shareType: "" });
         setShareholderForm({ firstName: "", lastName: "", address: "", postcode: "", city: "", country: "United Kingdom", shareAllocation: 0 });
+        setSelectedShareholderId("");
         setShowAmendmentForm(false);
         setAmendmentTab("history");
 

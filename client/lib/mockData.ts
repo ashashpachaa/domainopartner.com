@@ -981,6 +981,34 @@ export interface CompanyAmendment {
     oldDetails?: CompanyShareholder;
   }[];
 
+  // Data for Annual Confirmation Statement (CS01)
+  confirmationYear?: number;
+  confirmedDirectors?: CompanyDirector[];
+  confirmedShareholders?: CompanyShareholder[];
+  confirmedAddress?: {
+    addressLine1: string;
+    addressLine2?: string;
+    city: string;
+    postcode: string;
+    country: string;
+  };
+  confirmedShareCapital?: number;
+  confirmedShareType?: string;
+  confirmedSicCode?: string;
+  directorsUnchanged?: boolean;
+  shareholdersUnchanged?: boolean;
+  addressUnchanged?: boolean;
+  capitalUnchanged?: boolean;
+  sicUnchanged?: boolean;
+  secretaryDetails?: {
+    firstName: string;
+    lastName: string;
+    address: string;
+    postcode: string;
+    city: string;
+    country: string;
+  };
+
   notes?: string;
   submittedBy?: string; // Staff ID
 }

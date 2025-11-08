@@ -174,6 +174,47 @@ export default function ClientDashboard() {
           </div>
         )}
 
+        {/* Available Products Section */}
+        <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
+          <div className="p-6 border-b border-slate-200 flex items-center justify-between">
+            <h2 className="text-lg font-semibold text-slate-900 flex items-center gap-2">
+              <ShoppingCart className="w-5 h-5" /> Available Products
+            </h2>
+            <Button variant="ghost" onClick={() => navigate("/client/orders/new")} className="text-primary-600">
+              Create Order <ArrowRight className="w-4 h-4 ml-2" />
+            </Button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-6">
+            {mockProducts.slice(0, 6).map((product) => (
+              <div key={product.id} className="p-4 border border-slate-200 rounded-lg hover:shadow-md transition cursor-pointer" onClick={() => navigate(`/client/orders/new?productId=${product.id}`)}>
+                <h3 className="font-semibold text-slate-900 mb-1">{product.name}</h3>
+                <p className="text-xs text-slate-600 mb-3 line-clamp-2">{product.description}</p>
+
+                <div className="mb-3 space-y-1 text-xs">
+                  <p className="font-bold text-primary-600">{product.price} {product.currency}</p>
+                  <p className="text-slate-600">Duration: {product.duration}</p>
+                  <p className="text-slate-600">Location: {product.country}</p>
+                </div>
+
+                {/* Services included */}
+                {(product.services.hasApostille || product.services.hasPOA || product.services.hasShipping || product.services.hasFinancialReport) && (
+                  <div className="text-xs mb-3 space-y-1 bg-green-50 p-2 rounded">
+                    {product.services.hasApostille && <p className="text-green-700 flex items-center gap-1"><CheckCircle className="w-3 h-3" /> Apostille</p>}
+                    {product.services.hasPOA && <p className="text-green-700 flex items-center gap-1"><CheckCircle className="w-3 h-3" /> POA</p>}
+                    {product.services.hasShipping && <p className="text-green-700 flex items-center gap-1"><CheckCircle className="w-3 h-3" /> Shipping</p>}
+                    {product.services.hasFinancialReport && <p className="text-green-700 flex items-center gap-1"><CheckCircle className="w-3 h-3" /> Financial Report</p>}
+                  </div>
+                )}
+
+                <Button size="sm" onClick={() => navigate(`/client/orders/new?productId=${product.id}`)} className="w-full">
+                  Order Now
+                </Button>
+              </div>
+            ))}
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Recent Orders */}
           <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">

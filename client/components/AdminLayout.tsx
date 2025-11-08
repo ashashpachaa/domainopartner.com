@@ -49,13 +49,16 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       if (key?.startsWith('user_')) {
         try {
           const userData = JSON.parse(localStorage.getItem(key) || '{}');
-          userMap.set(userData.id, userData);
+          // Only add if userData has a valid id
+          if (userData.id && userData.id !== 'undefined') {
+            userMap.set(userData.id, userData);
+          }
         } catch (e) {
           console.error('Error parsing user from localStorage:', e);
         }
       }
     }
-    return Array.from(userMap.values());
+    return Array.from(userMap.values()).filter(u => u.id && u.id !== 'undefined');
   }, []);
 
   // Load staff from both mockStaff and localStorage

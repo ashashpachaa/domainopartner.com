@@ -183,7 +183,7 @@ export default function AdminUserDetail() {
                   {new Date(user.lastLogin).toLocaleDateString()}
                 </div>
                 {user.assignedToStaffId && (() => {
-                  const assignedStaff = mockStaff.find(s => s.id === user.assignedToStaffId);
+                  const assignedStaff = allStaff.find(s => s.id === user.assignedToStaffId);
                   return (
                     <div className="col-span-1 md:col-span-2">
                       <span className="font-medium text-slate-600">Assigned to:</span>{" "}

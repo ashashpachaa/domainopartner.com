@@ -666,8 +666,10 @@ export default function CompanyDetailModal({
                             />
                           </div>
                           <div className="flex gap-2 justify-end pt-2">
-                            <Button variant="outline" size="sm" onClick={() => { setShowAmendmentForm(false); setShareholderName(""); setShareholderPercentage(""); }}>Cancel</Button>
-                            <Button size="sm" className="bg-blue-600 hover:bg-blue-700" onClick={() => { toast.success("Shareholder change amendment submitted"); setShowAmendmentForm(false); }}>Submit</Button>
+                            <Button variant="outline" size="sm" disabled={isSubmitting} onClick={() => { setShowAmendmentForm(false); setShareholderName(""); setShareholderPercentage(""); }}>Cancel</Button>
+                            <Button size="sm" disabled={isSubmitting || !shareholderName.trim() || !shareholderPercentage || parseFloat(shareholderPercentage) < 0 || parseFloat(shareholderPercentage) > 100} className="bg-blue-600 hover:bg-blue-700" onClick={() => { submitAmendment("shareholder_change", { shareholderName, shareholderPercentage: parseFloat(shareholderPercentage) }); }}>
+                              {isSubmitting ? "Submitting..." : "Submit"}
+                            </Button>
                           </div>
                         </div>
                       )}

@@ -113,12 +113,21 @@ export default function CompanyDetailModal({
       const result = await response.json();
       const filingRef = result.filingReference || `CH-AMEND-${Date.now()}`;
 
+      console.log("Amendment submission result:", {
+        success: result.success,
+        filingReference: filingRef,
+        transactionId: result.transactionId,
+        status: result.status,
+        message: result.message,
+      });
+
       // Create amendment object
       const newAmendment = {
         id: `AMD-${Date.now()}`,
         formType,
         status: result.status || "filed",
         filingReference: filingRef,
+        transactionId: result.transactionId,
         submittedAt: new Date().toISOString(),
         amendment: amendmentData,
       };
@@ -145,9 +154,11 @@ export default function CompanyDetailModal({
       // Update local state to show amendment immediately
       setAmendments([...amendments, newAmendment]);
 
-      toast.success(
-        `Amendment submitted! Reference: ${filingRef}`
-      );
+      const successMessage = result.transactionId
+        ? `✅ Amendment filed! Reference: ${filingRef}\nTransaction ID: ${result.transactionId}`
+        : `Amendment submitted! Reference: ${filingRef}`;
+
+      toast.success(successMessage);
 
       setShowAmendmentForm(false);
       setAmendmentTab("history");

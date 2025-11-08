@@ -565,6 +565,14 @@ export async function handleAmendmentSubmission(req: any, res: any) {
           })),
         });
         break;
+
+      case "company_name_change":
+        Object.assign(amendmentData, {
+          form_type: "NM01",
+          old_company_name: amendment.oldCompanyName,
+          new_company_name: amendment.newCompanyName,
+        });
+        break;
     }
 
     try {

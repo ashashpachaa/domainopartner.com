@@ -163,11 +163,11 @@ export default function AdminDashboard() {
   ).length;
 
   const updateUserStatus = (userId: string, newStatus: UserStatus) => {
-    setUsers(
-      users.map((user) =>
-        user.id === userId ? { ...user, status: newStatus } : user,
-      ),
-    );
+    const updatedUser = users.find(u => u.id === userId);
+    if (updatedUser) {
+      const updated = { ...updatedUser, status: newStatus };
+      localStorage.setItem(`user_${userId}`, JSON.stringify(updated));
+    }
   };
 
   const deleteUser = (userId: string) => {

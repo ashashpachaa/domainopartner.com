@@ -402,6 +402,48 @@ export async function handleIncorporationSubmission(req: any, res: any) {
   }
 }
 
+// Helper function to get OAuth 2.0 access token
+async function getCompaniesHouseAccessToken(): Promise<string> {
+  const clientId = process.env.COMPANIES_HOUSE_CLIENT_ID;
+  const clientSecret = process.env.COMPANIES_HOUSE_CLIENT_SECRET;
+
+  if (!clientId || !clientSecret) {
+    throw new Error("Companies House OAuth 2.0 credentials not configured");
+  }
+
+  console.log(`🔐 Requesting OAuth 2.0 access token...`);
+
+  const tokenRes = await fetch("https://identity.company-information.service.gov.uk/oauth2/token", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Accept: "application/json",
+    },
+    body: new URLSearchParams({
+      grant_type: "client_credentials",
+      client_id: clientId,
+      client_secret: clientSecret,
+    }).toString(),
+  });
+
+  if (!tokenRes.ok) {
+    const errorText = await tokenRes.text();
+    throw new Error(
+      `Failed to get OAuth 2.0 access token (${tokenRes.status}): ${errorText.substring(0, 300)}`
+    );
+  }
+
+  const tokenData = await tokenRes.json();
+  const accessToken = tokenData.access_token;
+
+  if (!accessToken) {
+    throw new Error("OAuth 2.0 response missing access_token field");
+  }
+
+  console.log(`✅ OAuth 2.0 access token obtained (expires in ${tokenData.expires_in} seconds)`);
+  return accessToken;
+}
+
 export async function handleAmendmentSubmission(req: any, res: any) {
   try {
     const {
@@ -418,28 +460,24 @@ export async function handleAmendmentSubmission(req: any, res: any) {
       });
     }
 
-    const apiKey = process.env.COMPANIES_HOUSE_API_KEY;
-    if (!apiKey) {
-      return res.status(500).json({
-        error: "Companies House API key not configured",
-      });
-    }
-
     const amendmentFilingReference = `CH-AMEND-${Date.now()}`;
     console.log(`📨 Submitting ${formType} amendment for company ${companyRegistrationNumber}:`, amendment);
 
     try {
-      const basicAuth = Buffer.from(apiKey + ":").toString("base64");
-      const presenterId = process.env.COMPANIES_HOUSE_PRESENTER_ID;
-      const presenterCode = process.env.COMPANIES_HOUSE_PRESENTER_CODE;
+      // Get OAuth 2.0 access token
+      let accessToken: string;
+      try {
+        accessToken = await getCompaniesHouseAccessToken();
+      } catch (tokenError: any) {
+        console.error(`❌ OAuth 2.0 token error:`, tokenError.message);
+        throw new Error(`Cannot authenticate with Companies House: ${tokenError.message}`);
+      }
 
       const headers = {
-        Authorization: `Basic ${basicAuth}`,
+        Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",
         Accept: "application/json",
         "User-Agent": "Domaino-Partner/1.0",
-        "X-Presenter-ID": presenterId || "",
-        "X-Presenter-Code": presenterCode || "",
       };
 
       // Step 1: Create a transaction

@@ -2155,76 +2155,162 @@ export default function AdminUKCompanySetup() {
 
                     {currentStep === 4 && (
                       <div className="space-y-6">
-                        <h2 className="text-2xl font-bold text-slate-900">Confirmation</h2>
+                        <div>
+                          <h2 className="text-2xl font-bold text-slate-900 mb-2">Application Summary</h2>
+                          <p className="text-slate-600">Please review all details before submitting to Companies House</p>
+                        </div>
 
-                        <div className="space-y-4">
-                          <label className="flex items-start gap-3 cursor-pointer">
-                            <input
-                              type="checkbox"
-                              checked={formData.confirmations.memorandumAccepted}
-                              onChange={(e) =>
-                                setFormData({
-                                  ...formData,
-                                  confirmations: { ...formData.confirmations, memorandumAccepted: e.target.checked },
-                                })
-                              }
-                              className="w-4 h-4 rounded mt-1"
-                            />
+                        {/* Company Details */}
+                        <div className="bg-white border border-slate-200 rounded-lg p-6">
+                          <h3 className="font-bold text-slate-900 mb-4">Company Details</h3>
+                          <div className="grid grid-cols-2 gap-4 text-sm">
                             <div>
-                              <p className="font-medium text-slate-900">Tick to confirm that each subscriber to this memorandum of association wishes to form a company under the Companies Act 2006 and agrees to become a member of the company and to take at least one share.</p>
+                              <p className="text-slate-600">Company Name</p>
+                              <p className="font-semibold text-slate-900">{formData.companyName} {formData.companySuffix}</p>
                             </div>
-                          </label>
+                            <div>
+                              <p className="text-slate-600">Company Type</p>
+                              <p className="font-semibold text-slate-900 capitalize">{formData.companyType.replace(/_/g, ' ')}</p>
+                            </div>
+                            <div className="col-span-2">
+                              <p className="text-slate-600">Registered Office Address</p>
+                              <p className="font-semibold text-slate-900">
+                                {formData.registeredOfficeAddress.addressLine1}, {formData.registeredOfficeAddress.city}, {formData.registeredOfficeAddress.postcode}
+                              </p>
+                            </div>
+                            <div>
+                              <p className="text-slate-600">Share Capital</p>
+                              <p className="font-semibold text-slate-900">{formData.shareCapital.currency} {formData.shareCapital.nominalValue}</p>
+                            </div>
+                            <div>
+                              <p className="text-slate-600">Share Type</p>
+                              <p className="font-semibold text-slate-900">{formData.shareCapital.shareType}</p>
+                            </div>
+                            {formData.sicCodes.length > 0 && (
+                              <div className="col-span-2">
+                                <p className="text-slate-600 mb-2">SIC Codes</p>
+                                <div className="flex flex-wrap gap-2">
+                                  {formData.sicCodes.map(code => {
+                                    const sicDetail = SIC_CODES.find(s => s.code === code);
+                                    return (
+                                      <div key={code} className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">
+                                        {code} - {sicDetail?.description}
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </div>
 
-                          <label className="flex items-start gap-3 cursor-pointer border-t border-slate-200 pt-4">
-                            <input
-                              type="checkbox"
-                              checked={formData.confirmations.futureActivitiesLawful}
-                              onChange={(e) =>
-                                setFormData({
-                                  ...formData,
-                                  confirmations: { ...formData.confirmations, futureActivitiesLawful: e.target.checked },
-                                })
-                              }
-                              className="w-4 h-4 rounded mt-1"
-                            />
-                            <div>
-                              <p className="font-medium text-slate-900">Tick to confirm that the intended future activities of the company are lawful.</p>
-                            </div>
-                          </label>
+                        {/* Officers & Shareholders */}
+                        <div className="bg-white border border-slate-200 rounded-lg p-6">
+                          <h3 className="font-bold text-slate-900 mb-4">Officers & Shareholders ({officers.length})</h3>
+                          <div className="space-y-3 text-sm">
+                            {officers.map(officer => (
+                              <div key={officer.id} className="border-b border-slate-200 pb-3 last:border-b-0">
+                                <p className="font-semibold text-slate-900">{officer.firstName} {officer.lastName}</p>
+                                <p className="text-slate-600">{officer.roles.join(', ')}</p>
+                                {officer.roles.includes('Shareholder') && officer.shareholding && (
+                                  <p className="text-slate-600">Ownership: {officer.shareholding.percentage}%</p>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
 
-                          <label className="flex items-start gap-3 cursor-pointer border-t border-slate-200 pt-4">
-                            <input
-                              type="checkbox"
-                              checked={formData.confirmations.termsAccepted}
-                              onChange={(e) =>
-                                setFormData({
-                                  ...formData,
-                                  confirmations: { ...formData.confirmations, termsAccepted: e.target.checked },
-                                })
-                              }
-                              className="w-4 h-4 rounded mt-1"
-                            />
-                            <div>
-                              <p className="font-medium text-slate-900">I confirm my acceptance of the Inform Direct <a href="#" className="text-blue-600 underline">terms and conditions</a> and <a href="#" className="text-blue-600 underline">system capabilities</a></p>
+                        {/* Documents & Services */}
+                        <div className="bg-white border border-slate-200 rounded-lg p-6">
+                          <h3 className="font-bold text-slate-900 mb-4">Documents & Services</h3>
+                          <div className="space-y-2 text-sm">
+                            <div className="flex justify-between">
+                              <span>Articles of Association</span>
+                              <span className="text-green-600 font-medium">✓ Included</span>
                             </div>
-                          </label>
+                            <div className="flex justify-between border-t border-slate-200 pt-2">
+                              <span>First Board Minutes</span>
+                              <span className="text-green-600 font-medium">✓ Included</span>
+                            </div>
+                            {formData.documents?.sharesCertificates && (
+                              <div className="flex justify-between border-t border-slate-200 pt-2">
+                                <span>Share Certificates</span>
+                                <span className="text-green-600 font-medium">✓ Selected</span>
+                              </div>
+                            )}
+                            {formData.extras?.bankingDetails && (
+                              <div className="flex justify-between border-t border-slate-200 pt-2">
+                                <span>Barclays Bank Account</span>
+                                <span className="text-green-600 font-medium">✓ Selected</span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
 
-                          <label className="flex items-start gap-3 cursor-pointer border-t border-slate-200 pt-4">
-                            <input
-                              type="checkbox"
-                              checked={formData.confirmations.authorityGiven}
-                              onChange={(e) =>
-                                setFormData({
-                                  ...formData,
-                                  confirmations: { ...formData.confirmations, authorityGiven: e.target.checked },
-                                })
-                              }
-                              className="w-4 h-4 rounded mt-1"
-                            />
-                            <div>
-                              <p className="font-medium text-slate-900">Tick to confirm that you have the explicit authority from the officers and those who benefit from the company being formed for their details and those of the company to be passed to Registered Office (UK) Ltd (trading as MYCO Limited) for the purpose of providing registered office and/or service address services, to carry out identity verification checks on them and to be contacted directly by Registered Office (UK) Ltd.</p>
-                            </div>
-                          </label>
+                        {/* Legal Confirmations */}
+                        <div className="bg-amber-50 border border-amber-200 rounded-lg p-6">
+                          <h3 className="font-bold text-slate-900 mb-4">Legal Confirmations</h3>
+                          <div className="space-y-3">
+                            <label className="flex items-start gap-3 cursor-pointer">
+                              <input
+                                type="checkbox"
+                                checked={formData.confirmations.memorandumAccepted}
+                                onChange={(e) =>
+                                  setFormData({
+                                    ...formData,
+                                    confirmations: { ...formData.confirmations, memorandumAccepted: e.target.checked },
+                                  })
+                                }
+                                className="w-4 h-4 rounded mt-1"
+                              />
+                              <span className="text-sm text-slate-900">I confirm the details of the Memorandum and Articles are correct</span>
+                            </label>
+
+                            <label className="flex items-start gap-3 cursor-pointer border-t border-amber-200 pt-3">
+                              <input
+                                type="checkbox"
+                                checked={formData.confirmations.futureActivitiesLawful}
+                                onChange={(e) =>
+                                  setFormData({
+                                    ...formData,
+                                    confirmations: { ...formData.confirmations, futureActivitiesLawful: e.target.checked },
+                                  })
+                                }
+                                className="w-4 h-4 rounded mt-1"
+                              />
+                              <span className="text-sm text-slate-900">The company will not engage in activities for which consent is required</span>
+                            </label>
+
+                            <label className="flex items-start gap-3 cursor-pointer border-t border-amber-200 pt-3">
+                              <input
+                                type="checkbox"
+                                checked={formData.confirmations.termsAccepted}
+                                onChange={(e) =>
+                                  setFormData({
+                                    ...formData,
+                                    confirmations: { ...formData.confirmations, termsAccepted: e.target.checked },
+                                  })
+                                }
+                                className="w-4 h-4 rounded mt-1"
+                              />
+                              <span className="text-sm text-slate-900">I agree to the terms and conditions</span>
+                            </label>
+
+                            <label className="flex items-start gap-3 cursor-pointer border-t border-amber-200 pt-3">
+                              <input
+                                type="checkbox"
+                                checked={formData.confirmations.authorityGiven}
+                                onChange={(e) =>
+                                  setFormData({
+                                    ...formData,
+                                    confirmations: { ...formData.confirmations, authorityGiven: e.target.checked },
+                                  })
+                                }
+                                className="w-4 h-4 rounded mt-1"
+                              />
+                              <span className="text-sm text-slate-900">I am authorized to submit this application</span>
+                            </label>
+                          </div>
                         </div>
 
                         {formData.confirmations.memorandumAccepted &&
@@ -2232,7 +2318,7 @@ export default function AdminUKCompanySetup() {
                         formData.confirmations.termsAccepted &&
                         formData.confirmations.authorityGiven ? (
                           <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-                            <p className="text-green-700 font-medium">✓ All confirmations accepted</p>
+                            <p className="text-green-700 font-medium">✓ All confirmations accepted - Ready to submit</p>
                           </div>
                         ) : (
                           <div className="p-4 bg-red-50 border border-red-200 rounded-lg">

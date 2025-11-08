@@ -219,9 +219,14 @@ export default function AdminDashboard() {
       const newUsers = users.filter(user => !selectedUsers.has(user.id));
       setUsers(newUsers);
 
-      // Remove from localStorage
+      // Remove from localStorage and mockUsers
       selectedUsers.forEach(userId => {
         localStorage.removeItem(`user_${userId}`);
+        // Also remove from mockUsers to prevent it from coming back on refresh
+        const mockIndex = mockUsers.findIndex(u => u.id === userId);
+        if (mockIndex !== -1) {
+          mockUsers.splice(mockIndex, 1);
+        }
       });
 
       setSelectedUsers(new Set());

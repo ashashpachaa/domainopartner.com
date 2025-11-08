@@ -3639,18 +3639,82 @@ export default function AdminUKCompanySetup() {
                         {amendmentTab === "shareholder" && (
                           <div className="space-y-3">
                             <h4 className="font-bold text-slate-900">Shareholder Change (SA01)</h4>
-                            <select value={shareholderAction} onChange={(e) => setShareholderAction(e.target.value as any)} className="w-full px-3 py-2 border border-slate-300 rounded text-sm">
+                            <select value={shareholderAction} onChange={(e) => {
+                              setShareholderAction(e.target.value as any);
+                              setSelectedShareholderId("");
+                              setShareholderForm({ firstName: "", lastName: "", address: "", postcode: "", city: "", country: "United Kingdom", shareAllocation: 0 });
+                            }} className="w-full px-3 py-2 border border-slate-300 rounded text-sm">
                               <option value="add">Add Shareholder</option>
                               <option value="remove">Remove Shareholder</option>
                               <option value="modify">Modify Shareholder</option>
                             </select>
-                            <input type="text" placeholder="First Name *" value={shareholderForm.firstName} onChange={(e) => setShareholderForm({...shareholderForm, firstName: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
-                            <input type="text" placeholder="Last Name *" value={shareholderForm.lastName} onChange={(e) => setShareholderForm({...shareholderForm, lastName: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
-                            <input type="text" placeholder="Address" value={shareholderForm.address} onChange={(e) => setShareholderForm({...shareholderForm, address: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
-                            <input type="text" placeholder="City" value={shareholderForm.city} onChange={(e) => setShareholderForm({...shareholderForm, city: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
-                            <input type="text" placeholder="Postcode" value={shareholderForm.postcode} onChange={(e) => setShareholderForm({...shareholderForm, postcode: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+
+                            {shareholderAction !== "add" && (
+                              <div className="bg-slate-100 p-3 rounded-lg">
+                                <label className="text-xs font-bold text-slate-700 block mb-2">Select Shareholder *</label>
+                                <select
+                                  value={selectedShareholderId}
+                                  onChange={(e) => {
+                                    const id = e.target.value;
+                                    setSelectedShareholderId(id);
+                                    if (id && shareholderAction === "modify") {
+                                      const shareholder = selectedIncorporation.shareholders.find(s => s.id === id);
+                                      if (shareholder) {
+                                        setShareholderForm({
+                                          firstName: shareholder.firstName,
+                                          lastName: shareholder.lastName,
+                                          address: shareholder.address,
+                                          postcode: shareholder.postcode,
+                                          city: shareholder.city,
+                                          country: shareholder.country,
+                                          shareAllocation: shareholder.shareAllocation,
+                                        });
+                                      }
+                                    }
+                                  }}
+                                  className="w-full px-3 py-2 border border-slate-300 rounded text-sm"
+                                >
+                                  <option value="">-- Select a shareholder --</option>
+                                  {selectedIncorporation.shareholders.map((s) => (
+                                    <option key={s.id} value={s.id}>
+                                      {s.firstName} {s.lastName} ({s.shareAllocation} shares)
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+                            )}
+
+                            {shareholderAction === "remove" && selectedShareholderId && (
+                              <div className="bg-red-50 border border-red-200 p-3 rounded-lg">
+                                <p className="text-sm text-red-800">
+                                  <span className="font-bold">Confirm removal of: </span>
+                                  {selectedIncorporation.shareholders.find(s => s.id === selectedShareholderId)?.firstName} {selectedIncorporation.shareholders.find(s => s.id === selectedShareholderId)?.lastName}
+                                </p>
+                              </div>
+                            )}
+
+                            {shareholderAction === "modify" && selectedShareholderId && (
+                              <>
+                                <label className="text-xs font-bold text-slate-700">Edit Shareholder Details</label>
+                                <input type="text" placeholder="First Name *" value={shareholderForm.firstName} onChange={(e) => setShareholderForm({...shareholderForm, firstName: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                                <input type="text" placeholder="Last Name *" value={shareholderForm.lastName} onChange={(e) => setShareholderForm({...shareholderForm, lastName: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                                <input type="text" placeholder="Address" value={shareholderForm.address} onChange={(e) => setShareholderForm({...shareholderForm, address: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                                <input type="text" placeholder="City" value={shareholderForm.city} onChange={(e) => setShareholderForm({...shareholderForm, city: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                                <input type="text" placeholder="Postcode" value={shareholderForm.postcode} onChange={(e) => setShareholderForm({...shareholderForm, postcode: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                                <input type="number" placeholder="Share Allocation" value={shareholderForm.shareAllocation} onChange={(e) => setShareholderForm({...shareholderForm, shareAllocation: parseInt(e.target.value) || 0})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                              </>
+                            )}
+
                             {shareholderAction === "add" && (
-                              <input type="number" placeholder="Share Allocation" value={shareholderForm.shareAllocation} onChange={(e) => setShareholderForm({...shareholderForm, shareAllocation: parseInt(e.target.value) || 0})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                              <>
+                                <label className="text-xs font-bold text-slate-700">New Shareholder Details</label>
+                                <input type="text" placeholder="First Name *" value={shareholderForm.firstName} onChange={(e) => setShareholderForm({...shareholderForm, firstName: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                                <input type="text" placeholder="Last Name *" value={shareholderForm.lastName} onChange={(e) => setShareholderForm({...shareholderForm, lastName: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                                <input type="text" placeholder="Address" value={shareholderForm.address} onChange={(e) => setShareholderForm({...shareholderForm, address: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                                <input type="text" placeholder="City" value={shareholderForm.city} onChange={(e) => setShareholderForm({...shareholderForm, city: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                                <input type="text" placeholder="Postcode" value={shareholderForm.postcode} onChange={(e) => setShareholderForm({...shareholderForm, postcode: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                                <input type="number" placeholder="Share Allocation *" value={shareholderForm.shareAllocation} onChange={(e) => setShareholderForm({...shareholderForm, shareAllocation: parseInt(e.target.value) || 0})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                              </>
                             )}
                           </div>
                         )}

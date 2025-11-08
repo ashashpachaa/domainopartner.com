@@ -3,7 +3,7 @@ import { RegisteredCompany } from "@/hooks/useCompanyDetails";
 import { mockUsers, mockOrders, mockStaff } from "@/lib/mockData";
 import { useCompanyIncorporationLink } from "@/hooks/useCompanyIncorporationLink";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 
 interface CompanyDetailModalProps {

@@ -330,6 +330,7 @@ export interface RegisteredCompany {
   sicCodes?: string[];
   status: "active" | "dissolved" | "liquidation" | "administration";
   fetchedAt: string; // ISO timestamp when data was fetched from Companies House
+  incorporationId?: string; // Link to CompanyIncorporation for amendment access
 }
 
 export interface CompanyForSale {

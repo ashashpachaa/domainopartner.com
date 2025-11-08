@@ -100,10 +100,21 @@ export function useCompanyNameValidation() {
   );
 
   return {
+    // Flattened properties for easy access
+    isAvailable: validationResult?.isAvailable ?? null,
+    isChecking: isValidating,
+    exactMatch: validationResult?.exactMatch ?? null,
+    similarMatch: validationResult?.similarMatch ?? null,
+    results: validationResult?.results ?? [],
+    error: validationResult?.error,
+    totalResults: validationResult?.totalResults ?? 0,
+    // Methods
+    checkCompanyName,
+    validateCompanyName,
+    validateWithDebounce: checkCompanyName, // Alias for compatibility
+    // Full result object
     validationResult,
     isValidating,
     lastValidatedName,
-    checkCompanyName,
-    validateCompanyName,
   };
 }

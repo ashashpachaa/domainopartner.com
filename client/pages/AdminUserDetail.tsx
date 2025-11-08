@@ -21,7 +21,30 @@ export default function AdminUserDetail() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<TabType>("orders");
 
-  const user = mockUsers.find((u) => u.id === userId);
+  // Load user from both mockUsers and localStorage
+  const allUsers = useMemo(() => {
+    const userMap = new Map<string, User>();
+
+    // First add all mock users
+    mockUsers.forEach(user => userMap.set(user.id, user));
+
+    // Then merge with localStorage users (overwrites mock if exists)
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key?.startsWith('user_')) {
+        try {
+          const userData = JSON.parse(localStorage.getItem(key) || '{}');
+          userMap.set(userData.id, userData);
+        } catch (e) {
+          console.error('Error parsing user from localStorage:', e);
+        }
+      }
+    }
+
+    return Array.from(userMap.values());
+  }, []);
+
+  const user = allUsers.find((u) => u.id === userId);
   const userOrders = mockOrders.filter((o) => o.userId === userId);
   const userInvoices = mockInvoices.filter((i) => i.userId === userId);
   const userLogins = mockLoginHistory.filter((l) => l.userId === userId);

@@ -50,17 +50,17 @@ export default function AdminCreateOrder() {
     const staffMap = new Map<string, any>();
 
     // First add all mock staff
-    mockStaff.forEach(staff => staffMap.set(staff.id, staff));
+    mockStaff.forEach((staff) => staffMap.set(staff.id, staff));
 
     // Then merge with localStorage staff (overwrites mock if exists)
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
-      if (key?.startsWith('staff_')) {
+      if (key?.startsWith("staff_")) {
         try {
-          const staffData = JSON.parse(localStorage.getItem(key) || '{}');
+          const staffData = JSON.parse(localStorage.getItem(key) || "{}");
           staffMap.set(staffData.id, staffData);
         } catch (e) {
-          console.error('Error parsing staff from localStorage:', e);
+          console.error("Error parsing staff from localStorage:", e);
         }
       }
     }

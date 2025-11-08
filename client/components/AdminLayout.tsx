@@ -41,47 +41,51 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   // Load users from both mockUsers and localStorage
   const allUsers = useMemo(() => {
     const userMap = new Map();
-    mockUsers.forEach(user => userMap.set(user.id, user));
+    mockUsers.forEach((user) => userMap.set(user.id, user));
 
     // Merge with localStorage
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
-      if (key?.startsWith('user_')) {
+      if (key?.startsWith("user_")) {
         try {
-          const userData = JSON.parse(localStorage.getItem(key) || '{}');
+          const userData = JSON.parse(localStorage.getItem(key) || "{}");
           // Only add if userData has a valid id
-          if (userData.id && userData.id !== 'undefined') {
+          if (userData.id && userData.id !== "undefined") {
             userMap.set(userData.id, userData);
           }
         } catch (e) {
-          console.error('Error parsing user from localStorage:', e);
+          console.error("Error parsing user from localStorage:", e);
         }
       }
     }
-    return Array.from(userMap.values()).filter(u => u.id && u.id !== 'undefined');
+    return Array.from(userMap.values()).filter(
+      (u) => u.id && u.id !== "undefined",
+    );
   }, []);
 
   // Load staff from both mockStaff and localStorage
   const allStaff = useMemo(() => {
     const staffMap = new Map();
-    mockStaff.forEach(staff => staffMap.set(staff.id, staff));
+    mockStaff.forEach((staff) => staffMap.set(staff.id, staff));
 
     // Merge with localStorage
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
-      if (key?.startsWith('staff_')) {
+      if (key?.startsWith("staff_")) {
         try {
-          const staffData = JSON.parse(localStorage.getItem(key) || '{}');
+          const staffData = JSON.parse(localStorage.getItem(key) || "{}");
           // Only add if staffData has a valid id
-          if (staffData.id && staffData.id !== 'undefined') {
+          if (staffData.id && staffData.id !== "undefined") {
             staffMap.set(staffData.id, staffData);
           }
         } catch (e) {
-          console.error('Error parsing staff from localStorage:', e);
+          console.error("Error parsing staff from localStorage:", e);
         }
       }
     }
-    return Array.from(staffMap.values()).filter(s => s.id && s.id !== 'undefined');
+    return Array.from(staffMap.values()).filter(
+      (s) => s.id && s.id !== "undefined",
+    );
   }, []);
 
   const handleLogout = () => {

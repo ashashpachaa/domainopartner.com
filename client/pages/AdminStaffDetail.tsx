@@ -1,9 +1,27 @@
 import AdminLayout from "@/components/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Edit2, Mail, Phone, MapPin, Calendar, Shield, DollarSign, Plus, TrendingUp } from "lucide-react";
+import {
+  ArrowLeft,
+  Edit2,
+  Mail,
+  Phone,
+  MapPin,
+  Calendar,
+  Shield,
+  DollarSign,
+  Plus,
+  TrendingUp,
+} from "lucide-react";
 import { useMemo } from "react";
-import { mockStaff, rolePermissions, roleLabels, mockStaffCommissions, mockStaffSalaries, mockStaffPerformances } from "@/lib/mockData";
+import {
+  mockStaff,
+  rolePermissions,
+  roleLabels,
+  mockStaffCommissions,
+  mockStaffSalaries,
+  mockStaffPerformances,
+} from "@/lib/mockData";
 
 const roleDescriptions: Record<string, string> = {
   super_admin:
@@ -16,8 +34,7 @@ const roleDescriptions: Record<string, string> = {
     "Create and manage orders, upload documents, change order status for assigned items",
   sales:
     "Create orders for clients, view client invoices, payments, and track order status",
-  accounting:
-    "View and manage invoices, payments, and billing information",
+  accounting: "View and manage invoices, payments, and billing information",
 };
 
 const permissionDescriptions: Record<string, string> = {
@@ -60,7 +77,7 @@ export default function AdminStaffDetail() {
       try {
         return JSON.parse(localStorageStaff);
       } catch (e) {
-        console.error('Error parsing staff from localStorage:', e);
+        console.error("Error parsing staff from localStorage:", e);
       }
     }
 
@@ -82,14 +99,15 @@ export default function AdminStaffDetail() {
   }
 
   const permissions = rolePermissions[member.role] || [];
-  const roleColor = {
-    super_admin: "from-red-500 to-red-600",
-    admin: "from-purple-500 to-purple-600",
-    operation_manager: "from-blue-500 to-blue-600",
-    operation: "from-green-500 to-green-600",
-    sales: "from-orange-500 to-orange-600",
-    accounting: "from-cyan-500 to-cyan-600",
-  }[member.role] || "from-slate-500 to-slate-600";
+  const roleColor =
+    {
+      super_admin: "from-red-500 to-red-600",
+      admin: "from-purple-500 to-purple-600",
+      operation_manager: "from-blue-500 to-blue-600",
+      operation: "from-green-500 to-green-600",
+      sales: "from-orange-500 to-orange-600",
+      accounting: "from-cyan-500 to-cyan-600",
+    }[member.role] || "from-slate-500 to-slate-600";
 
   return (
     <AdminLayout>
@@ -106,7 +124,9 @@ export default function AdminStaffDetail() {
         </Link>
 
         {/* Header Card */}
-        <div className={`bg-gradient-to-r ${roleColor} rounded-lg p-8 text-white`}>
+        <div
+          className={`bg-gradient-to-r ${roleColor} rounded-lg p-8 text-white`}
+        >
           <div className="flex items-start justify-between">
             <div>
               <h1 className="text-4xl font-bold mb-2">
@@ -257,8 +277,11 @@ export default function AdminStaffDetail() {
                 Workflow Permissions
               </h2>
 
-              {!member.workflowPermissions || member.workflowPermissions.length === 0 ? (
-                <p className="text-slate-600">No workflow permissions assigned</p>
+              {!member.workflowPermissions ||
+              member.workflowPermissions.length === 0 ? (
+                <p className="text-slate-600">
+                  No workflow permissions assigned
+                </p>
               ) : (
                 <div className="space-y-3">
                   {member.workflowPermissions.map((permission) => (
@@ -301,7 +324,9 @@ export default function AdminStaffDetail() {
               <div className="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
                 <p className="text-sm text-amber-900">
                   <span className="font-semibold">Assigned Stages:</span>{" "}
-                  {member.workflowPermissions?.filter((p) => p.canAccess).length || 0} of {member.workflowPermissions?.length || 0}
+                  {member.workflowPermissions?.filter((p) => p.canAccess)
+                    .length || 0}{" "}
+                  of {member.workflowPermissions?.length || 0}
                 </p>
               </div>
             </div>
@@ -388,7 +413,9 @@ export default function AdminStaffDetail() {
                             </div>
                             <div className="grid grid-cols-2 gap-4 text-sm">
                               <div>
-                                <p className="text-slate-600">Percentage Rate</p>
+                                <p className="text-slate-600">
+                                  Percentage Rate
+                                </p>
                                 <p className="font-semibold text-slate-900">
                                   {tier.percentageRate}%
                                 </p>
@@ -439,29 +466,51 @@ export default function AdminStaffDetail() {
           </div>
           {mockStaffSalaries.find((s) => s.staffId === member.id) ? (
             <div className="grid grid-cols-1 gap-4">
-              {mockStaffSalaries.filter((s) => s.staffId === member.id).map((sal) => (
-                <div key={sal.staffId}>
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <div className="p-4 bg-green-50 rounded-lg border border-green-200">
-                      <p className="text-xs font-semibold text-green-600 uppercase mb-1">Base Salary</p>
-                      <p className="text-2xl font-bold text-green-700">{sal.currency} {sal.baseSalary.toLocaleString()}</p>
-                    </div>
-                    <div className="p-4 bg-red-50 rounded-lg border border-red-200">
-                      <p className="text-xs font-semibold text-red-600 uppercase mb-1">Underperformance Deduction</p>
-                      <p className="text-2xl font-bold text-red-700">-{sal.currency} {sal.underperformanceDeduction.toLocaleString()}</p>
-                    </div>
-                    <div className="p-4 bg-orange-50 rounded-lg border border-orange-200">
-                      <p className="text-xs font-semibold text-orange-600 uppercase mb-1">Rejection Fee Deducted</p>
-                      <p className="text-2xl font-bold text-orange-700">-{sal.currency} {sal.totalRejectionFees.toLocaleString()}</p>
-                      <p className="text-xs text-orange-600 mt-2">({sal.rejectionFee.toLocaleString()} per rejection)</p>
-                    </div>
-                    <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-                      <p className="text-xs font-semibold text-blue-600 uppercase mb-1">Next Payment</p>
-                      <p className="text-lg font-bold text-blue-700">{new Date(sal.nextSalaryDate).toLocaleDateString()}</p>
+              {mockStaffSalaries
+                .filter((s) => s.staffId === member.id)
+                .map((sal) => (
+                  <div key={sal.staffId}>
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                      <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                        <p className="text-xs font-semibold text-green-600 uppercase mb-1">
+                          Base Salary
+                        </p>
+                        <p className="text-2xl font-bold text-green-700">
+                          {sal.currency} {sal.baseSalary.toLocaleString()}
+                        </p>
+                      </div>
+                      <div className="p-4 bg-red-50 rounded-lg border border-red-200">
+                        <p className="text-xs font-semibold text-red-600 uppercase mb-1">
+                          Underperformance Deduction
+                        </p>
+                        <p className="text-2xl font-bold text-red-700">
+                          -{sal.currency}{" "}
+                          {sal.underperformanceDeduction.toLocaleString()}
+                        </p>
+                      </div>
+                      <div className="p-4 bg-orange-50 rounded-lg border border-orange-200">
+                        <p className="text-xs font-semibold text-orange-600 uppercase mb-1">
+                          Rejection Fee Deducted
+                        </p>
+                        <p className="text-2xl font-bold text-orange-700">
+                          -{sal.currency}{" "}
+                          {sal.totalRejectionFees.toLocaleString()}
+                        </p>
+                        <p className="text-xs text-orange-600 mt-2">
+                          ({sal.rejectionFee.toLocaleString()} per rejection)
+                        </p>
+                      </div>
+                      <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                        <p className="text-xs font-semibold text-blue-600 uppercase mb-1">
+                          Next Payment
+                        </p>
+                        <p className="text-lg font-bold text-blue-700">
+                          {new Date(sal.nextSalaryDate).toLocaleDateString()}
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
             </div>
           ) : (
             <div className="p-6 bg-amber-50 border border-amber-200 rounded-lg">
@@ -492,22 +541,39 @@ export default function AdminStaffDetail() {
               </Button>
             </Link>
           </div>
-          {mockStaffPerformances.filter((p) => p.staffId === member.id).map((perf) => (
-            <div key={perf.staffId} className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="p-4 bg-primary-50 rounded-lg border border-primary-200">
-                <p className="text-xs font-semibold text-primary-600 uppercase mb-1">Current Score</p>
-                <p className="text-3xl font-bold text-primary-700">{perf.currentScore}/100</p>
+          {mockStaffPerformances
+            .filter((p) => p.staffId === member.id)
+            .map((perf) => (
+              <div
+                key={perf.staffId}
+                className="grid grid-cols-1 md:grid-cols-3 gap-4"
+              >
+                <div className="p-4 bg-primary-50 rounded-lg border border-primary-200">
+                  <p className="text-xs font-semibold text-primary-600 uppercase mb-1">
+                    Current Score
+                  </p>
+                  <p className="text-3xl font-bold text-primary-700">
+                    {perf.currentScore}/100
+                  </p>
+                </div>
+                <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                  <p className="text-xs font-semibold text-green-600 uppercase mb-1">
+                    Early Completions
+                  </p>
+                  <p className="text-3xl font-bold text-green-700">
+                    {perf.earlyCompletions}
+                  </p>
+                </div>
+                <div className="p-4 bg-red-50 rounded-lg border border-red-200">
+                  <p className="text-xs font-semibold text-red-600 uppercase mb-1">
+                    Rejections
+                  </p>
+                  <p className="text-3xl font-bold text-red-700">
+                    {perf.rejections}
+                  </p>
+                </div>
               </div>
-              <div className="p-4 bg-green-50 rounded-lg border border-green-200">
-                <p className="text-xs font-semibold text-green-600 uppercase mb-1">Early Completions</p>
-                <p className="text-3xl font-bold text-green-700">{perf.earlyCompletions}</p>
-              </div>
-              <div className="p-4 bg-red-50 rounded-lg border border-red-200">
-                <p className="text-xs font-semibold text-red-600 uppercase mb-1">Rejections</p>
-                <p className="text-3xl font-bold text-red-700">{perf.rejections}</p>
-              </div>
-            </div>
-          ))}
+            ))}
         </div>
       </div>
     </AdminLayout>

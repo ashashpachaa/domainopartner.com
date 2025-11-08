@@ -49,18 +49,18 @@ export default function AdminDashboard() {
     // Load all users from localStorage (they're saved with keys like "user_*")
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
-      if (key?.startsWith('user_')) {
+      if (key?.startsWith("user_")) {
         try {
-          const userData = JSON.parse(localStorage.getItem(key) || '{}');
+          const userData = JSON.parse(localStorage.getItem(key) || "{}");
           // Check if this user already exists in mockUsers
-          const existingIndex = allUsers.findIndex(u => u.id === userData.id);
+          const existingIndex = allUsers.findIndex((u) => u.id === userData.id);
           if (existingIndex >= 0) {
             allUsers[existingIndex] = userData; // Update with latest from localStorage
           } else {
             allUsers.push(userData); // Add new user from localStorage
           }
         } catch (e) {
-          console.error('Error parsing user from localStorage:', e);
+          console.error("Error parsing user from localStorage:", e);
         }
       }
     }
@@ -168,7 +168,7 @@ export default function AdminDashboard() {
   ).length;
 
   const updateUserStatus = (userId: string, newStatus: UserStatus) => {
-    const updatedUser = users.find(u => u.id === userId);
+    const updatedUser = users.find((u) => u.id === userId);
     if (updatedUser) {
       const updated = { ...updatedUser, status: newStatus };
       localStorage.setItem(`user_${userId}`, JSON.stringify(updated));
@@ -182,7 +182,7 @@ export default function AdminDashboard() {
       // Remove from localStorage
       localStorage.removeItem(`user_${userId}`);
       // Also remove from mockUsers to prevent it from coming back on refresh
-      const mockIndex = mockUsers.findIndex(u => u.id === userId);
+      const mockIndex = mockUsers.findIndex((u) => u.id === userId);
       if (mockIndex !== -1) {
         mockUsers.splice(mockIndex, 1);
       }
@@ -204,7 +204,7 @@ export default function AdminDashboard() {
     if (selectedUsers.size === filteredUsers.length) {
       setSelectedUsers(new Set());
     } else {
-      setSelectedUsers(new Set(filteredUsers.map(u => u.id)));
+      setSelectedUsers(new Set(filteredUsers.map((u) => u.id)));
     }
   };
 
@@ -214,23 +214,25 @@ export default function AdminDashboard() {
       return;
     }
 
-    const confirmMessage = `Are you sure you want to delete ${selectedUsers.size} user${selectedUsers.size > 1 ? 's' : ''}? This action cannot be undone.`;
+    const confirmMessage = `Are you sure you want to delete ${selectedUsers.size} user${selectedUsers.size > 1 ? "s" : ""}? This action cannot be undone.`;
     if (confirm(confirmMessage)) {
-      const newUsers = users.filter(user => !selectedUsers.has(user.id));
+      const newUsers = users.filter((user) => !selectedUsers.has(user.id));
       setUsers(newUsers);
 
       // Remove from localStorage and mockUsers
-      selectedUsers.forEach(userId => {
+      selectedUsers.forEach((userId) => {
         localStorage.removeItem(`user_${userId}`);
         // Also remove from mockUsers to prevent it from coming back on refresh
-        const mockIndex = mockUsers.findIndex(u => u.id === userId);
+        const mockIndex = mockUsers.findIndex((u) => u.id === userId);
         if (mockIndex !== -1) {
           mockUsers.splice(mockIndex, 1);
         }
       });
 
       setSelectedUsers(new Set());
-      toast.success(`${selectedUsers.size} user${selectedUsers.size > 1 ? 's' : ''} deleted successfully`);
+      toast.success(
+        `${selectedUsers.size} user${selectedUsers.size > 1 ? "s" : ""} deleted successfully`,
+      );
     }
   };
 
@@ -381,7 +383,8 @@ export default function AdminDashboard() {
             {selectedUsers.size > 0 && (
               <div className="flex items-center justify-between bg-blue-50 border border-blue-200 rounded-lg p-4">
                 <span className="text-sm font-medium text-blue-900">
-                  {selectedUsers.size} user{selectedUsers.size > 1 ? 's' : ''} selected
+                  {selectedUsers.size} user{selectedUsers.size > 1 ? "s" : ""}{" "}
+                  selected
                 </span>
                 <Button
                   onClick={deleteSelectedUsers}
@@ -402,7 +405,10 @@ export default function AdminDashboard() {
                       <th className="px-4 py-4 text-left">
                         <input
                           type="checkbox"
-                          checked={filteredUsers.length > 0 && selectedUsers.size === filteredUsers.length}
+                          checked={
+                            filteredUsers.length > 0 &&
+                            selectedUsers.size === filteredUsers.length
+                          }
                           onChange={selectAllUsers}
                           className="w-4 h-4 rounded border-slate-300 cursor-pointer"
                           title="Select all users"
@@ -444,7 +450,7 @@ export default function AdminDashboard() {
                       filteredUsers.map((user) => (
                         <tr
                           key={user.id}
-                          className={`hover:bg-slate-50 transition ${selectedUsers.has(user.id) ? 'bg-blue-50' : ''}`}
+                          className={`hover:bg-slate-50 transition ${selectedUsers.has(user.id) ? "bg-blue-50" : ""}`}
                         >
                           <td className="px-4 py-4">
                             <input

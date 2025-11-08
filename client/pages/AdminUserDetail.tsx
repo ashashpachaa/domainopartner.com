@@ -27,17 +27,17 @@ export default function AdminUserDetail() {
     const userMap = new Map<string, User>();
 
     // First add all mock users
-    mockUsers.forEach(user => userMap.set(user.id, user));
+    mockUsers.forEach((user) => userMap.set(user.id, user));
 
     // Then merge with localStorage users (overwrites mock if exists)
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
-      if (key?.startsWith('user_')) {
+      if (key?.startsWith("user_")) {
         try {
-          const userData = JSON.parse(localStorage.getItem(key) || '{}');
+          const userData = JSON.parse(localStorage.getItem(key) || "{}");
           userMap.set(userData.id, userData);
         } catch (e) {
-          console.error('Error parsing user from localStorage:', e);
+          console.error("Error parsing user from localStorage:", e);
         }
       }
     }
@@ -50,17 +50,17 @@ export default function AdminUserDetail() {
     const staffMap = new Map<string, any>();
 
     // First add all mock staff
-    mockStaff.forEach(staff => staffMap.set(staff.id, staff));
+    mockStaff.forEach((staff) => staffMap.set(staff.id, staff));
 
     // Then merge with localStorage staff (overwrites mock if exists)
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
-      if (key?.startsWith('staff_')) {
+      if (key?.startsWith("staff_")) {
         try {
-          const staffData = JSON.parse(localStorage.getItem(key) || '{}');
+          const staffData = JSON.parse(localStorage.getItem(key) || "{}");
           staffMap.set(staffData.id, staffData);
         } catch (e) {
-          console.error('Error parsing staff from localStorage:', e);
+          console.error("Error parsing staff from localStorage:", e);
         }
       }
     }
@@ -110,7 +110,10 @@ export default function AdminUserDetail() {
       <div className="space-y-6">
         {/* Back Button */}
         <Link to="/admin/dashboard">
-          <Button variant="ghost" className="gap-2 text-slate-600 hover:text-slate-900">
+          <Button
+            variant="ghost"
+            className="gap-2 text-slate-600 hover:text-slate-900"
+          >
             <ArrowLeft className="w-4 h-4" />
             Back to Users
           </Button>
@@ -127,14 +130,14 @@ export default function AdminUserDetail() {
               <div className="flex items-center gap-2 mb-6">
                 <span
                   className={`inline-flex px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(
-                    user.status
+                    user.status,
                   )}`}
                 >
                   {user.status}
                 </span>
                 <span
                   className={`inline-flex px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(
-                    user.subscriptionStatus
+                    user.subscriptionStatus,
                   )}`}
                 >
                   {user.subscriptionStatus}
@@ -161,7 +164,8 @@ export default function AdminUserDetail() {
                   <span>{user.whatsappNumber}</span>
                 </div>
                 <div className="text-slate-600">
-                  <span className="font-medium">Plan:</span> {user.subscriptionPlan}
+                  <span className="font-medium">Plan:</span>{" "}
+                  {user.subscriptionPlan}
                 </div>
                 <div className="text-slate-600">
                   <span className="font-medium">Website:</span>{" "}
@@ -182,22 +186,29 @@ export default function AdminUserDetail() {
                   <span className="font-medium">Last Login:</span>{" "}
                   {new Date(user.lastLogin).toLocaleDateString()}
                 </div>
-                {user.assignedToStaffId && (() => {
-                  const assignedStaff = allStaff.find(s => s.id === user.assignedToStaffId);
-                  return (
-                    <div className="col-span-1 md:col-span-2">
-                      <span className="font-medium text-slate-600">Assigned to:</span>{" "}
-                      <span className="text-slate-900 font-semibold">
-                        {assignedStaff ? `${assignedStaff.firstName} ${assignedStaff.lastName}` : 'Unknown'}
-                      </span>
-                      {assignedStaff && (
-                        <span className="text-slate-500 ml-2">
-                          ({assignedStaff.role.replace(/_/g, " ")})
+                {user.assignedToStaffId &&
+                  (() => {
+                    const assignedStaff = allStaff.find(
+                      (s) => s.id === user.assignedToStaffId,
+                    );
+                    return (
+                      <div className="col-span-1 md:col-span-2">
+                        <span className="font-medium text-slate-600">
+                          Assigned to:
+                        </span>{" "}
+                        <span className="text-slate-900 font-semibold">
+                          {assignedStaff
+                            ? `${assignedStaff.firstName} ${assignedStaff.lastName}`
+                            : "Unknown"}
                         </span>
-                      )}
-                    </div>
-                  );
-                })()}
+                        {assignedStaff && (
+                          <span className="text-slate-500 ml-2">
+                            ({assignedStaff.role.replace(/_/g, " ")})
+                          </span>
+                        )}
+                      </div>
+                    );
+                  })()}
               </div>
             </div>
 
@@ -291,7 +302,7 @@ export default function AdminUserDetail() {
                             </p>
                             <span
                               className={`inline-block mt-2 px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(
-                                order.status
+                                order.status,
                               )}`}
                             >
                               {order.status}
@@ -338,7 +349,7 @@ export default function AdminUserDetail() {
                               <p>
                                 <span className="font-medium">Issued:</span>{" "}
                                 {new Date(
-                                  invoice.issueDate
+                                  invoice.issueDate,
                                 ).toLocaleDateString()}
                               </p>
                               <p>
@@ -349,7 +360,7 @@ export default function AdminUserDetail() {
                                 <p>
                                   <span className="font-medium">Paid:</span>{" "}
                                   {new Date(
-                                    invoice.paidDate
+                                    invoice.paidDate,
                                   ).toLocaleDateString()}
                                 </p>
                               )}
@@ -362,7 +373,7 @@ export default function AdminUserDetail() {
                             </p>
                             <span
                               className={`inline-block mt-2 px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(
-                                invoice.status
+                                invoice.status,
                               )}`}
                             >
                               {invoice.status}
@@ -412,9 +423,7 @@ export default function AdminUserDetail() {
                         {userLogins.map((login) => (
                           <tr key={login.id} className="hover:bg-slate-50">
                             <td className="px-4 py-3">
-                              {new Date(
-                                login.loginTime
-                              ).toLocaleString()}
+                              {new Date(login.loginTime).toLocaleString()}
                             </td>
                             <td className="px-4 py-3 font-mono text-xs">
                               {login.ipAddress}
@@ -426,7 +435,7 @@ export default function AdminUserDetail() {
                             <td className="px-4 py-3">
                               <span
                                 className={`inline-block px-2 py-1 rounded text-xs font-semibold ${getStatusColor(
-                                  login.status
+                                  login.status,
                                 )}`}
                               >
                                 {login.status}

@@ -1,12 +1,7 @@
 import AdminLayout from "@/components/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import {
-  ArrowLeft,
-  DollarSign,
-  AlertTriangle,
-  Info,
-} from "lucide-react";
+import { ArrowLeft, DollarSign, AlertTriangle, Info } from "lucide-react";
 import { useState, useMemo } from "react";
 import {
   mockStaff,
@@ -97,7 +92,7 @@ export default function AdminStaffSalary() {
       try {
         return JSON.parse(localStorageStaff);
       } catch (e) {
-        console.error('Error parsing staff from localStorage:', e);
+        console.error("Error parsing staff from localStorage:", e);
       }
     }
     return mockStaff.find((s) => s.id === staffId);
@@ -115,8 +110,10 @@ export default function AdminStaffSalary() {
       rejectionFee: 50,
       totalRejectionFees: 0,
       lastSalaryDate: new Date().toISOString().split("T")[0],
-      nextSalaryDate: new Date(new Date().getTime() + 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
-    }
+      nextSalaryDate: new Date(new Date().getTime() + 30 * 24 * 60 * 60 * 1000)
+        .toISOString()
+        .split("T")[0],
+    },
   );
 
   if (!staff) {
@@ -136,7 +133,8 @@ export default function AdminStaffSalary() {
     navigate(`/admin/staff/${staffId}`);
   };
 
-  const currencySymbol = currencySymbols[formData.currency] || formData.currency;
+  const currencySymbol =
+    currencySymbols[formData.currency] || formData.currency;
 
   // Get current month and bonuses for this staff
   const today = new Date();
@@ -154,7 +152,7 @@ export default function AdminStaffSalary() {
   }, [staffId]);
 
   const currentMonthBonus = staffBonuses.find(
-    (b) => b.month === currentMonth && b.year === currentYear
+    (b) => b.month === currentMonth && b.year === currentYear,
   );
 
   const totalBonusesEarned = staffBonuses
@@ -170,7 +168,10 @@ export default function AdminStaffSalary() {
       <div className="space-y-6">
         {/* Back Button */}
         <Link to={`/admin/staff/${staffId}`}>
-          <Button variant="ghost" className="gap-2 text-slate-600 hover:text-slate-900">
+          <Button
+            variant="ghost"
+            className="gap-2 text-slate-600 hover:text-slate-900"
+          >
             <ArrowLeft className="w-4 h-4" />
             Back to Staff Detail
           </Button>
@@ -320,7 +321,8 @@ export default function AdminStaffSalary() {
                     onChange={(e) =>
                       setFormData({
                         ...formData,
-                        underperformanceDeduction: parseFloat(e.target.value) || 0,
+                        underperformanceDeduction:
+                          parseFloat(e.target.value) || 0,
                       })
                     }
                     placeholder="0.00"
@@ -331,7 +333,8 @@ export default function AdminStaffSalary() {
                   </span>
                 </div>
                 <p className="text-xs text-slate-500 mt-2">
-                  Amount to deduct from salary when performance is below threshold
+                  Amount to deduct from salary when performance is below
+                  threshold
                 </p>
               </div>
 
@@ -349,7 +352,10 @@ export default function AdminStaffSalary() {
                     onChange={(e) =>
                       setFormData({
                         ...formData,
-                        underperformanceThreshold: Math.min(100, Math.max(0, parseFloat(e.target.value) || 0)),
+                        underperformanceThreshold: Math.min(
+                          100,
+                          Math.max(0, parseFloat(e.target.value) || 0),
+                        ),
                       })
                     }
                     className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:border-primary-600 focus:ring-1 focus:ring-primary-600"
@@ -367,10 +373,15 @@ export default function AdminStaffSalary() {
             {/* Example Calculation */}
             <div className="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
               <p className="text-sm text-amber-900">
-                <span className="font-semibold">Example:</span> If performance score falls below{" "}
-                <span className="font-semibold">{formData.underperformanceThreshold}</span>, a deduction of{" "}
+                <span className="font-semibold">Example:</span> If performance
+                score falls below{" "}
                 <span className="font-semibold">
-                  {currencySymbol}{formData.underperformanceDeduction.toLocaleString()}
+                  {formData.underperformanceThreshold}
+                </span>
+                , a deduction of{" "}
+                <span className="font-semibold">
+                  {currencySymbol}
+                  {formData.underperformanceDeduction.toLocaleString()}
                 </span>{" "}
                 will be applied to the monthly salary.
               </p>
@@ -436,12 +447,16 @@ export default function AdminStaffSalary() {
             {/* Rejection Fee Info */}
             <div className="mt-6 p-4 bg-orange-50 border border-orange-200 rounded-lg">
               <p className="text-sm text-orange-900">
-                <span className="font-semibold">How it works:</span> When an order review is rejected by any role, a fee of{" "}
+                <span className="font-semibold">How it works:</span> When an
+                order review is rejected by any role, a fee of{" "}
                 <span className="font-semibold">
-                  {currencySymbol}{formData.rejectionFee.toLocaleString()}
+                  {currencySymbol}
+                  {formData.rejectionFee.toLocaleString()}
                 </span>{" "}
-                is deducted from the staff member's salary. Multiple rejections result in cumulative deductions.
-                Additionally, <span className="font-semibold">-10 performance points</span> are also applied per rejection.
+                is deducted from the staff member's salary. Multiple rejections
+                result in cumulative deductions. Additionally,{" "}
+                <span className="font-semibold">-10 performance points</span>{" "}
+                are also applied per rejection.
               </p>
             </div>
           </div>
@@ -514,7 +529,8 @@ export default function AdminStaffSalary() {
                     This Month's Bonus
                   </p>
                   <p className="text-3xl font-bold text-amber-900 mt-2">
-                    {currencySymbols[currentMonthBonus.currency] || currentMonthBonus.currency}
+                    {currencySymbols[currentMonthBonus.currency] ||
+                      currentMonthBonus.currency}
                     {currentMonthBonus.bonusAmount.toLocaleString()}
                   </p>
                 </div>
@@ -542,7 +558,9 @@ export default function AdminStaffSalary() {
                 <p className="text-sm text-amber-800">
                   <span className="font-semibold">Status:</span>{" "}
                   {currentMonthBonus.status === "earned" ? (
-                    <span className="text-amber-700">Earned (Pending Payment)</span>
+                    <span className="text-amber-700">
+                      Earned (Pending Payment)
+                    </span>
                   ) : (
                     <span className="text-green-700">✓ Paid</span>
                   )}
@@ -552,7 +570,8 @@ export default function AdminStaffSalary() {
           ) : (
             <div className="bg-slate-50 border border-slate-200 rounded-lg p-6 text-center">
               <p className="text-slate-600">
-                No bonus earned this month. Maintain a performance score of 85+ to qualify for bonuses.
+                No bonus earned this month. Maintain a performance score of 85+
+                to qualify for bonuses.
               </p>
             </div>
           )}
@@ -560,7 +579,9 @@ export default function AdminStaffSalary() {
           {/* Bonus History */}
           {staffBonuses.length > 0 && (
             <div>
-              <h3 className="text-lg font-bold text-slate-900 mb-4">Bonus History</h3>
+              <h3 className="text-lg font-bold text-slate-900 mb-4">
+                Bonus History
+              </h3>
               <div className="space-y-3">
                 {staffBonuses.slice(0, 5).map((bonus) => (
                   <div
@@ -571,7 +592,7 @@ export default function AdminStaffSalary() {
                       <p className="font-semibold text-slate-900">
                         {new Date(bonus.year, bonus.month - 1).toLocaleString(
                           "default",
-                          { month: "long", year: "numeric" }
+                          { month: "long", year: "numeric" },
                         )}
                       </p>
                       <p className="text-sm text-slate-600">
@@ -689,9 +710,7 @@ export default function AdminStaffSalary() {
               </div>
             )}
             <div className="flex justify-between items-center text-red-700">
-              <p className="text-lg font-semibold">
-                - Rejection Fees:
-              </p>
+              <p className="text-lg font-semibold">- Rejection Fees:</p>
               <p className="text-2xl font-bold text-red-600">
                 -{currencySymbol}
                 {formData.totalRejectionFees.toLocaleString()}
@@ -717,7 +736,9 @@ export default function AdminStaffSalary() {
                 {(
                   formData.baseSalary -
                   formData.totalRejectionFees -
-                  (formData.underperformanceDeduction > 0 ? formData.underperformanceDeduction : 0) +
+                  (formData.underperformanceDeduction > 0
+                    ? formData.underperformanceDeduction
+                    : 0) +
                   (currentMonthBonus?.bonusAmount || 0)
                 ).toLocaleString()}
               </p>

@@ -29,7 +29,7 @@ export default function AdminStaffCommission() {
       try {
         return JSON.parse(localStorageStaff);
       } catch (e) {
-        console.error('Error parsing staff from localStorage:', e);
+        console.error("Error parsing staff from localStorage:", e);
       }
     }
     return mockStaff.find((s) => s.id === staffId);
@@ -40,9 +40,7 @@ export default function AdminStaffCommission() {
   const [isEditingTier, setIsEditingTier] = useState(false);
   const [editingTierId, setEditingTierId] = useState<string | null>(null);
   const [currency, setCurrency] = useState(commission?.currency || "USD");
-  const [tiers, setTiers] = useState<CommissionTier[]>(
-    commission?.tiers || []
-  );
+  const [tiers, setTiers] = useState<CommissionTier[]>(commission?.tiers || []);
 
   const [formData, setFormData] = useState<Partial<CommissionTier>>({
     orderCountMin: 1,
@@ -84,9 +82,7 @@ export default function AdminStaffCommission() {
       };
 
       if (editingTierId) {
-        setTiers(
-          tiers.map((t) => (t.id === editingTierId ? newTier : t))
-        );
+        setTiers(tiers.map((t) => (t.id === editingTierId ? newTier : t)));
         setEditingTierId(null);
       } else {
         setTiers([...tiers, newTier]);
@@ -122,7 +118,10 @@ export default function AdminStaffCommission() {
       <div className="space-y-6">
         {/* Back Button */}
         <Link to={`/admin/staff/${staffId}`}>
-          <Button variant="ghost" className="gap-2 text-slate-600 hover:text-slate-900">
+          <Button
+            variant="ghost"
+            className="gap-2 text-slate-600 hover:text-slate-900"
+          >
             <ArrowLeft className="w-4 h-4" />
             Back to Staff Detail
           </Button>
@@ -142,8 +141,8 @@ export default function AdminStaffCommission() {
                 </span>
               </p>
               <p className="text-sm text-slate-500">
-                Set up tiered commissions based on order count. Each tier applies when
-                the staff member reaches the order count threshold.
+                Set up tiered commissions based on order count. Each tier
+                applies when the staff member reaches the order count threshold.
               </p>
             </div>
           </div>
@@ -399,7 +398,9 @@ export default function AdminStaffCommission() {
           <div className="divide-y divide-slate-200">
             {tiers.length === 0 ? (
               <div className="px-8 py-12 text-center">
-                <p className="text-slate-600">No commission tiers configured yet</p>
+                <p className="text-slate-600">
+                  No commission tiers configured yet
+                </p>
                 <p className="text-sm text-slate-500 mt-1">
                   Add your first tier to get started
                 </p>
@@ -468,18 +469,25 @@ export default function AdminStaffCommission() {
               Example Commission Calculation
             </h3>
             <p className="text-sm text-blue-800 mb-4">
-              Commission is calculated as: <span className="font-semibold">(Invoice Amount × Percentage Rate) + Fixed Amount</span>
+              Commission is calculated as:{" "}
+              <span className="font-semibold">
+                (Invoice Amount × Percentage Rate) + Fixed Amount
+              </span>
             </p>
             <div className="bg-white rounded p-4 space-y-3">
               <p className="text-sm text-slate-700">
-                <span className="font-semibold">Example:</span> If a staff member has 8 orders and closes a {currency}1,000 invoice:
+                <span className="font-semibold">Example:</span> If a staff
+                member has 8 orders and closes a {currency}1,000 invoice:
               </p>
               {tiers[0] && (
                 <p className="text-sm text-slate-700 ml-4">
                   Commission = ({currency}1,000 × {tiers[0].percentageRate}%) +{" "}
                   {currency}
                   {tiers[0].fixedAmount} = {currency}
-                  {(1000 * (tiers[0].percentageRate / 100) + tiers[0].fixedAmount).toFixed(2)}
+                  {(
+                    1000 * (tiers[0].percentageRate / 100) +
+                    tiers[0].fixedAmount
+                  ).toFixed(2)}
                 </p>
               )}
             </div>

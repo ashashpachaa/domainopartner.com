@@ -32,6 +32,7 @@ export default function AdminDashboard() {
   );
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState<UserStatus | "all">("all");
+  const [users, setUsers] = useState<User[]>(mockUsers);
   const [clientRequests, setClientRequests] = useState(mockClientRequests);
   const [clientSearchTerm, setClientSearchTerm] = useState("");
   const [clientFilterStatus, setClientFilterStatus] = useState<
@@ -40,8 +41,8 @@ export default function AdminDashboard() {
   const [notificationDismissed, setNotificationDismissed] = useState(false);
   const [showNotificationToast, setShowNotificationToast] = useState(false);
 
-  // Load users from both mock data and localStorage
-  const users = useMemo(() => {
+  // Load users from both mock data and localStorage when component mounts
+  useEffect(() => {
     const allUsers = [...mockUsers];
 
     // Load all users from localStorage (they're saved with keys like "user_*")
@@ -51,8 +52,11 @@ export default function AdminDashboard() {
         try {
           const userData = JSON.parse(localStorage.getItem(key) || '{}');
           // Check if this user already exists in mockUsers
-          if (!allUsers.find(u => u.id === userData.id)) {
-            allUsers.push(userData);
+          const existingIndex = allUsers.findIndex(u => u.id === userData.id);
+          if (existingIndex >= 0) {
+            allUsers[existingIndex] = userData; // Update with latest from localStorage
+          } else {
+            allUsers.push(userData); // Add new user from localStorage
           }
         } catch (e) {
           console.error('Error parsing user from localStorage:', e);
@@ -60,7 +64,7 @@ export default function AdminDashboard() {
       }
     }
 
-    return allUsers;
+    setUsers(allUsers);
   }, []);
 
   // Load client requests from both mock data and localStorage

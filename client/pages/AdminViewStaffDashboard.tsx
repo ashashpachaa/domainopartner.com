@@ -3,11 +3,24 @@ import AdminLayout from "@/components/AdminLayout";
 import { mockStaff, mockOrders } from "@/lib/mockData";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Mail, Calendar, Building2, Clock } from "lucide-react";
+import { useMemo } from "react";
 
 export default function AdminViewStaffDashboard() {
   const { staffId } = useParams();
   const navigate = useNavigate();
-  const staff = mockStaff.find((s) => s.id === staffId);
+
+  // Load staff from localStorage first, then fallback to mockStaff
+  const staff = useMemo(() => {
+    const localStorageStaff = localStorage.getItem(`staff_${staffId}`);
+    if (localStorageStaff) {
+      try {
+        return JSON.parse(localStorageStaff);
+      } catch (e) {
+        console.error('Error parsing staff from localStorage:', e);
+      }
+    }
+    return mockStaff.find((s) => s.id === staffId);
+  }, [staffId]);
 
   if (!staff) {
     return (

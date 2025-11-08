@@ -199,7 +199,7 @@ export default function ClientDashboard() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-6">
-            {mockProducts.slice(0, 6).map((product) => (
+            {products.slice(0, 6).map((product) => (
               <div key={product.id} className="p-4 border border-slate-200 rounded-lg hover:shadow-md transition cursor-pointer" onClick={() => navigate(`/client/orders/new?productId=${product.id}`)}>
                 <h3 className="font-semibold text-slate-900 mb-1">{product.name}</h3>
                 <p className="text-xs text-slate-600 mb-3 line-clamp-2">{product.description}</p>

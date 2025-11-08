@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { mockOrders, mockProducts, Shareholder } from "@/lib/mockData";
 import ClientLayout from "@/components/ClientLayout";
@@ -22,6 +22,19 @@ export default function ClientCreateOrder() {
   const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
 
   const companyValidation = useCompanyNameValidation();
+
+  // Load products from localStorage (admin updates) or fall back to mockProducts
+  const products = useMemo(() => {
+    const storedProducts = localStorage.getItem("products");
+    if (storedProducts) {
+      try {
+        return JSON.parse(storedProducts);
+      } catch {
+        return mockProducts;
+      }
+    }
+    return mockProducts;
+  }, []);
 
   const [formData, setFormData] = useState({
     description: "",

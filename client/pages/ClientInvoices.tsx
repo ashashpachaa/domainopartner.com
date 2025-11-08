@@ -287,6 +287,171 @@ export default function ClientInvoices() {
             </div>
           </div>
         )}
+
+        {/* Invoice Detail Modal */}
+        {showInvoiceDetail && selectedInvoice && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-lg">
+              {/* Header */}
+              <div className="flex items-center justify-between p-6 border-b border-slate-200 sticky top-0 bg-white">
+                <h2 className="text-2xl font-bold text-slate-900">
+                  Invoice {selectedInvoice.id}
+                </h2>
+                <button
+                  onClick={() => {
+                    setShowInvoiceDetail(false);
+                    setSelectedInvoice(null);
+                  }}
+                  className="text-slate-500 hover:text-slate-700"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+
+              {/* Content */}
+              <div className="p-6 space-y-6">
+                {/* Invoice Details */}
+                <div className="grid grid-cols-2 gap-6">
+                  <div>
+                    <p className="text-sm text-slate-600 mb-1">Invoice Number</p>
+                    <p className="font-semibold text-slate-900">
+                      {selectedInvoice.invoiceNumber}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-slate-600 mb-1">Status</p>
+                    <span
+                      className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(selectedInvoice.status)}`}
+                    >
+                      {selectedInvoice.status.charAt(0).toUpperCase() +
+                        selectedInvoice.status.slice(1)}
+                    </span>
+                  </div>
+                  <div>
+                    <p className="text-sm text-slate-600 mb-1">Issue Date</p>
+                    <p className="font-semibold text-slate-900">
+                      {selectedInvoice.createdAt
+                        ? new Date(selectedInvoice.createdAt).toLocaleDateString()
+                        : "N/A"}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-slate-600 mb-1">Due Date</p>
+                    <p className="font-semibold text-slate-900">
+                      {selectedInvoice.dueDate
+                        ? new Date(selectedInvoice.dueDate).toLocaleDateString()
+                        : "N/A"}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Description */}
+                {selectedInvoice.description && (
+                  <div className="bg-slate-50 rounded-lg p-4">
+                    <p className="text-sm text-slate-600 mb-2">Description</p>
+                    <p className="text-slate-900">{selectedInvoice.description}</p>
+                  </div>
+                )}
+
+                {/* Items */}
+                {selectedInvoice.items && selectedInvoice.items.length > 0 && (
+                  <div>
+                    <p className="text-sm font-semibold text-slate-900 mb-3">
+                      Invoice Items
+                    </p>
+                    <div className="border border-slate-200 rounded-lg overflow-hidden">
+                      <table className="w-full">
+                        <thead className="bg-slate-50 border-b border-slate-200">
+                          <tr>
+                            <th className="px-4 py-3 text-left text-xs font-semibold text-slate-900">
+                              Description
+                            </th>
+                            <th className="px-4 py-3 text-right text-xs font-semibold text-slate-900">
+                              Quantity
+                            </th>
+                            <th className="px-4 py-3 text-right text-xs font-semibold text-slate-900">
+                              Unit Price
+                            </th>
+                            <th className="px-4 py-3 text-right text-xs font-semibold text-slate-900">
+                              Total
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-200">
+                          {selectedInvoice.items.map((item, idx) => (
+                            <tr key={idx}>
+                              <td className="px-4 py-3 text-slate-900">
+                                {item.description}
+                              </td>
+                              <td className="px-4 py-3 text-right text-slate-900">
+                                {item.quantity}
+                              </td>
+                              <td className="px-4 py-3 text-right text-slate-900">
+                                {selectedInvoice.currency}{" "}
+                                {item.unitPrice.toLocaleString()}
+                              </td>
+                              <td className="px-4 py-3 text-right font-semibold text-slate-900">
+                                {selectedInvoice.currency}{" "}
+                                {(item.quantity * item.unitPrice).toLocaleString()}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
+
+                {/* Total Amount */}
+                <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                  <div className="flex items-center justify-between">
+                    <span className="text-lg font-semibold text-slate-900">
+                      Total Amount
+                    </span>
+                    <span className="text-2xl font-bold text-blue-600">
+                      {selectedInvoice.currency} {selectedInvoice.amount}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Payment Info */}
+                {selectedInvoice.status === "paid" && selectedInvoice.paidDate && (
+                  <div className="bg-green-50 rounded-lg p-4 border border-green-200">
+                    <p className="text-sm text-green-700 mb-1">Payment Date</p>
+                    <p className="font-semibold text-green-900">
+                      {new Date(selectedInvoice.paidDate).toLocaleDateString()}
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* Footer Actions */}
+              <div className="flex items-center justify-end gap-3 p-6 border-t border-slate-200 sticky bottom-0 bg-white">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setShowInvoiceDetail(false);
+                    setSelectedInvoice(null);
+                  }}
+                >
+                  Close
+                </Button>
+                <Button
+                  className="bg-primary-600 hover:bg-primary-700"
+                  onClick={() => {
+                    const link = document.createElement("a");
+                    link.href = selectedInvoice.pdfUrl || "#";
+                    link.download = `${selectedInvoice.id}.pdf`;
+                    link.click();
+                  }}
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  Download PDF
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </ClientLayout>
   );

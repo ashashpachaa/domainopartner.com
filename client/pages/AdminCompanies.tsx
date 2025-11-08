@@ -608,6 +608,115 @@ export default function AdminCompanies() {
           onClose={() => setShowDetailModal(false)}
         />
       )}
+
+      {/* List Company Modal */}
+      <Dialog open={showListCompanyModal} onOpenChange={setShowListCompanyModal}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>List Company for Sale</DialogTitle>
+            <DialogDescription>
+              List {selectedCompanyToList?.companyName} on the Companies For Sale marketplace
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-6 py-4">
+            {selectedCompanyToList && (
+              <div className="bg-slate-50 border border-slate-200 rounded-lg p-4">
+                <h3 className="font-semibold text-slate-900 mb-3">Company Details</h3>
+                <div className="grid grid-cols-2 gap-3 text-sm">
+                  <div>
+                    <p className="text-slate-600">Company Name</p>
+                    <p className="font-semibold text-slate-900">{selectedCompanyToList.companyName}</p>
+                  </div>
+                  <div>
+                    <p className="text-slate-600">Company Number</p>
+                    <p className="font-mono text-slate-900">{selectedCompanyToList.companyNumber}</p>
+                  </div>
+                  <div>
+                    <p className="text-slate-600">Incorporation Date</p>
+                    <p className="text-slate-900">{formatDate(selectedCompanyToList.incorporationDate)}</p>
+                  </div>
+                  <div>
+                    <p className="text-slate-600">Status</p>
+                    <p className="text-slate-900 capitalize">{selectedCompanyToList.status}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Asking Price (£) <span className="text-red-600">*</span>
+                </label>
+                <input
+                  type="number"
+                  value={askingPrice}
+                  onChange={(e) => setAskingPrice(parseInt(e.target.value) || 0)}
+                  placeholder="e.g., 5000"
+                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  min="0"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Business Type <span className="text-red-600">*</span>
+                </label>
+                <select
+                  value={businessType}
+                  onChange={(e) => setBusinessType(e.target.value)}
+                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                >
+                  <option value="">Select business type...</option>
+                  <option value="Service">Service Business</option>
+                  <option value="Retail">Retail</option>
+                  <option value="Technology">Technology</option>
+                  <option value="Finance">Finance</option>
+                  <option value="Healthcare">Healthcare</option>
+                  <option value="Manufacturing">Manufacturing</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Reason for Sale
+                </label>
+                <textarea
+                  value={reason}
+                  onChange={(e) => setReason(e.target.value)}
+                  placeholder="e.g., Business expansion, Change in direction..."
+                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  rows={3}
+                />
+              </div>
+            </div>
+          </div>
+
+          <DialogFooter className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={() => {
+                setShowListCompanyModal(false);
+                setSelectedCompanyToList(null);
+                setAskingPrice(0);
+                setBusinessType("");
+                setReason("");
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleListCompany}
+              className="bg-green-600 hover:bg-green-700"
+            >
+              <TrendingUp className="w-4 h-4 mr-2" />
+              List for Sale
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </AdminLayout>
   );
 }

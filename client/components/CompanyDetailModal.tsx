@@ -23,22 +23,26 @@ export default function CompanyDetailModal({
 
   // Load amendments on mount or when company changes
   useEffect(() => {
-    // Try to get amendments from linked incorporation first
-    const linkedAmendments = getAmendmentHistory(company);
-    if (linkedAmendments.length > 0) {
-      setAmendments(linkedAmendments);
-      return;
-    }
+    try {
+      // First, try to get amendments from linked incorporation
+      const linkedAmendments = getAmendmentHistory(company);
 
-    // Fallback: check if amendments are stored directly on the company in localStorage
-    const storedAmendments = localStorage.getItem(`amendments_${company.companyNumber}`);
-    if (storedAmendments) {
-      try {
-        const parsed = JSON.parse(storedAmendments);
-        setAmendments(parsed);
-      } catch (e) {
-        console.error("Error parsing amendments from localStorage:", e);
-      }
+      // Then, also check localStorage for any amendments stored there
+      const storedAmendmentsStr = localStorage.getItem(`amendments_${company.companyNumber}`);
+      const storedAmendments = storedAmendmentsStr ? JSON.parse(storedAmendmentsStr) : [];
+
+      // Combine both sources (linked amendments and stored amendments)
+      const allAmendments = [...linkedAmendments, ...storedAmendments];
+
+      // Remove duplicates by ID
+      const uniqueAmendments = Array.from(
+        new Map(allAmendments.map((item) => [item.id, item])).values()
+      );
+
+      setAmendments(uniqueAmendments.sort((a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime()));
+    } catch (e) {
+      console.error("Error loading amendments:", e);
+      setAmendments([]);
     }
   }, [company.companyNumber]);
 

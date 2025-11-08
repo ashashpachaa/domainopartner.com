@@ -1,6 +1,14 @@
 import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { mockOrders, mockStaff, mockUsers, mockInvoices, mockStaffSalaries, mockStaffPerformances, mockStaffBonuses } from "@/lib/mockData";
+import {
+  mockOrders,
+  mockStaff,
+  mockUsers,
+  mockInvoices,
+  mockStaffSalaries,
+  mockStaffPerformances,
+  mockStaffBonuses,
+} from "@/lib/mockData";
 import AdminLayout from "@/components/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -35,13 +43,19 @@ export default function StaffDashboard() {
   }
 
   // Find staff record to get role
-  const currentStaff = mockStaff.find((s) => s.id === currentUser.id || s.email === currentUser.email);
+  const currentStaff = mockStaff.find(
+    (s) => s.id === currentUser.id || s.email === currentUser.email,
+  );
   if (!currentStaff) {
     return (
       <AdminLayout>
         <div className="p-8">
-          <h1 className="text-2xl font-bold text-red-600">Staff member not found</h1>
-          <p className="text-slate-600 mt-2">Your account is not linked to a staff record. Please contact admin.</p>
+          <h1 className="text-2xl font-bold text-red-600">
+            Staff member not found
+          </h1>
+          <p className="text-slate-600 mt-2">
+            Your account is not linked to a staff record. Please contact admin.
+          </p>
         </div>
       </AdminLayout>
     );
@@ -88,7 +102,10 @@ function SalesDashboard({ staff }: { staff: any }) {
           const orderData = localStorage.getItem(key);
           if (orderData) {
             const order = JSON.parse(orderData);
-            if (order.assignedToSalesId === staff.id && !orders.some((o) => o.id === order.id)) {
+            if (
+              order.assignedToSalesId === staff.id &&
+              !orders.some((o) => o.id === order.id)
+            ) {
               orders.push(order);
             }
           }
@@ -103,7 +120,8 @@ function SalesDashboard({ staff }: { staff: any }) {
       orders = orders.filter((o) => {
         if (filterStatus === "pending") return o.status.includes("pending");
         if (filterStatus === "completed") return o.status.includes("completed");
-        if (filterStatus === "review") return o.status === "awaiting_client_acceptance";
+        if (filterStatus === "review")
+          return o.status === "awaiting_client_acceptance";
         return true;
       });
     }
@@ -114,11 +132,16 @@ function SalesDashboard({ staff }: { staff: any }) {
       orders = orders.filter((o) => {
         const client = mockUsers.find((u) => u.id === o.userId);
         if (!client) return false;
-        return `${client.firstName} ${client.lastName}`.toLowerCase().includes(searchLower);
+        return `${client.firstName} ${client.lastName}`
+          .toLowerCase()
+          .includes(searchLower);
       });
     }
 
-    return orders.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    return orders.sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    );
   }, [staff.id, filterStatus, searchClient]);
 
   const currentMonthBonus = useMemo(() => {
@@ -127,16 +150,20 @@ function SalesDashboard({ staff }: { staff: any }) {
       (b) =>
         b.staffId === staff.id &&
         b.month === today.getMonth() + 1 &&
-        b.year === today.getFullYear()
+        b.year === today.getFullYear(),
     );
   }, [staff.id]);
 
   const stats = useMemo(() => {
     return {
       total: assignedOrders.length,
-      pending: assignedOrders.filter((o) => o.status.includes("pending")).length,
-      awaitingReview: assignedOrders.filter((o) => o.status === "awaiting_client_acceptance").length,
-      completed: assignedOrders.filter((o) => o.status.includes("completed")).length,
+      pending: assignedOrders.filter((o) => o.status.includes("pending"))
+        .length,
+      awaitingReview: assignedOrders.filter(
+        (o) => o.status === "awaiting_client_acceptance",
+      ).length,
+      completed: assignedOrders.filter((o) => o.status.includes("completed"))
+        .length,
       revenue: assignedOrders.reduce((sum, o) => sum + (o.amount || 0), 0),
     };
   }, [assignedOrders]);
@@ -147,21 +174,53 @@ function SalesDashboard({ staff }: { staff: any }) {
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900">Sales Dashboard</h1>
-            <p className="text-slate-600 mt-1">Welcome back, {staff.firstName} {staff.lastName}</p>
+            <h1 className="text-3xl font-bold text-slate-900">
+              Sales Dashboard
+            </h1>
+            <p className="text-slate-600 mt-1">
+              Welcome back, {staff.firstName} {staff.lastName}
+            </p>
           </div>
-          <Button onClick={() => navigate("/admin/operations/new")} className="bg-blue-600 hover:bg-blue-700">
+          <Button
+            onClick={() => navigate("/admin/operations/new")}
+            className="bg-blue-600 hover:bg-blue-700"
+          >
             <Zap className="w-4 h-4 mr-2" /> Create New Order
           </Button>
         </div>
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-6 gap-4 mb-8">
-          <StatCard icon={Briefcase} label="Total Orders" value={stats.total} color="blue" />
-          <StatCard icon={Clock} label="Pending" value={stats.pending} color="yellow" />
-          <StatCard icon={Eye} label="Awaiting Review" value={stats.awaitingReview} color="purple" />
-          <StatCard icon={CheckCircle} label="Completed" value={stats.completed} color="green" />
-          <StatCard icon={DollarSign} label="Revenue" value={`$${(stats.revenue / 1000).toFixed(1)}K`} color="emerald" />
+          <StatCard
+            icon={Briefcase}
+            label="Total Orders"
+            value={stats.total}
+            color="blue"
+          />
+          <StatCard
+            icon={Clock}
+            label="Pending"
+            value={stats.pending}
+            color="yellow"
+          />
+          <StatCard
+            icon={Eye}
+            label="Awaiting Review"
+            value={stats.awaitingReview}
+            color="purple"
+          />
+          <StatCard
+            icon={CheckCircle}
+            label="Completed"
+            value={stats.completed}
+            color="green"
+          />
+          <StatCard
+            icon={DollarSign}
+            label="Revenue"
+            value={`$${(stats.revenue / 1000).toFixed(1)}K`}
+            color="emerald"
+          />
           {currentMonthBonus && currentMonthBonus.bonusAmount > 0 ? (
             <StatCard
               icon={TrendingUp}
@@ -182,8 +241,10 @@ function SalesDashboard({ staff }: { staff: any }) {
         {/* Orders Table */}
         <div className="bg-white rounded-lg border border-slate-200 shadow-sm">
           <div className="p-6 border-b border-slate-200">
-            <h2 className="text-xl font-bold text-slate-900 mb-4">Your Client Orders</h2>
-            
+            <h2 className="text-xl font-bold text-slate-900 mb-4">
+              Your Client Orders
+            </h2>
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <Input
                 placeholder="Search client name..."
@@ -208,12 +269,24 @@ function SalesDashboard({ staff }: { staff: any }) {
             <table className="w-full">
               <thead className="bg-slate-50 border-b border-slate-200">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-slate-700 uppercase">Order</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-slate-700 uppercase">Client</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-slate-700 uppercase">Service</th>
-                  <th className="px-6 py-3 text-center text-xs font-bold text-slate-700 uppercase">Status</th>
-                  <th className="px-6 py-3 text-right text-xs font-bold text-slate-700 uppercase">Amount</th>
-                  <th className="px-6 py-3 text-center text-xs font-bold text-slate-700 uppercase">Actions</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-slate-700 uppercase">
+                    Order
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-slate-700 uppercase">
+                    Client
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-slate-700 uppercase">
+                    Service
+                  </th>
+                  <th className="px-6 py-3 text-center text-xs font-bold text-slate-700 uppercase">
+                    Status
+                  </th>
+                  <th className="px-6 py-3 text-right text-xs font-bold text-slate-700 uppercase">
+                    Amount
+                  </th>
+                  <th className="px-6 py-3 text-center text-xs font-bold text-slate-700 uppercase">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200">
@@ -227,11 +300,21 @@ function SalesDashboard({ staff }: { staff: any }) {
                         : "bg-yellow-100 text-yellow-800";
                   return (
                     <tr key={order.id} className="hover:bg-slate-50">
-                      <td className="px-6 py-4 font-mono text-sm text-slate-900">{order.orderNumber}</td>
-                      <td className="px-6 py-4 text-slate-900">{client ? `${client.firstName} ${client.lastName}` : "Unknown"}</td>
-                      <td className="px-6 py-4 text-slate-600">{order.serviceType}</td>
+                      <td className="px-6 py-4 font-mono text-sm text-slate-900">
+                        {order.orderNumber}
+                      </td>
+                      <td className="px-6 py-4 text-slate-900">
+                        {client
+                          ? `${client.firstName} ${client.lastName}`
+                          : "Unknown"}
+                      </td>
+                      <td className="px-6 py-4 text-slate-600">
+                        {order.serviceType}
+                      </td>
                       <td className="px-6 py-4 text-center">
-                        <span className={`px-3 py-1 rounded-full text-xs font-semibold ${statusColor}`}>
+                        <span
+                          className={`px-3 py-1 rounded-full text-xs font-semibold ${statusColor}`}
+                        >
                           {order.status.replace(/_/g, " ")}
                         </span>
                       </td>
@@ -242,7 +325,9 @@ function SalesDashboard({ staff }: { staff: any }) {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => navigate(`/admin/operations/${order.id}`)}
+                          onClick={() =>
+                            navigate(`/admin/operations/${order.id}`)
+                          }
                           className="text-blue-600 border-blue-200"
                         >
                           View
@@ -276,15 +361,25 @@ function OperationDashboard({ staff }: { staff: any }) {
   // Get orders in operation stage assigned to this staff
   const operationQueue = useMemo(() => {
     return mockOrders
-      .filter((o) => o.assignedToOperationId === staff.id && o.status === "pending_operation")
-      .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+      .filter(
+        (o) =>
+          o.assignedToOperationId === staff.id &&
+          o.status === "pending_operation",
+      )
+      .sort(
+        (a, b) =>
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+      );
   }, [staff.id]);
 
   const completedToday = useMemo(() => {
     const today = new Date().toISOString().split("T")[0];
-    return mockOrders
-      .filter((o) => o.assignedToOperationId === staff.id && o.status.includes("completed") && o.createdAt.startsWith(today))
-      .length;
+    return mockOrders.filter(
+      (o) =>
+        o.assignedToOperationId === staff.id &&
+        o.status.includes("completed") &&
+        o.createdAt.startsWith(today),
+    ).length;
   }, [staff.id]);
 
   const currentMonthBonus = useMemo(() => {
@@ -293,7 +388,7 @@ function OperationDashboard({ staff }: { staff: any }) {
       (b) =>
         b.staffId === staff.id &&
         b.month === today.getMonth() + 1 &&
-        b.year === today.getFullYear()
+        b.year === today.getFullYear(),
     );
   }, [staff.id]);
 
@@ -301,15 +396,34 @@ function OperationDashboard({ staff }: { staff: any }) {
     <AdminLayout>
       <div className="p-8">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900">Operations Dashboard</h1>
-          <p className="text-slate-600 mt-1">Process orders and prepare documents for manager review</p>
+          <h1 className="text-3xl font-bold text-slate-900">
+            Operations Dashboard
+          </h1>
+          <p className="text-slate-600 mt-1">
+            Process orders and prepare documents for manager review
+          </p>
         </div>
 
         {/* Quick Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 my-8">
-          <StatCard icon={ListTodo} label="In Queue" value={operationQueue.length} color="blue" />
-          <StatCard icon={Zap} label="Completed Today" value={completedToday} color="green" />
-          <StatCard icon={AlertCircle} label="Your Role" value="Operation" color="purple" />
+          <StatCard
+            icon={ListTodo}
+            label="In Queue"
+            value={operationQueue.length}
+            color="blue"
+          />
+          <StatCard
+            icon={Zap}
+            label="Completed Today"
+            value={completedToday}
+            color="green"
+          />
+          <StatCard
+            icon={AlertCircle}
+            label="Your Role"
+            value="Operation"
+            color="purple"
+          />
           {currentMonthBonus && currentMonthBonus.bonusAmount > 0 ? (
             <StatCard
               icon={TrendingUp}
@@ -330,28 +444,48 @@ function OperationDashboard({ staff }: { staff: any }) {
         {/* Processing Queue */}
         <div className="bg-white rounded-lg border border-slate-200 shadow-sm">
           <div className="p-6 border-b border-slate-200">
-            <h2 className="text-xl font-bold text-slate-900">🔄 Your Processing Queue</h2>
-            <p className="text-slate-600 text-sm mt-1">Complete company data and upload required documents before requesting manager review</p>
+            <h2 className="text-xl font-bold text-slate-900">
+              🔄 Your Processing Queue
+            </h2>
+            <p className="text-slate-600 text-sm mt-1">
+              Complete company data and upload required documents before
+              requesting manager review
+            </p>
           </div>
 
           <div className="divide-y divide-slate-200">
             {operationQueue.map((order) => {
               const client = mockUsers.find((u) => u.id === order.userId);
-              const documentsUploaded = order.operationFiles?.filter((f) => f.stage === "operation").length || 0;
-              const isCompanyDataComplete = order.companyInfo && order.companyInfo.companyName;
-              const canRequestReview = isCompanyDataComplete && documentsUploaded > 0;
+              const documentsUploaded =
+                order.operationFiles?.filter((f) => f.stage === "operation")
+                  .length || 0;
+              const isCompanyDataComplete =
+                order.companyInfo && order.companyInfo.companyName;
+              const canRequestReview =
+                isCompanyDataComplete && documentsUploaded > 0;
 
               return (
-                <div key={order.id} className="p-6 hover:bg-slate-50 transition">
+                <div
+                  key={order.id}
+                  className="p-6 hover:bg-slate-50 transition"
+                >
                   <div className="flex justify-between items-start mb-4">
                     <div>
-                      <h3 className="font-bold text-lg text-slate-900">{order.orderNumber}</h3>
+                      <h3 className="font-bold text-lg text-slate-900">
+                        {order.orderNumber}
+                      </h3>
                       <p className="text-slate-600 text-sm">
-                        Client: {client ? `${client.firstName} ${client.lastName}` : "Unknown"} • {order.serviceType}
+                        Client:{" "}
+                        {client
+                          ? `${client.firstName} ${client.lastName}`
+                          : "Unknown"}{" "}
+                        • {order.serviceType}
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="text-2xl font-bold text-slate-900">${order.amount?.toLocaleString()}</p>
+                      <p className="text-2xl font-bold text-slate-900">
+                        ${order.amount?.toLocaleString()}
+                      </p>
                       <p className="text-xs text-slate-500">USD</p>
                     </div>
                   </div>
@@ -364,7 +498,13 @@ function OperationDashboard({ staff }: { staff: any }) {
                       ) : (
                         <AlertCircle className="w-5 h-5 text-red-600" />
                       )}
-                      <span className={isCompanyDataComplete ? "text-green-700" : "text-red-700"}>
+                      <span
+                        className={
+                          isCompanyDataComplete
+                            ? "text-green-700"
+                            : "text-red-700"
+                        }
+                      >
                         ✓ Company Information Complete
                       </span>
                     </div>
@@ -374,7 +514,13 @@ function OperationDashboard({ staff }: { staff: any }) {
                       ) : (
                         <AlertCircle className="w-5 h-5 text-red-600" />
                       )}
-                      <span className={documentsUploaded > 0 ? "text-green-700" : "text-red-700"}>
+                      <span
+                        className={
+                          documentsUploaded > 0
+                            ? "text-green-700"
+                            : "text-red-700"
+                        }
+                      >
                         ✓ Documents Uploaded ({documentsUploaded})
                       </span>
                     </div>
@@ -399,7 +545,8 @@ function OperationDashboard({ staff }: { staff: any }) {
                         // Here you would update order status to pending_operation_manager_review
                       }}
                     >
-                      <ArrowRight className="w-4 h-4 mr-2" /> Request Manager Review
+                      <ArrowRight className="w-4 h-4 mr-2" /> Request Manager
+                      Review
                     </Button>
                   </div>
                 </div>
@@ -411,7 +558,9 @@ function OperationDashboard({ staff }: { staff: any }) {
             <div className="p-12 text-center text-slate-500">
               <CheckCircle className="w-12 h-12 mx-auto mb-4 opacity-30 text-green-600" />
               <p className="text-lg">No orders in your queue 🎉</p>
-              <p className="text-sm">All caught up! Check back later for new orders.</p>
+              <p className="text-sm">
+                All caught up! Check back later for new orders.
+              </p>
             </div>
           )}
         </div>
@@ -425,13 +574,22 @@ function OperationDashboard({ staff }: { staff: any }) {
 // ============================================================================
 function ManagerDashboard({ staff }: { staff: any }) {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<"review" | "shipping" | "team">("review");
+  const [activeTab, setActiveTab] = useState<"review" | "shipping" | "team">(
+    "review",
+  );
 
   // Get orders awaiting manager review
   const reviewQueue = useMemo(() => {
     return mockOrders
-      .filter((o) => o.assignedToManagerId === staff.id && o.status === "pending_operation_manager_review")
-      .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+      .filter(
+        (o) =>
+          o.assignedToManagerId === staff.id &&
+          o.status === "pending_operation_manager_review",
+      )
+      .sort(
+        (a, b) =>
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+      );
   }, [staff.id]);
 
   // Get orders awaiting shipping (after client approval)
@@ -445,7 +603,10 @@ function ManagerDashboard({ staff }: { staff: any }) {
             o.status === "pending_poa" ||
             o.status === "pending_financial_report"),
       )
-      .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+      .sort(
+        (a, b) =>
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+      );
   }, [staff.id]);
 
   // Get team stats
@@ -462,15 +623,34 @@ function ManagerDashboard({ staff }: { staff: any }) {
     <AdminLayout>
       <div className="p-8">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900">Manager Dashboard</h1>
-          <p className="text-slate-600 mt-1">Review operations, manage shipping, and oversee team performance</p>
+          <h1 className="text-3xl font-bold text-slate-900">
+            Manager Dashboard
+          </h1>
+          <p className="text-slate-600 mt-1">
+            Review operations, manage shipping, and oversee team performance
+          </p>
         </div>
 
         {/* Quick Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-8">
-          <StatCard icon={ListTodo} label="Awaiting Review" value={teamStats.reviewPending} color="blue" />
-          <StatCard icon={Upload} label="Shipping Queue" value={teamStats.shippingPending} color="orange" />
-          <StatCard icon={Users} label="Team Size" value={teamStats.teamSize} color="purple" />
+          <StatCard
+            icon={ListTodo}
+            label="Awaiting Review"
+            value={teamStats.reviewPending}
+            color="blue"
+          />
+          <StatCard
+            icon={Upload}
+            label="Shipping Queue"
+            value={teamStats.shippingPending}
+            color="orange"
+          />
+          <StatCard
+            icon={Users}
+            label="Team Size"
+            value={teamStats.teamSize}
+            color="purple"
+          />
         </div>
 
         {/* Tabs */}
@@ -511,23 +691,40 @@ function ManagerDashboard({ staff }: { staff: any }) {
         {activeTab === "review" && (
           <div className="bg-white rounded-lg border border-slate-200 shadow-sm">
             <div className="p-6 border-b border-slate-200">
-              <h2 className="text-xl font-bold text-slate-900">Operations Review Queue</h2>
-              <p className="text-slate-600 text-sm mt-1">Review completed work from operations team</p>
+              <h2 className="text-xl font-bold text-slate-900">
+                Operations Review Queue
+              </h2>
+              <p className="text-slate-600 text-sm mt-1">
+                Review completed work from operations team
+              </p>
             </div>
 
             <div className="divide-y divide-slate-200">
               {reviewQueue.map((order) => {
                 const client = mockUsers.find((u) => u.id === order.userId);
-                const operationStaff = mockStaff.find((s) => s.id === order.assignedToOperationId);
+                const operationStaff = mockStaff.find(
+                  (s) => s.id === order.assignedToOperationId,
+                );
 
                 return (
-                  <div key={order.id} className="p-6 hover:bg-slate-50 transition">
+                  <div
+                    key={order.id}
+                    className="p-6 hover:bg-slate-50 transition"
+                  >
                     <div className="flex justify-between items-start mb-4">
                       <div>
-                        <h3 className="font-bold text-lg text-slate-900">{order.orderNumber}</h3>
+                        <h3 className="font-bold text-lg text-slate-900">
+                          {order.orderNumber}
+                        </h3>
                         <p className="text-slate-600 text-sm">
-                          From: {operationStaff ? `${operationStaff.firstName} ${operationStaff.lastName}` : "Unknown"} • Client:{" "}
-                          {client ? `${client.firstName} ${client.lastName}` : "Unknown"}
+                          From:{" "}
+                          {operationStaff
+                            ? `${operationStaff.firstName} ${operationStaff.lastName}`
+                            : "Unknown"}{" "}
+                          • Client:{" "}
+                          {client
+                            ? `${client.firstName} ${client.lastName}`
+                            : "Unknown"}
                         </p>
                       </div>
                       <span className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-xs font-semibold">
@@ -540,15 +737,22 @@ function ManagerDashboard({ staff }: { staff: any }) {
                       <div className="grid grid-cols-2 gap-4 text-sm">
                         <div>
                           <p className="text-slate-600">Company Name</p>
-                          <p className="font-semibold text-slate-900">{order.companyInfo?.companyName || "Not provided"}</p>
+                          <p className="font-semibold text-slate-900">
+                            {order.companyInfo?.companyName || "Not provided"}
+                          </p>
                         </div>
                         <div>
                           <p className="text-slate-600">Company Number</p>
-                          <p className="font-semibold text-slate-900">{order.operationReviewForm?.companyNumber || "Not provided"}</p>
+                          <p className="font-semibold text-slate-900">
+                            {order.operationReviewForm?.companyNumber ||
+                              "Not provided"}
+                          </p>
                         </div>
                         <div className="col-span-2">
                           <p className="text-slate-600">Documents Uploaded</p>
-                          <p className="font-semibold text-slate-900">{order.operationFiles?.length || 0} files</p>
+                          <p className="font-semibold text-slate-900">
+                            {order.operationFiles?.length || 0} files
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -558,7 +762,9 @@ function ManagerDashboard({ staff }: { staff: any }) {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => navigate(`/admin/operations/${order.id}`)}
+                        onClick={() =>
+                          navigate(`/admin/operations/${order.id}`)
+                        }
                         className="text-blue-600 border-blue-200"
                       >
                         <Eye className="w-4 h-4 mr-2" /> View Details
@@ -567,7 +773,9 @@ function ManagerDashboard({ staff }: { staff: any }) {
                         size="sm"
                         className="bg-green-600 hover:bg-green-700"
                         onClick={() => {
-                          toast.success("Order approved! Sending to client for review...");
+                          toast.success(
+                            "Order approved! Sending to client for review...",
+                          );
                           // Update order status to awaiting_client_acceptance
                         }}
                       >
@@ -594,7 +802,9 @@ function ManagerDashboard({ staff }: { staff: any }) {
               <div className="p-12 text-center text-slate-500">
                 <CheckCircle className="w-12 h-12 mx-auto mb-4 opacity-30 text-green-600" />
                 <p className="text-lg">No pending reviews</p>
-                <p className="text-sm">All operations work has been reviewed!</p>
+                <p className="text-sm">
+                  All operations work has been reviewed!
+                </p>
               </div>
             )}
           </div>
@@ -604,8 +814,13 @@ function ManagerDashboard({ staff }: { staff: any }) {
         {activeTab === "shipping" && (
           <div className="bg-white rounded-lg border border-slate-200 shadow-sm">
             <div className="p-6 border-b border-slate-200">
-              <h2 className="text-xl font-bold text-slate-900">Shipping & Document Management</h2>
-              <p className="text-slate-600 text-sm mt-1">Upload apostille, POA, and shipping documents after client approval</p>
+              <h2 className="text-xl font-bold text-slate-900">
+                Shipping & Document Management
+              </h2>
+              <p className="text-slate-600 text-sm mt-1">
+                Upload apostille, POA, and shipping documents after client
+                approval
+              </p>
             </div>
 
             <div className="divide-y divide-slate-200">
@@ -613,11 +828,21 @@ function ManagerDashboard({ staff }: { staff: any }) {
                 const client = mockUsers.find((u) => u.id === order.userId);
 
                 return (
-                  <div key={order.id} className="p-6 hover:bg-slate-50 transition">
+                  <div
+                    key={order.id}
+                    className="p-6 hover:bg-slate-50 transition"
+                  >
                     <div className="flex justify-between items-start mb-4">
                       <div>
-                        <h3 className="font-bold text-lg text-slate-900">{order.orderNumber}</h3>
-                        <p className="text-slate-600 text-sm">Client: {client ? `${client.firstName} ${client.lastName}` : "Unknown"}</p>
+                        <h3 className="font-bold text-lg text-slate-900">
+                          {order.orderNumber}
+                        </h3>
+                        <p className="text-slate-600 text-sm">
+                          Client:{" "}
+                          {client
+                            ? `${client.firstName} ${client.lastName}`
+                            : "Unknown"}
+                        </p>
                       </div>
                       <span className="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs font-semibold">
                         {order.status.replace(/_/g, " ")}
@@ -662,7 +887,9 @@ function ManagerDashboard({ staff }: { staff: any }) {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => navigate(`/admin/operations/${order.id}`)}
+                        onClick={() =>
+                          navigate(`/admin/operations/${order.id}`)
+                        }
                         className="text-blue-600 border-blue-200"
                       >
                         <Upload className="w-4 h-4 mr-2" /> Upload Documents
@@ -692,43 +919,73 @@ function ManagerDashboard({ staff }: { staff: any }) {
         {activeTab === "team" && (
           <div className="bg-white rounded-lg border border-slate-200 shadow-sm">
             <div className="p-6 border-b border-slate-200">
-              <h2 className="text-xl font-bold text-slate-900">Team Performance</h2>
-              <p className="text-slate-600 text-sm mt-1">Monitor operations staff performance</p>
+              <h2 className="text-xl font-bold text-slate-900">
+                Team Performance
+              </h2>
+              <p className="text-slate-600 text-sm mt-1">
+                Monitor operations staff performance
+              </p>
             </div>
 
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead className="bg-slate-50 border-b border-slate-200">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-bold text-slate-700 uppercase">Staff</th>
-                    <th className="px-6 py-3 text-center text-xs font-bold text-slate-700 uppercase">Orders Processed</th>
-                    <th className="px-6 py-3 text-center text-xs font-bold text-slate-700 uppercase">Pending Review</th>
-                    <th className="px-6 py-3 text-center text-xs font-bold text-slate-700 uppercase">Completed</th>
-                    <th className="px-6 py-3 text-center text-xs font-bold text-slate-700 uppercase">Performance</th>
+                    <th className="px-6 py-3 text-left text-xs font-bold text-slate-700 uppercase">
+                      Staff
+                    </th>
+                    <th className="px-6 py-3 text-center text-xs font-bold text-slate-700 uppercase">
+                      Orders Processed
+                    </th>
+                    <th className="px-6 py-3 text-center text-xs font-bold text-slate-700 uppercase">
+                      Pending Review
+                    </th>
+                    <th className="px-6 py-3 text-center text-xs font-bold text-slate-700 uppercase">
+                      Completed
+                    </th>
+                    <th className="px-6 py-3 text-center text-xs font-bold text-slate-700 uppercase">
+                      Performance
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200">
                   {mockStaff
                     .filter((s) => s.role === "operation")
                     .map((operationStaff) => {
-                      const staffOrders = mockOrders.filter((o) => o.assignedToOperationId === operationStaff.id);
-                      const completed = staffOrders.filter((o) => o.status.includes("completed")).length;
-                      const pending = staffOrders.filter((o) => o.status === "pending_operation").length;
+                      const staffOrders = mockOrders.filter(
+                        (o) => o.assignedToOperationId === operationStaff.id,
+                      );
+                      const completed = staffOrders.filter((o) =>
+                        o.status.includes("completed"),
+                      ).length;
+                      const pending = staffOrders.filter(
+                        (o) => o.status === "pending_operation",
+                      ).length;
                       const total = staffOrders.length;
-                      const performance = total > 0 ? Math.round((completed / total) * 100) : 0;
+                      const performance =
+                        total > 0 ? Math.round((completed / total) * 100) : 0;
 
                       return (
-                        <tr key={operationStaff.id} className="hover:bg-slate-50">
+                        <tr
+                          key={operationStaff.id}
+                          className="hover:bg-slate-50"
+                        >
                           <td className="px-6 py-4 font-semibold text-slate-900">
                             {operationStaff.firstName} {operationStaff.lastName}
                           </td>
-                          <td className="px-6 py-4 text-center text-slate-900">{total}</td>
+                          <td className="px-6 py-4 text-center text-slate-900">
+                            {total}
+                          </td>
                           <td className="px-6 py-4 text-center">
-                            <span className={`px-3 py-1 rounded-full font-semibold text-xs ${pending > 0 ? "bg-yellow-100 text-yellow-800" : "bg-green-100 text-green-800"}`}>
+                            <span
+                              className={`px-3 py-1 rounded-full font-semibold text-xs ${pending > 0 ? "bg-yellow-100 text-yellow-800" : "bg-green-100 text-green-800"}`}
+                            >
                               {pending}
                             </span>
                           </td>
-                          <td className="px-6 py-4 text-center font-semibold text-green-600">{completed}</td>
+                          <td className="px-6 py-4 text-center font-semibold text-green-600">
+                            {completed}
+                          </td>
                           <td className="px-6 py-4 text-center">
                             <div className="flex items-center justify-center gap-2">
                               <div className="w-16 bg-slate-200 rounded-full h-2">
@@ -737,7 +994,9 @@ function ManagerDashboard({ staff }: { staff: any }) {
                                   style={{ width: `${performance}%` }}
                                 ></div>
                               </div>
-                              <span className="font-semibold text-sm text-slate-900">{performance}%</span>
+                              <span className="font-semibold text-sm text-slate-900">
+                                {performance}%
+                              </span>
                             </div>
                           </td>
                         </tr>
@@ -756,7 +1015,17 @@ function ManagerDashboard({ staff }: { staff: any }) {
 // ============================================================================
 // STAT CARD COMPONENT
 // ============================================================================
-function StatCard({ icon: Icon, label, value, color }: { icon: any; label: string; value: string | number; color: string }) {
+function StatCard({
+  icon: Icon,
+  label,
+  value,
+  color,
+}: {
+  icon: any;
+  label: string;
+  value: string | number;
+  color: string;
+}) {
   const colorMap: Record<string, string> = {
     blue: "bg-blue-50 text-blue-600 border-blue-200",
     green: "bg-green-50 text-green-600 border-green-200",

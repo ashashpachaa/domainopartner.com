@@ -533,7 +533,7 @@ export default function AdminOperationDetail() {
     }
 
     // Use dynamic workflow stages
-    const dynamicStages = workflowStages.map(s => s.id);
+    const dynamicStages = workflowStages.map((s) => s.id);
 
     // Move through all stages from current position
     const currentIndex = dynamicStages.indexOf(order.status);

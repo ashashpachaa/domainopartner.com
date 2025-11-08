@@ -71,7 +71,11 @@ export default function AdminCreateOrder() {
   const [companyName, setCompanyName] = useState("");
   const [companyNumber, setCompanyNumber] = useState("");
   const [showCompanySelector, setShowCompanySelector] = useState(false);
-  const [availableCompanies, setAvailableCompanies] = useState(mockCompaniesForSale.filter(c => c.country === "United Kingdom" && c.registrationStatus !== "sold"));
+  const [availableCompanies, setAvailableCompanies] = useState(
+    mockCompaniesForSale.filter(
+      (c) => c.country === "United Kingdom" && c.registrationStatus !== "sold",
+    ),
+  );
 
   const selectedProduct = mockProducts.find((p) => p.id === formData.productId);
   const salesStaff = mockStaff.filter((s) => s.role === "sales");
@@ -97,9 +101,16 @@ export default function AdminCreateOrder() {
         setSelectedCountries([product.country]);
 
         // Show company selector if UK Acquisitions Package is selected
-        if (product.id === "P005") { // UK Acquisitions Package
+        if (product.id === "P005") {
+          // UK Acquisitions Package
           setShowCompanySelector(true);
-          setAvailableCompanies(mockCompaniesForSale.filter(c => c.country === "United Kingdom" && c.registrationStatus !== "sold"));
+          setAvailableCompanies(
+            mockCompaniesForSale.filter(
+              (c) =>
+                c.country === "United Kingdom" &&
+                c.registrationStatus !== "sold",
+            ),
+          );
         } else {
           setShowCompanySelector(false);
           setCompanyName("");
@@ -177,7 +188,9 @@ export default function AdminCreateOrder() {
     return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + " " + sizes[i];
   };
 
-  const selectCompanyForAcquisition = (company: typeof mockCompaniesForSale[0]) => {
+  const selectCompanyForAcquisition = (
+    company: (typeof mockCompaniesForSale)[0],
+  ) => {
     setCompanyName(company.companyName);
     setCompanyNumber(company.companyNumber);
     setShowCompanySelector(false);
@@ -300,14 +313,14 @@ export default function AdminCreateOrder() {
     // Mark company as sold if UK Acquisitions Package was selected
     if (product?.id === "P005" && companyNumber) {
       const companyIndex = mockCompaniesForSale.findIndex(
-        (c) => c.companyNumber === companyNumber
+        (c) => c.companyNumber === companyNumber,
       );
       if (companyIndex !== -1) {
         mockCompaniesForSale[companyIndex].registrationStatus = "sold";
         // Save updated companies list to localStorage
         localStorage.setItem(
           "companiesForSale",
-          JSON.stringify(mockCompaniesForSale)
+          JSON.stringify(mockCompaniesForSale),
         );
       }
     }
@@ -500,7 +513,8 @@ export default function AdminCreateOrder() {
                     Select Company to Acquire
                   </h2>
                   <p className="text-sm text-slate-600 mb-4">
-                    Choose a UK company from the Companies for Sale list that will be acquired through this order.
+                    Choose a UK company from the Companies for Sale list that
+                    will be acquired through this order.
                   </p>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {availableCompanies.map((company) => (
@@ -582,9 +596,7 @@ export default function AdminCreateOrder() {
                         value={companyName}
                         onChange={(e) => {
                           setCompanyName(e.target.value);
-                          companyValidation.checkCompanyName(
-                            e.target.value,
-                          );
+                          companyValidation.checkCompanyName(e.target.value);
                         }}
                         placeholder="e.g., Acme Corporation Ltd"
                         className={`${

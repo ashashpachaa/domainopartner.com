@@ -1029,18 +1029,31 @@ export interface SICCode {
 
 export const UK_SIC_CODES: SICCode[] = [
   // Section A: Agriculture, Forestry and Fishing
-  { code: "01110", description: "Growing of cereals (except rice), leguminous crops and oil seeds" },
+  {
+    code: "01110",
+    description:
+      "Growing of cereals (except rice), leguminous crops and oil seeds",
+  },
   { code: "01120", description: "Growing of rice" },
-  { code: "01130", description: "Growing of vegetables and melons, roots and tubers" },
+  {
+    code: "01130",
+    description: "Growing of vegetables and melons, roots and tubers",
+  },
   { code: "01140", description: "Growing of sugar cane" },
   { code: "01150", description: "Growing of other non-perennial crops" },
   { code: "01210", description: "Growing of grapes" },
   { code: "01220", description: "Growing of tropical and subtropical fruits" },
-  { code: "01230", description: "Growing of other tree and bush fruits and nuts" },
+  {
+    code: "01230",
+    description: "Growing of other tree and bush fruits and nuts",
+  },
   { code: "01240", description: "Growing of olives" },
   { code: "01250", description: "Growing of other perennial crops" },
   { code: "01260", description: "Growing of flowers and ornamentals" },
-  { code: "01270", description: "Growing of other crops not elsewhere classified" },
+  {
+    code: "01270",
+    description: "Growing of other crops not elsewhere classified",
+  },
   { code: "01300", description: "Plant propagation" },
   { code: "01410", description: "Raising of cattle (except buffalo)" },
   { code: "01420", description: "Raising of buffalo" },
@@ -1056,7 +1069,10 @@ export const UK_SIC_CODES: SICCode[] = [
   { code: "01620", description: "Support activities for animal production" },
   { code: "01630", description: "Post-harvest crop activities" },
   { code: "01640", description: "Seed treatment and plant propagation" },
-  { code: "01700", description: "Hunting, trapping and related service activities" },
+  {
+    code: "01700",
+    description: "Hunting, trapping and related service activities",
+  },
   { code: "02100", description: "Silviculture and other forestry activities" },
   { code: "02200", description: "Logging" },
   { code: "02300", description: "Gathering of non-wood forest products" },
@@ -1076,71 +1092,156 @@ export const UK_SIC_CODES: SICCode[] = [
   { code: "07210", description: "Mining of uranium and thorium ores" },
   { code: "07290", description: "Mining of other non-ferrous metal ores" },
   { code: "08110", description: "Quarrying of ornamental and building stone" },
-  { code: "08120", description: "Quarrying of limestone, gypsum, chalk and slate" },
+  {
+    code: "08120",
+    description: "Quarrying of limestone, gypsum, chalk and slate",
+  },
   { code: "08910", description: "Mining and quarrying of other minerals" },
   { code: "08920", description: "Extraction of peat" },
 
   // Section C: Manufacturing
   { code: "10110", description: "Processing and preserving of meat" },
   { code: "10120", description: "Processing and preserving of poultry meat" },
-  { code: "10130", description: "Production of meat and poultry meat products" },
-  { code: "10200", description: "Processing and preserving of fish, crustaceans and molluscs" },
+  {
+    code: "10130",
+    description: "Production of meat and poultry meat products",
+  },
+  {
+    code: "10200",
+    description: "Processing and preserving of fish, crustaceans and molluscs",
+  },
   { code: "10310", description: "Processing and preserving of potatoes" },
   { code: "10320", description: "Manufacture of fruit and vegetable juice" },
-  { code: "10390", description: "Other processing and preserving of fruit and vegetables" },
+  {
+    code: "10390",
+    description: "Other processing and preserving of fruit and vegetables",
+  },
   { code: "10410", description: "Manufacture of oils and fats" },
-  { code: "10420", description: "Manufacture of margarine and similar edible fats" },
+  {
+    code: "10420",
+    description: "Manufacture of margarine and similar edible fats",
+  },
   { code: "10510", description: "Operation of dairies and cheese making" },
   { code: "10520", description: "Manufacture of ice cream" },
   { code: "10610", description: "Manufacture of grain mill products" },
   { code: "10620", description: "Manufacture of starches and starch products" },
-  { code: "10710", description: "Manufacture of bread; manufacture of fresh pastry goods and cakes" },
-  { code: "10720", description: "Manufacture of rusks and biscuits; manufacture of preserved pastry goods and cakes" },
-  { code: "10730", description: "Manufacture of macaroni, noodles, couscous and similar farinaceous products" },
+  {
+    code: "10710",
+    description:
+      "Manufacture of bread; manufacture of fresh pastry goods and cakes",
+  },
+  {
+    code: "10720",
+    description:
+      "Manufacture of rusks and biscuits; manufacture of preserved pastry goods and cakes",
+  },
+  {
+    code: "10730",
+    description:
+      "Manufacture of macaroni, noodles, couscous and similar farinaceous products",
+  },
   { code: "10810", description: "Manufacture of sugar" },
-  { code: "10820", description: "Manufacture of cocoa and chocolate confectionery" },
+  {
+    code: "10820",
+    description: "Manufacture of cocoa and chocolate confectionery",
+  },
   { code: "10830", description: "Manufacture of other confectionery" },
-  { code: "10840", description: "Manufacture of homogenised food preparations and dietetic food" },
+  {
+    code: "10840",
+    description:
+      "Manufacture of homogenised food preparations and dietetic food",
+  },
   { code: "10850", description: "Manufacture of other food products" },
   { code: "10860", description: "Manufacture of animal feed" },
-  { code: "11010", description: "Distilling, rectifying and blending of spirits" },
+  {
+    code: "11010",
+    description: "Distilling, rectifying and blending of spirits",
+  },
   { code: "11020", description: "Manufacture of wine from grape" },
   { code: "11030", description: "Manufacture of cider and other fruit wines" },
-  { code: "11040", description: "Manufacture of other non-distilled fermented beverages" },
+  {
+    code: "11040",
+    description: "Manufacture of other non-distilled fermented beverages",
+  },
   { code: "11050", description: "Manufacture of beer" },
   { code: "11060", description: "Manufacture of malt" },
-  { code: "11070", description: "Manufacture of soft drinks; production of mineral waters and other bottled waters" },
+  {
+    code: "11070",
+    description:
+      "Manufacture of soft drinks; production of mineral waters and other bottled waters",
+  },
   { code: "12000", description: "Manufacture of tobacco products" },
   { code: "13100", description: "Preparation and spinning of textile fibres" },
   { code: "13200", description: "Weaving of textiles" },
   { code: "13300", description: "Finishing of textiles" },
-  { code: "14100", description: "Manufacture of wearing apparel, except fur apparel" },
+  {
+    code: "14100",
+    description: "Manufacture of wearing apparel, except fur apparel",
+  },
   { code: "14200", description: "Manufacture of articles of fur" },
   { code: "14300", description: "Manufacture of other clothing accessories" },
-  { code: "15100", description: "Tanning and dressing of leather; dressing and dyeing of fur" },
-  { code: "15200", description: "Manufacture of luggage, handbags and the like, saddlery and harness" },
+  {
+    code: "15100",
+    description: "Tanning and dressing of leather; dressing and dyeing of fur",
+  },
+  {
+    code: "15200",
+    description:
+      "Manufacture of luggage, handbags and the like, saddlery and harness",
+  },
   { code: "15300", description: "Manufacture of footwear" },
   { code: "16100", description: "Sawmilling and planing of wood" },
-  { code: "16200", description: "Manufacture of products of wood, cork, straw and plaiting materials" },
+  {
+    code: "16200",
+    description:
+      "Manufacture of products of wood, cork, straw and plaiting materials",
+  },
   { code: "17100", description: "Manufacture of pulp, paper and paperboard" },
-  { code: "17200", description: "Manufacture of articles of paper and paperboard" },
+  {
+    code: "17200",
+    description: "Manufacture of articles of paper and paperboard",
+  },
   { code: "18110", description: "Printing of newspapers" },
   { code: "18112", description: "Other printing" },
   { code: "18120", description: "Service activities related to printing" },
   { code: "19100", description: "Manufacture of coke oven products" },
   { code: "19200", description: "Manufacture of refined petroleum products" },
-  { code: "20100", description: "Manufacture of basic chemicals, fertilisers and nitrogen compounds, plastics and synthetic rubber in primary forms" },
-  { code: "20200", description: "Manufacture of pesticides and other agrochemical products" },
-  { code: "20300", description: "Manufacture of paints, varnishes and similar coatings, printing ink and mastics" },
+  {
+    code: "20100",
+    description:
+      "Manufacture of basic chemicals, fertilisers and nitrogen compounds, plastics and synthetic rubber in primary forms",
+  },
+  {
+    code: "20200",
+    description: "Manufacture of pesticides and other agrochemical products",
+  },
+  {
+    code: "20300",
+    description:
+      "Manufacture of paints, varnishes and similar coatings, printing ink and mastics",
+  },
   { code: "20410", description: "Manufacture of soap and detergents" },
-  { code: "20420", description: "Manufacture of perfumes and toilet preparations" },
+  {
+    code: "20420",
+    description: "Manufacture of perfumes and toilet preparations",
+  },
   { code: "20500", description: "Manufacture of other chemical products" },
   { code: "20600", description: "Manufacture of man-made fibres" },
-  { code: "21100", description: "Manufacture of basic pharmaceutical products" },
+  {
+    code: "21100",
+    description: "Manufacture of basic pharmaceutical products",
+  },
   { code: "21200", description: "Manufacture of pharmaceutical preparations" },
-  { code: "22110", description: "Manufacture of rubber tyres and tubes; retreading and rebuilding of rubber tyres" },
+  {
+    code: "22110",
+    description:
+      "Manufacture of rubber tyres and tubes; retreading and rebuilding of rubber tyres",
+  },
   { code: "22190", description: "Manufacture of other rubber products" },
-  { code: "22210", description: "Manufacture of plastic plates, sheets, tubes and profiles" },
+  {
+    code: "22210",
+    description: "Manufacture of plastic plates, sheets, tubes and profiles",
+  },
   { code: "22220", description: "Manufacture of plastic packing goods" },
   { code: "22230", description: "Manufacture of builders' ware of plastics" },
   { code: "22290", description: "Manufacture of other plastic products" },
@@ -1148,25 +1249,65 @@ export const UK_SIC_CODES: SICCode[] = [
   { code: "23120", description: "Shaping and tempering of flat glass" },
   { code: "23130", description: "Manufacture of hollow glass" },
   { code: "23140", description: "Manufacture of glass fibres" },
-  { code: "23190", description: "Manufacture and processing of other glass, including technical glassware" },
+  {
+    code: "23190",
+    description:
+      "Manufacture and processing of other glass, including technical glassware",
+  },
   { code: "23200", description: "Manufacture of refractory products" },
   { code: "23310", description: "Manufacture of ceramic tiles and flags" },
   { code: "23320", description: "Manufacture of other ceramic products" },
   { code: "23410", description: "Manufacture of cement" },
   { code: "23420", description: "Manufacture of lime and plaster" },
-  { code: "23430", description: "Manufacture of articles of cement, concrete or artificial stone" },
-  { code: "23510", description: "Manufacture of bricks, tiles and construction products, in baked clay" },
-  { code: "23520", description: "Manufacture of other porcelain and ceramic products" },
-  { code: "23610", description: "Manufacture of concrete products for construction" },
-  { code: "23620", description: "Manufacture of plaster products for construction" },
+  {
+    code: "23430",
+    description:
+      "Manufacture of articles of cement, concrete or artificial stone",
+  },
+  {
+    code: "23510",
+    description:
+      "Manufacture of bricks, tiles and construction products, in baked clay",
+  },
+  {
+    code: "23520",
+    description: "Manufacture of other porcelain and ceramic products",
+  },
+  {
+    code: "23610",
+    description: "Manufacture of concrete products for construction",
+  },
+  {
+    code: "23620",
+    description: "Manufacture of plaster products for construction",
+  },
   { code: "23630", description: "Manufacture of readymixed concrete" },
   { code: "23640", description: "Manufacture of mortars" },
   { code: "23650", description: "Manufacture of fibre cement products" },
-  { code: "23690", description: "Manufacture of other articles of concrete, plaster and cement" },
-  { code: "23700", description: "Cutting, shaping and finishing of ornamental and building stone" },
-  { code: "23900", description: "Manufacture of abrasive products; manufacture of other non-metallic mineral products" },
-  { code: "24100", description: "Manufacture of basic iron and steel and of ferro-alloys" },
-  { code: "24200", description: "Manufacture of tubes, pipes, hollow profiles and related fittings, of steel" },
+  {
+    code: "23690",
+    description:
+      "Manufacture of other articles of concrete, plaster and cement",
+  },
+  {
+    code: "23700",
+    description:
+      "Cutting, shaping and finishing of ornamental and building stone",
+  },
+  {
+    code: "23900",
+    description:
+      "Manufacture of abrasive products; manufacture of other non-metallic mineral products",
+  },
+  {
+    code: "24100",
+    description: "Manufacture of basic iron and steel and of ferro-alloys",
+  },
+  {
+    code: "24200",
+    description:
+      "Manufacture of tubes, pipes, hollow profiles and related fittings, of steel",
+  },
   { code: "24300", description: "Other manufacture of basic metals" },
   { code: "24410", description: "Precious metals production" },
   { code: "24420", description: "Aluminium production" },
@@ -1179,108 +1320,290 @@ export const UK_SIC_CODES: SICCode[] = [
   { code: "24530", description: "Casting of light metals" },
   { code: "24540", description: "Casting of other non-ferrous metals" },
   { code: "25100", description: "Manufacture of structural metal products" },
-  { code: "25200", description: "Manufacture of tanks, reservoirs and containers of metal" },
-  { code: "25300", description: "Manufacture of steam generators, except central heating hot water boilers" },
+  {
+    code: "25200",
+    description: "Manufacture of tanks, reservoirs and containers of metal",
+  },
+  {
+    code: "25300",
+    description:
+      "Manufacture of steam generators, except central heating hot water boilers",
+  },
   { code: "25400", description: "Manufacture of weapons and ammunition" },
-  { code: "25500", description: "Forging, pressing, stamping and roll-forming of metal; powder metallurgy" },
-  { code: "25610", description: "Treatment and disposal of non-hazardous waste" },
+  {
+    code: "25500",
+    description:
+      "Forging, pressing, stamping and roll-forming of metal; powder metallurgy",
+  },
+  {
+    code: "25610",
+    description: "Treatment and disposal of non-hazardous waste",
+  },
   { code: "25620", description: "Treatment and disposal of hazardous waste" },
   { code: "25710", description: "Manufacture of cutlery" },
   { code: "25720", description: "Manufacture of locks and hinges" },
   { code: "25730", description: "Manufacture of tools" },
-  { code: "25910", description: "Manufacture of steel drums and similar containers" },
+  {
+    code: "25910",
+    description: "Manufacture of steel drums and similar containers",
+  },
   { code: "25920", description: "Manufacture of light metal packaging" },
-  { code: "25930", description: "Manufacture of wire products, chain and springs" },
-  { code: "25940", description: "Manufacture of fasteners and screw machine products" },
-  { code: "25990", description: "Manufacture of other fabricated metal products" },
+  {
+    code: "25930",
+    description: "Manufacture of wire products, chain and springs",
+  },
+  {
+    code: "25940",
+    description: "Manufacture of fasteners and screw machine products",
+  },
+  {
+    code: "25990",
+    description: "Manufacture of other fabricated metal products",
+  },
   { code: "26110", description: "Manufacture of electronic components" },
   { code: "26120", description: "Manufacture of loaded electronic boards" },
-  { code: "26200", description: "Manufacture of computers and peripheral equipment" },
+  {
+    code: "26200",
+    description: "Manufacture of computers and peripheral equipment",
+  },
   { code: "26300", description: "Manufacture of communication equipment" },
   { code: "26400", description: "Manufacture of consumer electronics" },
-  { code: "26510", description: "Manufacture of instruments and appliances for measuring, testing and navigation" },
+  {
+    code: "26510",
+    description:
+      "Manufacture of instruments and appliances for measuring, testing and navigation",
+  },
   { code: "26520", description: "Manufacture of watches and clocks" },
-  { code: "26600", description: "Manufacture of irradiation, electromedical and electrotherapeutic equipment" },
-  { code: "26700", description: "Manufacture of optical instruments and photographic equipment" },
+  {
+    code: "26600",
+    description:
+      "Manufacture of irradiation, electromedical and electrotherapeutic equipment",
+  },
+  {
+    code: "26700",
+    description:
+      "Manufacture of optical instruments and photographic equipment",
+  },
   { code: "26800", description: "Manufacture of magnetic and optical media" },
-  { code: "27100", description: "Manufacture of electric motors, generators, transformers, electricity distribution and control apparatus" },
+  {
+    code: "27100",
+    description:
+      "Manufacture of electric motors, generators, transformers, electricity distribution and control apparatus",
+  },
   { code: "27200", description: "Manufacture of batteries and accumulators" },
   { code: "27310", description: "Manufacture of fibre optic cables" },
-  { code: "27320", description: "Manufacture of other electronic and electric wires and cables" },
+  {
+    code: "27320",
+    description:
+      "Manufacture of other electronic and electric wires and cables",
+  },
   { code: "27330", description: "Manufacture of wiring devices" },
   { code: "27400", description: "Manufacture of electric lighting equipment" },
   { code: "27510", description: "Manufacture of electric domestic appliances" },
-  { code: "27520", description: "Manufacture of non-electric domestic appliances" },
+  {
+    code: "27520",
+    description: "Manufacture of non-electric domestic appliances",
+  },
   { code: "27900", description: "Manufacture of other electrical equipment" },
-  { code: "28110", description: "Manufacture of engines and turbines, except aircraft, vehicle and cycle engines" },
-  { code: "28120", description: "Manufacture of hydraulic and pneumatic transmission equipment" },
-  { code: "28130", description: "Manufacture of other pumps, compressors, taps and valves" },
-  { code: "28140", description: "Manufacture of bearings, gears, gearing and driving elements" },
-  { code: "28150", description: "Manufacture of ovens, furnaces and furnace burners" },
-  { code: "28160", description: "Manufacture of lifting and handling equipment" },
-  { code: "28170", description: "Manufacture of office machinery and equipment (except computers and peripheral equipment)" },
+  {
+    code: "28110",
+    description:
+      "Manufacture of engines and turbines, except aircraft, vehicle and cycle engines",
+  },
+  {
+    code: "28120",
+    description:
+      "Manufacture of hydraulic and pneumatic transmission equipment",
+  },
+  {
+    code: "28130",
+    description: "Manufacture of other pumps, compressors, taps and valves",
+  },
+  {
+    code: "28140",
+    description: "Manufacture of bearings, gears, gearing and driving elements",
+  },
+  {
+    code: "28150",
+    description: "Manufacture of ovens, furnaces and furnace burners",
+  },
+  {
+    code: "28160",
+    description: "Manufacture of lifting and handling equipment",
+  },
+  {
+    code: "28170",
+    description:
+      "Manufacture of office machinery and equipment (except computers and peripheral equipment)",
+  },
   { code: "28210", description: "Manufacture of engines and turbines" },
   { code: "28220", description: "Manufacture of turbines" },
   { code: "28230", description: "Manufacture of other prime movers" },
-  { code: "28240", description: "Manufacture of mechanical power transmission equipment" },
-  { code: "28250", description: "Manufacture of industrial furnaces and ovens" },
-  { code: "28290", description: "Manufacture of other general-purpose machinery" },
-  { code: "28300", description: "Manufacture of agricultural and forestry machinery" },
+  {
+    code: "28240",
+    description: "Manufacture of mechanical power transmission equipment",
+  },
+  {
+    code: "28250",
+    description: "Manufacture of industrial furnaces and ovens",
+  },
+  {
+    code: "28290",
+    description: "Manufacture of other general-purpose machinery",
+  },
+  {
+    code: "28300",
+    description: "Manufacture of agricultural and forestry machinery",
+  },
   { code: "28410", description: "Manufacture of metal forming machinery" },
-  { code: "28420", description: "Manufacture of machine-tools for processing metal" },
+  {
+    code: "28420",
+    description: "Manufacture of machine-tools for processing metal",
+  },
   { code: "28430", description: "Manufacture of other machine tools" },
-  { code: "28510", description: "Manufacture of machinery for mining and construction" },
+  {
+    code: "28510",
+    description: "Manufacture of machinery for mining and construction",
+  },
   { code: "28520", description: "Manufacture of machinery for metallurgy" },
-  { code: "28530", description: "Manufacture of machinery for food, beverage and tobacco processing" },
-  { code: "28540", description: "Manufacture of machinery for textile, apparel and leather production" },
-  { code: "28550", description: "Manufacture of machinery for paper and paperboard production" },
-  { code: "28560", description: "Manufacture of plastics and rubber machinery" },
-  { code: "28590", description: "Manufacture of other special-purpose machinery" },
+  {
+    code: "28530",
+    description:
+      "Manufacture of machinery for food, beverage and tobacco processing",
+  },
+  {
+    code: "28540",
+    description:
+      "Manufacture of machinery for textile, apparel and leather production",
+  },
+  {
+    code: "28550",
+    description: "Manufacture of machinery for paper and paperboard production",
+  },
+  {
+    code: "28560",
+    description: "Manufacture of plastics and rubber machinery",
+  },
+  {
+    code: "28590",
+    description: "Manufacture of other special-purpose machinery",
+  },
   { code: "28610", description: "Manufacture of metal structural components" },
-  { code: "28620", description: "Manufacture of boilers and radiators for central heating" },
+  {
+    code: "28620",
+    description: "Manufacture of boilers and radiators for central heating",
+  },
   { code: "28630", description: "Manufacture of steam engines and turbines" },
   { code: "28640", description: "Manufacture of other prime movers" },
-  { code: "28650", description: "Manufacture of other machinery and equipment for specific industries" },
+  {
+    code: "28650",
+    description:
+      "Manufacture of other machinery and equipment for specific industries",
+  },
   { code: "28660", description: "Manufacture of weapons and ammunition" },
-  { code: "28670", description: "Manufacture of ordnance and ordnance accessories" },
-  { code: "28680", description: "Manufacture of other special-purpose machinery" },
-  { code: "28690", description: "Manufacture of machinery and equipment for other purposes" },
-  { code: "28700", description: "Manufacture of mechanical handling equipment" },
-  { code: "28750", description: "Manufacture of other machinery and equipment" },
+  {
+    code: "28670",
+    description: "Manufacture of ordnance and ordnance accessories",
+  },
+  {
+    code: "28680",
+    description: "Manufacture of other special-purpose machinery",
+  },
+  {
+    code: "28690",
+    description: "Manufacture of machinery and equipment for other purposes",
+  },
+  {
+    code: "28700",
+    description: "Manufacture of mechanical handling equipment",
+  },
+  {
+    code: "28750",
+    description: "Manufacture of other machinery and equipment",
+  },
   { code: "28910", description: "Manufacture of motor vehicles" },
   { code: "28920", description: "Manufacture of motor vehicle bodies" },
-  { code: "28930", description: "Manufacture of motor vehicle parts and accessories" },
+  {
+    code: "28930",
+    description: "Manufacture of motor vehicle parts and accessories",
+  },
   { code: "28940", description: "Manufacture of motorcycles" },
-  { code: "28950", description: "Manufacture of bicycles and invalid carriages" },
+  {
+    code: "28950",
+    description: "Manufacture of bicycles and invalid carriages",
+  },
   { code: "28960", description: "Manufacture of trailers and semi-trailers" },
   { code: "28970", description: "Manufacture of other transport equipment" },
-  { code: "28990", description: "Manufacture of other machinery and equipment" },
+  {
+    code: "28990",
+    description: "Manufacture of other machinery and equipment",
+  },
   { code: "29100", description: "Manufacture of motor vehicles" },
-  { code: "29200", description: "Manufacture of motor vehicle bodies and trailers" },
-  { code: "29300", description: "Manufacture of parts and accessories for motor vehicles" },
+  {
+    code: "29200",
+    description: "Manufacture of motor vehicle bodies and trailers",
+  },
+  {
+    code: "29300",
+    description: "Manufacture of parts and accessories for motor vehicles",
+  },
   { code: "30100", description: "Building of ships and boats" },
-  { code: "30200", description: "Manufacture of railway locomotives and rolling stock" },
-  { code: "30300", description: "Manufacture of air and spacecraft and related machinery" },
-  { code: "30400", description: "Manufacture of transport equipment not elsewhere classified" },
+  {
+    code: "30200",
+    description: "Manufacture of railway locomotives and rolling stock",
+  },
+  {
+    code: "30300",
+    description: "Manufacture of air and spacecraft and related machinery",
+  },
+  {
+    code: "30400",
+    description: "Manufacture of transport equipment not elsewhere classified",
+  },
   { code: "31000", description: "Manufacture of furniture" },
   { code: "31100", description: "Manufacture of chairs and seats" },
   { code: "31200", description: "Manufacture of other furniture" },
-  { code: "32100", description: "Manufacture of jewellery, bijouterie and related articles" },
+  {
+    code: "32100",
+    description: "Manufacture of jewellery, bijouterie and related articles",
+  },
   { code: "32200", description: "Manufacture of musical instruments" },
   { code: "32300", description: "Manufacture of sports goods" },
   { code: "32400", description: "Manufacture of games and toys" },
-  { code: "32500", description: "Manufacture of medical and dental instruments and supplies" },
+  {
+    code: "32500",
+    description: "Manufacture of medical and dental instruments and supplies",
+  },
   { code: "32910", description: "Manufacture of brooms and brushes" },
   { code: "32920", description: "Manufacture of other articles and products" },
-  { code: "33110", description: "Repair and maintenance of fabricated metal products" },
+  {
+    code: "33110",
+    description: "Repair and maintenance of fabricated metal products",
+  },
   { code: "33120", description: "Repair and maintenance of machinery" },
-  { code: "33130", description: "Repair and maintenance of electronic and optical equipment" },
-  { code: "33140", description: "Repair and maintenance of electrical equipment" },
-  { code: "33150", description: "Repair and maintenance of transport equipment, except motor vehicles" },
-  { code: "33160", description: "Repair and maintenance of furniture and home furnishings" },
+  {
+    code: "33130",
+    description: "Repair and maintenance of electronic and optical equipment",
+  },
+  {
+    code: "33140",
+    description: "Repair and maintenance of electrical equipment",
+  },
+  {
+    code: "33150",
+    description:
+      "Repair and maintenance of transport equipment, except motor vehicles",
+  },
+  {
+    code: "33160",
+    description: "Repair and maintenance of furniture and home furnishings",
+  },
   { code: "33170", description: "Repair of other equipment" },
   { code: "33190", description: "Repair and maintenance of other equipment" },
-  { code: "33200", description: "Installation of industrial machinery and equipment" },
+  {
+    code: "33200",
+    description: "Installation of industrial machinery and equipment",
+  },
 
   // Section D: Electricity, Gas, Steam and Air Conditioning Supply
   { code: "35110", description: "Production of electricity" },
@@ -1297,137 +1620,299 @@ export const UK_SIC_CODES: SICCode[] = [
   { code: "37000", description: "Sewerage" },
   { code: "38110", description: "Collection of non-hazardous waste" },
   { code: "38120", description: "Collection of hazardous waste" },
-  { code: "38210", description: "Treatment and disposal of non-hazardous waste" },
+  {
+    code: "38210",
+    description: "Treatment and disposal of non-hazardous waste",
+  },
   { code: "38220", description: "Treatment and disposal of hazardous waste" },
   { code: "38300", description: "Materials recovery and recycling" },
-  { code: "38310", description: "Dismantling of waste electrical and electronic equipment" },
+  {
+    code: "38310",
+    description: "Dismantling of waste electrical and electronic equipment",
+  },
   { code: "38320", description: "Recovery of sorted materials" },
-  { code: "39000", description: "Remediation activities and other waste management services" },
-  { code: "39010", description: "Remediation activities and other waste management services" },
+  {
+    code: "39000",
+    description: "Remediation activities and other waste management services",
+  },
+  {
+    code: "39010",
+    description: "Remediation activities and other waste management services",
+  },
   { code: "39020", description: "Other waste management services" },
 
   // Section F: Construction
   { code: "41100", description: "Development of building projects" },
-  { code: "41200", description: "Construction of residential and non-residential buildings" },
+  {
+    code: "41200",
+    description: "Construction of residential and non-residential buildings",
+  },
   { code: "41201", description: "Construction of residential buildings" },
   { code: "41202", description: "Construction of non-residential buildings" },
   { code: "42110", description: "Construction of roads and motorways" },
-  { code: "42120", description: "Construction of railways and underground railways" },
+  {
+    code: "42120",
+    description: "Construction of railways and underground railways",
+  },
   { code: "42130", description: "Construction of bridges and tunnels" },
   { code: "42210", description: "Construction of utility projects for fluids" },
-  { code: "42220", description: "Construction of utility projects for electricity and telecommunications" },
-  { code: "42900", description: "Construction of other civil engineering projects" },
-  { code: "43110", description: "Demolition and wrecking of buildings; earth moving" },
+  {
+    code: "42220",
+    description:
+      "Construction of utility projects for electricity and telecommunications",
+  },
+  {
+    code: "42900",
+    description: "Construction of other civil engineering projects",
+  },
+  {
+    code: "43110",
+    description: "Demolition and wrecking of buildings; earth moving",
+  },
   { code: "43120", description: "Site preparation" },
   { code: "43130", description: "Test drilling and boring" },
   { code: "43210", description: "Electrical installation" },
-  { code: "43220", description: "Plumbing, heat and air-conditioning installation" },
+  {
+    code: "43220",
+    description: "Plumbing, heat and air-conditioning installation",
+  },
   { code: "43290", description: "Other construction installation" },
   { code: "43300", description: "Building completion and finishing" },
   { code: "43310", description: "Plastering" },
   { code: "43320", description: "Joinery installation" },
-  { code: "43330", description: "Tile hanging, stone facing and other wall and floor coverings" },
+  {
+    code: "43330",
+    description:
+      "Tile hanging, stone facing and other wall and floor coverings",
+  },
   { code: "43340", description: "Painting and glazing" },
   { code: "43350", description: "Other building completion and finishing" },
   { code: "43390", description: "Other specialised construction activities" },
   { code: "43910", description: "Roofing activities" },
   { code: "43920", description: "Insulation work activities" },
   { code: "43930", description: "Scaffolding activities" },
-  { code: "43991", description: "Specialised construction activities for concrete treatment and similar activities" },
-  { code: "43999", description: "Other specialised construction activities not elsewhere classified" },
+  {
+    code: "43991",
+    description:
+      "Specialised construction activities for concrete treatment and similar activities",
+  },
+  {
+    code: "43999",
+    description:
+      "Other specialised construction activities not elsewhere classified",
+  },
 
   // Section G: Wholesale and Retail Trade; Repair of Motor Vehicles and Motorcycles
   { code: "45110", description: "Sale of cars and light motor vehicles" },
   { code: "45120", description: "Sale of heavy trucks and buses" },
   { code: "45190", description: "Sale of other motor vehicles" },
   { code: "45200", description: "Maintenance and repair of motor vehicles" },
-  { code: "45310", description: "Trade in motor vehicle parts and accessories" },
+  {
+    code: "45310",
+    description: "Trade in motor vehicle parts and accessories",
+  },
   { code: "45320", description: "Trade in motorcycle parts and accessories" },
-  { code: "45400", description: "Sale, maintenance and repair of motorcycles and related parts and accessories" },
+  {
+    code: "45400",
+    description:
+      "Sale, maintenance and repair of motorcycles and related parts and accessories",
+  },
   { code: "46110", description: "Wholesale of agricultural products" },
   { code: "46120", description: "Wholesale of food, beverages and tobacco" },
   { code: "46121", description: "Wholesale of fruits and vegetables" },
   { code: "46122", description: "Wholesale of flowers and plants" },
   { code: "46123", description: "Wholesale of live animals" },
   { code: "46124", description: "Wholesale of hides, skins and furs" },
-  { code: "46190", description: "Other wholesale trade in agricultural products" },
+  {
+    code: "46190",
+    description: "Other wholesale trade in agricultural products",
+  },
   { code: "46200", description: "Wholesale of metals and metal ores" },
-  { code: "46300", description: "Wholesale of wood, construction materials and sanitary equipment" },
+  {
+    code: "46300",
+    description:
+      "Wholesale of wood, construction materials and sanitary equipment",
+  },
   { code: "46310", description: "Wholesale of wood and wood products" },
   { code: "46320", description: "Wholesale of metal and metal ores" },
-  { code: "46330", description: "Wholesale of stone, sand, gravel, cement and construction materials" },
-  { code: "46340", description: "Wholesale of hardware, plumbing and heating equipment and supplies" },
+  {
+    code: "46330",
+    description:
+      "Wholesale of stone, sand, gravel, cement and construction materials",
+  },
+  {
+    code: "46340",
+    description:
+      "Wholesale of hardware, plumbing and heating equipment and supplies",
+  },
   { code: "46350", description: "Wholesale of chemical products" },
   { code: "46360", description: "Wholesale of other machinery and equipment" },
   { code: "46370", description: "Wholesale of waste and scrap" },
   { code: "46380", description: "Wholesale of energy products" },
   { code: "46390", description: "Wholesale of waste and scrap materials" },
   { code: "46400", description: "Wholesale trade on a fee or contract basis" },
-  { code: "46410", description: "Acting as agents in the sale of food, beverages and tobacco" },
-  { code: "46490", description: "Acting as agents for the sale of other goods" },
+  {
+    code: "46410",
+    description: "Acting as agents in the sale of food, beverages and tobacco",
+  },
+  {
+    code: "46490",
+    description: "Acting as agents for the sale of other goods",
+  },
   { code: "46500", description: "Wholesale of other household goods" },
-  { code: "46510", description: "Wholesale of textiles, clothing and footwear" },
-  { code: "46520", description: "Wholesale of electrical household appliances and sanitary equipment" },
-  { code: "46530", description: "Wholesale of music and video recordings and musical instruments" },
+  {
+    code: "46510",
+    description: "Wholesale of textiles, clothing and footwear",
+  },
+  {
+    code: "46520",
+    description:
+      "Wholesale of electrical household appliances and sanitary equipment",
+  },
+  {
+    code: "46530",
+    description:
+      "Wholesale of music and video recordings and musical instruments",
+  },
   { code: "46540", description: "Wholesale of sports goods" },
   { code: "46550", description: "Wholesale of games and toys" },
   { code: "46560", description: "Wholesale of furniture" },
   { code: "46570", description: "Wholesale of books and journals" },
   { code: "46580", description: "Other specialised wholesale" },
-  { code: "46590", description: "Other wholesale trade in other household goods" },
+  {
+    code: "46590",
+    description: "Other wholesale trade in other household goods",
+  },
   { code: "46600", description: "Wholesale of waste and scrap" },
-  { code: "46700", description: "Wholesale trade of waste and scrap materials not elsewhere classified" },
+  {
+    code: "46700",
+    description:
+      "Wholesale trade of waste and scrap materials not elsewhere classified",
+  },
   { code: "46710", description: "Wholesale of waste and scrap" },
   { code: "46720", description: "Wholesale of used goods" },
   { code: "46900", description: "Non-specialised wholesale trade" },
-  { code: "47110", description: "Retail sale in non-specialised stores with food, beverages or tobacco predominating" },
+  {
+    code: "47110",
+    description:
+      "Retail sale in non-specialised stores with food, beverages or tobacco predominating",
+  },
   { code: "47120", description: "Other retail sale in non-specialised stores" },
   { code: "47190", description: "Other non-specialised retail trade" },
   { code: "47210", description: "Retail sale of fresh fruits and vegetables" },
-  { code: "47220", description: "Retail sale of fish, crustaceans and molluscs" },
-  { code: "47230", description: "Retail sale of bread, cakes, flour confectionery and sugar confectionery" },
+  {
+    code: "47220",
+    description: "Retail sale of fish, crustaceans and molluscs",
+  },
+  {
+    code: "47230",
+    description:
+      "Retail sale of bread, cakes, flour confectionery and sugar confectionery",
+  },
   { code: "47240", description: "Retail sale of beverages" },
   { code: "47250", description: "Retail sale of tobacco products" },
-  { code: "47260", description: "Other retail sale of food, beverages and tobacco in specialised stores" },
-  { code: "47290", description: "Other retail sale in specialised food stores" },
+  {
+    code: "47260",
+    description:
+      "Other retail sale of food, beverages and tobacco in specialised stores",
+  },
+  {
+    code: "47290",
+    description: "Other retail sale in specialised food stores",
+  },
   { code: "47300", description: "Retail sale of automotive fuel" },
-  { code: "47400", description: "Retail sale of books, newspapers and stationery" },
-  { code: "47410", description: "Retail sale of books, newspapers and stationery" },
+  {
+    code: "47400",
+    description: "Retail sale of books, newspapers and stationery",
+  },
+  {
+    code: "47410",
+    description: "Retail sale of books, newspapers and stationery",
+  },
   { code: "47420", description: "Retail sale of books" },
   { code: "47430", description: "Retail sale of newspapers and stationery" },
-  { code: "47500", description: "Retail sale of clothing, footwear and leather goods" },
+  {
+    code: "47500",
+    description: "Retail sale of clothing, footwear and leather goods",
+  },
   { code: "47510", description: "Retail sale of clothing" },
   { code: "47520", description: "Retail sale of footwear" },
   { code: "47530", description: "Retail sale of leather goods" },
   { code: "47540", description: "Retail sale of sports goods, toys and games" },
-  { code: "47590", description: "Retail sale of other clothing and accessories" },
-  { code: "47600", description: "Retail sale of materials for the construction of buildings; tools; and miscellaneous articles" },
+  {
+    code: "47590",
+    description: "Retail sale of other clothing and accessories",
+  },
+  {
+    code: "47600",
+    description:
+      "Retail sale of materials for the construction of buildings; tools; and miscellaneous articles",
+  },
   { code: "47610", description: "Retail sale of tools" },
   { code: "47620", description: "Retail sale of paints and varnishes" },
-  { code: "47630", description: "Retail sale of materials for the construction of buildings" },
-  { code: "47640", description: "Retail sale of sanitary fixtures and fittings" },
-  { code: "47650", description: "Other retail sale of materials for the construction of buildings" },
+  {
+    code: "47630",
+    description: "Retail sale of materials for the construction of buildings",
+  },
+  {
+    code: "47640",
+    description: "Retail sale of sanitary fixtures and fittings",
+  },
+  {
+    code: "47650",
+    description:
+      "Other retail sale of materials for the construction of buildings",
+  },
   { code: "47710", description: "Retail sale of furniture" },
   { code: "47720", description: "Retail sale of lighting equipment and fans" },
   { code: "47730", description: "Retail sale of kitchen and tableware" },
-  { code: "47740", description: "Retail sale of carpets, rugs and wall coverings" },
-  { code: "47750", description: "Retail sale of paints, varnishes and wall coverings" },
+  {
+    code: "47740",
+    description: "Retail sale of carpets, rugs and wall coverings",
+  },
+  {
+    code: "47750",
+    description: "Retail sale of paints, varnishes and wall coverings",
+  },
   { code: "47760", description: "Other retail sale of household articles" },
   { code: "47790", description: "Other retail sale of household goods" },
-  { code: "47810", description: "Retail sale of clothing and accessories (second hand)" },
-  { code: "47820", description: "Retail sale of furniture and home furnishings (second hand)" },
+  {
+    code: "47810",
+    description: "Retail sale of clothing and accessories (second hand)",
+  },
+  {
+    code: "47820",
+    description: "Retail sale of furniture and home furnishings (second hand)",
+  },
   { code: "47890", description: "Other retail sale of second hand goods" },
-  { code: "47900", description: "Retail trade not in stores, stalls and markets" },
-  { code: "47910", description: "Retail sale via mail order houses or via Internet" },
-  { code: "47920", description: "Retail sale via stalls and markets of food, beverages and tobacco products" },
-  { code: "47930", description: "Retail sale via stalls and markets of textiles, clothing and footwear" },
+  {
+    code: "47900",
+    description: "Retail trade not in stores, stalls and markets",
+  },
+  {
+    code: "47910",
+    description: "Retail sale via mail order houses or via Internet",
+  },
+  {
+    code: "47920",
+    description:
+      "Retail sale via stalls and markets of food, beverages and tobacco products",
+  },
+  {
+    code: "47930",
+    description:
+      "Retail sale via stalls and markets of textiles, clothing and footwear",
+  },
   { code: "47990", description: "Other retail sale via stalls and markets" },
 
   // Section H: Transportation and Storage
   { code: "49100", description: "Passenger rail transport, interurban" },
   { code: "49110", description: "Passenger rail transport, interurban" },
   { code: "49200", description: "Freight rail transport" },
-  { code: "49300", description: "Other urban, suburban and regional passenger land transport" },
+  {
+    code: "49300",
+    description: "Other urban, suburban and regional passenger land transport",
+  },
   { code: "49310", description: "Urban and suburban passenger land transport" },
   { code: "49320", description: "Taxi operation" },
   { code: "49390", description: "Other passenger land transport" },
@@ -1442,12 +1927,27 @@ export const UK_SIC_CODES: SICCode[] = [
   { code: "51210", description: "Freight air transport" },
   { code: "51220", description: "Space transport" },
   { code: "52100", description: "Warehousing and storage" },
-  { code: "52210", description: "Service activities incidental to land transportation" },
-  { code: "52220", description: "Service activities incidental to water transportation" },
-  { code: "52230", description: "Service activities incidental to air transportation" },
+  {
+    code: "52210",
+    description: "Service activities incidental to land transportation",
+  },
+  {
+    code: "52220",
+    description: "Service activities incidental to water transportation",
+  },
+  {
+    code: "52230",
+    description: "Service activities incidental to air transportation",
+  },
   { code: "52240", description: "Cargo handling" },
-  { code: "52290", description: "Other service activities incidental to transportation" },
-  { code: "53100", description: "Postal activities under universal service obligation" },
+  {
+    code: "52290",
+    description: "Other service activities incidental to transportation",
+  },
+  {
+    code: "53100",
+    description: "Postal activities under universal service obligation",
+  },
   { code: "53200", description: "Other postal and courier activities" },
 
   // Section I: Accommodation and Food Service
@@ -1455,7 +1955,11 @@ export const UK_SIC_CODES: SICCode[] = [
   { code: "55110", description: "Hotels and similar accommodation" },
   { code: "55120", description: "Holiday and other short-stay accommodation" },
   { code: "55210", description: "Holiday and other short-stay accommodation" },
-  { code: "55220", description: "Camping grounds, recreational vehicle parks and trailer parks" },
+  {
+    code: "55220",
+    description:
+      "Camping grounds, recreational vehicle parks and trailer parks",
+  },
   { code: "55230", description: "Other accommodation" },
   { code: "55300", description: "Food and beverage service activities" },
   { code: "55301", description: "Operation of restaurants" },
@@ -1467,20 +1971,41 @@ export const UK_SIC_CODES: SICCode[] = [
   { code: "55900", description: "Other food and beverage service" },
 
   // Section J: Information and Communication
-  { code: "58110", description: "Publishing of books, brochures and other printed matter" },
+  {
+    code: "58110",
+    description: "Publishing of books, brochures and other printed matter",
+  },
   { code: "58120", description: "Publishing of newspapers" },
   { code: "58130", description: "Publishing of journals and periodicals" },
   { code: "58140", description: "Publishing of recorded media" },
   { code: "58190", description: "Other publishing activities" },
   { code: "58210", description: "Publishing of computer games" },
   { code: "58290", description: "Other software publishing" },
-  { code: "59110", description: "Motion picture, video and television programme production activities" },
-  { code: "59120", description: "Motion picture, video and television programme post-production activities" },
-  { code: "59130", description: "Motion picture, video and television programme distribution activities" },
+  {
+    code: "59110",
+    description:
+      "Motion picture, video and television programme production activities",
+  },
+  {
+    code: "59120",
+    description:
+      "Motion picture, video and television programme post-production activities",
+  },
+  {
+    code: "59130",
+    description:
+      "Motion picture, video and television programme distribution activities",
+  },
   { code: "59140", description: "Projection of motion pictures" },
-  { code: "59200", description: "Sound recording and music publishing activities" },
+  {
+    code: "59200",
+    description: "Sound recording and music publishing activities",
+  },
   { code: "60100", description: "Radio broadcasting" },
-  { code: "60200", description: "Television programming and broadcasting activities" },
+  {
+    code: "60200",
+    description: "Television programming and broadcasting activities",
+  },
   { code: "61100", description: "Wired telecommunications activities" },
   { code: "61200", description: "Wireless telecommunications activities" },
   { code: "61300", description: "Satellite telecommunications activities" },
@@ -1488,15 +2013,27 @@ export const UK_SIC_CODES: SICCode[] = [
   { code: "62010", description: "Computer programming activities" },
   { code: "62020", description: "Computer consultancy activities" },
   { code: "62030", description: "Computer facilities management activities" },
-  { code: "62090", description: "Other information technology and computer service activities" },
-  { code: "63110", description: "Data processing, hosting and related activities" },
+  {
+    code: "62090",
+    description: "Other information technology and computer service activities",
+  },
+  {
+    code: "63110",
+    description: "Data processing, hosting and related activities",
+  },
   { code: "63120", description: "Web portals" },
   { code: "63210", description: "Data processing activities" },
   { code: "63220", description: "Web portal activities" },
-  { code: "63290", description: "Other information technology service activities" },
+  {
+    code: "63290",
+    description: "Other information technology service activities",
+  },
   { code: "63910", description: "News agency activities" },
   { code: "63920", description: "Libraries and archives" },
-  { code: "63930", description: "Museums, historical sites and similar institutions" },
+  {
+    code: "63930",
+    description: "Museums, historical sites and similar institutions",
+  },
   { code: "63990", description: "Other information service activities" },
 
   // Section K: Financial and Insurance Activities
@@ -1510,128 +2047,279 @@ export const UK_SIC_CODES: SICCode[] = [
   { code: "64220", description: "Other financial service activities" },
   { code: "64229", description: "Other financial service activities" },
   { code: "64301", description: "Stock exchange and related activities" },
-  { code: "64302", description: "Activities of investment trusts and similar financial entities" },
+  {
+    code: "64302",
+    description:
+      "Activities of investment trusts and similar financial entities",
+  },
   { code: "64303", description: "Fund management activities" },
-  { code: "64304", description: "Activities of portfolio investment companies" },
+  {
+    code: "64304",
+    description: "Activities of portfolio investment companies",
+  },
   { code: "64309", description: "Other financial market service activities" },
   { code: "64910", description: "Financial guarantee and surety services" },
-  { code: "64921", description: "Life insurance and pension funding, except compulsory social security" },
+  {
+    code: "64921",
+    description:
+      "Life insurance and pension funding, except compulsory social security",
+  },
   { code: "64922", description: "Non-life insurance" },
   { code: "64929", description: "Other insurance activities" },
-  { code: "64991", description: "Financial intermediation and brokerage services" },
+  {
+    code: "64991",
+    description: "Financial intermediation and brokerage services",
+  },
   { code: "64992", description: "Financial consultancy activities" },
-  { code: "64999", description: "Other financial service activities, except insurance and pension funding" },
+  {
+    code: "64999",
+    description:
+      "Other financial service activities, except insurance and pension funding",
+  },
 
   // Section L: Real Estate Activities
   { code: "68100", description: "Buying and selling of own real estate" },
-  { code: "68200", description: "Renting and operating of own or leased real estate" },
+  {
+    code: "68200",
+    description: "Renting and operating of own or leased real estate",
+  },
   { code: "68201", description: "Renting and letting of own property" },
   { code: "68202", description: "Letting of own property" },
   { code: "68209", description: "Other letting and operating" },
   { code: "68310", description: "Real estate agencies" },
-  { code: "68320", description: "Management of real estate on a fee or contract basis" },
+  {
+    code: "68320",
+    description: "Management of real estate on a fee or contract basis",
+  },
 
   // Section M: Professional, Scientific and Technical Activities
   { code: "69101", description: "Barristers at law" },
   { code: "69102", description: "Solicitors" },
-  { code: "69103", description: "Legal representation by those authorised by bodies other than the Bar Council" },
+  {
+    code: "69103",
+    description:
+      "Legal representation by those authorised by bodies other than the Bar Council",
+  },
   { code: "69109", description: "Other legal activities" },
   { code: "69201", description: "Accountancy" },
   { code: "69202", description: "Taxation" },
   { code: "69203", description: "Auditing" },
   { code: "69204", description: "Other accounting" },
   { code: "69209", description: "Other professional consultancy activities" },
-  { code: "70100", description: "Activities of head offices; management consultancy activities" },
-  { code: "70210", description: "Public relations and communication activities" },
+  {
+    code: "70100",
+    description:
+      "Activities of head offices; management consultancy activities",
+  },
+  {
+    code: "70210",
+    description: "Public relations and communication activities",
+  },
   { code: "70220", description: "Management consultancy activities" },
   { code: "71110", description: "Architectural activities" },
   { code: "71120", description: "Engineering activities related to buildings" },
   { code: "71129", description: "Other architectural and engineering design" },
-  { code: "71200", description: "Engineering, design and technical consultancy activities" },
-  { code: "71210", description: "Engineering design activities related to manufacturing" },
-  { code: "71220", description: "Engineering activities related to buildings and civil engineering" },
+  {
+    code: "71200",
+    description: "Engineering, design and technical consultancy activities",
+  },
+  {
+    code: "71210",
+    description: "Engineering design activities related to manufacturing",
+  },
+  {
+    code: "71220",
+    description:
+      "Engineering activities related to buildings and civil engineering",
+  },
   { code: "71229", description: "Other engineering activities" },
-  { code: "72110", description: "Research and experimental development on natural sciences and engineering" },
-  { code: "72120", description: "Research and experimental development on social sciences and humanities" },
-  { code: "72190", description: "Other research and experimental development on natural sciences and engineering" },
-  { code: "72200", description: "Research and experimental development on social sciences and humanities" },
+  {
+    code: "72110",
+    description:
+      "Research and experimental development on natural sciences and engineering",
+  },
+  {
+    code: "72120",
+    description:
+      "Research and experimental development on social sciences and humanities",
+  },
+  {
+    code: "72190",
+    description:
+      "Other research and experimental development on natural sciences and engineering",
+  },
+  {
+    code: "72200",
+    description:
+      "Research and experimental development on social sciences and humanities",
+  },
   { code: "73110", description: "Advertising agencies" },
   { code: "73120", description: "Media representation services" },
   { code: "73200", description: "Market research and public opinion polling" },
   { code: "74100", description: "Specialized design activities" },
   { code: "74200", description: "Photographic activities" },
   { code: "74300", description: "Translation and interpretation activities" },
-  { code: "74900", description: "Other professional, scientific and technical activities" },
+  {
+    code: "74900",
+    description: "Other professional, scientific and technical activities",
+  },
   { code: "74901", description: "Sign writing and similar activities" },
   { code: "74902", description: "Veterinary activities" },
   { code: "74909", description: "Other professional and technical activities" },
   { code: "75000", description: "Veterinary activities" },
 
   // Section N: Administrative and Support Service Activities
-  { code: "77110", description: "Renting and leasing of cars and light motor vehicles" },
-  { code: "77120", description: "Renting and leasing of trucks and heavy vehicles" },
-  { code: "77210", description: "Renting and leasing of recreational and sports goods" },
+  {
+    code: "77110",
+    description: "Renting and leasing of cars and light motor vehicles",
+  },
+  {
+    code: "77120",
+    description: "Renting and leasing of trucks and heavy vehicles",
+  },
+  {
+    code: "77210",
+    description: "Renting and leasing of recreational and sports goods",
+  },
   { code: "77220", description: "Renting of video tapes and discs" },
   { code: "77290", description: "Renting and leasing of other goods" },
-  { code: "77300", description: "Leasing of intellectual property and similar products" },
-  { code: "77310", description: "Leasing of intellectual property and similar products" },
-  { code: "77320", description: "Leasing of industrial machinery and equipment" },
-  { code: "77330", description: "Leasing of other machinery, equipment and tangible objects" },
-  { code: "77390", description: "Leasing of other intellectual property and similar products" },
+  {
+    code: "77300",
+    description: "Leasing of intellectual property and similar products",
+  },
+  {
+    code: "77310",
+    description: "Leasing of intellectual property and similar products",
+  },
+  {
+    code: "77320",
+    description: "Leasing of industrial machinery and equipment",
+  },
+  {
+    code: "77330",
+    description: "Leasing of other machinery, equipment and tangible objects",
+  },
+  {
+    code: "77390",
+    description: "Leasing of other intellectual property and similar products",
+  },
   { code: "78100", description: "Activities of employment placement agencies" },
   { code: "78110", description: "Private employment agencies" },
   { code: "78120", description: "Temporary employment agency activities" },
   { code: "78200", description: "Temporary employment agency activities" },
   { code: "78300", description: "Other human resources provision" },
-  { code: "78999", description: "Other professional, scientific and technical activities" },
+  {
+    code: "78999",
+    description: "Other professional, scientific and technical activities",
+  },
   { code: "79110", description: "Activities of travel agency" },
   { code: "79120", description: "Tour operator activities" },
-  { code: "79200", description: "Activities of travel agencies and tour operators" },
+  {
+    code: "79200",
+    description: "Activities of travel agencies and tour operators",
+  },
   { code: "79210", description: "Activities of travel agencies" },
   { code: "79220", description: "Activities of tour operators" },
-  { code: "79900", description: "Other reservation service and related activities" },
+  {
+    code: "79900",
+    description: "Other reservation service and related activities",
+  },
   { code: "80100", description: "Private security activities" },
-  { code: "80210", description: "Activities of security systems service providers" },
+  {
+    code: "80210",
+    description: "Activities of security systems service providers",
+  },
   { code: "80220", description: "Facilities support services" },
   { code: "80230", description: "Cleaning activities" },
   { code: "80241", description: "General cleaning of buildings" },
   { code: "80242", description: "Specialised cleaning services" },
-  { code: "80243", description: "Street and related outdoor cleaning services" },
+  {
+    code: "80243",
+    description: "Street and related outdoor cleaning services",
+  },
   { code: "80300", description: "Cleaning activities" },
   { code: "81100", description: "Combined facilities support activities" },
   { code: "81210", description: "General cleaning of buildings" },
   { code: "81220", description: "Specialised cleaning services" },
-  { code: "81230", description: "Street and related outdoor cleaning services" },
+  {
+    code: "81230",
+    description: "Street and related outdoor cleaning services",
+  },
   { code: "81300", description: "Landscape service activities" },
-  { code: "82110", description: "Administrative and executive office activities" },
-  { code: "82190", description: "Other administrative and office support activities" },
+  {
+    code: "82110",
+    description: "Administrative and executive office activities",
+  },
+  {
+    code: "82190",
+    description: "Other administrative and office support activities",
+  },
   { code: "82200", description: "Activities of call centres" },
-  { code: "82300", description: "Document preparation and other office support activities" },
+  {
+    code: "82300",
+    description: "Document preparation and other office support activities",
+  },
   { code: "82910", description: "Activities of collection agencies" },
   { code: "82920", description: "Activities of credit reporting agencies" },
-  { code: "82990", description: "Other professional, scientific and technical activities" },
-  { code: "83100", description: "Activities of labour supply and personnel placement agencies" },
-  { code: "83110", description: "Combined office administrative service activities" },
+  {
+    code: "82990",
+    description: "Other professional, scientific and technical activities",
+  },
+  {
+    code: "83100",
+    description: "Activities of labour supply and personnel placement agencies",
+  },
+  {
+    code: "83110",
+    description: "Combined office administrative service activities",
+  },
   { code: "83120", description: "Activities of call centres" },
-  { code: "83130", description: "Document preparation and other specialist office support activities" },
+  {
+    code: "83130",
+    description:
+      "Document preparation and other specialist office support activities",
+  },
   { code: "83210", description: "Activities of collection agencies" },
   { code: "83220", description: "Activities of credit reporting agencies" },
-  { code: "83290", description: "Other administrative and office support activities" },
-  { code: "83300", description: "Activity of business and management consultants" },
+  {
+    code: "83290",
+    description: "Other administrative and office support activities",
+  },
+  {
+    code: "83300",
+    description: "Activity of business and management consultants",
+  },
   { code: "83910", description: "Activities associated with waste management" },
   { code: "83920", description: "Activities associated with sanitation" },
   { code: "83930", description: "Landscaping service activities" },
-  { code: "83990", description: "Other service activities incidental to mining and quarrying" },
+  {
+    code: "83990",
+    description: "Other service activities incidental to mining and quarrying",
+  },
 
   // Section O: Public Administration and Defence
   { code: "84110", description: "General public administration activities" },
-  { code: "84120", description: "Regulation of the activities of providing health care, education, cultural services and other social services, excluding social security" },
-  { code: "84130", description: "Regulation of and contribution to more efficient operation of businesses" },
+  {
+    code: "84120",
+    description:
+      "Regulation of the activities of providing health care, education, cultural services and other social services, excluding social security",
+  },
+  {
+    code: "84130",
+    description:
+      "Regulation of and contribution to more efficient operation of businesses",
+  },
   { code: "84210", description: "Foreign affairs" },
   { code: "84220", description: "Defence activities" },
   { code: "84230", description: "Public order and safety activities" },
-  { code: "84240", description: "Firefighting and rescue and ambulance service activities" },
-  { code: "84250", description: "Activities related to the enforcement of legal requirements" },
+  {
+    code: "84240",
+    description: "Firefighting and rescue and ambulance service activities",
+  },
+  {
+    code: "84250",
+    description: "Activities related to the enforcement of legal requirements",
+  },
   { code: "84300", description: "Compulsory social security activities" },
 
   // Section P: Education
@@ -1653,26 +2341,60 @@ export const UK_SIC_CODES: SICCode[] = [
   { code: "86210", description: "General medical practice activities" },
   { code: "86220", description: "Specialist medical practice activities" },
   { code: "86230", description: "Dental practice activities" },
-  { code: "86240", description: "Other professional, scientific and technical activities" },
-  { code: "86900", description: "Other professional, scientific and technical activities" },
+  {
+    code: "86240",
+    description: "Other professional, scientific and technical activities",
+  },
+  {
+    code: "86900",
+    description: "Other professional, scientific and technical activities",
+  },
   { code: "87100", description: "Residential nursing care facilities" },
   { code: "87200", description: "Residential care facilities" },
   { code: "87210", description: "Residential care for the elderly" },
-  { code: "87220", description: "Residential care facilities for the disabled (not psychiatric)" },
-  { code: "87300", description: "Social work activities without accommodation" },
+  {
+    code: "87220",
+    description:
+      "Residential care facilities for the disabled (not psychiatric)",
+  },
+  {
+    code: "87300",
+    description: "Social work activities without accommodation",
+  },
   { code: "87310", description: "Child daycare activities" },
-  { code: "87320", description: "Social work activities for the elderly and disabled without accommodation" },
-  { code: "87330", description: "Social work activities for the disabled without accommodation" },
-  { code: "87900", description: "Other social work activities without accommodation" },
+  {
+    code: "87320",
+    description:
+      "Social work activities for the elderly and disabled without accommodation",
+  },
+  {
+    code: "87330",
+    description:
+      "Social work activities for the disabled without accommodation",
+  },
+  {
+    code: "87900",
+    description: "Other social work activities without accommodation",
+  },
 
   // Section R: Arts, Entertainment and Recreation
   { code: "90010", description: "Performing arts" },
   { code: "90020", description: "Support services to performing arts" },
-  { code: "90030", description: "Artistic and literary creation and interpretation" },
+  {
+    code: "90030",
+    description: "Artistic and literary creation and interpretation",
+  },
   { code: "90040", description: "Operation of arts facilities" },
   { code: "91010", description: "Library and archive activities" },
-  { code: "91020", description: "Museums, historical sites and similar institution activities" },
-  { code: "91030", description: "Botanical and zoological gardens and nature reserves activities" },
+  {
+    code: "91020",
+    description: "Museums, historical sites and similar institution activities",
+  },
+  {
+    code: "91030",
+    description:
+      "Botanical and zoological gardens and nature reserves activities",
+  },
   { code: "92000", description: "Gambling and betting activities" },
   { code: "92110", description: "Gambling activities" },
   { code: "92120", description: "Betting activities" },
@@ -1680,42 +2402,82 @@ export const UK_SIC_CODES: SICCode[] = [
   { code: "93120", description: "Activities of sports clubs" },
   { code: "93130", description: "Fitness facilities" },
   { code: "93190", description: "Other sports activities" },
-  { code: "93210", description: "Activities of amusement parks and theme parks" },
+  {
+    code: "93210",
+    description: "Activities of amusement parks and theme parks",
+  },
   { code: "93290", description: "Other amusement and recreation activities" },
 
   // Section S: Other Service Activities
-  { code: "94110", description: "Business and employers membership organizations" },
+  {
+    code: "94110",
+    description: "Business and employers membership organizations",
+  },
   { code: "94120", description: "Professional membership organizations" },
   { code: "94200", description: "Trade unions" },
   { code: "94910", description: "Religious organizations" },
   { code: "94920", description: "Political organizations" },
-  { code: "94990", description: "Other not elsewhere classified membership organizations" },
-  { code: "95110", description: "Repair of computers and peripheral equipment" },
+  {
+    code: "94990",
+    description: "Other not elsewhere classified membership organizations",
+  },
+  {
+    code: "95110",
+    description: "Repair of computers and peripheral equipment",
+  },
   { code: "95120", description: "Repair of communication equipment" },
   { code: "95210", description: "Repair of consumer electronics" },
-  { code: "95220", description: "Repair of household appliances and equipment" },
+  {
+    code: "95220",
+    description: "Repair of household appliances and equipment",
+  },
   { code: "95230", description: "Repair of footwear and leather goods" },
   { code: "95240", description: "Repair of furniture and home furnishings" },
   { code: "95250", description: "Repair of watches, clocks and jewellery" },
-  { code: "95290", description: "Repair of other personal and household goods" },
-  { code: "96010", description: "Washing and dry-cleaning of textile and fur products" },
+  {
+    code: "95290",
+    description: "Repair of other personal and household goods",
+  },
+  {
+    code: "96010",
+    description: "Washing and dry-cleaning of textile and fur products",
+  },
   { code: "96020", description: "Hairdressing and other beauty treatment" },
   { code: "96030", description: "Funeral and cremation services" },
   { code: "96040", description: "Other personal service activities" },
 
   // Section T: Activities of Households
-  { code: "97000", description: "Activities of households as employers of domestic personnel" },
-  { code: "98100", description: "Undifferentiated goods and services producing activities of private households for own use" },
-  { code: "98200", description: "Undifferentiated services producing activities of private households for own use" },
+  {
+    code: "97000",
+    description: "Activities of households as employers of domestic personnel",
+  },
+  {
+    code: "98100",
+    description:
+      "Undifferentiated goods and services producing activities of private households for own use",
+  },
+  {
+    code: "98200",
+    description:
+      "Undifferentiated services producing activities of private households for own use",
+  },
 
   // Section U: Activities of Extraterritorial Organisations
-  { code: "99000", description: "Activities of extraterritorial organisations and bodies" },
+  {
+    code: "99000",
+    description: "Activities of extraterritorial organisations and bodies",
+  },
 ];
 
 export interface CompanyIncorporation {
   id: string;
   companyName: string;
-  companyType: "private_limited" | "public_limited" | "limited_by_guarantee" | "private_guarantee" | "unlimited";
+  companyType:
+    | "private_limited"
+    | "public_limited"
+    | "limited_by_guarantee"
+    | "private_guarantee"
+    | "unlimited";
   registeredOfficeAddress: string;
   registeredOfficePostcode: string;
   registeredOfficeCity: string;

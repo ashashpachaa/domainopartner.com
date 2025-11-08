@@ -4,7 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft, CheckCircle2, XCircle, Clock, User } from "lucide-react";
 import { useState, useMemo } from "react";
-import { mockClientRequests, mockUsers, ClientRequest, mockStaff } from "@/lib/mockData";
+import {
+  mockClientRequests,
+  mockUsers,
+  ClientRequest,
+  mockStaff,
+} from "@/lib/mockData";
 import { toast } from "sonner";
 
 export default function AdminClientRequestDetail() {
@@ -34,7 +39,7 @@ export default function AdminClientRequestDetail() {
       const createdUser = users.find(
         (u) =>
           u.email === foundRequest.email &&
-          u.firstName === foundRequest.firstName
+          u.firstName === foundRequest.firstName,
       );
       if (createdUser && createdUser.assignedToStaffId) {
         setAssignedToStaffId(createdUser.assignedToStaffId);
@@ -111,7 +116,9 @@ export default function AdminClientRequestDetail() {
       localStorage.setItem("mockUsers", JSON.stringify(mockUsers));
 
       const assignedStaffName = assignedToStaffId
-        ? mockStaff.find(s => s.id === assignedToStaffId)?.firstName + " " + mockStaff.find(s => s.id === assignedToStaffId)?.lastName
+        ? mockStaff.find((s) => s.id === assignedToStaffId)?.firstName +
+          " " +
+          mockStaff.find((s) => s.id === assignedToStaffId)?.lastName
         : "No one";
       toast.success(
         `✅ ${request.firstName} ${request.lastName}'s account approved! Assigned to: ${assignedStaffName}`,
@@ -284,16 +291,25 @@ export default function AdminClientRequestDetail() {
             <div className="mb-6 space-y-3">
               <div className="p-4 bg-slate-50 border border-slate-200 rounded-lg">
                 <p className="text-sm text-slate-600">
-                  Reviewed on {new Date(request.reviewedAt).toLocaleDateString()}{" "}
-                  by <span className="font-medium">Admin</span>
+                  Reviewed on{" "}
+                  {new Date(request.reviewedAt).toLocaleDateString()} by{" "}
+                  <span className="font-medium">Admin</span>
                 </p>
               </div>
               {assignedToStaffId && (
                 <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
                   <p className="text-sm text-blue-700">
                     <User className="w-4 h-4 inline mr-2" />
-                    Assigned to: <span className="font-medium">
-                      {mockStaff.find(s => s.id === assignedToStaffId)?.firstName} {mockStaff.find(s => s.id === assignedToStaffId)?.lastName}
+                    Assigned to:{" "}
+                    <span className="font-medium">
+                      {
+                        mockStaff.find((s) => s.id === assignedToStaffId)
+                          ?.firstName
+                      }{" "}
+                      {
+                        mockStaff.find((s) => s.id === assignedToStaffId)
+                          ?.lastName
+                      }
                     </span>
                   </p>
                 </div>
@@ -322,7 +338,8 @@ export default function AdminClientRequestDetail() {
                   ))}
                 </select>
                 <p className="text-xs text-slate-500 mt-1">
-                  This staff member will be responsible for following up on this client's orders.
+                  This staff member will be responsible for following up on this
+                  client's orders.
                 </p>
               </div>
 

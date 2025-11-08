@@ -1,6 +1,11 @@
 import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { mockOrders, mockInvoices, mockUsers, mockProducts } from "@/lib/mockData";
+import {
+  mockOrders,
+  mockInvoices,
+  mockUsers,
+  mockProducts,
+} from "@/lib/mockData";
 import ClientLayout from "@/components/ClientLayout";
 import { Button } from "@/components/ui/button";
 import {
@@ -193,34 +198,75 @@ export default function ClientDashboard() {
             <h2 className="text-lg font-semibold text-slate-900 flex items-center gap-2">
               <ShoppingCart className="w-5 h-5" /> Available Products
             </h2>
-            <Button variant="ghost" onClick={() => navigate("/client/orders/new")} className="text-primary-600">
+            <Button
+              variant="ghost"
+              onClick={() => navigate("/client/orders/new")}
+              className="text-primary-600"
+            >
               Create Order <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-6">
             {products.slice(0, 6).map((product) => (
-              <div key={product.id} className="p-4 border border-slate-200 rounded-lg hover:shadow-md transition cursor-pointer" onClick={() => navigate(`/client/orders/new?productId=${product.id}`)}>
-                <h3 className="font-semibold text-slate-900 mb-1">{product.name}</h3>
-                <p className="text-xs text-slate-600 mb-3 line-clamp-2">{product.description}</p>
+              <div
+                key={product.id}
+                className="p-4 border border-slate-200 rounded-lg hover:shadow-md transition cursor-pointer"
+                onClick={() =>
+                  navigate(`/client/orders/new?productId=${product.id}`)
+                }
+              >
+                <h3 className="font-semibold text-slate-900 mb-1">
+                  {product.name}
+                </h3>
+                <p className="text-xs text-slate-600 mb-3 line-clamp-2">
+                  {product.description}
+                </p>
 
                 <div className="mb-3 space-y-1 text-xs">
-                  <p className="font-bold text-primary-600">{product.price} {product.currency}</p>
+                  <p className="font-bold text-primary-600">
+                    {product.price} {product.currency}
+                  </p>
                   <p className="text-slate-600">Duration: {product.duration}</p>
                   <p className="text-slate-600">Location: {product.country}</p>
                 </div>
 
                 {/* Services included */}
-                {(product.services.hasApostille || product.services.hasPOA || product.services.hasShipping || product.services.hasFinancialReport) && (
+                {(product.services.hasApostille ||
+                  product.services.hasPOA ||
+                  product.services.hasShipping ||
+                  product.services.hasFinancialReport) && (
                   <div className="text-xs mb-3 space-y-1 bg-green-50 p-2 rounded">
-                    {product.services.hasApostille && <p className="text-green-700 flex items-center gap-1"><CheckCircle className="w-3 h-3" /> Apostille</p>}
-                    {product.services.hasPOA && <p className="text-green-700 flex items-center gap-1"><CheckCircle className="w-3 h-3" /> POA</p>}
-                    {product.services.hasShipping && <p className="text-green-700 flex items-center gap-1"><CheckCircle className="w-3 h-3" /> Shipping</p>}
-                    {product.services.hasFinancialReport && <p className="text-green-700 flex items-center gap-1"><CheckCircle className="w-3 h-3" /> Financial Report</p>}
+                    {product.services.hasApostille && (
+                      <p className="text-green-700 flex items-center gap-1">
+                        <CheckCircle className="w-3 h-3" /> Apostille
+                      </p>
+                    )}
+                    {product.services.hasPOA && (
+                      <p className="text-green-700 flex items-center gap-1">
+                        <CheckCircle className="w-3 h-3" /> POA
+                      </p>
+                    )}
+                    {product.services.hasShipping && (
+                      <p className="text-green-700 flex items-center gap-1">
+                        <CheckCircle className="w-3 h-3" /> Shipping
+                      </p>
+                    )}
+                    {product.services.hasFinancialReport && (
+                      <p className="text-green-700 flex items-center gap-1">
+                        <CheckCircle className="w-3 h-3" /> Financial Report
+                      </p>
+                    )}
                   </div>
                 )}
 
-                <Button size="sm" onClick={() => navigate(`/client/orders/new?productId=${product.id}`)} className="w-full">
+                <Button
+                  size="sm"
+                  onClick={() =>
+                    navigate(`/client/orders/new?productId=${product.id}`)
+                  }
+                  className="w-full"
+                >
                   Order Now
                 </Button>
               </div>

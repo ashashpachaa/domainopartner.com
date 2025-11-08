@@ -20,64 +20,64 @@ export interface CompanyValidationResult {
 }
 
 export function useCompanyNameValidation() {
-  const [validationResult, setValidationResult] = useState<CompanyValidationResult | null>(null);
+  const [validationResult, setValidationResult] =
+    useState<CompanyValidationResult | null>(null);
   const [isValidating, setIsValidating] = useState(false);
   const [lastValidatedName, setLastValidatedName] = useState("");
-  const [debounceTimer, setDebounceTimer] = useState<NodeJS.Timeout | null>(null);
+  const [debounceTimer, setDebounceTimer] = useState<NodeJS.Timeout | null>(
+    null,
+  );
 
-  const validateCompanyName = useCallback(
-    async (companyName: string) => {
-      if (!companyName || companyName.trim().length < 2) {
-        setValidationResult(null);
-        return;
-      }
+  const validateCompanyName = useCallback(async (companyName: string) => {
+    if (!companyName || companyName.trim().length < 2) {
+      setValidationResult(null);
+      return;
+    }
 
-      setIsValidating(true);
+    setIsValidating(true);
 
-      try {
-        const response = await fetch(
-          `/api/companies-house/search?companyName=${encodeURIComponent(companyName)}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+    try {
+      const response = await fetch(
+        `/api/companies-house/search?companyName=${encodeURIComponent(companyName)}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      );
 
-        if (!response.ok) {
-          const errorData = await response.json();
-          setValidationResult({
-            isAvailable: null,
-            totalResults: 0,
-            exactMatch: null,
-            similarMatch: null,
-            results: [],
-            error: errorData.error || "Failed to validate company name",
-          });
-          setIsValidating(false);
-          return;
-        }
-
-        const data = await response.json();
-        setValidationResult(data);
-        setLastValidatedName(companyName);
-      } catch (error) {
-        console.error("Company name validation error:", error);
+      if (!response.ok) {
+        const errorData = await response.json();
         setValidationResult({
           isAvailable: null,
           totalResults: 0,
           exactMatch: null,
           similarMatch: null,
           results: [],
-          error: "Failed to check company availability",
+          error: errorData.error || "Failed to validate company name",
         });
-      } finally {
         setIsValidating(false);
+        return;
       }
-    },
-    []
-  );
+
+      const data = await response.json();
+      setValidationResult(data);
+      setLastValidatedName(companyName);
+    } catch (error) {
+      console.error("Company name validation error:", error);
+      setValidationResult({
+        isAvailable: null,
+        totalResults: 0,
+        exactMatch: null,
+        similarMatch: null,
+        results: [],
+        error: "Failed to check company availability",
+      });
+    } finally {
+      setIsValidating(false);
+    }
+  }, []);
 
   const checkCompanyName = useCallback(
     (companyName: string) => {
@@ -96,7 +96,7 @@ export function useCompanyNameValidation() {
 
       setDebounceTimer(timer);
     },
-    [debounceTimer, validateCompanyName]
+    [debounceTimer, validateCompanyName],
   );
 
   return {

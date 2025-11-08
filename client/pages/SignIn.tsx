@@ -27,7 +27,9 @@ export default function SignIn() {
         const clientRequest = mockClientRequests.find((r) => r.email === email);
 
         if (clientRequest && clientRequest.status === "pending_approval") {
-          setError("⏳ Your account is pending admin approval. You will be notified once approved.");
+          setError(
+            "⏳ Your account is pending admin approval. You will be notified once approved.",
+          );
           toast.info("Your signup is awaiting admin approval");
           setIsLoading(false);
           return;
@@ -35,7 +37,9 @@ export default function SignIn() {
 
         if (clientRequest && clientRequest.status === "rejected") {
           setError("❌ Your signup request was rejected.");
-          setRejectionReason(clientRequest.rejectionReason || "No reason provided");
+          setRejectionReason(
+            clientRequest.rejectionReason || "No reason provided",
+          );
           toast.error("Your signup was rejected");
           setIsLoading(false);
           return;
@@ -47,7 +51,9 @@ export default function SignIn() {
 
         // If not found in mockUsers, check localStorage for newly approved accounts
         if (!user) {
-          const storedUsers = JSON.parse(localStorage.getItem("mockUsers") || "[]");
+          const storedUsers = JSON.parse(
+            localStorage.getItem("mockUsers") || "[]",
+          );
           user = storedUsers.find((u: any) => u.email === email);
         }
 
@@ -100,9 +106,7 @@ export default function SignIn() {
           <div>
             <div className="text-center mb-8">
               <h1 className="text-4xl font-bold mb-2">Welcome Back</h1>
-              <p className="text-slate-600">
-                Sign in to your Domaino account
-              </p>
+              <p className="text-slate-600">Sign in to your Domaino account</p>
             </div>
 
             {error && (
@@ -110,7 +114,9 @@ export default function SignIn() {
                 <div className="flex gap-3">
                   <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-sm font-semibold text-red-900">{error}</p>
+                    <p className="text-sm font-semibold text-red-900">
+                      {error}
+                    </p>
                     {rejectionReason && (
                       <p className="text-sm text-red-700 mt-1">
                         Reason: {rejectionReason}
@@ -192,7 +198,9 @@ export default function SignIn() {
                 <div className="w-full border-t border-slate-200"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-slate-500">Or continue with</span>
+                <span className="px-2 bg-white text-slate-500">
+                  Or continue with
+                </span>
               </div>
             </div>
 
@@ -215,7 +223,10 @@ export default function SignIn() {
             {/* Sign Up Link */}
             <p className="text-center mt-6 text-slate-600">
               Don't have an account?{" "}
-              <Link to="/signup" className="text-primary-600 hover:text-primary-700 font-semibold">
+              <Link
+                to="/signup"
+                className="text-primary-600 hover:text-primary-700 font-semibold"
+              >
                 Sign up
               </Link>
             </p>

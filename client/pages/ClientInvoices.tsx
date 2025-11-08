@@ -2,7 +2,14 @@ import { useState, useMemo } from "react";
 import { mockInvoices, mockOrders, Invoice } from "@/lib/mockData";
 import ClientLayout from "@/components/ClientLayout";
 import { Button } from "@/components/ui/button";
-import { Download, FileText, DollarSign, Eye, X, ArrowRight } from "lucide-react";
+import {
+  Download,
+  FileText,
+  DollarSign,
+  Eye,
+  X,
+  ArrowRight,
+} from "lucide-react";
 
 export default function ClientInvoices() {
   const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
@@ -313,7 +320,9 @@ export default function ClientInvoices() {
                 {/* Invoice Details */}
                 <div className="grid grid-cols-2 gap-6">
                   <div>
-                    <p className="text-sm text-slate-600 mb-1">Invoice Number</p>
+                    <p className="text-sm text-slate-600 mb-1">
+                      Invoice Number
+                    </p>
                     <p className="font-semibold text-slate-900">
                       {selectedInvoice.invoiceNumber}
                     </p>
@@ -331,7 +340,9 @@ export default function ClientInvoices() {
                     <p className="text-sm text-slate-600 mb-1">Issue Date</p>
                     <p className="font-semibold text-slate-900">
                       {selectedInvoice.createdAt
-                        ? new Date(selectedInvoice.createdAt).toLocaleDateString()
+                        ? new Date(
+                            selectedInvoice.createdAt,
+                          ).toLocaleDateString()
                         : "N/A"}
                     </p>
                   </div>
@@ -349,7 +360,9 @@ export default function ClientInvoices() {
                 {selectedInvoice.description && (
                   <div className="bg-slate-50 rounded-lg p-4">
                     <p className="text-sm text-slate-600 mb-2">Description</p>
-                    <p className="text-slate-900">{selectedInvoice.description}</p>
+                    <p className="text-slate-900">
+                      {selectedInvoice.description}
+                    </p>
                   </div>
                 )}
 
@@ -392,7 +405,9 @@ export default function ClientInvoices() {
                               </td>
                               <td className="px-4 py-3 text-right font-semibold text-slate-900">
                                 {selectedInvoice.currency}{" "}
-                                {(item.quantity * item.unitPrice).toLocaleString()}
+                                {(
+                                  item.quantity * item.unitPrice
+                                ).toLocaleString()}
                               </td>
                             </tr>
                           ))}
@@ -415,14 +430,19 @@ export default function ClientInvoices() {
                 </div>
 
                 {/* Payment Info */}
-                {selectedInvoice.status === "paid" && selectedInvoice.paidDate && (
-                  <div className="bg-green-50 rounded-lg p-4 border border-green-200">
-                    <p className="text-sm text-green-700 mb-1">Payment Date</p>
-                    <p className="font-semibold text-green-900">
-                      {new Date(selectedInvoice.paidDate).toLocaleDateString()}
-                    </p>
-                  </div>
-                )}
+                {selectedInvoice.status === "paid" &&
+                  selectedInvoice.paidDate && (
+                    <div className="bg-green-50 rounded-lg p-4 border border-green-200">
+                      <p className="text-sm text-green-700 mb-1">
+                        Payment Date
+                      </p>
+                      <p className="font-semibold text-green-900">
+                        {new Date(
+                          selectedInvoice.paidDate,
+                        ).toLocaleDateString()}
+                      </p>
+                    </div>
+                  )}
               </div>
 
               {/* Footer Actions */}

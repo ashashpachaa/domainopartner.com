@@ -134,7 +134,9 @@ export default function AdminEditProduct() {
       );
 
       // Also update the main products array in localStorage (for AdminProducts and ClientCreateOrder)
-      const allProducts = JSON.parse(localStorage.getItem("products") || JSON.stringify(mockProducts));
+      const allProducts = JSON.parse(
+        localStorage.getItem("products") || JSON.stringify(mockProducts),
+      );
       allProducts.push(newProduct);
       localStorage.setItem("products", JSON.stringify(allProducts));
 
@@ -160,8 +162,12 @@ export default function AdminEditProduct() {
       );
 
       // Also update the main products array in localStorage (for AdminProducts and ClientCreateOrder)
-      const allProducts = JSON.parse(localStorage.getItem("products") || JSON.stringify(mockProducts));
-      const productIndex = allProducts.findIndex((p: any) => p.id === updatedProduct.id);
+      const allProducts = JSON.parse(
+        localStorage.getItem("products") || JSON.stringify(mockProducts),
+      );
+      const productIndex = allProducts.findIndex(
+        (p: any) => p.id === updatedProduct.id,
+      );
       if (productIndex >= 0) {
         allProducts[productIndex] = updatedProduct;
       } else {

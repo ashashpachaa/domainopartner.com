@@ -1362,6 +1362,18 @@ export default function AdminUKCompanySetup() {
             confirmedShareholders: selectedIncorporation.shareholders,
           };
           break;
+
+        case "company_name_change":
+          if (!newCompanyName || newCompanyName.trim() === "") {
+            toast.error("Please enter the new company name");
+            return;
+          }
+          amendmentData.formType = "company_name_change";
+          amendmentData.amendment = {
+            oldCompanyName: selectedIncorporation.companyName,
+            newCompanyName: newCompanyName,
+          };
+          break;
       }
 
       toast.loading("Submitting amendment to Companies House...");

@@ -7770,6 +7770,7 @@ export const mockRegisteredCompanies: RegisteredCompany[] = [
     sicCodes: ["62010", "62020"],
     status: "active",
     fetchedAt: "2024-01-15T10:30:00Z",
+    incorporationId: "INC001",
   },
   {
     id: "REG002",
@@ -7786,6 +7787,7 @@ export const mockRegisteredCompanies: RegisteredCompany[] = [
     sicCodes: ["62010"],
     status: "active",
     fetchedAt: "2024-01-14T14:20:00Z",
+    incorporationId: "INC001",
   },
   {
     id: "REG003",

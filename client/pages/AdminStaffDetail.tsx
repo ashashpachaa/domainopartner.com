@@ -2,6 +2,7 @@ import AdminLayout from "@/components/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, Edit2, Mail, Phone, MapPin, Calendar, Shield, DollarSign, Plus, TrendingUp } from "lucide-react";
+import { useMemo } from "react";
 import { mockStaff, rolePermissions, roleLabels, mockStaffCommissions, mockStaffSalaries, mockStaffPerformances } from "@/lib/mockData";
 
 const roleDescriptions: Record<string, string> = {
@@ -51,7 +52,21 @@ export default function AdminStaffDetail() {
   const { staffId } = useParams<{ staffId: string }>();
   const navigate = useNavigate();
 
-  const member = mockStaff.find((s) => s.id === staffId);
+  // Load staff from localStorage first, then fallback to mockStaff
+  const member = useMemo(() => {
+    // First check localStorage for updated version
+    const localStorageStaff = localStorage.getItem(`staff_${staffId}`);
+    if (localStorageStaff) {
+      try {
+        return JSON.parse(localStorageStaff);
+      } catch (e) {
+        console.error('Error parsing staff from localStorage:', e);
+      }
+    }
+
+    // Fallback to mockStaff
+    return mockStaff.find((s) => s.id === staffId);
+  }, [staffId]);
 
   if (!member) {
     return (

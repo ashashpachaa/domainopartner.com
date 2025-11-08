@@ -65,6 +65,13 @@ export default function AdminEditProduct() {
     },
   );
 
+  // Update formData when existingProduct changes
+  useEffect(() => {
+    if (existingProduct) {
+      setFormData(existingProduct);
+    }
+  }, [existingProduct]);
+
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement

@@ -111,7 +111,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center">
               <Globe className="w-6 h-6" />
             </div>
-            {sidebarOpen && <p className="font-bold text-lg">Domaino Partner</p>}
+            {sidebarOpen && (
+              <p className="font-bold text-lg">Domaino Partner</p>
+            )}
           </Link>
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}

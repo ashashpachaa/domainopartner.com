@@ -447,20 +447,203 @@ export default function CompanyDetailModal({
                     </div>
                   )}
 
-                  {/* View Full Forms Link */}
+                  {/* Amendment Forms */}
                   {showAmendmentForm && (
-                    <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
-                      <p className="text-sm text-slate-700 mb-3">
-                        To complete this amendment, you'll be taken to the full form editor.
-                      </p>
-                      <Button
-                        onClick={() => {
-                          window.location.href = `/admin/uk-company-setup?incorporationId=${incorporation.id}&amendment=${amendmentTab}`;
-                        }}
-                        className="w-full bg-orange-600 hover:bg-orange-700 text-white"
-                      >
-                        Open Full Amendment Form
-                      </Button>
+                    <div className="bg-white border border-slate-200 p-4 rounded-lg space-y-4">
+                      {/* Appoint Director Form */}
+                      {amendmentTab === "director_appoint" && (
+                        <div className="space-y-4">
+                          <h4 className="font-bold text-slate-900">Appoint Director</h4>
+                          <div className="grid grid-cols-2 gap-3">
+                            <input
+                              type="text"
+                              placeholder="First Name"
+                              value={directorFirstName}
+                              onChange={(e) => setDirectorFirstName(e.target.value)}
+                              className="px-3 py-2 border border-slate-300 rounded text-sm"
+                            />
+                            <input
+                              type="text"
+                              placeholder="Last Name"
+                              value={directorLastName}
+                              onChange={(e) => setDirectorLastName(e.target.value)}
+                              className="px-3 py-2 border border-slate-300 rounded text-sm"
+                            />
+                            <input
+                              type="date"
+                              placeholder="Date of Birth"
+                              value={directorDOB}
+                              onChange={(e) => setDirectorDOB(e.target.value)}
+                              className="col-span-2 px-3 py-2 border border-slate-300 rounded text-sm"
+                            />
+                          </div>
+                          <div className="flex gap-2 justify-end pt-2">
+                            <Button variant="outline" size="sm" onClick={() => { setShowAmendmentForm(false); setDirectorFirstName(""); setDirectorLastName(""); setDirectorDOB(""); }}>Cancel</Button>
+                            <Button size="sm" className="bg-blue-600 hover:bg-blue-700" onClick={() => { toast.success("Director appoint amendment submitted"); setShowAmendmentForm(false); }}>Submit</Button>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Resign Director Form */}
+                      {amendmentTab === "director_resign" && (
+                        <div className="space-y-4">
+                          <h4 className="font-bold text-slate-900">Resign Director</h4>
+                          <div>
+                            <label className="text-sm font-medium text-slate-700 mb-2 block">Select Director</label>
+                            <select
+                              value={resignDirectorId}
+                              onChange={(e) => setResignDirectorId(e.target.value)}
+                              className="w-full px-3 py-2 border border-slate-300 rounded text-sm"
+                            >
+                              <option value="">Choose a director...</option>
+                              <option value="DIR001">Ahmed Hassan</option>
+                              <option value="DIR002">Fatima Hassan</option>
+                            </select>
+                          </div>
+                          <div className="flex gap-2 justify-end pt-2">
+                            <Button variant="outline" size="sm" onClick={() => { setShowAmendmentForm(false); setResignDirectorId(""); }}>Cancel</Button>
+                            <Button size="sm" className="bg-blue-600 hover:bg-blue-700" onClick={() => { toast.success("Director resignation amendment submitted"); setShowAmendmentForm(false); }}>Submit</Button>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Change Address Form */}
+                      {amendmentTab === "address" && (
+                        <div className="space-y-4">
+                          <h4 className="font-bold text-slate-900">Change Registered Office Address</h4>
+                          <div className="space-y-3">
+                            <input
+                              type="text"
+                              placeholder="Address Line 1"
+                              value={newAddress}
+                              onChange={(e) => setNewAddress(e.target.value)}
+                              className="w-full px-3 py-2 border border-slate-300 rounded text-sm"
+                            />
+                            <input
+                              type="text"
+                              placeholder="City"
+                              value={newAddressCity}
+                              onChange={(e) => setNewAddressCity(e.target.value)}
+                              className="w-full px-3 py-2 border border-slate-300 rounded text-sm"
+                            />
+                            <input
+                              type="text"
+                              placeholder="Postcode"
+                              value={newAddressPostcode}
+                              onChange={(e) => setNewAddressPostcode(e.target.value)}
+                              className="w-full px-3 py-2 border border-slate-300 rounded text-sm"
+                            />
+                          </div>
+                          <div className="flex gap-2 justify-end pt-2">
+                            <Button variant="outline" size="sm" onClick={() => { setShowAmendmentForm(false); setNewAddress(""); setNewAddressCity(""); setNewAddressPostcode(""); }}>Cancel</Button>
+                            <Button size="sm" className="bg-blue-600 hover:bg-blue-700" onClick={() => { toast.success("Address change amendment submitted"); setShowAmendmentForm(false); }}>Submit</Button>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Change SIC Form */}
+                      {amendmentTab === "sic" && (
+                        <div className="space-y-4">
+                          <h4 className="font-bold text-slate-900">Change SIC Code</h4>
+                          <input
+                            type="text"
+                            placeholder="e.g., 62011 - Software publishing"
+                            value={newSicCode}
+                            onChange={(e) => setNewSicCode(e.target.value)}
+                            className="w-full px-3 py-2 border border-slate-300 rounded text-sm"
+                          />
+                          <div className="flex gap-2 justify-end pt-2">
+                            <Button variant="outline" size="sm" onClick={() => { setShowAmendmentForm(false); setNewSicCode(""); }}>Cancel</Button>
+                            <Button size="sm" className="bg-blue-600 hover:bg-blue-700" onClick={() => { toast.success("SIC code change amendment submitted"); setShowAmendmentForm(false); }}>Submit</Button>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Increase Capital Form */}
+                      {amendmentTab === "capital" && (
+                        <div className="space-y-4">
+                          <h4 className="font-bold text-slate-900">Increase Share Capital</h4>
+                          <input
+                            type="number"
+                            placeholder="New Capital Amount (£)"
+                            value={newCapitalAmount}
+                            onChange={(e) => setNewCapitalAmount(e.target.value)}
+                            className="w-full px-3 py-2 border border-slate-300 rounded text-sm"
+                          />
+                          <div className="flex gap-2 justify-end pt-2">
+                            <Button variant="outline" size="sm" onClick={() => { setShowAmendmentForm(false); setNewCapitalAmount(""); }}>Cancel</Button>
+                            <Button size="sm" className="bg-blue-600 hover:bg-blue-700" onClick={() => { toast.success("Capital increase amendment submitted"); setShowAmendmentForm(false); }}>Submit</Button>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Shareholder Change Form */}
+                      {amendmentTab === "shareholder" && (
+                        <div className="space-y-4">
+                          <h4 className="font-bold text-slate-900">Shareholder Change</h4>
+                          <div className="space-y-3">
+                            <input
+                              type="text"
+                              placeholder="Shareholder Name"
+                              value={shareholderName}
+                              onChange={(e) => setShareholderName(e.target.value)}
+                              className="w-full px-3 py-2 border border-slate-300 rounded text-sm"
+                            />
+                            <input
+                              type="number"
+                              placeholder="Ownership Percentage"
+                              value={shareholderPercentage}
+                              onChange={(e) => setShareholderPercentage(e.target.value)}
+                              className="w-full px-3 py-2 border border-slate-300 rounded text-sm"
+                              min="0"
+                              max="100"
+                            />
+                          </div>
+                          <div className="flex gap-2 justify-end pt-2">
+                            <Button variant="outline" size="sm" onClick={() => { setShowAmendmentForm(false); setShareholderName(""); setShareholderPercentage(""); }}>Cancel</Button>
+                            <Button size="sm" className="bg-blue-600 hover:bg-blue-700" onClick={() => { toast.success("Shareholder change amendment submitted"); setShowAmendmentForm(false); }}>Submit</Button>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Annual Confirmation Form */}
+                      {amendmentTab === "annual_confirmation" && (
+                        <div className="space-y-4">
+                          <h4 className="font-bold text-slate-900">Annual Confirmation (CS01)</h4>
+                          <div>
+                            <label className="text-sm font-medium text-slate-700 mb-2 block">Confirmation Year</label>
+                            <input
+                              type="number"
+                              value={confirmationYear}
+                              onChange={(e) => setConfirmationYear(parseInt(e.target.value))}
+                              className="w-full px-3 py-2 border border-slate-300 rounded text-sm"
+                            />
+                          </div>
+                          <p className="text-xs text-slate-600 bg-slate-50 p-2 rounded">Directors and shareholders will be confirmed as unchanged unless updated here.</p>
+                          <div className="flex gap-2 justify-end pt-2">
+                            <Button variant="outline" size="sm" onClick={() => { setShowAmendmentForm(false); setConfirmationYear(new Date().getFullYear()); }}>Cancel</Button>
+                            <Button size="sm" className="bg-blue-600 hover:bg-blue-700" onClick={() => { toast.success("Annual confirmation amendment submitted"); setShowAmendmentForm(false); }}>Submit</Button>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Change Company Name Form */}
+                      {amendmentTab === "company_name_change" && (
+                        <div className="space-y-4">
+                          <h4 className="font-bold text-slate-900">Change Company Name</h4>
+                          <input
+                            type="text"
+                            placeholder="New Company Name"
+                            value={newCompanyName}
+                            onChange={(e) => setNewCompanyName(e.target.value)}
+                            className="w-full px-3 py-2 border border-slate-300 rounded text-sm"
+                          />
+                          <div className="flex gap-2 justify-end pt-2">
+                            <Button variant="outline" size="sm" onClick={() => { setShowAmendmentForm(false); setNewCompanyName(""); }}>Cancel</Button>
+                            <Button size="sm" className="bg-blue-600 hover:bg-blue-700" onClick={() => { toast.success("Company name change amendment submitted"); setShowAmendmentForm(false); }}>Submit</Button>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>

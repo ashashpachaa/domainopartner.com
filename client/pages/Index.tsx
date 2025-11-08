@@ -363,6 +363,14 @@ export default function Index() {
                 <li><a href="#" className="hover:text-white transition">Cookies</a></li>
               </ul>
             </div>
+            <div>
+              <h4 className="font-semibold text-white mb-4">Administration</h4>
+              <ul className="space-y-2 text-sm">
+                <li><a href="/extranet/login" className="hover:text-white transition">🔐 Extranet</a></li>
+                <li><a href="/admin/login" className="hover:text-white transition">Admin Portal</a></li>
+                <li><a href="#" className="hover:text-white transition">Support</a></li>
+              </ul>
+            </div>
           </div>
           <div className="border-t border-slate-800 pt-8">
             <p className="text-center text-sm">

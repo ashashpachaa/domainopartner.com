@@ -28,6 +28,19 @@ export default function AdminClientRequestDetail() {
       );
     }
 
+    // If approved, try to find the created user and load assignment
+    if (foundRequest && foundRequest.status === "approved") {
+      const users = mockUsers;
+      const createdUser = users.find(
+        (u) =>
+          u.email === foundRequest.email &&
+          u.firstName === foundRequest.firstName
+      );
+      if (createdUser && createdUser.assignedToStaffId) {
+        setAssignedToStaffId(createdUser.assignedToStaffId);
+      }
+    }
+
     return foundRequest;
   }, [requestId]);
 

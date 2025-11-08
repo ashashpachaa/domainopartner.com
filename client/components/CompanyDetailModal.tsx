@@ -34,8 +34,21 @@ export default function CompanyDetailModal({
   const [shareholderPercentage, setShareholderPercentage] = useState("");
   const [confirmationYear, setConfirmationYear] = useState(new Date().getFullYear());
   const [newCompanyName, setNewCompanyName] = useState("");
+  const [registeredOfficeEmail, setRegisteredOfficeEmail] = useState(company.registeredOfficeEmail || "");
+  const [isEditingEmail, setIsEditingEmail] = useState(false);
 
   const owner = mockUsers.find((u) => u.id === company.userId);
+
+  const handleSaveEmail = () => {
+    const updatedCompany = {
+      ...company,
+      registeredOfficeEmail,
+    };
+
+    localStorage.setItem(`company_${company.id}`, JSON.stringify(updatedCompany));
+    toast.success("Registered office email updated!");
+    setIsEditingEmail(false);
+  };
 
   // Find the order linked to this company
   const linkedOrder = mockOrders.find((o) => o.id === company.orderId);

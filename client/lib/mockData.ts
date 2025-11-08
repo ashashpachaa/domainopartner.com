@@ -927,6 +927,7 @@ export type CompanyAmendmentType =
   | "sic_code_change" // CH01
   | "share_capital_increase" // SH01
   | "shareholder_change" // SA01
+  | "company_name_change" // NM01 - Company Name Change
   | "annual_confirmation"; // CS01 - Annual Confirmation Statement
 
 export interface CompanyAmendment {

@@ -1426,6 +1426,7 @@ export default function AdminUKCompanySetup() {
         setCapitalChange({ oldCapital: 0, newCapital: 0, shareType: "" });
         setShareholderForm({ firstName: "", lastName: "", address: "", postcode: "", city: "", country: "United Kingdom", shareAllocation: 0 });
         setSelectedShareholderId("");
+        setNewCompanyName("");
         setShowAmendmentForm(false);
         setAmendmentTab("history");
 

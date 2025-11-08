@@ -18,7 +18,14 @@ export default function CompanyDetailModal({
   const [amendmentTab, setAmendmentTab] = useState<string>("history");
   const [showAmendmentForm, setShowAmendmentForm] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [amendments, setAmendments] = useState<any[]>([]);
   const { getIncorporationForCompany, canFileAmendments, getAmendmentHistory } = useCompanyIncorporationLink();
+
+  // Load amendments on mount or when company changes
+  useEffect(() => {
+    const loadedAmendments = getAmendmentHistory(company);
+    setAmendments(loadedAmendments);
+  }, [company.id]);
 
   // Amendment form states
   const [directorFirstName, setDirectorFirstName] = useState("");

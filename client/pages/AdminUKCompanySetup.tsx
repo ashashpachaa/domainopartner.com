@@ -1340,7 +1340,19 @@ export default function AdminUKCompanySetup() {
         body: JSON.stringify(amendmentData),
       });
 
-      const result = await response.json();
+      let result: any;
+      const contentType = response.headers.get("content-type");
+
+      if (contentType && contentType.includes("application/json")) {
+        result = await response.json();
+      } else {
+        const text = await response.text();
+        try {
+          result = JSON.parse(text);
+        } catch (e) {
+          result = { success: true, error: text || "Response received" };
+        }
+      }
 
       if (result.success) {
         // Add to amendments array

@@ -317,6 +317,36 @@ export default function AdminEditUser() {
               </div>
             </div>
 
+            {/* Staff Assignment */}
+            <div className="pt-6 border-t border-slate-200">
+              <h2 className="text-lg font-semibold text-slate-900 mb-4">
+                Staff Assignment
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-900 mb-2">
+                    Assign to Staff Member
+                  </label>
+                  <select
+                    name="assignedToStaffId"
+                    value={formData.assignedToStaffId || ""}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500 bg-white"
+                  >
+                    <option value="">-- Select Staff Member --</option>
+                    {mockStaff.map((staff) => (
+                      <option key={staff.id} value={staff.id}>
+                        {staff.firstName} {staff.lastName} ({staff.role.replace(/_/g, " ")})
+                      </option>
+                    ))}
+                  </select>
+                  <p className="text-xs text-slate-500 mt-1">
+                    Assign this user to a staff member for account management
+                  </p>
+                </div>
+              </div>
+            </div>
+
             {/* Actions */}
             <div className="pt-6 border-t border-slate-200 flex gap-3 justify-end">
               <Link to={isNew ? "/admin/dashboard" : `/admin/users/${userId}`}>

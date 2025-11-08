@@ -81,6 +81,7 @@ export default function AdminEditUser() {
           subscriptionStatus: formData.subscriptionStatus || "active",
           createdAt: new Date().toISOString().split("T")[0],
           lastLogin: new Date().toISOString(),
+          assignedToStaffId: formData.assignedToStaffId,
         };
 
         mockUsers.push(newUser);

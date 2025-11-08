@@ -107,17 +107,18 @@ export default function CompanyDetailModal({
       const result = await response.json();
       const filingRef = result.filingReference || `CH-AMEND-${Date.now()}`;
 
-      // Persist amendment to incorporation's amendments array
-      if (incorporation) {
-        const newAmendment = {
-          id: `AMD-${Date.now()}`,
-          formType,
-          status: result.status || "filed",
-          filingReference: filingRef,
-          submittedAt: new Date().toISOString(),
-          amendment: amendmentData,
-        };
+      // Create amendment object
+      const newAmendment = {
+        id: `AMD-${Date.now()}`,
+        formType,
+        status: result.status || "filed",
+        filingReference: filingRef,
+        submittedAt: new Date().toISOString(),
+        amendment: amendmentData,
+      };
 
+      // Persist amendment to incorporation's amendments array if linked
+      if (incorporation) {
         const updatedIncorporation = {
           ...incorporation,
           amendments: [...(incorporation.amendments || []), newAmendment],
@@ -127,10 +128,16 @@ export default function CompanyDetailModal({
           `incorporation_${incorporation.id}`,
           JSON.stringify(updatedIncorporation)
         );
-
-        // Update local state to show amendment immediately
-        setAmendments([...amendments, newAmendment]);
+      } else {
+        // Fallback: Store amendment directly on the company
+        const storedCompany = localStorage.getItem(`company_${company.id}`);
+        const companyData = storedCompany ? JSON.parse(storedCompany) : { ...company };
+        companyData.amendments = [...(companyData.amendments || []), newAmendment];
+        localStorage.setItem(`company_${company.id}`, JSON.stringify(companyData));
       }
+
+      // Update local state to show amendment immediately
+      setAmendments([...amendments, newAmendment]);
 
       toast.success(
         `Amendment submitted! Reference: ${filingRef}`

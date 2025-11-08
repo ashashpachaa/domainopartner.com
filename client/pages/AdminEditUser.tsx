@@ -12,7 +12,25 @@ export default function AdminEditUser() {
   const navigate = useNavigate();
   const isNew = userId === "new";
 
-  const existingUser = !isNew ? mockUsers.find((u) => u.id === userId) : null;
+  // Load existing user from both mockUsers and localStorage
+  const existingUser = useMemo(() => {
+    if (isNew) return null;
+
+    // First try to find in mockUsers
+    const mockUser = mockUsers.find((u) => u.id === userId);
+
+    // Then check localStorage for updated version
+    const localStorageUser = localStorage.getItem(`user_${userId}`);
+    if (localStorageUser) {
+      try {
+        return JSON.parse(localStorageUser);
+      } catch (e) {
+        console.error('Error parsing user from localStorage:', e);
+      }
+    }
+
+    return mockUser;
+  }, [userId, isNew]);
 
   // Load all staff from both mockStaff and localStorage
   const allStaff = useMemo(() => {

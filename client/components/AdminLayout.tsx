@@ -72,13 +72,16 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       if (key?.startsWith('staff_')) {
         try {
           const staffData = JSON.parse(localStorage.getItem(key) || '{}');
-          staffMap.set(staffData.id, staffData);
+          // Only add if staffData has a valid id
+          if (staffData.id && staffData.id !== 'undefined') {
+            staffMap.set(staffData.id, staffData);
+          }
         } catch (e) {
           console.error('Error parsing staff from localStorage:', e);
         }
       }
     }
-    return Array.from(staffMap.values());
+    return Array.from(staffMap.values()).filter(s => s.id && s.id !== 'undefined');
   }, []);
 
   const handleLogout = () => {

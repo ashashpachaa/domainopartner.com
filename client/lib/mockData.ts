@@ -983,6 +983,10 @@ export interface CompanyAmendment {
     oldDetails?: CompanyShareholder;
   }[];
 
+  // Data for Company Name Change (NM01)
+  oldCompanyName?: string;
+  newCompanyName?: string;
+
   // Data for Annual Confirmation Statement (CS01)
   confirmationYear?: number;
   confirmedDirectors?: CompanyDirector[];

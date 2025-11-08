@@ -97,8 +97,11 @@ export default function AdminClientRequestDetail() {
       );
       localStorage.setItem("mockUsers", JSON.stringify(mockUsers));
 
+      const assignedStaffName = assignedToStaffId
+        ? mockStaff.find(s => s.id === assignedToStaffId)?.firstName + " " + mockStaff.find(s => s.id === assignedToStaffId)?.lastName
+        : "No one";
       toast.success(
-        `✅ ${request.firstName} ${request.lastName}'s account has been approved!`,
+        `✅ ${request.firstName} ${request.lastName}'s account approved! Assigned to: ${assignedStaffName}`,
       );
       navigate("/admin/dashboard");
     } catch (error: any) {

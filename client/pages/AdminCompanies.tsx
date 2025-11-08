@@ -11,6 +11,7 @@ import {
   CheckCircle2,
   TrendingUp,
   X,
+  Plus,
 } from "lucide-react";
 import {
   getRegisteredCompanies,

@@ -117,8 +117,40 @@ export default function AdminCompaniesNeedRenewal() {
     };
   }, [sorted]);
 
-  const handleMarkRenewed = (companyId: string) => {
-    toast.success("Company marked as renewed. Updating records...");
+  const handleMarkRenewed = async (companyId: string) => {
+    const company = getRegisteredCompanies().find((c) => c.id === companyId);
+    if (!company) {
+      toast.error("Company not found");
+      return;
+    }
+
+    toast.loading("Submitting Annual Confirmation to Companies House...");
+
+    const result = await submitCompanyRenewal(company.companyNumber, company.companyName);
+
+    toast.dismiss();
+
+    if (result) {
+      // Update the company record in localStorage with new renewal dates
+      const updatedCompany = {
+        ...company,
+        nextRenewalDate: result.nextRenewalDate,
+        nextAccountsFilingDate: result.nextAccountsFilingDate,
+        status: "active" as const,
+        lastRenewalDate: new Date().toISOString().split("T")[0],
+        filingReference: result.filingReference,
+      };
+
+      // Save to localStorage
+      localStorage.setItem(`registeredCompany_${companyId}`, JSON.stringify(updatedCompany));
+
+      toast.success(`✓ Company renewed successfully!\nFiling Reference: ${result.filingReference}\nNext Renewal: ${new Date(result.nextRenewalDate).toLocaleDateString()}`);
+
+      // Refresh the page to show updated data
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+    }
   };
 
   const handleSendReminder = (companyId: string, companyName: string) => {
@@ -238,7 +270,7 @@ export default function AdminCompaniesNeedRenewal() {
                 : "border-transparent text-slate-600 hover:text-slate-900"
             }`}
           >
-            🇨🇦 Canada
+            ����🇦 Canada
           </button>
           <button
             onClick={() => setSelectedCountry("Sweden")}

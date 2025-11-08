@@ -131,11 +131,11 @@ export default function CompanyDetailModal({
           JSON.stringify(updatedIncorporation)
         );
       } else {
-        // Fallback: Store amendment directly on the company
-        const storedCompany = localStorage.getItem(`company_${company.id}`);
-        const companyData = storedCompany ? JSON.parse(storedCompany) : { ...company };
-        companyData.amendments = [...(companyData.amendments || []), newAmendment];
-        localStorage.setItem(`company_${company.id}`, JSON.stringify(companyData));
+        // Fallback: Store amendments as array under unique company key
+        const storedAmendmentsStr = localStorage.getItem(`amendments_${company.companyNumber}`);
+        const existingAmendments = storedAmendmentsStr ? JSON.parse(storedAmendmentsStr) : [];
+        const allAmendments = [...existingAmendments, newAmendment];
+        localStorage.setItem(`amendments_${company.companyNumber}`, JSON.stringify(allAmendments));
       }
 
       // Update local state to show amendment immediately

@@ -442,6 +442,16 @@ export interface CompanyAmendment {
   amendment?: any;
 }
 
+// Role Labels
+export const roleLabels: Record<StaffRole, string> = {
+  super_admin: "Super Admin",
+  admin: "Admin",
+  operation_manager: "Operation Manager",
+  operation: "Operation",
+  sales: "Sales",
+  accounting: "Accounting",
+};
+
 // EMPTY MOCK DATA ARRAYS - Ready for live data entry
 export const mockExpenses: Expense[] = [];
 export const mockVendors: Vendor[] = [];

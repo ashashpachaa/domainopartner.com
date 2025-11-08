@@ -19,7 +19,7 @@ import {
   Eye,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ReactNode, useState } from "react";
+import { ReactNode, useState, useMemo } from "react";
 import { ChevronDown } from "lucide-react";
 import { mockUsers, mockStaff } from "@/lib/mockData";
 
@@ -37,6 +37,46 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const [showDashboardDropdown, setShowDashboardDropdown] = useState(false);
   const [dashboardTab, setDashboardTab] = useState<"users" | "staff">("users");
   const [searchQuery, setSearchQuery] = useState("");
+
+  // Load users from both mockUsers and localStorage
+  const allUsers = useMemo(() => {
+    const userMap = new Map();
+    mockUsers.forEach(user => userMap.set(user.id, user));
+
+    // Merge with localStorage
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key?.startsWith('user_')) {
+        try {
+          const userData = JSON.parse(localStorage.getItem(key) || '{}');
+          userMap.set(userData.id, userData);
+        } catch (e) {
+          console.error('Error parsing user from localStorage:', e);
+        }
+      }
+    }
+    return Array.from(userMap.values());
+  }, []);
+
+  // Load staff from both mockStaff and localStorage
+  const allStaff = useMemo(() => {
+    const staffMap = new Map();
+    mockStaff.forEach(staff => staffMap.set(staff.id, staff));
+
+    // Merge with localStorage
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key?.startsWith('staff_')) {
+        try {
+          const staffData = JSON.parse(localStorage.getItem(key) || '{}');
+          staffMap.set(staffData.id, staffData);
+        } catch (e) {
+          console.error('Error parsing staff from localStorage:', e);
+        }
+      }
+    }
+    return Array.from(staffMap.values());
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("adminToken");
@@ -345,7 +385,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                           : "text-slate-600 hover:text-slate-900"
                       }`}
                     >
-                      👥 Users ({mockUsers.length})
+                      👥 Users ({allUsers.length})
                     </button>
                     <button
                       onClick={() => {
@@ -358,7 +398,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                           : "text-slate-600 hover:text-slate-900"
                       }`}
                     >
-                      👨‍💼 Staff ({mockStaff.length})
+                      👨‍💼 Staff ({allStaff.length})
                     </button>
                   </div>
 
@@ -381,7 +421,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                   {/* List */}
                   <div className="max-h-96 overflow-y-auto">
                     {dashboardTab === "users"
-                      ? mockUsers
+                      ? allUsers
                           .filter(
                             (user) =>
                               `${user.firstName} ${user.lastName}`
@@ -409,7 +449,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                               </p>
                             </button>
                           ))
-                      : mockStaff
+                      : allStaff
                           .filter(
                             (staff) =>
                               `${staff.firstName} ${staff.lastName}`

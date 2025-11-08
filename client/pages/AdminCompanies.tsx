@@ -36,6 +36,11 @@ export default function AdminCompanies() {
   const [selectedCountry, setSelectedCountry] = useState<CountryTab>("all");
   const [selectedCompany, setSelectedCompany] = useState<RegisteredCompany | null>(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
+  const [showListCompanyModal, setShowListCompanyModal] = useState(false);
+  const [selectedCompanyToList, setSelectedCompanyToList] = useState<RegisteredCompany | null>(null);
+  const [askingPrice, setAskingPrice] = useState<number>(0);
+  const [businessType, setBusinessType] = useState<string>("");
+  const [reason, setReason] = useState<string>("");
 
   // Helper functions
   const formatDate = (dateStr: string) => {

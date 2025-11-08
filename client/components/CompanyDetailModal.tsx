@@ -595,8 +595,10 @@ export default function CompanyDetailModal({
                             />
                           </div>
                           <div className="flex gap-2 justify-end pt-2">
-                            <Button variant="outline" size="sm" onClick={() => { setShowAmendmentForm(false); setNewAddress(""); setNewAddressCity(""); setNewAddressPostcode(""); }}>Cancel</Button>
-                            <Button size="sm" className="bg-blue-600 hover:bg-blue-700" onClick={() => { toast.success("Address change amendment submitted"); setShowAmendmentForm(false); }}>Submit</Button>
+                            <Button variant="outline" size="sm" disabled={isSubmitting} onClick={() => { setShowAmendmentForm(false); setNewAddress(""); setNewAddressCity(""); setNewAddressPostcode(""); }}>Cancel</Button>
+                            <Button size="sm" disabled={isSubmitting || !newAddress.trim() || !newAddressCity.trim() || !newAddressPostcode.trim()} className="bg-blue-600 hover:bg-blue-700" onClick={() => { submitAmendment("address_change", { addressLine1: newAddress, city: newAddressCity, postcode: newAddressPostcode }); }}>
+                              {isSubmitting ? "Submitting..." : "Submit"}
+                            </Button>
                           </div>
                         </div>
                       )}

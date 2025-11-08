@@ -177,8 +177,16 @@ export default function AdminDashboard() {
 
   const deleteUser = (userId: string) => {
     if (confirm("Are you sure you want to delete this user?")) {
+      // Remove from state
       setUsers(users.filter((user) => user.id !== userId));
+      // Remove from localStorage
       localStorage.removeItem(`user_${userId}`);
+      // Also remove from mockUsers to prevent it from coming back on refresh
+      const mockIndex = mockUsers.findIndex(u => u.id === userId);
+      if (mockIndex !== -1) {
+        mockUsers.splice(mockIndex, 1);
+      }
+      toast.success("User deleted successfully");
     }
   };
 

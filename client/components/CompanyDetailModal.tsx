@@ -31,14 +31,16 @@ export default function CompanyDetailModal({
     }
 
     // Fallback: check if amendments are stored directly on the company in localStorage
-    const storedCompany = localStorage.getItem(`company_${company.id}`);
-    if (storedCompany) {
-      const parsed = JSON.parse(storedCompany);
-      if (parsed.amendments) {
-        setAmendments(parsed.amendments);
+    const storedAmendments = localStorage.getItem(`amendments_${company.companyNumber}`);
+    if (storedAmendments) {
+      try {
+        const parsed = JSON.parse(storedAmendments);
+        setAmendments(parsed);
+      } catch (e) {
+        console.error("Error parsing amendments from localStorage:", e);
       }
     }
-  }, [company.id]);
+  }, [company.companyNumber]);
 
   // Amendment form states
   const [directorFirstName, setDirectorFirstName] = useState("");

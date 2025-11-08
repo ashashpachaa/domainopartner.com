@@ -855,7 +855,7 @@ export default function ClientCreateOrder() {
                           ...companyInfo,
                           companyName: e.target.value,
                         });
-                        companyValidation.validateWithDebounce(e.target.value);
+                        companyValidation.checkCompanyName(e.target.value);
                       }}
                       placeholder="e.g., Acme Corporation Ltd"
                       className={`${

@@ -7,6 +7,8 @@ import { Download, FileText, DollarSign, Eye, X, ArrowRight } from "lucide-react
 export default function ClientInvoices() {
   const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
   const [filterStatus, setFilterStatus] = useState<string>("all");
+  const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null);
+  const [showInvoiceDetail, setShowInvoiceDetail] = useState(false);
 
   // Get all client's orders (from mockOrders + localStorage)
   const allClientOrders = useMemo(() => {

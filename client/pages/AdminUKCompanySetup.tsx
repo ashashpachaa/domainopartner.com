@@ -985,6 +985,7 @@ export default function AdminUKCompanySetup() {
     setEditingIncorporationId(inc.id);
     setFormData({
       companyName: inc.companyName,
+      companySuffix: (inc.companySuffix as any) || "Ltd",
       companyType: inc.companyType as any,
       jurisdiction: "england-wales",
       registeredOfficeAddress: {
@@ -1817,7 +1818,7 @@ export default function AdminUKCompanySetup() {
                                       {officer.roles.director && <span className="text-green-600 font-bold">✓</span>}
                                     </td>
                                     <td className="px-4 py-3 text-center">
-                                      {officer.roles.secretary && <span className="text-green-600 font-bold">���</span>}
+                                      {officer.roles.secretary && <span className="text-green-600 font-bold">����</span>}
                                     </td>
                                     <td className="px-4 py-3 text-center">
                                       {officer.roles.shareholder && <span className="text-slate-900">{officer.shareholdings.numberOfShares}</span>}

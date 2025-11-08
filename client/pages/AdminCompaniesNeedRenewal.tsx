@@ -270,7 +270,7 @@ export default function AdminCompaniesNeedRenewal() {
                 : "border-transparent text-slate-600 hover:text-slate-900"
             }`}
           >
-            ����🇦 Canada
+            🇨🇦 Canada
           </button>
           <button
             onClick={() => setSelectedCountry("Sweden")}
@@ -544,9 +544,10 @@ export default function AdminCompaniesNeedRenewal() {
                                 </button>
                                 <Button
                                   onClick={() => handleMarkRenewed(company.id)}
-                                  className="bg-green-600 hover:bg-green-700 text-white text-xs h-8 px-3"
+                                  disabled={isSubmitting}
+                                  className="bg-green-600 hover:bg-green-700 text-white text-xs h-8 px-3 disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
-                                  Renewed
+                                  {isSubmitting ? "Processing..." : "Renewed"}
                                 </Button>
                               </div>
                             </td>

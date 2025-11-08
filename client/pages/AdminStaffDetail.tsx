@@ -463,7 +463,19 @@ export default function AdminStaffDetail() {
                 </div>
               ))}
             </div>
-          ) : null}
+          ) : (
+            <div className="p-6 bg-amber-50 border border-amber-200 rounded-lg">
+              <p className="text-amber-900 mb-4">
+                No salary configuration found for this staff member.
+              </p>
+              <Link to={`/admin/staff/${member.id}/salary`}>
+                <Button className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white gap-2">
+                  <Plus className="w-4 h-4" />
+                  Create Salary Configuration
+                </Button>
+              </Link>
+            </div>
+          )}
         </div>
 
         {/* Performance Section */}

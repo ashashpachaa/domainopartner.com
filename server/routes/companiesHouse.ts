@@ -452,12 +452,30 @@ export async function handleAmendmentSubmission(req: any, res: any) {
         }),
       });
 
-      const transactionData = await transactionRes.json();
+      console.log(`📊 Transaction API Response Status: ${transactionRes.status} ${transactionRes.statusText}`);
+      console.log(`📊 Response Headers:`, {
+        contentType: transactionRes.headers.get("content-type"),
+        contentLength: transactionRes.headers.get("content-length"),
+      });
+
+      const transactionResText = await transactionRes.text();
+      console.log(`📊 Transaction API Response Body (first 500 chars):`, transactionResText.substring(0, 500));
+
+      let transactionData: any;
+      try {
+        transactionData = JSON.parse(transactionResText);
+      } catch (e) {
+        console.error(`❌ Failed to parse transaction response as JSON:`, e);
+        throw new Error(
+          `Transaction API returned non-JSON response (${transactionRes.status}): ${transactionResText.substring(0, 300)}`
+        );
+      }
+
       const transactionId = transactionData.id;
 
       if (!transactionId) {
         throw new Error(
-          `Failed to create transaction: ${transactionData.errors?.[0]?.error || "Unknown error"}`
+          `Failed to create transaction: ${transactionData.errors?.[0]?.error || JSON.stringify(transactionData).substring(0, 200)}`
         );
       }
 

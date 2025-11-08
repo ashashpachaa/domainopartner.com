@@ -19,6 +19,21 @@ export default function CompanyDetailModal({
   const [showAmendmentForm, setShowAmendmentForm] = useState(false);
   const { getIncorporationForCompany, canFileAmendments, getAmendmentHistory } = useCompanyIncorporationLink();
 
+  // Amendment form states
+  const [directorFirstName, setDirectorFirstName] = useState("");
+  const [directorLastName, setDirectorLastName] = useState("");
+  const [directorDOB, setDirectorDOB] = useState("");
+  const [resignDirectorId, setResignDirectorId] = useState("");
+  const [newAddress, setNewAddress] = useState("");
+  const [newAddressCity, setNewAddressCity] = useState("");
+  const [newAddressPostcode, setNewAddressPostcode] = useState("");
+  const [newSicCode, setNewSicCode] = useState("");
+  const [newCapitalAmount, setNewCapitalAmount] = useState("");
+  const [shareholderName, setShareholderName] = useState("");
+  const [shareholderPercentage, setShareholderPercentage] = useState("");
+  const [confirmationYear, setConfirmationYear] = useState(new Date().getFullYear());
+  const [newCompanyName, setNewCompanyName] = useState("");
+
   const owner = mockUsers.find((u) => u.id === company.userId);
 
   // Find the order linked to this company

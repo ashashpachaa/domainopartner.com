@@ -402,46 +402,23 @@ export async function handleIncorporationSubmission(req: any, res: any) {
   }
 }
 
-// Helper function to get OAuth 2.0 access token
-async function getCompaniesHouseAccessToken(): Promise<string> {
-  const clientId = process.env.COMPANIES_HOUSE_CLIENT_ID;
-  const clientSecret = process.env.COMPANIES_HOUSE_CLIENT_SECRET;
+// Helper function to get Companies House API headers
+function getCompaniesHouseHeaders(): { Authorization: string; "Content-Type": string; Accept: string; "User-Agent": string } {
+  const apiKey = process.env.COMPANIES_HOUSE_API_KEY;
 
-  if (!clientId || !clientSecret) {
-    throw new Error("Companies House OAuth 2.0 credentials not configured");
+  if (!apiKey) {
+    throw new Error("Companies House API key not configured");
   }
 
-  console.log(`🔐 Requesting OAuth 2.0 access token...`);
+  // Use HTTP Basic Auth (REST API key as username, empty password)
+  const basicAuth = Buffer.from(apiKey + ":").toString("base64");
 
-  const tokenRes = await fetch("https://identity.company-information.service.gov.uk/oauth2/token", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      Accept: "application/json",
-    },
-    body: new URLSearchParams({
-      grant_type: "client_credentials",
-      client_id: clientId,
-      client_secret: clientSecret,
-    }).toString(),
-  });
-
-  if (!tokenRes.ok) {
-    const errorText = await tokenRes.text();
-    throw new Error(
-      `Failed to get OAuth 2.0 access token (${tokenRes.status}): ${errorText.substring(0, 300)}`
-    );
-  }
-
-  const tokenData = await tokenRes.json();
-  const accessToken = tokenData.access_token;
-
-  if (!accessToken) {
-    throw new Error("OAuth 2.0 response missing access_token field");
-  }
-
-  console.log(`✅ OAuth 2.0 access token obtained (expires in ${tokenData.expires_in} seconds)`);
-  return accessToken;
+  return {
+    Authorization: `Basic ${basicAuth}`,
+    "Content-Type": "application/json",
+    Accept: "application/json",
+    "User-Agent": "Domaino-Partner/1.0",
+  };
 }
 
 export async function handleAmendmentSubmission(req: any, res: any) {

@@ -141,7 +141,7 @@ export default function AdminEditUser() {
         toast.success(
           `User ${newUser.firstName} ${newUser.lastName} created successfully!`,
         );
-        navigate("/admin/users");
+        navigate(`/admin/users/${newUser.id}`);
       } else {
         // Update existing user
         const updatedUser: User = {

@@ -1423,7 +1423,15 @@ export default function AdminUKCompanySetup() {
     } catch (error: any) {
       console.error("Amendment submission error:", error);
       toast.dismiss();
-      toast.error(error.message || "Failed to submit amendment");
+
+      // Provide helpful error messages
+      if (error.message?.includes("body stream already read")) {
+        toast.error("Server communication error. Please try again.");
+      } else if (error.message?.includes("JSON")) {
+        toast.error("Invalid response from server. Please try again.");
+      } else {
+        toast.error(error.message || "Failed to submit amendment");
+      }
     }
   };
 

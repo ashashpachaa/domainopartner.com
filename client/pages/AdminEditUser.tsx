@@ -25,7 +25,7 @@ export default function AdminEditUser() {
       try {
         return JSON.parse(localStorageUser);
       } catch (e) {
-        console.error('Error parsing user from localStorage:', e);
+        console.error("Error parsing user from localStorage:", e);
       }
     }
 
@@ -37,23 +37,25 @@ export default function AdminEditUser() {
     const staffMap = new Map<string, any>();
 
     // First add all mock staff
-    mockStaff.forEach(staff => staffMap.set(staff.id, staff));
+    mockStaff.forEach((staff) => staffMap.set(staff.id, staff));
 
     // Then merge with localStorage staff (overwrites mock if exists)
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
-      if (key?.startsWith('staff_')) {
+      if (key?.startsWith("staff_")) {
         try {
-          const staffData = JSON.parse(localStorage.getItem(key) || '{}');
+          const staffData = JSON.parse(localStorage.getItem(key) || "{}");
           staffMap.set(staffData.id, staffData);
         } catch (e) {
-          console.error('Error parsing staff from localStorage:', e);
+          console.error("Error parsing staff from localStorage:", e);
         }
       }
     }
 
     return Array.from(staffMap.values()).sort((a, b) =>
-      `${a.firstName} ${a.lastName}`.localeCompare(`${b.firstName} ${b.lastName}`)
+      `${a.firstName} ${a.lastName}`.localeCompare(
+        `${b.firstName} ${b.lastName}`,
+      ),
     );
   }, [userId, isNew]);
 
@@ -387,7 +389,8 @@ export default function AdminEditUser() {
                     <option value="">-- Select Staff Member --</option>
                     {allStaff.map((staff) => (
                       <option key={staff.id} value={staff.id}>
-                        {staff.firstName} {staff.lastName} ({staff.role.replace(/_/g, " ")})
+                        {staff.firstName} {staff.lastName} (
+                        {staff.role.replace(/_/g, " ")})
                       </option>
                     ))}
                   </select>

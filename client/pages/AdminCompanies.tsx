@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import AdminLayout from "@/components/AdminLayout";
 import CompanyDetailModal from "@/components/CompanyDetailModal";

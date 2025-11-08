@@ -1368,6 +1368,23 @@ export default function AdminUKCompanySetup() {
             toast.error("Please enter the new company name");
             return;
           }
+
+          // Validate company name availability
+          if (validationResult?.isAvailable === false) {
+            toast.error("Please choose a different company name. This name already exists or is too similar to an existing company.");
+            return;
+          }
+
+          if (validationResult?.isAvailable === null && newCompanyName) {
+            toast.error("Please wait for company name validation to complete");
+            return;
+          }
+
+          if (validationResult?.isAvailable !== true) {
+            toast.error("Please validate the company name before submitting");
+            return;
+          }
+
           amendmentData.formType = "company_name_change";
           amendmentData.amendment = {
             oldCompanyName: selectedIncorporation.companyName,

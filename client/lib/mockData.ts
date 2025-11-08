@@ -88,6 +88,7 @@ export interface User {
   subscriptionStatus: "active" | "cancelled" | "expired";
   createdAt: string;
   lastLogin: string;
+  assignedToStaffId?: string; // Staff member responsible for this client
 }
 
 export type ClientRequestStatus = "pending_approval" | "approved" | "rejected";
@@ -4409,7 +4410,7 @@ export const mockOrders: Order[] = [
       companyName: "Acme Corporation UK Ltd",
       companyActivities: "Business consulting and advisory services",
       totalCapital: "£250,000",
-      pricePerShare: "£10",
+      pricePerShare: "��10",
     },
     shareholders: [
       {

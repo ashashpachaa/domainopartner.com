@@ -93,6 +93,9 @@ const App = () => (
             element={<ProtectedRoute element={<StaffDashboard />} />}
           />
 
+          {/* Extranet Routes */}
+          <Route path="/extranet/login" element={<ExtranetLogin />} />
+
           {/* Admin Routes */}
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route

@@ -182,6 +182,45 @@ export default function AdminDashboard() {
     }
   };
 
+  const toggleUserSelection = (userId: string) => {
+    const newSelected = new Set(selectedUsers);
+    if (newSelected.has(userId)) {
+      newSelected.delete(userId);
+    } else {
+      newSelected.add(userId);
+    }
+    setSelectedUsers(newSelected);
+  };
+
+  const selectAllUsers = () => {
+    if (selectedUsers.size === filteredUsers.length) {
+      setSelectedUsers(new Set());
+    } else {
+      setSelectedUsers(new Set(filteredUsers.map(u => u.id)));
+    }
+  };
+
+  const deleteSelectedUsers = () => {
+    if (selectedUsers.size === 0) {
+      toast.error("No users selected");
+      return;
+    }
+
+    const confirmMessage = `Are you sure you want to delete ${selectedUsers.size} user${selectedUsers.size > 1 ? 's' : ''}? This action cannot be undone.`;
+    if (confirm(confirmMessage)) {
+      const newUsers = users.filter(user => !selectedUsers.has(user.id));
+      setUsers(newUsers);
+
+      // Remove from localStorage
+      selectedUsers.forEach(userId => {
+        localStorage.removeItem(`user_${userId}`);
+      });
+
+      setSelectedUsers(new Set());
+      toast.success(`${selectedUsers.size} user${selectedUsers.size > 1 ? 's' : ''} deleted successfully`);
+    }
+  };
+
   const getStatusColor = (status: UserStatus) => {
     switch (status) {
       case "active":

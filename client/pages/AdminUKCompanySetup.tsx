@@ -3997,12 +3997,60 @@ export default function AdminUKCompanySetup() {
                                 type="text"
                                 placeholder="Enter new company name"
                                 value={newCompanyName}
-                                onChange={(e) => setNewCompanyName(e.target.value)}
+                                onChange={(e) => {
+                                  setNewCompanyName(e.target.value);
+                                  checkCompanyName(e.target.value);
+                                }}
                                 className="w-full px-3 py-2 border border-slate-300 rounded text-sm"
                               />
                               <p className="text-xs text-slate-600 mt-2">
                                 Company names must follow UK naming rules and be available at Companies House
                               </p>
+
+                              {newCompanyName && (
+                                <div className="mt-2 space-y-1">
+                                  {isValidating && (
+                                    <div className="flex items-center gap-2 text-blue-600 text-sm">
+                                      <Loader className="w-4 h-4 animate-spin" />
+                                      <span>Checking availability...</span>
+                                    </div>
+                                  )}
+
+                                  {!isValidating && validationResult && (
+                                    <>
+                                      {validationResult.isAvailable === true && (
+                                        <div className="flex items-center gap-2 text-green-600 text-sm">
+                                          <CheckSquare className="w-4 h-4" />
+                                          <span>✓ Company name is available</span>
+                                        </div>
+                                      )}
+
+                                      {validationResult.isAvailable === false && validationResult.exactMatch && (
+                                        <div className="flex items-center gap-2 text-red-600 text-sm">
+                                          <AlertCircle className="w-4 h-4" />
+                                          <div>
+                                            <span>✗ Company name already exists: </span>
+                                            <strong>{validationResult.exactMatch.title}</strong>
+                                            {validationResult.exactMatch.company_status && (
+                                              <span> ({validationResult.exactMatch.company_status})</span>
+                                            )}
+                                          </div>
+                                        </div>
+                                      )}
+
+                                      {validationResult.similarMatch && !validationResult.exactMatch && (
+                                        <div className="flex items-center gap-2 text-amber-600 text-sm">
+                                          <AlertCircle className="w-4 h-4" />
+                                          <div>
+                                            <span>⚠ Similar company found: </span>
+                                            <strong>{validationResult.similarMatch.title}</strong>
+                                          </div>
+                                        </div>
+                                      )}
+                                    </>
+                                  )}
+                                </div>
+                              )}
                             </div>
                           </div>
                         )}

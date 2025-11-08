@@ -90,7 +90,19 @@ export default function AdminStaffSalary() {
   const { staffId } = useParams<{ staffId: string }>();
   const navigate = useNavigate();
 
-  const staff = mockStaff.find((s) => s.id === staffId);
+  // Load staff from localStorage first, then fallback to mockStaff
+  const staff = useMemo(() => {
+    const localStorageStaff = localStorage.getItem(`staff_${staffId}`);
+    if (localStorageStaff) {
+      try {
+        return JSON.parse(localStorageStaff);
+      } catch (e) {
+        console.error('Error parsing staff from localStorage:', e);
+      }
+    }
+    return mockStaff.find((s) => s.id === staffId);
+  }, [staffId]);
+
   const salary = mockStaffSalaries.find((s) => s.staffId === staffId);
 
   const [formData, setFormData] = useState<StaffSalary>(

@@ -78,7 +78,7 @@ export default function AdminEditUser() {
   );
 
   // Update formData when existingUser changes
-  React.useEffect(() => {
+  useEffect(() => {
     if (existingUser) {
       setFormData(existingUser);
     }

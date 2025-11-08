@@ -30,13 +30,14 @@ export default function Index() {
             <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
               <span className="bg-gradient-to-r from-primary-600 via-primary-500 to-accent-600 bg-clip-text text-transparent">
                 Global Company Setup
-              </span>
-              {" "}
+              </span>{" "}
               Made Simple
             </h1>
 
             <p className="text-xl md:text-2xl text-slate-600 mb-8 leading-relaxed max-w-2xl mx-auto">
-              Establish your business in any country worldwide. Navigate regulations, handle paperwork, and launch internationally in days, not months.
+              Establish your business in any country worldwide. Navigate
+              regulations, handle paperwork, and launch internationally in days,
+              not months.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
@@ -80,7 +81,8 @@ export default function Index() {
                 Multi-Country Support
               </h3>
               <p className="text-slate-600 leading-relaxed">
-                Register your business in 150+ countries with localized compliance and regulatory support.
+                Register your business in 150+ countries with localized
+                compliance and regulatory support.
               </p>
             </div>
 
@@ -93,7 +95,8 @@ export default function Index() {
                 Quick Setup Process
               </h3>
               <p className="text-slate-600 leading-relaxed">
-                Complete your company registration in as little as 48 hours with our streamlined digital process.
+                Complete your company registration in as little as 48 hours with
+                our streamlined digital process.
               </p>
             </div>
 
@@ -106,7 +109,8 @@ export default function Index() {
                 Legal Compliance
               </h3>
               <p className="text-slate-600 leading-relaxed">
-                Stay compliant with local laws, tax regulations, and reporting requirements in every jurisdiction.
+                Stay compliant with local laws, tax regulations, and reporting
+                requirements in every jurisdiction.
               </p>
             </div>
 
@@ -119,7 +123,8 @@ export default function Index() {
                 Expert Support
               </h3>
               <p className="text-slate-600 leading-relaxed">
-                Get personalized guidance from our team of international business experts and local partners.
+                Get personalized guidance from our team of international
+                business experts and local partners.
               </p>
             </div>
 
@@ -132,7 +137,8 @@ export default function Index() {
                 Growth Analytics
               </h3>
               <p className="text-slate-600 leading-relaxed">
-                Track your expansion metrics and get insights to optimize your international operations.
+                Track your expansion metrics and get insights to optimize your
+                international operations.
               </p>
             </div>
 
@@ -145,7 +151,8 @@ export default function Index() {
                 Document Management
               </h3>
               <p className="text-slate-600 leading-relaxed">
-                Securely store and manage all your legal documents, certificates, and compliance records.
+                Securely store and manage all your legal documents,
+                certificates, and compliance records.
               </p>
             </div>
           </div>
@@ -153,7 +160,10 @@ export default function Index() {
       </section>
 
       {/* How It Works Section */}
-      <section id="how-it-works" className="py-20 md:py-32 bg-gradient-to-b from-slate-50 to-white">
+      <section
+        id="how-it-works"
+        className="py-20 md:py-32 bg-gradient-to-b from-slate-50 to-white"
+      >
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
@@ -176,7 +186,8 @@ export default function Index() {
               <div className="pb-12 pt-2">
                 <h3 className="text-2xl font-bold mb-2">Choose Your Country</h3>
                 <p className="text-slate-600 text-lg">
-                  Select where you want to establish your business and tell us about your company type.
+                  Select where you want to establish your business and tell us
+                  about your company type.
                 </p>
               </div>
             </div>
@@ -190,9 +201,12 @@ export default function Index() {
                 <div className="w-1 h-24 bg-gradient-to-b from-accent-300 to-slate-200 mt-4 hidden md:block"></div>
               </div>
               <div className="pb-12 pt-2">
-                <h3 className="text-2xl font-bold mb-2">Complete Questionnaire</h3>
+                <h3 className="text-2xl font-bold mb-2">
+                  Complete Questionnaire
+                </h3>
                 <p className="text-slate-600 text-lg">
-                  Provide business details, shareholder information, and compliance requirements in our simple form.
+                  Provide business details, shareholder information, and
+                  compliance requirements in our simple form.
                 </p>
               </div>
             </div>
@@ -206,9 +220,12 @@ export default function Index() {
                 <div className="w-1 h-24 bg-gradient-to-b from-primary-300 to-slate-200 mt-4 hidden md:block"></div>
               </div>
               <div className="pb-12 pt-2">
-                <h3 className="text-2xl font-bold mb-2">We Handle the Paperwork</h3>
+                <h3 className="text-2xl font-bold mb-2">
+                  We Handle the Paperwork
+                </h3>
                 <p className="text-slate-600 text-lg">
-                  Our local experts file all necessary documents and handle government requirements for you.
+                  Our local experts file all necessary documents and handle
+                  government requirements for you.
                 </p>
               </div>
             </div>
@@ -223,7 +240,8 @@ export default function Index() {
               <div className="pt-2">
                 <h3 className="text-2xl font-bold mb-2">Ready to Operate</h3>
                 <p className="text-slate-600 text-lg">
-                  Receive your registration certificate and start doing business immediately.
+                  Receive your registration certificate and start doing business
+                  immediately.
                 </p>
               </div>
             </div>
@@ -249,7 +267,8 @@ export default function Index() {
               <div>
                 <h3 className="font-bold text-lg mb-2">Fastest Setup</h3>
                 <p className="text-slate-600">
-                  Average setup time of just 48 hours compared to months with traditional methods
+                  Average setup time of just 48 hours compared to months with
+                  traditional methods
                 </p>
               </div>
             </div>
@@ -269,7 +288,8 @@ export default function Index() {
               <div>
                 <h3 className="font-bold text-lg mb-2">Local Expertise</h3>
                 <p className="text-slate-600">
-                  Partner with local experts in 150+ countries who understand local regulations
+                  Partner with local experts in 150+ countries who understand
+                  local regulations
                 </p>
               </div>
             </div>
@@ -289,7 +309,8 @@ export default function Index() {
               <div>
                 <h3 className="font-bold text-lg mb-2">Fully Compliant</h3>
                 <p className="text-slate-600">
-                  100% compliant with local regulations and international standards
+                  100% compliant with local regulations and international
+                  standards
                 </p>
               </div>
             </div>
@@ -342,33 +363,87 @@ export default function Index() {
             <div>
               <h4 className="font-semibold text-white mb-4">Product</h4>
               <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:text-white transition">Features</a></li>
-                <li><a href="#" className="hover:text-white transition">Pricing</a></li>
-                <li><a href="#" className="hover:text-white transition">Security</a></li>
+                <li>
+                  <a href="#" className="hover:text-white transition">
+                    Features
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition">
+                    Pricing
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition">
+                    Security
+                  </a>
+                </li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold text-white mb-4">Company</h4>
               <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:text-white transition">About</a></li>
-                <li><a href="#" className="hover:text-white transition">Blog</a></li>
-                <li><a href="#" className="hover:text-white transition">Contact</a></li>
+                <li>
+                  <a href="#" className="hover:text-white transition">
+                    About
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition">
+                    Blog
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition">
+                    Contact
+                  </a>
+                </li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold text-white mb-4">Legal</h4>
               <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:text-white transition">Privacy</a></li>
-                <li><a href="#" className="hover:text-white transition">Terms</a></li>
-                <li><a href="#" className="hover:text-white transition">Cookies</a></li>
+                <li>
+                  <a href="#" className="hover:text-white transition">
+                    Privacy
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition">
+                    Terms
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition">
+                    Cookies
+                  </a>
+                </li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold text-white mb-4">Administration</h4>
               <ul className="space-y-2 text-sm">
-                <li><a href="/extranet/login" className="hover:text-white transition">🔐 Extranet</a></li>
-                <li><a href="/admin/login" className="hover:text-white transition">Admin Portal</a></li>
-                <li><a href="#" className="hover:text-white transition">Support</a></li>
+                <li>
+                  <a
+                    href="/extranet/login"
+                    className="hover:text-white transition"
+                  >
+                    🔐 Extranet
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="/admin/login"
+                    className="hover:text-white transition"
+                  >
+                    Admin Portal
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition">
+                    Support
+                  </a>
+                </li>
               </ul>
             </div>
           </div>

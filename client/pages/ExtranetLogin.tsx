@@ -31,7 +31,10 @@ export default function ExtranetLogin() {
           createdAt: "2024-01-01",
         };
         localStorage.setItem("currentUser", JSON.stringify(adminUser));
-        localStorage.setItem("adminToken", "extranet-admin-token-" + Date.now());
+        localStorage.setItem(
+          "adminToken",
+          "extranet-admin-token-" + Date.now(),
+        );
         toast.success("Welcome to Extranet! Redirecting to dashboard...");
         navigate("/admin/dashboard");
       } else {
@@ -55,9 +58,7 @@ export default function ExtranetLogin() {
             <h1 className="text-3xl font-bold text-slate-900 mb-2">
               Extranet Login
             </h1>
-            <p className="text-slate-600">
-              Administration Portal Access
-            </p>
+            <p className="text-slate-600">Administration Portal Access</p>
           </div>
 
           {error && (
@@ -112,7 +113,10 @@ export default function ExtranetLogin() {
                 />
                 <span className="text-slate-600">Remember me</span>
               </label>
-              <a href="#" className="text-primary-600 hover:text-primary-700 font-medium">
+              <a
+                href="#"
+                className="text-primary-600 hover:text-primary-700 font-medium"
+              >
                 Forgot password?
               </a>
             </div>
@@ -130,7 +134,9 @@ export default function ExtranetLogin() {
 
           {/* Demo Info */}
           <div className="mt-6 p-4 bg-primary-50 rounded-lg border border-primary-200">
-            <p className="text-xs text-primary-900 font-medium mb-2">Demo Credentials:</p>
+            <p className="text-xs text-primary-900 font-medium mb-2">
+              Demo Credentials:
+            </p>
             <p className="text-xs text-primary-800">
               Username: <span className="font-mono font-semibold">admin</span>
             </p>
@@ -141,7 +147,8 @@ export default function ExtranetLogin() {
 
           {/* Footer Note */}
           <p className="text-center text-xs text-slate-500 mt-6">
-            This is a secure administration portal. Unauthorized access is prohibited.
+            This is a secure administration portal. Unauthorized access is
+            prohibited.
           </p>
         </div>
       </div>

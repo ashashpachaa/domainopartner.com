@@ -17,6 +17,7 @@ export default function CompanyDetailModal({
 }: CompanyDetailModalProps) {
   const [amendmentTab, setAmendmentTab] = useState<string>("history");
   const [showAmendmentForm, setShowAmendmentForm] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { getIncorporationForCompany, canFileAmendments, getAmendmentHistory } = useCompanyIncorporationLink();
 
   // Amendment form states

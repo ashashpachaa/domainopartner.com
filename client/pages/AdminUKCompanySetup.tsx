@@ -1201,8 +1201,18 @@ export default function AdminUKCompanySetup() {
   };
 
   const handleSubmitAmendment = async () => {
-    if (!selectedIncorporation?.companyRegistrationNumber) {
-      toast.error("Company registration number is required to file amendments");
+    if (!selectedIncorporation) {
+      toast.error("No company selected");
+      return;
+    }
+
+    if (!selectedIncorporation.companyRegistrationNumber) {
+      toast.error("Company registration number is required to file amendments. Please ensure the company is fully registered with Companies House.");
+      return;
+    }
+
+    if (!selectedIncorporation.id) {
+      toast.error("Company ID is missing");
       return;
     }
 
@@ -1210,6 +1220,7 @@ export default function AdminUKCompanySetup() {
       incorporationId: selectedIncorporation.id,
       companyRegistrationNumber: selectedIncorporation.companyRegistrationNumber,
       amendment: {},
+      formType: "", // Will be set in switch cases
     };
 
     try {

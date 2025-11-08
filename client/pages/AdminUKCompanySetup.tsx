@@ -1743,27 +1743,49 @@ export default function AdminUKCompanySetup() {
                                   ⚠️ Maximum 4 SIC codes can be selected
                                 </div>
                               )}
-                              <select
-                                onChange={(e) => {
-                                  if (e.target.value && !formData.sicCodes.includes(e.target.value)) {
-                                    if (formData.sicCodes.length < 4) {
-                                      setFormData({ ...formData, sicCodes: [...formData.sicCodes, e.target.value] });
-                                      e.target.value = "";
-                                    } else {
-                                      toast.error("Maximum 4 SIC codes can be selected");
-                                    }
-                                  }
-                                }}
-                                disabled={formData.sicCodes.length >= 4}
-                                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 disabled:bg-slate-100 disabled:cursor-not-allowed"
-                              >
-                                <option value="">-- Select SIC Code --</option>
-                                {SIC_CODES.map(code => (
-                                  <option key={code.code} value={code.code}>
-                                    {code.code} - {code.description}
-                                  </option>
-                                ))}
-                              </select>
+
+                              {/* Search input */}
+                              <input
+                                type="text"
+                                placeholder="Search by code or description (e.g., software, consulting)..."
+                                value={sicSearch}
+                                onChange={(e) => setSicSearch(e.target.value)}
+                                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                              />
+
+                              {/* Filtered dropdown */}
+                              {sicSearch && filteredSicCodes.length > 0 && (
+                                <div className="border border-slate-300 rounded-lg max-h-60 overflow-y-auto bg-white shadow-lg">
+                                  {filteredSicCodes.slice(0, 20).map(code => (
+                                    <button
+                                      key={code.code}
+                                      type="button"
+                                      onClick={() => {
+                                        if (!formData.sicCodes.includes(code.code) && formData.sicCodes.length < 4) {
+                                          setFormData({ ...formData, sicCodes: [...formData.sicCodes, code.code] });
+                                          setSicSearch("");
+                                        } else if (formData.sicCodes.includes(code.code)) {
+                                          toast.error("SIC code already selected");
+                                        } else {
+                                          toast.error("Maximum 4 SIC codes can be selected");
+                                        }
+                                      }}
+                                      disabled={formData.sicCodes.includes(code.code) || formData.sicCodes.length >= 4}
+                                      className="w-full text-left px-4 py-3 hover:bg-blue-50 disabled:bg-slate-100 disabled:cursor-not-allowed border-b border-slate-200 last:border-b-0 transition"
+                                    >
+                                      <span className="font-semibold text-slate-900">{code.code}</span>
+                                      <span className="text-slate-600 text-sm ml-2">{code.description}</span>
+                                    </button>
+                                  ))}
+                                </div>
+                              )}
+
+                              {/* No results message */}
+                              {sicSearch && filteredSicCodes.length === 0 && (
+                                <div className="text-sm text-slate-500 py-3 text-center bg-slate-50 rounded border border-slate-200">
+                                  No SIC codes found for "{sicSearch}"
+                                </div>
+                              )}
                               {formData.sicCodes.length > 0 && (
                                 <div className="flex flex-wrap gap-2">
                                   {formData.sicCodes.map(code => {

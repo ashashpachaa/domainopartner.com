@@ -1802,6 +1802,29 @@ export const mockCompanyIncorporations: CompanyIncorporation[] = [
     completedAt: "2024-01-16",
     currency: "GBP",
     filingFee: 12,
+    amendments: [
+      {
+        id: "AMD001",
+        incorporationId: "INC001",
+        formType: "director_appointment",
+        status: "filed",
+        createdAt: "2024-01-20",
+        submittedAt: "2024-01-20",
+        filedAt: "2024-01-21",
+        filingReference: "CH-AMEND-1762590453381",
+        appointmentDirector: {
+          id: "DIR002",
+          firstName: "Sarah",
+          lastName: "Johnson",
+          dateOfBirth: "1992-03-20",
+          nationality: "British",
+          address: "20 Executive Way",
+          postcode: "EC1A 1BB",
+          city: "London",
+          country: "United Kingdom",
+        },
+      },
+    ],
   },
 ];
 

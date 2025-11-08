@@ -33,7 +33,7 @@ export default function AdminStaffCommission() {
       }
     }
     return mockStaff.find((s) => s.id === staffId);
-  }, [staffId]);
+  }, []);
 
   const commission = mockStaffCommissions.find((c) => c.staffId === staffId);
 

@@ -93,7 +93,30 @@ export default function AdminEditStaff() {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    // In a real app, this would save to a database
+
+    // Validate required fields
+    if (!formData.firstName || !formData.lastName || !formData.email) {
+      alert("Please fill in all required fields");
+      return;
+    }
+
+    // Save to localStorage and mockStaff
+    const staffToSave = formData as Staff;
+
+    // Save to localStorage
+    localStorage.setItem(`staff_${staffToSave.id}`, JSON.stringify(staffToSave));
+
+    // Also update mockStaff if it's a new staff member
+    if (isNew) {
+      mockStaff.push(staffToSave);
+    } else {
+      // Update existing staff
+      const index = mockStaff.findIndex(s => s.id === staffToSave.id);
+      if (index !== -1) {
+        mockStaff[index] = staffToSave;
+      }
+    }
+
     navigate("/admin/staff");
   };
 

@@ -13,7 +13,7 @@ const distPath = path.join(__dirname, "../spa");
 app.use(express.static(distPath));
 
 // Handle React Router - serve index.html for all non-API routes
-app.all("*", (req, res) => {
+app.use((req, res, next) => {
   // Don't serve index.html for API routes
   if (req.path.startsWith("/api/") || req.path.startsWith("/health")) {
     res.status(404).json({ error: "Not found" });
@@ -22,7 +22,11 @@ app.all("*", (req, res) => {
 
   // For all other routes, serve index.html for client-side routing
   const indexPath = path.join(distPath, "index.html");
-  res.sendFile(indexPath);
+  res.sendFile(indexPath, (err) => {
+    if (err) {
+      next(err);
+    }
+  });
 });
 
 app.listen(port, () => {

@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, Save } from "lucide-react";
 import { FormEvent, useState } from "react";
-import { mockUsers, User, UserStatus } from "@/lib/mockData";
+import { mockUsers, mockStaff, User, UserStatus } from "@/lib/mockData";
 import { toast } from "sonner";
 
 export default function AdminEditUser() {

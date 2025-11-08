@@ -8,12 +8,22 @@ import {
   Download,
   AlertCircle,
   CheckCircle2,
+  TrendingUp,
+  X,
 } from "lucide-react";
 import {
   getRegisteredCompanies,
   RegisteredCompany,
 } from "@/hooks/useCompanyDetails";
-import { mockUsers } from "@/lib/mockData";
+import { mockUsers, mockCompaniesForSale } from "@/lib/mockData";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 
 type CountryTab = "all" | "UK" | "USA" | "Sweden";
 

@@ -223,6 +223,18 @@ export default function AdminOrderDetail() {
     return staff ? `${staff.firstName} ${staff.lastName}` : "Unknown";
   };
 
+  const getStaffDetails = (staffId?: string) => {
+    if (!staffId) return null;
+    const staff = mockStaff.find((s) => s.id === staffId);
+    return staff
+      ? {
+          name: `${staff.firstName} ${staff.lastName}`,
+          role: staff.role.charAt(0).toUpperCase() + staff.role.slice(1),
+          department: staff.department,
+        }
+      : null;
+  };
+
   const handleDownloadFile = (file: any) => {
     // Create a mock file download with the original filename
     const fileData = `File: ${file.fileName}\nSize: ${file.fileSize} bytes\nUploaded By: ${file.uploadedByName}\nUploaded At: ${new Date(file.uploadedAt).toLocaleString()}\nStage: ${file.stage}\nDescription: ${file.description || "N/A"}\n\n--- File Content ---\nThis is a mock download of ${file.fileName}. In a production environment, this would contain the actual file content.`;

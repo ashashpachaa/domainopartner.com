@@ -2,9 +2,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import AdminLayout from "@/components/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, CheckCircle2, XCircle, Clock } from "lucide-react";
+import { ArrowLeft, CheckCircle2, XCircle, Clock, User } from "lucide-react";
 import { useState, useMemo } from "react";
-import { mockClientRequests, mockUsers, ClientRequest } from "@/lib/mockData";
+import { mockClientRequests, mockUsers, ClientRequest, mockStaff } from "@/lib/mockData";
 import { toast } from "sonner";
 
 export default function AdminClientRequestDetail() {

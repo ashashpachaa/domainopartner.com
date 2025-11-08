@@ -582,7 +582,7 @@ export default function AdminCreateOrder() {
                         value={companyName}
                         onChange={(e) => {
                           setCompanyName(e.target.value);
-                          companyValidation.validateWithDebounce(
+                          companyValidation.checkCompanyName(
                             e.target.value,
                           );
                         }}

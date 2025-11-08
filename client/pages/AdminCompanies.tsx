@@ -144,8 +144,11 @@ export default function AdminCompanies() {
       return;
     }
 
+    // Get current companies from storage
+    const existingCompanies = getRegisteredCompanies();
+
     // Check for duplicate company number
-    const isDuplicate = companies.some(
+    const isDuplicate = existingCompanies.some(
       (c) => c.companyNumber === fetchedCompanyData.companyNumber
     );
 
@@ -170,8 +173,7 @@ export default function AdminCompanies() {
     };
 
     // Store the company
-    const companies = getRegisteredCompanies();
-    const updatedCompanies = [...companies, newCompany];
+    const updatedCompanies = [...existingCompanies, newCompany];
     localStorage.setItem("registeredCompanies", JSON.stringify(updatedCompanies));
 
     toast.success(`${newCompany.companyName} has been imported!`);

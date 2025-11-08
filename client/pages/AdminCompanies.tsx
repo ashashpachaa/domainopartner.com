@@ -47,6 +47,14 @@ export default function AdminCompanies() {
   const [businessType, setBusinessType] = useState<string>("");
   const [reason, setReason] = useState<string>("");
 
+  // Import modal state
+  const [showImportModal, setShowImportModal] = useState(false);
+  const [importCompanyNumber, setImportCompanyNumber] = useState("");
+  const [importAuthCode, setImportAuthCode] = useState("");
+  const [isLoadingCH, setIsLoadingCH] = useState(false);
+  const [fetchedCompanyData, setFetchedCompanyData] = useState<any>(null);
+  const [importAuthCodeForFetched, setImportAuthCodeForFetched] = useState("");
+
   // Helper functions
   const formatDate = (dateStr: string) => {
     return new Date(dateStr).toLocaleDateString("en-US", {

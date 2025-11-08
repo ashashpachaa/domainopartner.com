@@ -534,7 +534,7 @@ export default function AdminCompanies() {
                         )}
                         {selectedCountry === "UK" && (
                           <td className="px-6 py-4 sticky right-0 bg-white border-l border-slate-200 shadow-lg">
-                            <div className="flex items-center gap-1 flex-wrap">
+                            <div className="flex items-center gap-1">
                               <Button
                                 onClick={() => {
                                   setSelectedCompany(company);
@@ -544,6 +544,16 @@ export default function AdminCompanies() {
                                 size="sm"
                               >
                                 View
+                              </Button>
+                              <Button
+                                onClick={() => {
+                                  setSelectedCompany(company);
+                                  setShowDetailModal(true);
+                                }}
+                                className="bg-slate-600 hover:bg-slate-700 text-white text-xs h-8 px-2 py-1"
+                                size="sm"
+                              >
+                                Edit
                               </Button>
                               <Button
                                 onClick={() => {

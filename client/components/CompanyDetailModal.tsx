@@ -322,6 +322,57 @@ export default function CompanyDetailModal({
             </div>
           )}
 
+          {/* Amendments Section */}
+          {incorporation && (
+            <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-lg p-6 border border-orange-200">
+              <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                <FileText className="w-5 h-5 text-orange-600" />
+                Company Amendments
+              </h3>
+
+              {canAmend ? (
+                <div className="space-y-4">
+                  <p className="text-sm text-slate-600">
+                    This company is linked to a UK Company Setup incorporation. You can file amendments to Companies House.
+                  </p>
+
+                  {amendments.length > 0 && (
+                    <div className="bg-white rounded-lg p-3 border border-orange-200">
+                      <p className="text-xs font-bold text-slate-700 mb-2">Recent Amendments: {amendments.length}</p>
+                      <div className="space-y-2">
+                        {amendments.slice(0, 3).map((amd: any) => (
+                          <div key={amd.id} className="text-xs text-slate-600 flex items-center justify-between">
+                            <span>
+                              {amd.formType.replace(/_/g, " ").toUpperCase()} - {amd.status}
+                            </span>
+                            {amd.filingReference && (
+                              <span className="text-orange-600 font-medium">{amd.filingReference}</span>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  <Button
+                    onClick={() => {
+                      toast.info("Opening amendment form in UK Company Setup page");
+                      // This would navigate to the UK Company Setup page with the company pre-selected
+                      window.location.href = `/admin/uk-company-setup?incorporationId=${incorporation.id}`;
+                    }}
+                    className="w-full bg-orange-600 hover:bg-orange-700 text-white"
+                  >
+                    File Amendment to Companies House
+                  </Button>
+                </div>
+              ) : (
+                <p className="text-sm text-slate-600">
+                  This company is not yet eligible for amendments. It must be fully registered with Companies House first.
+                </p>
+              )}
+            </div>
+          )}
+
           {/* Action Buttons */}
           <div className="flex gap-3 justify-end pt-4 border-t border-slate-200">
             <button

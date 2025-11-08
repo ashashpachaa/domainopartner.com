@@ -278,6 +278,28 @@ export default function AdminClientRequestDetail() {
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-slate-900 mb-2">
+                  <User className="w-4 h-4 inline mr-2" />
+                  Assign Responsible Staff Member (optional)
+                </label>
+                <select
+                  value={assignedToStaffId}
+                  onChange={(e) => setAssignedToStaffId(e.target.value)}
+                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:border-primary-500 focus:ring-primary-500 bg-white"
+                >
+                  <option value="">-- No assignment --</option>
+                  {mockStaff.map((staff) => (
+                    <option key={staff.id} value={staff.id}>
+                      {staff.firstName} {staff.lastName} ({staff.role})
+                    </option>
+                  ))}
+                </select>
+                <p className="text-xs text-slate-500 mt-1">
+                  This staff member will be responsible for following up on this client's orders.
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-900 mb-2">
                   Rejection Reason (required if rejecting)
                 </label>
                 <textarea

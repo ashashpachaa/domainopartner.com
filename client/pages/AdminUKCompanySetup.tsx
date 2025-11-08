@@ -1330,6 +1330,24 @@ export default function AdminUKCompanySetup() {
             };
           }
           break;
+
+        case "annual_confirmation":
+          amendmentData.formType = "annual_confirmation";
+          amendmentData.amendment = {
+            confirmationYear: confirmationYear,
+            directorsUnchanged: confirmationData.directorsUnchanged,
+            shareholdersUnchanged: confirmationData.shareholdersUnchanged,
+            addressUnchanged: confirmationData.addressUnchanged,
+            capitalUnchanged: confirmationData.capitalUnchanged,
+            sicUnchanged: confirmationData.sicUnchanged,
+            confirmedAddress: confirmationData.addressUnchanged ? null : confirmedAddress,
+            confirmedShareCapital: confirmationData.capitalUnchanged ? null : confirmedCapital,
+            confirmedSicCode: confirmationData.sicUnchanged ? null : confirmedSicCode,
+            secretaryDetails: confirmationData.hasSecretary ? secretaryForm : null,
+            confirmedDirectors: selectedIncorporation.directors,
+            confirmedShareholders: selectedIncorporation.shareholders,
+          };
+          break;
       }
 
       toast.loading("Submitting amendment to Companies House...");

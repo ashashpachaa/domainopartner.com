@@ -31,6 +31,7 @@ import {
 type CountryTab = "all" | "UK" | "USA" | "Sweden";
 
 export default function AdminCompanies() {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState<
     "all" | "active" | "dissolved"

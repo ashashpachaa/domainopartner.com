@@ -663,12 +663,12 @@ export default function CompanyDetailModal({
             >
               Close
             </button>
-            <button
-              onClick={() => alert("Edit functionality to be implemented")}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition"
+            <Button
+              onClick={() => window.location.href = `/admin/uk-company-setup?companyId=${company.id}`}
+              className="bg-blue-600 hover:bg-blue-700"
             >
               Edit Company
-            </button>
+            </Button>
           </div>
         </div>
       </div>

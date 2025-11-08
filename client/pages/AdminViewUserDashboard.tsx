@@ -4,6 +4,7 @@ import { mockUsers, mockOrders } from "@/lib/mockData";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Mail, MapPin, Building2 } from "lucide-react";
 import { useMemo } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
 export default function AdminViewUserDashboard() {
   const { userId } = useParams();

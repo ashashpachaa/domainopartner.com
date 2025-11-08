@@ -533,35 +533,28 @@ export default function AdminCompanies() {
                           </td>
                         )}
                         {selectedCountry === "UK" && (
-                          <td className="px-6 py-4">
-                            <div className="flex items-center gap-2 flex-wrap">
+                          <td className="px-6 py-4 sticky right-0 bg-white border-l border-slate-200 shadow-lg">
+                            <div className="flex items-center gap-1 flex-wrap">
                               <Button
                                 onClick={() => {
                                   setSelectedCompany(company);
                                   setShowDetailModal(true);
                                 }}
-                                className="bg-blue-600 hover:bg-blue-700 text-white text-xs h-8 px-3"
+                                className="bg-blue-600 hover:bg-blue-700 text-white text-xs h-8 px-2 py-1"
+                                size="sm"
                               >
                                 View
-                              </Button>
-                              <Button
-                                onClick={() => {
-                                  setSelectedCompany(company);
-                                  setShowDetailModal(true);
-                                }}
-                                className="bg-slate-600 hover:bg-slate-700 text-white text-xs h-8 px-3"
-                              >
-                                Edit
                               </Button>
                               <Button
                                 onClick={() => {
                                   setSelectedCompanyToList(company);
                                   setShowListCompanyModal(true);
                                 }}
-                                className="bg-green-600 hover:bg-green-700 text-white text-xs h-8 px-3"
+                                className="bg-green-600 hover:bg-green-700 text-white text-xs h-8 px-2 py-1"
                                 title="List this company for sale"
+                                size="sm"
                               >
-                                <TrendingUp className="w-3 h-3 mr-1" />
+                                <TrendingUp className="w-3 h-3" />
                                 List
                               </Button>
                             </div>

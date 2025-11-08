@@ -93,7 +93,11 @@ export default function AdminStaff() {
 
   const deleteStaff = (staffId: string) => {
     if (confirm("Are you sure you want to delete this staff member?")) {
+      // Remove from state
       setStaff(staff.filter((member) => member.id !== staffId));
+
+      // Remove from localStorage
+      localStorage.removeItem(`staff_${staffId}`);
     }
   };
 

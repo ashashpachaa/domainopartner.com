@@ -263,8 +263,7 @@ export default function AdminCompanies() {
             </div>
             <Button
               onClick={() => {
-                // Navigate to UK Company Setup to import a company
-                window.location.href = '/admin/uk-company-setup';
+                navigate('/admin/uk-company-setup');
               }}
               className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2 whitespace-nowrap"
             >

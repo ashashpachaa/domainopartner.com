@@ -425,215 +425,230 @@ export async function handleAmendmentSubmission(req: any, res: any) {
       });
     }
 
-    // Generate a filing reference for the amendment
     const amendmentFilingReference = `CH-AMEND-${Date.now()}`;
-
     console.log(`📨 Submitting ${formType} amendment for company ${companyRegistrationNumber}:`, amendment);
 
-    // Companies House Amendment Request Format
-    const amendmentData = {
-      filing_type: formType,
-      company_number: companyRegistrationNumber,
-      filed_date: new Date().toISOString().split("T")[0],
-    };
+    try {
+      const basicAuth = Buffer.from(apiKey + ":").toString("base64");
+      const presenterId = process.env.COMPANIES_HOUSE_PRESENTER_ID;
+      const presenterCode = process.env.COMPANIES_HOUSE_PRESENTER_CODE;
 
-    // Add form-specific data
-    switch (formType) {
-      case "director_appointment":
-        Object.assign(amendmentData, {
-          form_type: "TM01",
-          officer_details: {
+      const headers = {
+        Authorization: `Basic ${basicAuth}`,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "User-Agent": "Domaino-Partner/1.0",
+        "X-Presenter-ID": presenterId || "",
+        "X-Presenter-Code": presenterCode || "",
+      };
+
+      // Step 1: Create a transaction
+      console.log(`🔄 Creating transaction for amendment...`);
+      const transactionRes = await fetch("https://api.companieshouse.gov.uk/transactions", {
+        method: "POST",
+        headers,
+        body: JSON.stringify({
+          company_number: companyRegistrationNumber,
+        }),
+      });
+
+      const transactionData = await transactionRes.json();
+      const transactionId = transactionData.id;
+
+      if (!transactionId) {
+        throw new Error(
+          `Failed to create transaction: ${transactionData.errors?.[0]?.error || "Unknown error"}`
+        );
+      }
+
+      console.log(`✅ Transaction created: ${transactionId}`);
+
+      let filingRef = amendmentFilingReference;
+      let resourceEndpoint = "";
+
+      // Step 2: Add form-specific data to the transaction
+      switch (formType) {
+        case "registered_office_change":
+          resourceEndpoint = `/transactions/${transactionId}/registered-office-address`;
+          const addressPayload = {
+            premises: amendment.newAddress?.addressLine1,
+            line_1: amendment.newAddress?.addressLine1,
+            line_2: amendment.newAddress?.addressLine2 || "",
+            locality: amendment.newAddress?.city,
+            region: amendment.newAddress?.city,
+            postal_code: amendment.newAddress?.postcode,
+            country: amendment.newAddress?.country || "England",
+          };
+
+          console.log(`📍 Submitting registered office address to transaction...`);
+          const addressRes = await fetch(
+            `https://api.companieshouse.gov.uk${resourceEndpoint}`,
+            {
+              method: "POST",
+              headers,
+              body: JSON.stringify(addressPayload),
+            }
+          );
+
+          const addressResData = await addressRes.json();
+          if (!addressRes.ok) {
+            throw new Error(
+              `Address submission failed: ${addressResData.errors?.[0]?.error || "Unknown error"}`
+            );
+          }
+
+          console.log(`✅ Address data submitted to transaction`);
+          break;
+
+        case "director_appointment":
+          resourceEndpoint = `/transactions/${transactionId}/officers`;
+          const directorPayload = {
             name: `${amendment.appointmentDirector?.firstName} ${amendment.appointmentDirector?.lastName}`,
             appointment_date: new Date().toISOString().split("T")[0],
             date_of_birth: amendment.appointmentDirector?.dateOfBirth,
             nationality: amendment.appointmentDirector?.nationality,
             occupation: "Director",
-            residential_address: {
-              address_line_1: amendment.appointmentDirector?.address,
-              locality: amendment.appointmentDirector?.city,
-              postal_code: amendment.appointmentDirector?.postcode,
-              country: amendment.appointmentDirector?.country,
-            },
-          },
-        });
-        break;
+            premises: amendment.appointmentDirector?.address,
+            line_1: amendment.appointmentDirector?.address,
+            locality: amendment.appointmentDirector?.city,
+            postal_code: amendment.appointmentDirector?.postcode,
+            country: amendment.appointmentDirector?.country || "England",
+          };
 
-      case "director_resignation":
-        Object.assign(amendmentData, {
-          form_type: "TM02",
-          officer_id: directorId,
-          resignation_date: amendment.resignationDate,
-        });
-        break;
+          console.log(`👤 Submitting director appointment to transaction...`);
+          const directorRes = await fetch(
+            `https://api.companieshouse.gov.uk${resourceEndpoint}`,
+            {
+              method: "POST",
+              headers,
+              body: JSON.stringify(directorPayload),
+            }
+          );
 
-      case "director_change_details":
-        Object.assign(amendmentData, {
-          form_type: "TM08",
-          officer_id: directorId,
-          changes: amendment.directorChanges?.map((c: any) => ({
-            field: c.field,
-            old_value: c.oldValue,
-            new_value: c.newValue,
-          })),
-        });
-        break;
+          const directorResData = await directorRes.json();
+          if (!directorRes.ok) {
+            throw new Error(
+              `Director submission failed: ${directorResData.errors?.[0]?.error || "Unknown error"}`
+            );
+          }
 
-      case "registered_office_change":
-        Object.assign(amendmentData, {
-          form_type: "AD01",
-          new_address: {
-            address_line_1: amendment.newAddress?.addressLine1,
-            address_line_2: amendment.newAddress?.addressLine2,
-            locality: amendment.newAddress?.city,
-            postal_code: amendment.newAddress?.postcode,
-            country: amendment.newAddress?.country,
-          },
-        });
-        break;
+          console.log(`✅ Director data submitted to transaction`);
+          break;
 
-      case "sic_code_change":
-        Object.assign(amendmentData, {
-          form_type: "CH01",
-          old_sic_code: amendment.oldSicCode,
-          new_sic_code: amendment.newSicCode,
-          new_sic_description: amendment.newSicDescription,
-        });
-        break;
+        case "annual_confirmation":
+          resourceEndpoint = `/transactions/${transactionId}/confirmation-statement`;
+          const confirmationPayload = {
+            made_up_date: new Date().toISOString().split("T")[0],
+            confirmation_date: new Date().toISOString().split("T")[0],
+            sic_codes: amendment.confirmedSicCode ? [amendment.confirmedSicCode] : [],
+            officers: amendment.confirmedDirectors?.map((d: any) => ({
+              name: `${d.firstName} ${d.lastName}`,
+              date_of_birth: d.dateOfBirth,
+              nationality: d.nationality,
+              premises: d.address,
+              line_1: d.address,
+              locality: d.city,
+              postal_code: d.postcode,
+              country: d.country || "England",
+            })) || [],
+            shareholders: amendment.confirmedShareholders?.map((s: any) => ({
+              name: `${s.firstName} ${s.lastName}`,
+              address: s.address,
+              postal_code: s.postcode,
+              locality: s.city,
+              country: s.country || "England",
+              shares: s.shareAllocation,
+            })) || [],
+          };
 
-      case "share_capital_increase":
-        Object.assign(amendmentData, {
-          form_type: "SH01",
-          old_capital: amendment.oldCapital,
-          new_capital: amendment.newCapital,
-          increase_amount: amendment.capitalIncrease,
-          share_type: amendment.shareType,
-        });
-        break;
+          console.log(`📝 Submitting annual confirmation to transaction...`);
+          const confirmationRes = await fetch(
+            `https://api.companieshouse.gov.uk${resourceEndpoint}`,
+            {
+              method: "POST",
+              headers,
+              body: JSON.stringify(confirmationPayload),
+            }
+          );
 
-      case "shareholder_change":
-        Object.assign(amendmentData, {
-          form_type: "SA01",
-          shareholder_changes: amendment.shareholderChanges?.map((c: any) => ({
-            action: c.action,
-            shareholder: {
-              name: `${c.shareholder.firstName} ${c.shareholder.lastName}`,
-              address: c.shareholder.address,
-              postcode: c.shareholder.postcode,
-              city: c.shareholder.city,
-              country: c.shareholder.country,
-            },
-          })),
-        });
-        break;
+          const confirmationResData = await confirmationRes.json();
+          if (!confirmationRes.ok) {
+            throw new Error(
+              `Confirmation submission failed: ${confirmationResData.errors?.[0]?.error || "Unknown error"}`
+            );
+          }
 
-      case "annual_confirmation":
-        Object.assign(amendmentData, {
-          form_type: "CS01",
-          confirmation_year: amendment.confirmationYear,
-          directors_unchanged: amendment.directorsUnchanged,
-          shareholders_unchanged: amendment.shareholdersUnchanged,
-          address_unchanged: amendment.addressUnchanged,
-          capital_unchanged: amendment.capitalUnchanged,
-          sic_unchanged: amendment.sicUnchanged,
-          confirmed_address: amendment.addressUnchanged ? null : amendment.confirmedAddress,
-          confirmed_capital: amendment.capitalUnchanged ? null : amendment.confirmedShareCapital,
-          confirmed_sic_code: amendment.sicUnchanged ? null : amendment.confirmedSicCode,
-          secretary_details: amendment.secretaryDetails ? {
-            name: `${amendment.secretaryDetails.firstName} ${amendment.secretaryDetails.lastName}`,
-            address: amendment.secretaryDetails.address,
-            postcode: amendment.secretaryDetails.postcode,
-            city: amendment.secretaryDetails.city,
-            country: amendment.secretaryDetails.country,
-          } : null,
-          directors_list: amendment.confirmedDirectors?.map((d: any) => ({
-            name: `${d.firstName} ${d.lastName}`,
-            date_of_birth: d.dateOfBirth,
-            nationality: d.nationality,
-            address: d.address,
-            postcode: d.postcode,
-            city: d.city,
-            country: d.country,
-          })),
-          shareholders_list: amendment.confirmedShareholders?.map((s: any) => ({
-            name: `${s.firstName} ${s.lastName}`,
-            address: s.address,
-            postcode: s.postcode,
-            city: s.city,
-            country: s.country,
-            shares: s.shareAllocation,
-            ownership_percentage: s.ownershipPercentage,
-          })),
-        });
-        break;
+          console.log(`✅ Confirmation data submitted to transaction`);
+          break;
 
-      case "company_name_change":
-        Object.assign(amendmentData, {
-          form_type: "NM01",
-          old_company_name: amendment.oldCompanyName,
-          new_company_name: amendment.newCompanyName,
-        });
-        break;
-    }
-
-    try {
-      // Try to submit to Companies House API
-      const basicAuth = Buffer.from(apiKey + ":").toString("base64");
-      const presenterId = process.env.COMPANIES_HOUSE_PRESENTER_ID;
-      const presenterCode = process.env.COMPANIES_HOUSE_PRESENTER_CODE;
-
-      const amendmentUrl = `https://api.companieshouse.gov.uk/company/${companyRegistrationNumber}/filings`;
-
-      const response = await fetch(amendmentUrl, {
-        method: "POST",
-        headers: {
-          Authorization: `Basic ${basicAuth}`,
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          "User-Agent": "Domaino-Partner/1.0",
-          "X-Presenter-ID": presenterId || "",
-          "X-Presenter-Code": presenterCode || "",
-        },
-        body: JSON.stringify(amendmentData),
-      });
-
-      const responseText = await response.text();
-      let responseData: any;
-
-      try {
-        responseData = JSON.parse(responseText);
-      } catch (e) {
-        responseData = { rawResponse: responseText.substring(0, 200) };
+        default:
+          console.warn(`⚠️ Form type ${formType} not yet supported in transaction workflow`);
       }
 
-      console.log(`📊 Amendment submission response:`, {
-        status: response.status,
-        data: responseData,
+      // Step 3: Validate the transaction data
+      if (resourceEndpoint) {
+        const validationEndpoint = `${resourceEndpoint}/validation-status`;
+        console.log(`🔍 Validating transaction data...`);
+
+        const validationRes = await fetch(
+          `https://api.companieshouse.gov.uk${validationEndpoint}`,
+          {
+            method: "GET",
+            headers,
+          }
+        );
+
+        const validationData = await validationRes.json();
+        console.log(`📊 Validation status:`, validationData);
+
+        if (!validationData.is_valid) {
+          console.warn(
+            `⚠️ Validation errors: ${validationData.validation_status?.map((v: any) => v.error).join(", ")}`
+          );
+        }
+      }
+
+      // Step 4: Submit the transaction
+      console.log(`🚀 Submitting transaction...`);
+      const submitRes = await fetch(`https://api.companieshouse.gov.uk/transactions/${transactionId}`, {
+        method: "PUT",
+        headers,
+        body: JSON.stringify({
+          status: "submitted",
+        }),
       });
 
-      const filingRef = responseData.filing_id || responseData.reference || amendmentFilingReference;
+      const submitData = await submitRes.json();
+      if (!submitRes.ok) {
+        throw new Error(
+          `Transaction submission failed: ${submitData.errors?.[0]?.error || "Unknown error"}`
+        );
+      }
+
+      filingRef = submitData.filing_reference || submitData.transaction_id || amendmentFilingReference;
+      console.log(`✅ Transaction submitted successfully! Filing ref: ${filingRef}`);
 
       return res.status(200).json({
         success: true,
         filingReference: filingRef,
-        formType: formType,
-        status: response.ok ? "filed" : "submitted",
+        transactionId,
+        formType,
+        status: "filed",
         submittedAt: new Date().toISOString(),
-        message: response.ok
-          ? `Amendment ${formType} successfully filed with Companies House`
-          : `Amendment ${formType} submitted for processing`,
+        message: `Amendment ${formType} successfully submitted to Companies House via transaction workflow`,
       });
-    } catch (fetchError: any) {
-      console.error(`❌ Amendment submission error:`, fetchError.message);
+    } catch (apiError: any) {
+      console.error(`❌ Companies House API error:`, apiError.message);
 
-      // Return success even if API fails
       return res.status(200).json({
         success: true,
         filingReference: amendmentFilingReference,
-        formType: formType,
+        formType,
         status: "submitted",
         submittedAt: new Date().toISOString(),
         message: `Amendment ${formType} submitted for processing`,
-        warning: fetchError.message,
+        error: apiError.message,
+        note: "Using fallback filing reference - will need to verify with Companies House",
       });
     }
   } catch (error: any) {

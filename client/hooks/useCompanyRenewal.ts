@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { toast } from "sonner";
-import { mockIncorporations } from "@/lib/mockData";
+import { mockCompanyIncorporations } from "@/lib/mockData";
 
 export function useCompanyRenewal() {
   const [isSubmitting, setIsSubmitting] = useState(false);

@@ -586,6 +586,34 @@ export default function AdminUKCompanySetup() {
     shareAllocation: 0,
   });
 
+  // Annual Confirmation Statement (CS01)
+  const [confirmationYear, setConfirmationYear] = useState(new Date().getFullYear());
+  const [confirmationData, setConfirmationData] = useState({
+    directorsUnchanged: true,
+    shareholdersUnchanged: true,
+    addressUnchanged: true,
+    capitalUnchanged: true,
+    sicUnchanged: true,
+    hasSecretary: false,
+  });
+  const [confirmedAddress, setConfirmedAddress] = useState({
+    addressLine1: "",
+    addressLine2: "",
+    city: "",
+    postcode: "",
+    country: "United Kingdom",
+  });
+  const [confirmedCapital, setConfirmedCapital] = useState(0);
+  const [confirmedSicCode, setConfirmedSicCode] = useState("");
+  const [secretaryForm, setSecretaryForm] = useState({
+    firstName: "",
+    lastName: "",
+    address: "",
+    postcode: "",
+    city: "",
+    country: "United Kingdom",
+  });
+
   const [defaultOfficer, setDefaultOfficer] = useState<OfficerDetail>({
     id: `OFF${Date.now()}`,
     title: "",

@@ -177,6 +177,7 @@ export default function AdminDashboard() {
   const deleteUser = (userId: string) => {
     if (confirm("Are you sure you want to delete this user?")) {
       setUsers(users.filter((user) => user.id !== userId));
+      localStorage.removeItem(`user_${userId}`);
     }
   };
 

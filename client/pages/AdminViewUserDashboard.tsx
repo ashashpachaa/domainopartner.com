@@ -23,7 +23,7 @@ export default function AdminViewUserDashboard() {
 
     // Fallback to mockUsers
     return mockUsers.find((u) => u.id === userId);
-  }, [userId]);
+  }, []);
 
   if (!user) {
     return (

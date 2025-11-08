@@ -50,6 +50,62 @@ export default function CompanyDetailModal({
   const canAmend = canFileAmendments(company);
   const amendments = getAmendmentHistory(company);
 
+  const submitAmendment = async (formType: string, amendmentData: any) => {
+    try {
+      setIsSubmitting(true);
+
+      const response = await fetch("/api/companies-house/submit-amendment", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          incorporationId: incorporation?.id || company.id,
+          formType,
+          companyRegistrationNumber: company.companyNumber,
+          amendment: amendmentData,
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Failed to submit amendment");
+      }
+
+      const result = await response.json();
+      toast.success(
+        `Amendment submitted! Reference: ${result.filingReference || "Pending"}`
+      );
+
+      setShowAmendmentForm(false);
+      setAmendmentTab("history");
+      resetAmendmentForms();
+
+      setTimeout(() => window.location.reload(), 1500);
+    } catch (error: any) {
+      console.error("Amendment submission error:", error);
+      toast.error(error.message || "Failed to submit amendment");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const resetAmendmentForms = () => {
+    setDirectorFirstName("");
+    setDirectorLastName("");
+    setDirectorDOB("");
+    setResignDirectorId("");
+    setNewAddress("");
+    setNewAddressCity("");
+    setNewAddressPostcode("");
+    setNewSicCode("");
+    setNewCapitalAmount("");
+    setShareholderName("");
+    setShareholderPercentage("");
+    setConfirmationYear(new Date().getFullYear());
+    setNewCompanyName("");
+  };
+
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-lg shadow-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">

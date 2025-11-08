@@ -375,7 +375,7 @@ export default function AdminCompanies() {
             </div>
             <Button
               onClick={() => {
-                navigate('/admin/uk-company-setup');
+                setShowImportModal(true);
               }}
               className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2 whitespace-nowrap"
             >

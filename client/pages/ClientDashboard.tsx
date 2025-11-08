@@ -18,6 +18,19 @@ export default function ClientDashboard() {
   const navigate = useNavigate();
   const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
 
+  // Load products from localStorage (admin updates) or fall back to mockProducts
+  const products = useMemo(() => {
+    const storedProducts = localStorage.getItem("products");
+    if (storedProducts) {
+      try {
+        return JSON.parse(storedProducts);
+      } catch {
+        return mockProducts;
+      }
+    }
+    return mockProducts;
+  }, []);
+
   // Get client's orders and invoices
   const clientOrders = useMemo(() => {
     return mockOrders.filter((o) => o.userId === currentUser.id);

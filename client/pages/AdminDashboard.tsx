@@ -40,6 +40,7 @@ export default function AdminDashboard() {
   >("all");
   const [notificationDismissed, setNotificationDismissed] = useState(false);
   const [showNotificationToast, setShowNotificationToast] = useState(false);
+  const [selectedUsers, setSelectedUsers] = useState<Set<string>>(new Set());
 
   // Load users from both mock data and localStorage when component mounts
   useEffect(() => {

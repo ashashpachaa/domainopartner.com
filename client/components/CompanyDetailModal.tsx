@@ -68,7 +68,6 @@ export default function CompanyDetailModal({
   // Get linked incorporation for amendments
   const incorporation = getIncorporationForCompany(company);
   const canAmend = canFileAmendments(company);
-  const amendments = getAmendmentHistory(company);
 
   const submitAmendment = async (formType: string, amendmentData: any) => {
     try {

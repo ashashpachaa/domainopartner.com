@@ -3487,6 +3487,182 @@ export default function AdminUKCompanySetup() {
                   </div>
                 </div>
 
+                {selectedIncorporation.status === "completed" && (
+                  <div className="border-t border-slate-200 pt-6">
+                    <h3 className="font-bold text-slate-900 mb-4">Company Amendments</h3>
+                    <div className="flex gap-2 mb-4 flex-wrap">
+                      <Button
+                        onClick={() => { setAmendmentTab("history"); setShowAmendmentForm(false); }}
+                        variant={amendmentTab === "history" ? "default" : "outline"}
+                        size="sm"
+                      >
+                        Amendment History
+                      </Button>
+                      <Button
+                        onClick={() => { setAmendmentTab("director_appoint"); setShowAmendmentForm(true); }}
+                        variant={amendmentTab === "director_appoint" ? "default" : "outline"}
+                        size="sm"
+                      >
+                        Appoint Director
+                      </Button>
+                      <Button
+                        onClick={() => { setAmendmentTab("director_resign"); setShowAmendmentForm(true); }}
+                        variant={amendmentTab === "director_resign" ? "default" : "outline"}
+                        size="sm"
+                      >
+                        Resign Director
+                      </Button>
+                      <Button
+                        onClick={() => { setAmendmentTab("address"); setShowAmendmentForm(true); }}
+                        variant={amendmentTab === "address" ? "default" : "outline"}
+                        size="sm"
+                      >
+                        Change Address
+                      </Button>
+                      <Button
+                        onClick={() => { setAmendmentTab("sic"); setShowAmendmentForm(true); }}
+                        variant={amendmentTab === "sic" ? "default" : "outline"}
+                        size="sm"
+                      >
+                        Change SIC
+                      </Button>
+                      <Button
+                        onClick={() => { setAmendmentTab("capital"); setShowAmendmentForm(true); }}
+                        variant={amendmentTab === "capital" ? "default" : "outline"}
+                        size="sm"
+                      >
+                        Increase Capital
+                      </Button>
+                      <Button
+                        onClick={() => { setAmendmentTab("shareholder"); setShowAmendmentForm(true); }}
+                        variant={amendmentTab === "shareholder" ? "default" : "outline"}
+                        size="sm"
+                      >
+                        Shareholder Change
+                      </Button>
+                    </div>
+
+                    {amendmentTab === "history" && !showAmendmentForm && (
+                      <div className="bg-slate-50 p-4 rounded-lg">
+                        {selectedIncorporation.amendments && selectedIncorporation.amendments.length > 0 ? (
+                          <div className="space-y-3">
+                            {selectedIncorporation.amendments.map((amd) => (
+                              <div key={amd.id} className="bg-white p-3 rounded border border-slate-200">
+                                <div className="flex items-center justify-between">
+                                  <div>
+                                    <p className="font-bold text-slate-900">{amd.formType.replace(/_/g, " ").toUpperCase()}</p>
+                                    <p className="text-xs text-slate-600">
+                                      Status: <span className={`font-bold ${amd.status === "filed" ? "text-green-600" : amd.status === "rejected" ? "text-red-600" : "text-blue-600"}`}>{amd.status}</span>
+                                    </p>
+                                    {amd.filingReference && (
+                                      <p className="text-xs text-slate-600">Reference: {amd.filingReference}</p>
+                                    )}
+                                    <p className="text-xs text-slate-500">{new Date(amd.submittedAt || amd.createdAt).toLocaleDateString()}</p>
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <p className="text-slate-600 text-sm">No amendments filed yet</p>
+                        )}
+                      </div>
+                    )}
+
+                    {showAmendmentForm && (
+                      <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 space-y-4">
+                        {amendmentTab === "director_appoint" && (
+                          <div className="space-y-3">
+                            <h4 className="font-bold text-slate-900">Appoint New Director (TM01)</h4>
+                            <input type="text" placeholder="First Name *" value={newDirector.firstName} onChange={(e) => setNewDirector({...newDirector, firstName: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                            <input type="text" placeholder="Last Name *" value={newDirector.lastName} onChange={(e) => setNewDirector({...newDirector, lastName: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                            <input type="date" placeholder="Date of Birth *" value={newDirector.dateOfBirth} onChange={(e) => setNewDirector({...newDirector, dateOfBirth: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                            <select value={newDirector.nationality} onChange={(e) => setNewDirector({...newDirector, nationality: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm">
+                              {NATIONALITIES.map(n => <option key={n} value={n}>{n}</option>)}
+                            </select>
+                            <input type="text" placeholder="Address *" value={newDirector.address} onChange={(e) => setNewDirector({...newDirector, address: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                            <input type="text" placeholder="City *" value={newDirector.city} onChange={(e) => setNewDirector({...newDirector, city: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                            <input type="text" placeholder="Postcode *" value={newDirector.postcode} onChange={(e) => setNewDirector({...newDirector, postcode: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                          </div>
+                        )}
+
+                        {amendmentTab === "director_resign" && (
+                          <div className="space-y-3">
+                            <h4 className="font-bold text-slate-900">Director Resignation (TM02)</h4>
+                            <select value={resigningDirector.id} onChange={(e) => setResigningDirector({...resigningDirector, id: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm">
+                              <option value="">Select Director to Resign *</option>
+                              {selectedIncorporation.directors.map(d => (
+                                <option key={d.id} value={d.id}>{d.firstName} {d.lastName}</option>
+                              ))}
+                            </select>
+                            <label className="text-xs font-medium text-slate-700">Resignation Date *</label>
+                            <input type="date" value={resigningDirector.resignationDate} onChange={(e) => setResigningDirector({...resigningDirector, resignationDate: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                          </div>
+                        )}
+
+                        {amendmentTab === "address" && (
+                          <div className="space-y-3">
+                            <h4 className="font-bold text-slate-900">Change Registered Office Address (AD01)</h4>
+                            <input type="text" placeholder="Address Line 1 *" value={newAddress.addressLine1} onChange={(e) => setNewAddress({...newAddress, addressLine1: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                            <input type="text" placeholder="Address Line 2" value={newAddress.addressLine2} onChange={(e) => setNewAddress({...newAddress, addressLine2: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                            <input type="text" placeholder="City *" value={newAddress.city} onChange={(e) => setNewAddress({...newAddress, city: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                            <input type="text" placeholder="Postcode *" value={newAddress.postcode} onChange={(e) => setNewAddress({...newAddress, postcode: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                          </div>
+                        )}
+
+                        {amendmentTab === "sic" && (
+                          <div className="space-y-3">
+                            <h4 className="font-bold text-slate-900">Change SIC Code (CH01)</h4>
+                            <div className="bg-white p-2 rounded border border-slate-300 text-sm">
+                              Current SIC: {selectedIncorporation.sicCode || "Not set"}
+                            </div>
+                            <input type="text" placeholder="New SIC Code *" value={sicChange.newSicCode} onChange={(e) => setSicChange({...sicChange, newSicCode: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                            <textarea placeholder="SIC Description" value={sicChange.newSicDescription} onChange={(e) => setSicChange({...sicChange, newSicDescription: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" rows={2} />
+                          </div>
+                        )}
+
+                        {amendmentTab === "capital" && (
+                          <div className="space-y-3">
+                            <h4 className="font-bold text-slate-900">Increase Share Capital (SH01)</h4>
+                            <div className="bg-white p-2 rounded border border-slate-300 text-sm">
+                              Current Capital: £{selectedIncorporation.shareCapital}
+                            </div>
+                            <input type="number" placeholder="New Capital Amount *" value={capitalChange.newCapital} onChange={(e) => setCapitalChange({...capitalChange, newCapital: parseInt(e.target.value) || 0})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                            <input type="text" placeholder="Share Type" value={capitalChange.shareType} onChange={(e) => setCapitalChange({...capitalChange, shareType: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                            {capitalChange.newCapital > 0 && (
+                              <p className="text-xs text-slate-600">Increase: £{capitalChange.newCapital - selectedIncorporation.shareCapital}</p>
+                            )}
+                          </div>
+                        )}
+
+                        {amendmentTab === "shareholder" && (
+                          <div className="space-y-3">
+                            <h4 className="font-bold text-slate-900">Shareholder Change (SA01)</h4>
+                            <select value={shareholderAction} onChange={(e) => setShareholderAction(e.target.value as any)} className="w-full px-3 py-2 border border-slate-300 rounded text-sm">
+                              <option value="add">Add Shareholder</option>
+                              <option value="remove">Remove Shareholder</option>
+                              <option value="modify">Modify Shareholder</option>
+                            </select>
+                            <input type="text" placeholder="First Name *" value={shareholderForm.firstName} onChange={(e) => setShareholderForm({...shareholderForm, firstName: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                            <input type="text" placeholder="Last Name *" value={shareholderForm.lastName} onChange={(e) => setShareholderForm({...shareholderForm, lastName: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                            <input type="text" placeholder="Address" value={shareholderForm.address} onChange={(e) => setShareholderForm({...shareholderForm, address: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                            <input type="text" placeholder="City" value={shareholderForm.city} onChange={(e) => setShareholderForm({...shareholderForm, city: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                            <input type="text" placeholder="Postcode" value={shareholderForm.postcode} onChange={(e) => setShareholderForm({...shareholderForm, postcode: e.target.value})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                            {shareholderAction === "add" && (
+                              <input type="number" placeholder="Share Allocation" value={shareholderForm.shareAllocation} onChange={(e) => setShareholderForm({...shareholderForm, shareAllocation: parseInt(e.target.value) || 0})} className="w-full px-3 py-2 border border-slate-300 rounded text-sm" />
+                            )}
+                          </div>
+                        )}
+
+                        <div className="flex gap-2 pt-2">
+                          <Button onClick={() => { setShowAmendmentForm(false); setAmendmentTab("history"); }} variant="outline" size="sm">Cancel</Button>
+                          <Button onClick={handleSubmitAmendment} className="bg-green-600 hover:bg-green-700" size="sm">Submit Amendment</Button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 <div className="border-t border-slate-200 pt-6 flex gap-3">
                   <Button
                     onClick={() => setShowDetailModal(false)}

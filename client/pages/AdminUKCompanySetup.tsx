@@ -3663,6 +3663,13 @@ export default function AdminUKCompanySetup() {
                       >
                         Annual Confirmation
                       </Button>
+                      <Button
+                        onClick={() => { setAmendmentTab("company_name_change"); setShowAmendmentForm(true); }}
+                        variant={amendmentTab === "company_name_change" ? "default" : "outline"}
+                        size="sm"
+                      >
+                        Change Company Name
+                      </Button>
                     </div>
 
                     {amendmentTab === "history" && !showAmendmentForm && (

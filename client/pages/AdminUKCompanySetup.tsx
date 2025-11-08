@@ -1171,6 +1171,157 @@ export default function AdminUKCompanySetup() {
     );
   };
 
+  const handleSubmitAmendment = async () => {
+    if (!selectedIncorporation?.companyRegistrationNumber) {
+      toast.error("Company registration number is required to file amendments");
+      return;
+    }
+
+    let amendmentData: any = {
+      incorporationId: selectedIncorporation.id,
+      companyRegistrationNumber: selectedIncorporation.companyRegistrationNumber,
+      amendment: {},
+    };
+
+    try {
+      switch (amendmentTab) {
+        case "director_appoint":
+          if (!newDirector.firstName || !newDirector.lastName) {
+            toast.error("Please fill in director details");
+            return;
+          }
+          amendmentData.formType = "director_appointment";
+          amendmentData.amendment = {
+            appointmentDirector: {
+              id: `DIR${Date.now()}`,
+              ...newDirector,
+            },
+          };
+          break;
+
+        case "director_resign":
+          if (!resigningDirector.id || !resigningDirector.resignationDate) {
+            toast.error("Please select director and resignation date");
+            return;
+          }
+          amendmentData.formType = "director_resignation";
+          amendmentData.directorId = resigningDirector.id;
+          amendmentData.amendment = {
+            resignationDirector: selectedIncorporation.directors.find(d => d.id === resigningDirector.id),
+            resignationDate: resigningDirector.resignationDate,
+          };
+          break;
+
+        case "address":
+          if (!newAddress.addressLine1 || !newAddress.city || !newAddress.postcode) {
+            toast.error("Please fill in address details");
+            return;
+          }
+          amendmentData.formType = "registered_office_change";
+          amendmentData.amendment = { newAddress };
+          break;
+
+        case "sic":
+          if (!sicChange.newSicCode) {
+            toast.error("Please select new SIC code");
+            return;
+          }
+          amendmentData.formType = "sic_code_change";
+          amendmentData.amendment = {
+            oldSicCode: selectedIncorporation.sicCode,
+            ...sicChange,
+          };
+          break;
+
+        case "capital":
+          if (capitalChange.newCapital <= 0) {
+            toast.error("Please enter new capital amount");
+            return;
+          }
+          amendmentData.formType = "share_capital_increase";
+          amendmentData.amendment = {
+            oldCapital: selectedIncorporation.shareCapital,
+            newCapital: capitalChange.newCapital,
+            capitalIncrease: capitalChange.newCapital - selectedIncorporation.shareCapital,
+            shareType: capitalChange.shareType || selectedIncorporation.shareType,
+          };
+          break;
+
+        case "shareholder":
+          if (!shareholderForm.firstName || !shareholderForm.lastName) {
+            toast.error("Please fill in shareholder details");
+            return;
+          }
+          amendmentData.formType = "shareholder_change";
+          amendmentData.amendment = {
+            shareholderChanges: [
+              {
+                action: shareholderAction,
+                shareholder: {
+                  id: `SHA${Date.now()}`,
+                  ...shareholderForm,
+                },
+              },
+            ],
+          };
+          break;
+      }
+
+      toast.loading("Submitting amendment to Companies House...");
+
+      const response = await fetch("/api/companies-house/submit-amendment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(amendmentData),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        // Add to amendments array
+        const newAmendment = {
+          id: `AMD${Date.now()}`,
+          incorporationId: selectedIncorporation.id,
+          formType: amendmentTab as any,
+          status: "submitted" as const,
+          createdAt: new Date().toISOString(),
+          submittedAt: new Date().toISOString(),
+          filingReference: result.filingReference,
+          ...amendmentData.amendment,
+        };
+
+        const updated = {
+          ...selectedIncorporation,
+          amendments: [...(selectedIncorporation.amendments || []), newAmendment],
+        };
+
+        localStorage.setItem(`incorporation_${updated.id}`, JSON.stringify(updated));
+        setIncorporations(incorporations.map(i => i.id === updated.id ? updated : i));
+        setSelectedIncorporation(updated);
+
+        // Reset form
+        setNewDirector({ firstName: "", lastName: "", dateOfBirth: "", nationality: "British", address: "", postcode: "", city: "", country: "United Kingdom" });
+        setResigningDirector({ id: "", resignationDate: "" });
+        setNewAddress({ addressLine1: "", addressLine2: "", city: "", postcode: "", country: "United Kingdom" });
+        setSicChange({ oldSicCode: "", newSicCode: "", newSicDescription: "" });
+        setCapitalChange({ oldCapital: 0, newCapital: 0, shareType: "" });
+        setShareholderForm({ firstName: "", lastName: "", address: "", postcode: "", city: "", country: "United Kingdom", shareAllocation: 0 });
+        setShowAmendmentForm(false);
+        setAmendmentTab("history");
+
+        toast.dismiss();
+        toast.success(`✓ Amendment submitted! Filing Reference: ${result.filingReference}`);
+      } else {
+        toast.dismiss();
+        toast.error(result.error || "Failed to submit amendment");
+      }
+    } catch (error: any) {
+      console.error("Amendment submission error:", error);
+      toast.dismiss();
+      toast.error(error.message || "Failed to submit amendment");
+    }
+  };
+
   return (
     <AdminLayout>
       <div className="p-8 space-y-8">

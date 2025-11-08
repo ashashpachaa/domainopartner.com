@@ -159,6 +159,22 @@ export default function AdminUserDetail() {
                   <span className="font-medium">Last Login:</span>{" "}
                   {new Date(user.lastLogin).toLocaleDateString()}
                 </div>
+                {user.assignedToStaffId && (() => {
+                  const assignedStaff = mockStaff.find(s => s.id === user.assignedToStaffId);
+                  return (
+                    <div className="col-span-1 md:col-span-2">
+                      <span className="font-medium text-slate-600">Assigned to:</span>{" "}
+                      <span className="text-slate-900 font-semibold">
+                        {assignedStaff ? `${assignedStaff.firstName} ${assignedStaff.lastName}` : 'Unknown'}
+                      </span>
+                      {assignedStaff && (
+                        <span className="text-slate-500 ml-2">
+                          ({assignedStaff.role.replace(/_/g, " ")})
+                        </span>
+                      )}
+                    </div>
+                  );
+                })()}
               </div>
             </div>
 

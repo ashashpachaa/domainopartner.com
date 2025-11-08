@@ -586,6 +586,9 @@ export default function AdminUKCompanySetup() {
     shareAllocation: 0,
   });
 
+  // Company Name Change (NM01)
+  const [newCompanyName, setNewCompanyName] = useState("");
+
   // Annual Confirmation Statement (CS01)
   const [confirmationYear, setConfirmationYear] = useState(new Date().getFullYear());
   const [confirmationData, setConfirmationData] = useState({

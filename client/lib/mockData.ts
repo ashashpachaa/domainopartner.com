@@ -2721,6 +2721,22 @@ export const mockUsers: User[] = [
     createdAt: "2023-08-20",
     lastLogin: "2023-12-15T10:30:00Z",
   },
+  {
+    id: "ADM001",
+    firstName: "Admin",
+    lastName: "User",
+    companyName: "Domaino Admin",
+    country: "United Kingdom",
+    city: "London",
+    whatsappNumber: "+44-20-7946-0000",
+    email: "admin@domaino.com",
+    website: "https://domaino.com",
+    status: "active",
+    subscriptionPlan: "enterprise",
+    subscriptionStatus: "active",
+    createdAt: "2024-01-01",
+    lastLogin: "2024-01-08T16:00:00Z",
+  },
 ];
 
 export const mockClientRequests: ClientRequest[] = [

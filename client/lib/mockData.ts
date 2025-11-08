@@ -452,6 +452,56 @@ export const roleLabels: Record<StaffRole, string> = {
   accounting: "Accounting",
 };
 
+// Role Permissions
+export const rolePermissions: Record<StaffRole, string[]> = {
+  super_admin: [
+    "manage_users",
+    "manage_staff",
+    "manage_orders",
+    "manage_invoices",
+    "view_reports",
+    "manage_permissions",
+    "view_all_data",
+  ],
+  admin: [
+    "manage_users",
+    "manage_staff",
+    "manage_orders",
+    "manage_invoices",
+    "view_reports",
+    "view_all_data",
+  ],
+  operation_manager: [
+    "manage_orders",
+    "upload_documents",
+    "change_order_status",
+    "view_all_orders",
+    "view_operations",
+  ],
+  operation: [
+    "create_orders",
+    "edit_assigned_orders",
+    "change_order_status",
+    "view_assigned_orders",
+    "upload_documents",
+  ],
+  sales: [
+    "add_orders",
+    "edit_assigned_orders",
+    "view_assigned_orders",
+    "view_client_orders",
+    "view_client_invoices",
+    "view_client_payments",
+    "track_orders",
+  ],
+  accounting: [
+    "view_invoices",
+    "view_payments",
+    "manage_billing",
+    "view_reports",
+  ],
+};
+
 // EMPTY MOCK DATA ARRAYS - Ready for live data entry
 export const mockExpenses: Expense[] = [];
 export const mockVendors: Vendor[] = [];

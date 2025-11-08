@@ -42,6 +42,7 @@ export function createServer() {
   app.get("/api/companies-house/webhook-status", handleWebhookStatus);
   app.post("/api/companies-house/submit-incorporation", handleIncorporationSubmission);
   app.post("/api/companies-house/process-payment", handlePaymentSubmission);
+  app.post("/api/companies-house/submit-amendment", handleAmendmentSubmission);
 
   return app;
 }

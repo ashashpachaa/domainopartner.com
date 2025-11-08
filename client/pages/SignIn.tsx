@@ -42,7 +42,15 @@ export default function SignIn() {
         }
 
         // Check if user exists and is approved
-        const user = mockUsers.find((u) => u.email === email);
+        // First check in-memory mockUsers, then check localStorage
+        let user = mockUsers.find((u) => u.email === email);
+
+        // If not found in mockUsers, check localStorage for newly approved accounts
+        if (!user) {
+          const storedUsers = JSON.parse(localStorage.getItem("mockUsers") || "[]");
+          user = storedUsers.find((u: any) => u.email === email);
+        }
+
         if (!user) {
           setError("No account found. Please sign up first.");
           setIsLoading(false);

@@ -115,6 +115,9 @@ export default function CompanyDetailModal({
           `incorporation_${incorporation.id}`,
           JSON.stringify(updatedIncorporation)
         );
+
+        // Update local state to show amendment immediately
+        setAmendments([...amendments, newAmendment]);
       }
 
       toast.success(

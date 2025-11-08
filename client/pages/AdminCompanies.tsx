@@ -858,6 +858,182 @@ export default function AdminCompanies() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Import Company Modal */}
+      <Dialog open={showImportModal} onOpenChange={setShowImportModal}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Import Company from Companies House</DialogTitle>
+            <DialogDescription>
+              Search for a UK company by Company Number or Auth Code to import it
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-6 py-4">
+            {/* Search Filters */}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Company Number
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g., 14234567"
+                  value={importCompanyNumber}
+                  onChange={(e) => setImportCompanyNumber(e.target.value)}
+                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Auth Code
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g., AUTH001TVS"
+                  value={importAuthCode}
+                  onChange={(e) => setImportAuthCode(e.target.value)}
+                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                />
+              </div>
+            </div>
+
+            {/* Lookup from Companies House */}
+            <div className="border-t pt-4">
+              <h3 className="text-md font-semibold text-slate-900 mb-3">
+                Import from Companies House
+              </h3>
+              <div className="bg-slate-50 p-4 rounded-lg">
+                <p className="text-sm text-slate-600 mb-4">
+                  Enter a Company Number to fetch the latest data from Companies House
+                </p>
+                <Button
+                  onClick={fetchFromCompaniesHouse}
+                  disabled={isLoadingCH || !importCompanyNumber}
+                  className="w-full bg-blue-600 hover:bg-blue-700"
+                >
+                  {isLoadingCH ? (
+                    <>
+                      <Loader className="w-4 h-4 mr-2 animate-spin" />
+                      Fetching...
+                    </>
+                  ) : (
+                    "Lookup from Companies House"
+                  )}
+                </Button>
+              </div>
+            </div>
+
+            {/* Fetched Company Preview */}
+            {fetchedCompanyData && (
+              <div className="border-t pt-4">
+                <h3 className="text-md font-semibold text-slate-900 mb-4">
+                  Company Data Preview
+                </h3>
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 space-y-3">
+                  <div className="grid grid-cols-2 gap-3 text-sm">
+                    <div>
+                      <p className="text-slate-600 font-medium">Company Name</p>
+                      <p className="text-slate-900 font-semibold">
+                        {fetchedCompanyData.companyName}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-slate-600 font-medium">Company Number</p>
+                      <p className="text-slate-900 font-mono">
+                        {fetchedCompanyData.companyNumber}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-slate-600 font-medium">Incorporation Date</p>
+                      <p className="text-slate-900">
+                        {fetchedCompanyData.incorporationDate
+                          ? new Date(
+                              fetchedCompanyData.incorporationDate
+                            ).toLocaleDateString("en-GB")
+                          : "N/A"}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-slate-600 font-medium">Status</p>
+                      <p className="text-slate-900">
+                        {fetchedCompanyData.status || "Unknown"}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-slate-600 font-medium">
+                        Next Renewal Date
+                      </p>
+                      <p className="text-slate-900">
+                        {fetchedCompanyData.nextRenewalDate
+                          ? new Date(
+                              fetchedCompanyData.nextRenewalDate
+                            ).toLocaleDateString("en-GB")
+                          : "N/A"}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-slate-600 font-medium">
+                        Next Accounts Filing
+                      </p>
+                      <p className="text-slate-900">
+                        {fetchedCompanyData.nextAccountsFilingDate
+                          ? new Date(
+                              fetchedCompanyData.nextAccountsFilingDate
+                            ).toLocaleDateString("en-GB")
+                          : "N/A"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="border-t pt-4 mt-4">
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Auth Code <span className="text-red-600">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g., AUTH001TVS"
+                    value={importAuthCodeForFetched}
+                    onChange={(e) => setImportAuthCodeForFetched(e.target.value)}
+                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent mb-4"
+                  />
+                </div>
+                <div className="flex justify-end gap-2 mt-4">
+                  <Button
+                    variant="outline"
+                    onClick={handleRejectImport}
+                  >
+                    Reject
+                  </Button>
+                  <Button
+                    onClick={handleAcceptImport}
+                    className="bg-green-600 hover:bg-green-700"
+                    disabled={!importAuthCodeForFetched.trim()}
+                  >
+                    Accept & Import
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {/* Cancel Button */}
+            {!fetchedCompanyData && (
+              <div className="flex justify-end gap-2 pt-2">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setShowImportModal(false);
+                    setImportCompanyNumber("");
+                    setImportAuthCode("");
+                  }}
+                >
+                  Cancel
+                </Button>
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </AdminLayout>
   );
 }

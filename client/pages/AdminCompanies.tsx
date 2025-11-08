@@ -248,13 +248,27 @@ export default function AdminCompanies() {
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-900 flex items-center gap-3 mb-2">
-            <Building2 className="w-8 h-8 text-blue-600" />
-            Registered Companies Registry
-          </h1>
-          <p className="text-slate-600">
-            Monitor all companies registered through the platform
-          </p>
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h1 className="text-3xl font-bold text-slate-900 flex items-center gap-3 mb-2">
+                <Building2 className="w-8 h-8 text-blue-600" />
+                Registered Companies Registry
+              </h1>
+              <p className="text-slate-600">
+                Monitor all companies registered through the platform
+              </p>
+            </div>
+            <Button
+              onClick={() => {
+                // Navigate to UK Company Setup to import a company
+                window.location.href = '/admin/uk-company-setup';
+              }}
+              className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2 whitespace-nowrap"
+            >
+              <Plus className="w-4 h-4" />
+              Import Company
+            </Button>
+          </div>
         </div>
 
         {/* Country Tabs */}
